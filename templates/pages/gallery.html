@@ -1,0 +1,557 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% comment %}
+===========================================================================
+GALLERY  —  /page/gallery/
+            served by website.views.gallery
+---------------------------------------------------------------------------
+Header and footer come from base.html. Do not add them here.
+
+Reached from Gallery under At a Glance in the yellow navigation bar. That
+entry is already in MAIN_NAV in data.py and it carries an explicit href, so
+rewording the label does not move the link. The route is declared in urls.py
+ABOVE the generic page/<slug>/ line — a page with its own template has to be matched before the catch-all,
+or page_detail swallows it and renders an empty editorial placeholder.
+
+WHAT BELONGS HERE
+  Five sections: campus life and the year's awards, then Festivals &
+  Celebrations, Freshers' Day, সংহti 2K24 and Khadaan on Campus. Photographs
+  of one room or one facility belong on the facilities page instead.
+
+HOW THE VIEWER IS WIRED
+  data-viewer on a grid makes it one gallery; data-viewer-item on each cell
+  makes it a frame. That is the whole contract — no onclick attributes and no
+  index numbers to keep in step, so inserting a photograph in the middle does
+  not renumber anything after it. The viewer (counter, fullscreen, close,
+  arrows, caption, keyboard, swipe) is built by initPhotoViewer in main.js and
+  styled at the foot of gallery.css.
+
+  Each section has its OWN data-viewer name, so the arrows and the counter stay
+  inside that event. Give a new section a new name; reusing one merges the two
+  grids into a single run of photographs, which is almost never what you want.
+
+  The caption under an enlarged photograph is that image's own alt text, so
+  writing a good alt does double duty.
+
+TO ADD A PHOTOGRAPH
+  1. Put the file in static/img/Gallery/
+  2. Copy one "gallery cell" block into the right section and change the src
+     and the alt
+  3. Run:  python manage.py collectstatic --noinput
+     Not optional once DEBUG is off — settings.py switches to WhiteNoise's
+     manifest storage there, and a static path with no manifest entry raises
+     ValueError on every request, so the page goes down rather than showing a
+     broken image.
+
+  Cells are a fixed height and the photograph is cropped to fill, so portrait,
+  landscape and square originals all come out identical in the grid. The
+  enlarged view shows the whole uncropped photograph.
+
+  Rows are four across, so a count that is a multiple of four never leaves an
+  orphan tile at the end of a section on a wide screen.
+
+  The first cell in each section deliberately has no loading="lazy" — it is
+  above the fold often enough that deferring it just delays the first paint.
+
+NOTES ON THE FILES THEMSELVES
+  .jfif is an ordinary JPEG with an unusual extension, and Python maps it to
+  image/jpeg, so it serves correctly. No need to rename them for that reason.
+
+  "CU14 (1).jpg" in static/img/Gallery/ is byte-for-byte identical to
+  "CU14.jpg" — only CU14.jpg is used here. Delete the copy when convenient.
+
+  The 48…/54…_n.jpg.jpeg names in the first section are Facebook's own: that is
+  what the CDN calls an image, and the doubled extension is what the browser
+  saved. They are the university's own photographs, so there is no provenance
+  problem, but the names carry no meaning.
+
+  Several of the fest photographs are 4704x3136 at half a megabyte or more.
+  They are served full size and only then scaled down by the browser. Resizing
+  the originals to about 1600px wide would cut most of this page's weight
+  without any visible difference in the grid or the viewer.
+
+NOTE ON COMMENTS: the hash-style Django comment covers a SINGLE line only.
+For a multi-line note use a comment/endcomment tag pair like this one, or the
+text leaks onto the page and any tag inside it actually runs. Do not write
+those two tag names literally inside a comment either — the parser stops at
+the first endcomment it sees and the real one is then orphaned.
+===========================================================================
+{% endcomment %}
+
+{% block title %}Gallery | {{ site.site_name }}{% endblock %}
+{% block meta_description %}Photographs from Swami Vivekananda University — the Barrackpore campus, its facilities, and the festivals, fests and ceremonies that mark the academic year.{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/page-head.css' %}">
+  <link rel="stylesheet" href="{% static 'css/gallery.css' %}">
+{% endblock %}
+
+{% block content %}
+
+{# =======================================================  BANNER  ======= #}
+<section class="page-banner"
+         style="background-image: linear-gradient(0deg, rgba(10,10,10,.72), rgba(10,10,10,.55)), url('{% static 'img/about/team.png' %}');">
+  <div class="shell">
+    <h1 class="page-banner__title">Gallery</h1>
+  </div>
+</section>
+
+
+{# ======================================================  GALLERY  ======= #}
+<section class="section">
+  <div class="shell">
+    <div class="page-head">
+      <h2 class="page-heading">Cultural at <span>SVU</span></h2>
+      <span class="page-rule"></span>
+    </div>
+
+    <p class="gallery-lead">
+      We encourage our students to be in touch with their cultural heritage and traditions through
+      several events and shows. It also helps our students become involved with extracurricular
+      activities that enhance their personality development process.
+    </p>
+
+    <div class="gallery-grid-lg" data-viewer="gallery">
+
+      {% comment %} ---- the campus and its events ---- {% endcomment %}
+      <!-- ---- gallery cell ---- -->
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/about/campus.jpg' %}"
+             alt="The Swami Vivekananda University campus at Barrackpore, with the WE LOVE SVU installation on the lawn">
+      </button>
+
+      <!-- ---- gallery cell ---- -->
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/events/1.jfif' %}"
+             alt="The 80th Independence Day on campus, with the unfurling of the national flag, an NCC parade and cultural performances by students and cadets"
+             loading="lazy">
+      </button>
+
+      <!-- ---- gallery cell ---- -->
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/events/2.jpg' %}"
+             alt="14th August observed with NSS as a Day of Remembrance, under the Har Ghar Tiranga initiative"
+             loading="lazy">
+      </button>
+
+      <!-- ---- gallery cell ---- -->
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/events/3.jfif' %}"
+             alt="Smart India Hackathon 2026 on campus, students and mentors working on their entries"
+             loading="lazy">
+      </button>
+
+      {% comment %} ---- teaching and study ---- {% endcomment %}
+      <!-- ---- gallery cell ---- -->
+      <!-- <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/facilities/facility-1.jpg' %}"
+             alt="The digital library, an online storehouse of textbooks, notes, journals and rare books"
+             loading="lazy">
+      </button> -->
+
+      <!-- ---- gallery cell ---- -->
+      <!-- <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/facilities/facility-2.jpg' %}"
+             alt="A smart classroom, where digital whiteboards make the lecture interactive"
+             loading="lazy">
+      </button> -->
+
+      <!-- ---- gallery cell ---- -->
+      <!-- <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/facilities/facility-3.jpg' %}"
+             alt="One of the university laboratories, equipped for engineering, science, pharmacy and nursing practicals"
+             loading="lazy">
+      </button> -->
+
+      <!-- ---- gallery cell ---- -->
+      <!-- <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/facilities/facility-5.jpg' %}"
+             alt="The sports complex, with indoor and outdoor facilities and a gymnasium"
+             loading="lazy">
+      </button> -->
+
+      {% comment %} ---- ceremonies and awards ---- {% endcomment %}
+      <!-- ---- gallery cell ---- -->
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/achivements/482247234_972659861637453_1522331182250338419_n.jpg.jpeg' %}"
+             alt="Receiving the News18 Bangla Education Eminence 2024 trophy on stage"
+             loading="lazy">
+      </button>
+
+      <!-- ---- gallery cell ---- -->
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/achivements/481233106_972665624970210_8860091325710493319_n.jpg.jpeg' %}"
+             alt="The Education Excellence 2024 citation and memento being handed over at the awards ceremony"
+             loading="lazy">
+      </button>
+
+      <!-- ---- gallery cell ---- -->
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/achivements/540903586_1105990141637757_7221139477378257898_n.jpg.jpeg' %}"
+             alt="Faculty on stage at the SWAYAM-NPTEL SPOC Workshop 2025 East Zone, receiving the local chapter citation"
+             loading="lazy">
+      </button>
+
+      <!-- ---- gallery cell ---- -->
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/achivements/NPTEL_1.jpeg' %}"
+             alt="A member of faculty accepting an NPTEL STAR Award at the felicitation ceremony"
+             loading="lazy">
+      </button>
+
+    </div>
+  </div>
+</section>
+
+
+{# ==============================================  FESTIVALS  ============= #}
+<section class="section section--alt">
+  <div class="shell">
+    <div class="page-head">
+      <h2 class="page-heading">Festivals &amp; <span>Celebrations</span></h2>
+      <span class="page-rule"></span>
+    </div>
+
+    <p class="gallery-lead">
+      Sharadiya, Basanta Utsav and the days in between. The Bengali calendar is kept on this campus
+      as carefully as the academic one.
+    </p>
+
+    <div class="gallery-grid-lg" data-viewer="festivals">
+
+      <!-- ---- gallery cell ---- -->
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/Gallery/6S7A3351.jfif' %}"
+             alt="A troupe of dhaakis playing around the circular dais in the courtyard while students watch from the balconies above">
+      </button>
+
+      <!-- ---- gallery cell ---- -->
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/Gallery/6S7A3638.jfif' %}"
+             alt="Six dancers in red-bordered white saris performing before the Prak Sharadiya backdrop"
+             loading="lazy">
+      </button>
+
+      <!-- ---- gallery cell ---- -->
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/Gallery/c16.jpeg' %}"
+             alt="A potted sapling presented to a guest being felicitated at Basanta Utsav 2023"
+             loading="lazy">
+      </button>
+
+      <!-- ---- gallery cell ---- -->
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/Gallery/CU5.jpg' %}"
+             alt="A singer on the courtyard dais with students crowded around him, phones up, cheering"
+             loading="lazy">
+      </button>
+
+    </div>
+  </div>
+</section>
+
+
+{# ==========================================  TEACHERS' DAY  ============= #}
+<section class="section">
+  <div class="shell">
+    <div class="page-head">
+      <h2 class="page-heading">Freshers' Day <span>Celebration</span></h2>
+      <span class="page-rule"></span>
+    </div>
+
+    <p class="gallery-lead">
+      The welcome the new intake gets — an afternoon the students run themselves, with their own
+      bands on the open-air stage.
+    </p>
+
+    <div class="gallery-grid-lg" data-viewer="freshers-day">
+
+      <!-- ---- gallery cell ---- -->
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/Gallery/CU1.jpg' %}"
+             alt="Two vocalists sharing the mic stand in front of the Freshers' Day Celebration backdrop">
+      </button>
+
+      <!-- ---- gallery cell ---- -->
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/Gallery/CU2.jpg' %}"
+             alt="A singer holding her microphone above her head, guitarist and drummer playing behind her"
+             loading="lazy">
+      </button>
+
+      <!-- ---- gallery cell ---- -->
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/Gallery/CU3.jpg' %}"
+             alt="The full student band mid-set on the open-air stage, two vocalists out in front"
+             loading="lazy">
+      </button>
+
+      <!-- ---- gallery cell ---- -->
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/Gallery/CU6.jpg' %}"
+             alt="Two singers trading lines at the front of the stage with the bassist behind them"
+             loading="lazy">
+      </button>
+
+      <!-- ---- gallery cell ---- -->
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/Gallery/CU7.jpg' %}"
+             alt="A singer with both arms flung out to a crowd of students, every hand in the air"
+             loading="lazy">
+      </button>
+
+      <!-- ---- gallery cell ---- -->
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/Gallery/CU17.jpg' %}"
+             alt="A vocalist in a black shirt singing with his eyes shut, the band lit blue behind him"
+             loading="lazy">
+      </button>
+
+    </div>
+  </div>
+</section>
+
+
+{# ============================================  JOSH OTI 2K24  =========== #}
+<section class="section section--alt">
+  <div class="shell">
+    <div class="page-head">
+      <h2 class="page-heading">সংহti <span>2K24</span></h2>
+      <span class="page-rule"></span>
+    </div>
+
+    <p class="gallery-lead">
+      The annual fest, and the nights that end it — Surojiit O Bondhura and The Bolpur Blues
+      playing to the whole campus on the ground in front of the academic blocks.
+    </p>
+
+    <div class="gallery-grid-lg" data-viewer="sanghati">
+
+      <!-- ---- gallery cell ---- -->
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/Gallery/c1.jpg' %}"
+             alt="The band in silhouette across the stage, beams of light fanning out from the Surojiit O Bondhura backdrop">
+      </button>
+
+      <!-- ---- gallery cell ---- -->
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/Gallery/c2.jpg' %}"
+             alt="The frontman singing at the mic with a red semi-hollow guitar, the band's name filling the screen behind"
+             loading="lazy">
+      </button>
+
+      <!-- ---- gallery cell ---- -->
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/Gallery/c3.jpg' %}"
+             alt="The bass player in a yellow printed kurta singing into the microphone"
+             loading="lazy">
+      </button>
+
+      <!-- ---- gallery cell ---- -->
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/Gallery/c4.jpg' %}"
+             alt="The frontman with both arms raised, calling the crowd in under blue stage light"
+             loading="lazy">
+      </button>
+
+      <!-- ---- gallery cell ---- -->
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/Gallery/c5.jpg' %}"
+             alt="A bansuri solo at the microphone, the stage washed in purple and yellow"
+             loading="lazy">
+      </button>
+
+      <!-- ---- gallery cell ---- -->
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/Gallery/c6.jpg' %}"
+             alt="The bassist pointing skyward and grinning against a blaze of pink and yellow light"
+             loading="lazy">
+      </button>
+
+      <!-- ---- gallery cell ---- -->
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/Gallery/c8.jpg' %}"
+             alt="The whole band spread across the stage — guitars either side, tabla at the left, LED wall behind"
+             loading="lazy">
+      </button>
+
+      <!-- ---- gallery cell ---- -->
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/Gallery/c9.jpg' %}"
+             alt="A singer with his arms thrown wide at the mic stand, music folder open in front of him"
+             loading="lazy">
+      </button>
+
+      <!-- ---- gallery cell ---- -->
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/Gallery/c11.jpg' %}"
+             alt="A singer with one arm up, keyboard player and drummer working behind him"
+             loading="lazy">
+      </button>
+
+      <!-- ---- gallery cell ---- -->
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/Gallery/c12.jpg' %}"
+             alt="Wide view of the stage in blue and green light, the dotted LED wall running the full width"
+             loading="lazy">
+      </button>
+
+      {% comment %}
+      c14 is stored portrait and relies on its EXIF orientation flag to come out
+      the right way up. Browsers honour that by default, but anything that
+      re-saves or strips EXIF will leave it lying on its side. If it ever
+      appears rotated, rotate the pixels and clear the flag rather than
+      patching it with CSS.
+      {% endcomment %}
+      <!-- ---- gallery cell ---- -->
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/Gallery/c14.jpeg' %}"
+             alt="The Bolpur Blues across the stage, the band's name in neon script on the screen behind them"
+             loading="lazy">
+      </button>
+
+      <!-- ---- gallery cell ---- -->
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/Gallery/CU8.jpg' %}"
+             alt="A performer seen from behind, arms spread over a night crowd of raised hands and fairy lights"
+             loading="lazy">
+      </button>
+
+      <!-- ---- gallery cell ---- -->
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/Gallery/CU9.jpg' %}"
+             alt="The view out from the stage over the whole crowd, phones up, the campus lit behind them"
+             loading="lazy">
+      </button>
+
+      <!-- ---- gallery cell ---- -->
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/Gallery/CU10.jpg' %}"
+             alt="A singer at the mic with a huge illuminated heart filling the screen behind him"
+             loading="lazy">
+      </button>
+
+      <!-- ---- gallery cell ---- -->
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/Gallery/CU11.jpg' %}"
+             alt="The bass player in a red t-shirt, both arms up, singing into the mic"
+             loading="lazy">
+      </button>
+
+      <!-- ---- gallery cell ---- -->
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/Gallery/CU12.jpg' %}"
+             alt="The bassist grinning straight at the camera from the front of the stage, the singer working the crowd behind him"
+             loading="lazy">
+      </button>
+
+      <!-- ---- gallery cell ---- -->
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/Gallery/CU13.jpg' %}"
+             alt="The drummer with both sticks raised above the kit, caught in a single spotlight"
+             loading="lazy">
+      </button>
+
+      <!-- ---- gallery cell ---- -->
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/Gallery/CU14.jpg' %}"
+             alt="A silver-haired singer in a patchwork kantha kurta at the mic, a small hand drum slung at his hip"
+             loading="lazy">
+      </button>
+
+      <!-- ---- gallery cell ---- -->
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/Gallery/CU15.jpg' %}"
+             alt="A performer from behind, arms open, the stage filled with green haze"
+             loading="lazy">
+      </button>
+
+      <!-- ---- gallery cell ---- -->
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/Gallery/CU16.jpg' %}"
+             alt="The drummer at a green sparkle kit, lit by one beam through the smoke"
+             loading="lazy">
+      </button>
+
+      <!-- ---- gallery cell ---- -->
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/Gallery/CU18.jpg' %}"
+             alt="The same singer with a hand raised mid-phrase, The Bolpur Blues lettering glowing behind him"
+             loading="lazy">
+      </button>
+
+    </div>
+  </div>
+</section>
+
+
+{# =========================================  KHADAAN ON CAMPUS  ========== #}
+<section class="section">
+  <div class="shell">
+    <div class="page-head">
+      <h2 class="page-heading">Khadaan <span>on Campus</span></h2>
+      <span class="page-rule"></span>
+    </div>
+
+    <p class="gallery-lead">
+      The team behind the Bengali feature <em>Khadaan</em> brought their promotional tour to the
+      university — an afternoon of songs, dancing and, for at least two students, a portrait
+      handed over in person.
+    </p>
+
+    <div class="gallery-grid-lg" data-viewer="khadaan">
+
+      <!-- ---- gallery cell ---- -->
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/Gallery/IMG_0681asas.jfif' %}"
+             alt="A guest in an orange jacket speaking to the crowd, the film's backdrop behind him">
+      </button>
+
+      <!-- ---- gallery cell ---- -->
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/Gallery/IMG_0718rt.jfif' %}"
+             alt="The visiting team standing among students and crew before the event starts"
+             loading="lazy">
+      </button>
+
+      <!-- ---- gallery cell ---- -->
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/Gallery/IMG_0728.jfif' %}"
+             alt="Guests dancing with students, everyone around them filming on their phones"
+             loading="lazy">
+      </button>
+
+      <!-- ---- gallery cell ---- -->
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/Gallery/IMG_0749ac.jfif' %}"
+             alt="A member of the cast singing into a handheld microphone in the middle of the crowd"
+             loading="lazy">
+      </button>
+
+      <!-- ---- gallery cell ---- -->
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/Gallery/IMG_0820.jfif' %}"
+             alt="A student in uniform presenting a hand-drawn pencil portrait to one of the guests"
+             loading="lazy">
+      </button>
+
+      <!-- ---- gallery cell ---- -->
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/Gallery/IMG_0822ht.jfif' %}"
+             alt="Students holding up a large charcoal portrait for the visitors to see"
+             loading="lazy">
+      </button>
+
+      <!-- ---- gallery cell ---- -->
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/Gallery/IMG_0834.jfif' %}"
+             alt="Two of the visiting performers in Khadaan t-shirts, hands raised to the students"
+             loading="lazy">
+      </button>
+
+    </div>
+  </div>
+</section>
+
+{% endblock %}

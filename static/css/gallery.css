@@ -1,0 +1,225 @@
+/* ==========================================================================
+   Gallery  —  /page/gallery/
+   Loaded ALONGSIDE page-head.css, which supplies the photo banner and the
+   section heading with its rule. This file is the grid, and the full-size
+   viewer that the grid feeds.
+
+   The viewer markup does not exist in gallery.html: initPhotoViewer in
+   main.js builds it on the first click and reuses the one node for every
+   grid on the page, so its styles have to live here rather than alongside
+   any particular section.
+   ========================================================================== */
+/* Full width — no measure cap, so the paragraph runs the whole shell. */
+.gallery-lead {
+  margin: 0 0 30px;
+  color: var(--ink-soft);
+  font-size: clamp(15px, 1.3vw, 17px);
+  line-height: 1.6;
+}
+
+/* ==========================================================================
+   Grid
+   Four per row, wrapping — five photographs give four then one, eight give
+   four then four. Row count takes care of itself; only the column count is
+   declared, and only here.
+   ========================================================================== */
+.gallery-grid-lg {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+}
+
+/* Fixed tile height with a cover fit: portrait, landscape and square
+   originals all render identically, and one odd photograph cannot set the
+   height of its whole row. */
+.gallery-cell {
+  display: block;
+  width: 100%;
+  /* 260, not the 330 a three-across row used. Four columns inside the 1240px
+     shell leaves each about 280px wide, and 330px tall at that width crops a
+     room photograph into a portrait. Raise this if the photographs are
+     portrait to begin with. */
+  height: 260px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  background: var(--page);
+  cursor: pointer;
+  position: relative;
+}
+.gallery-cell img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+.gallery-cell:hover img { transform: scale(1.05); }
+.gallery-cell:focus-visible { outline: 3px solid var(--red); outline-offset: 3px; }
+
+/* Magnifier badge. The pointer cursor alone is not an affordance on touch,
+   where there is no hover to reveal anything.
+
+   Drawn from a data URI rather than an icon font: the CSP is locked to 'self'
+   and the whole site is deliberately free of any icon-font CDN, so there is
+   no Font Awesome here to borrow a glyph from. */
+.gallery-cell::after {
+  content: "";
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: rgba(20, 20, 20, 0.6);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23fff'%3E%3Cpath d='M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14zm2.5-4h-2v2H9v-2H7V9h2V7h1v2h2v1z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 18px 18px;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.gallery-cell:hover::after,
+.gallery-cell:focus-visible::after { opacity: 1; transform: none; }
+@media (hover: none) {
+  .gallery-cell::after { opacity: 1; transform: none; }
+}
+
+/* ==========================================================================
+   Full-size viewer
+   One overlay per page, built by main.js and moved between grids. Above the
+   skip link (999) so nothing on the page can sit over an enlarged
+   photograph.
+   ========================================================================== */
+body.viewer-open { overflow: hidden; }
+
+.viewer {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 68px 72px 20px;
+  background: rgba(8, 8, 8, 0.94);
+}
+/* Beats the display:flex above — without it the overlay stays on screen. */
+.viewer[hidden] { display: none; }
+
+.viewer__bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  color: #fff;
+}
+/* Pushes the buttons to the far end and keeps the count on the left. */
+.viewer__count {
+  margin-right: auto;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.viewer__btn {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+.viewer__btn:hover { background: rgba(255, 255, 255, 0.26); }
+.viewer__btn svg { width: 22px; height: 22px; fill: currentColor; }
+
+.viewer__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+}
+.viewer__nav svg { width: 28px; height: 28px; }
+.viewer__nav--prev { left: 14px; }
+.viewer__nav--next { right: 14px; }
+
+.viewer__figure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  margin: 0;
+  max-width: 100%;
+}
+/* Contain, not cover: the grid crops, the viewer never does. */
+.viewer__img {
+  display: block;
+  max-width: 100%;
+  max-height: calc(100vh - 170px);
+  object-fit: contain;
+}
+.viewer__caption {
+  max-width: 780px;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 14px;
+  line-height: 1.55;
+  text-align: center;
+}
+.viewer__caption:empty { display: none; }
+
+/* Fullscreen strips the browser chrome, so the image gets that height back. */
+.viewer:fullscreen .viewer__img { max-height: calc(100vh - 150px); }
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+/* Four columns get too narrow to read a photograph in well before the tablet
+   breakpoint, so they step down 4 -> 3 -> 2 -> 1. */
+@media (max-width: 1200px) {
+  .gallery-grid-lg { grid-template-columns: repeat(3, 1fr); gap: 26px; }
+  .gallery-cell { height: 270px; }
+}
+
+@media (max-width: 1000px) {
+  .gallery-grid-lg { grid-template-columns: repeat(2, 1fr); gap: 25px; }
+  .gallery-cell { height: 280px; }
+}
+
+@media (max-width: 767.98px) {
+  /* No room for arrows beside the photograph, so they drop underneath it. */
+  .viewer { padding: 60px 12px 84px; }
+  .viewer__nav {
+    top: auto;
+    bottom: 18px;
+    transform: none;
+    width: 44px;
+    height: 44px;
+  }
+  .viewer__nav--prev { left: calc(50% - 52px); }
+  .viewer__nav--next { right: calc(50% - 52px); }
+  .viewer__img { max-height: calc(100vh - 230px); }
+  .viewer__caption { font-size: 13px; }
+}
+
+@media (max-width: 600px) {
+  .gallery-grid-lg { grid-template-columns: 1fr; gap: 20px; }
+  .gallery-cell { height: 250px; }
+  .gallery-lead { margin-bottom: 24px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gallery-cell img,
+  .gallery-cell::after { transition: none; }
+  .gallery-cell:hover img { transform: none; }
+}

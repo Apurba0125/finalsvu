@@ -638,6 +638,16 @@ def recognition_approvals(request):
                   {"recognitions": data.RECOGNITIONS})
 
 
+def gallery(request):
+    """Photo gallery — every photograph is named in the template.
+
+    It has its own template rather than a PAGES entry, so its route has to sit
+    above the generic ``page/<slug>/`` line in urls.py; below it, page_detail
+    claims the URL first and renders an empty editorial placeholder.
+    """
+    return render(request, "pages/gallery.html")
+
+
 def page_detail(request, slug):
     """Render an editorial page.
 
@@ -747,6 +757,15 @@ def search(request):
             results.append({"type": "Page", "title": "Chancellor's Message",
                             "url": reverse("website:chancellors_message"),
                             "excerpt": chancellor.get("excerpt", "")})
+
+        # And the Gallery, for the same reason: its own template, not a PAGES row.
+        gallery_blurb = ("Photographs of the Barrackpore campus and its facilities, "
+                         "the festivals and fests of the academic year, Freshers' Day "
+                         "and the awards won since inception.")
+        if matches("Gallery photographs photos", gallery_blurb):
+            results.append({"type": "Page", "title": "Gallery",
+                            "url": reverse("website:gallery"),
+                            "excerpt": gallery_blurb})
 
         for slug, page in data.PAGES.items():
             if matches(page["title"], page["content"]):

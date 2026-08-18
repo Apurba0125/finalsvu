@@ -783,6 +783,205 @@
   }
 
   /* ----------------------------------------------------------------------
+     9. Photo viewer for the gallery grids
+     Contract: data-viewer on a grid makes it one gallery, data-viewer-item on
+     a cell makes it a frame. Nothing carries an index, so a photograph can be
+     dropped into the middle of a grid without renumbering anything after it.
+     One overlay is built on the first open and reused by every grid, so an
+     extra section on the page costs nothing here.
+     ---------------------------------------------------------------------- */
+  function initPhotoViewer() {
+    var grids = $$("[data-viewer]");
+    if (!grids.length) { return; }
+
+    var overlay = null;
+    var img, caption, counter, closeBtn, fsBtn;
+    var frames = [];    // the <img> of every cell in the grid currently open
+    var index = 0;
+    var opener = null;  // the cell that opened it, to restore focus on close
+
+    function icon(name) {
+      return '<svg aria-hidden="true" focusable="false"><use href="#i-' + name + '"></use></svg>';
+    }
+
+    // Safari and any browser with fullscreen disabled reject the promise
+    // rather than throwing; an unhandled rejection in the console helps nobody.
+    function swallow(result) {
+      if (result && result["catch"]) { result["catch"](function () {}); }
+    }
+
+    function build() {
+      overlay = document.createElement("div");
+      overlay.className = "viewer";
+      overlay.hidden = true;
+      overlay.setAttribute("role", "dialog");
+      overlay.setAttribute("aria-modal", "true");
+      overlay.setAttribute("aria-label", "Photograph viewer");
+      overlay.innerHTML =
+        '<div class="viewer__bar">' +
+          '<span class="viewer__count"></span>' +
+          '<button class="viewer__btn viewer__fs" type="button" aria-label="Full screen">' +
+            icon("expand") +
+          '</button>' +
+          '<button class="viewer__btn viewer__close" type="button" aria-label="Close viewer">' +
+            icon("close") +
+          '</button>' +
+        '</div>' +
+        '<button class="viewer__btn viewer__nav viewer__nav--prev" type="button" aria-label="Previous photograph">' +
+          icon("chevron-left") +
+        '</button>' +
+        '<figure class="viewer__figure">' +
+          '<img class="viewer__img" alt="">' +
+          '<figcaption class="viewer__caption"></figcaption>' +
+        '</figure>' +
+        '<button class="viewer__btn viewer__nav viewer__nav--next" type="button" aria-label="Next photograph">' +
+          icon("chevron-right") +
+        '</button>';
+      document.body.appendChild(overlay);
+
+      img = $(".viewer__img", overlay);
+      caption = $(".viewer__caption", overlay);
+      counter = $(".viewer__count", overlay);
+      closeBtn = $(".viewer__close", overlay);
+      fsBtn = $(".viewer__fs", overlay);
+
+      closeBtn.addEventListener("click", closeViewer);
+      fsBtn.addEventListener("click", toggleFullscreen);
+      $(".viewer__nav--prev", overlay).addEventListener("click", function () { step(-1); });
+      $(".viewer__nav--next", overlay).addEventListener("click", function () { step(1); });
+
+      // A click on the backdrop closes; one on the photograph must not.
+      overlay.addEventListener("click", function (e) {
+        if (e.target === overlay) { closeViewer(); }
+      });
+
+      // aria-modal claims focus stays inside, so it has to actually stay inside.
+      overlay.addEventListener("keydown", function (e) {
+        if (e.key !== "Tab") { return; }
+        var stops = $$("button", overlay);
+        if (!stops.length) { return; }
+        var first = stops[0];
+        var last = stops[stops.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      });
+
+      document.addEventListener("keydown", function (e) {
+        if (!overlay || overlay.hidden) { return; }
+        if (e.key === "Escape") {
+          // In fullscreen the browser's own Escape exits it; closing as well
+          // would take two states off the stack for one keypress.
+          if (!document.fullscreenElement) { closeViewer(); }
+        } else if (e.key === "ArrowLeft") {
+          step(-1);
+        } else if (e.key === "ArrowRight") {
+          step(1);
+        }
+      });
+
+      document.addEventListener("fullscreenchange", syncFullscreenButton);
+      initSwipe();
+    }
+
+    function initSwipe() {
+      var startX = 0;
+      var startY = 0;
+      var tracking = false;
+
+      overlay.addEventListener("touchstart", function (e) {
+        tracking = e.touches.length === 1;
+        if (!tracking) { return; }
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+      }, { passive: true });
+
+      overlay.addEventListener("touchend", function (e) {
+        if (!tracking) { return; }
+        tracking = false;
+        var touch = e.changedTouches[0];
+        var dx = touch.clientX - startX;
+        var dy = touch.clientY - startY;
+        // Horizontal only: a mostly-vertical drag is a scroll, not a swipe.
+        if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+          step(dx < 0 ? 1 : -1);
+        }
+      }, { passive: true });
+    }
+
+    function show(i) {
+      if (!frames.length) { return; }
+      // Wrap, so the arrows never dead-end at either edge of a section.
+      index = (i + frames.length) % frames.length;
+      var frame = frames[index];
+      img.src = frame.currentSrc || frame.src;
+      img.alt = frame.alt || "";
+      // The caption IS the alt text — writing a good alt does double duty.
+      caption.textContent = frame.alt || "";
+      counter.textContent = (index + 1) + " / " + frames.length;
+    }
+
+    function step(delta) { show(index + delta); }
+
+    function openViewer(grid, cell) {
+      if (!overlay) { build(); }
+      // Filter the cells first, not the images: dropping an empty cell out of
+      // one list but not the other would slide every index after it by one.
+      var cells = $$("[data-viewer-item]", grid).filter(function (item) {
+        return !!$("img", item);
+      });
+      frames = cells.map(function (item) { return $("img", item); });
+      if (!frames.length) { return; }
+
+      opener = cell;
+      overlay.hidden = false;
+      document.body.classList.add("viewer-open");
+      syncFullscreenButton();
+      show(cells.indexOf(cell));
+      closeBtn.focus();
+    }
+
+    function closeViewer() {
+      if (!overlay || overlay.hidden) { return; }
+      if (document.fullscreenElement && document.exitFullscreen) {
+        swallow(document.exitFullscreen());
+      }
+      overlay.hidden = true;
+      // Drop the photograph: several of them are 4704x3136.
+      img.removeAttribute("src");
+      document.body.classList.remove("viewer-open");
+      if (opener) {
+        opener.focus();
+        opener = null;
+      }
+    }
+
+    function toggleFullscreen() {
+      if (document.fullscreenElement) {
+        if (document.exitFullscreen) { swallow(document.exitFullscreen()); }
+      } else if (overlay.requestFullscreen) {
+        swallow(overlay.requestFullscreen());
+      }
+    }
+
+    function syncFullscreenButton() {
+      var full = !!document.fullscreenElement;
+      fsBtn.setAttribute("aria-label", full ? "Exit full screen" : "Full screen");
+      fsBtn.innerHTML = icon(full ? "collapse" : "expand");
+    }
+
+    grids.forEach(function (grid) {
+      $$("[data-viewer-item]", grid).forEach(function (cell) {
+        cell.addEventListener("click", function () { openViewer(grid, cell); });
+      });
+    });
+  }
+
+  /* ----------------------------------------------------------------------
      Bootstrap
      ---------------------------------------------------------------------- */
   function init() {
@@ -797,6 +996,7 @@
     initAccordions();
     initEnquiryForms();
     initLazyImages();
+    initPhotoViewer();
   }
 
   if (document.readyState === "loading") {
