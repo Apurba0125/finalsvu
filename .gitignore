@@ -1,0 +1,18 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# collectstatic output
+/staticfiles/
+
+# local settings & secrets
+.env
+*.log
+
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

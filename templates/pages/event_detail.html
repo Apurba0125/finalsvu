@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ event.title|truncatechars:60 }} — {{ site.site_name }}{% endblock %}
+{% block meta_description %}{{ event.excerpt|truncatechars:160 }}{% endblock %}
+
+{% block content %}
+{% include "includes/page_hero.html" %}
+
+<section class="section">
+  <div class="shell">
+    <article class="prose">
+      <h1>{{ event.title }}</h1>
+      <p style="color:var(--muted);font-size:.86rem">
+        <svg style="width:14px;height:14px;fill:var(--accent);vertical-align:-2px" aria-hidden="true"><use href="#i-calendar"></use></svg>
+        {{ event.event_date|date:"d M Y" }}
+        {% if event.venue %} &nbsp;|&nbsp;
+          <svg style="width:14px;height:14px;fill:var(--accent);vertical-align:-2px" aria-hidden="true"><use href="#i-pin"></use></svg>
+          {{ event.venue }}
+        {% endif %}
+      </p>
+
+      <img src="{% static event.cover_image %}" alt="{{ event.alt_text }}"
+           width="900" height="600" loading="lazy" style="width:100%;height:auto">
+
+      <p>{{ event.description|linebreaks }}</p>
+
+      <p><a class="btn btn--outline-gold btn--sm" href="{% url 'website:event_list' %}">Back to all events</a></p>
+    </article>
+
+    {% if related %}
+      <h2 class="section-title section-title--underline">
+        <span class="h-dark">MORE</span> <span class="h-accent">EVENTS</span>
+      </h2>
+      <div class="auto-grid">
+        {% for item in related %}
+          <article class="event-card">
+            <div class="event-card__media">
+              <img src="{% static item.cover_image %}" alt="{{ item.alt_text }}"
+                   loading="lazy" width="600" height="450">
+            </div>
+            <div class="event-card__body">
+              <span class="event-card__date">{{ item.event_date|date:"d M Y" }}</span>
+              <h3 class="event-card__title">{{ item.title|truncatechars:110 }}</h3>
+              <div class="event-card__footer">
+                <a class="btn btn--outline-gold btn--sm" href="{{ item.url }}">View Details</a>
+              </div>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

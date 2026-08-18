@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ course.name }} — {{ site.site_name }}{% endblock %}
+
+{% block content %}
+{% include "includes/page_hero.html" %}
+
+<section class="section">
+  <div class="shell home-band__grid" style="align-items:start">
+
+    <div class="prose" style="grid-column:span 2">
+      <h2>About the programme</h2>
+      <p>{{ course.description }}</p>
+
+      <h2>Eligibility</h2>
+      <p>{{ course.eligibility }}</p>
+
+      <h2>At a glance</h2>
+      <ul class="meta-list">
+        <li><span class="k">School</span>
+          <span>{% if course.school_url %}<a href="{{ course.school_url }}">{{ course.school_name }}</a>{% else %}{{ course.school_name }}{% endif %}</span></li>
+        <li><span class="k">Department</span>
+          <span>{% if course.department_url %}<a href="{{ course.department_url }}">{{ course.department_name }}</a>{% else %}{{ course.department_name }}{% endif %}</span></li>
+        <li><span class="k">Programme</span><span>{{ course.program_name }}</span></li>
+        <li><span class="k">Duration</span><span>{{ course.duration }}</span></li>
+        <li><span class="k">Intake</span><span>{{ course.total_seats }} seats</span></li>
+      </ul>
+
+      <p>
+        <a class="btn btn--gold" href="{% url 'website:apply' %}">Apply Online</a>
+        <a class="btn btn--outline-gold" href="{% url 'website:course_list' %}">All courses</a>
+      </p>
+
+      {% if related %}
+        <h2>Related courses</h2>
+        <ul>
+          {% for item in related %}
+            <li><a href="{{ item.url }}">{{ item.name }}</a>
+              <span style="color:var(--muted)"> — {{ item.department_name }}</span></li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+
+    <aside class="enquiry-panel">
+      <div class="panel">
+        <h2 class="panel__head">Enquiry Form</h2>
+        <div class="panel__body">
+          <div class="enquiry-panel__scroll">
+            {% include "includes/enquiry_form.html" with ajax=1 %}
+          </div>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+</section>
+{% endblock %}

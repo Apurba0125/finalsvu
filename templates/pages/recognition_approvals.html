@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% comment %}
+===========================================================================
+RECOGNITION & APPROVALS  —  served at /page/recognition-approvals/
+                             by website.views.recognition_approvals
+---------------------------------------------------------------------------
+Header, navigation and footer come from base.html. Do not add them here.
+
+Styling: page-head.css gives the banner and the heading with its rule (shared
+with About Us); recognition.css is only the cards.
+
+EACH CARD OPENS A PDF
+  The documents live in static/documents/ and each card points at one by
+  filename, set in the RECOGNITIONS list in website/data.py.
+
+  Every file there is currently a PLACEHOLDER — open one and it says so. To
+  publish a real certificate, overwrite the file of the same name; nothing in
+  this template or in data.py needs to change.
+
+TO ADD A BODY
+  Add an entry to RECOGNITIONS and drop the matching PDF into
+  static/documents/. The grid absorbs it — four across on desktop, two on
+  tablet, one on a phone.
+
+  To point a card at an external site instead, give the entry a "url" key
+  rather than a "file" key. rel=noopener is set either way: without it the
+  opened tab can reach back through window.opener and navigate this one.
+
+NOTE ON COMMENTS: the hash-style Django comment {# … #} covers a SINGLE line.
+For a multi-line note use a comment/endcomment pair like this one, or the text
+leaks onto the page.
+===========================================================================
+{% endcomment %}
+
+{% block title %}Recognition &amp; Approvals | {{ site.site_name }}{% endblock %}
+{% block meta_description %}The statutory approvals and recognitions held by Swami Vivekananda University, including the Department of Higher Education, West Bengal and the University Grants Commission.{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/page-head.css' %}">
+  <link rel="stylesheet" href="{% static 'css/recognition.css' %}">
+{% endblock %}
+
+{% block content %}
+
+{# ===========================================================  BANNER  === #}
+<section class="page-banner"
+         style="background-image: linear-gradient(0deg, rgba(10,10,10,.72), rgba(10,10,10,.55)), url('{% static 'img/about/team.png' %}');">
+  <div class="shell">
+    <h1 class="page-banner__title">Recognition &amp; Approvals</h1>
+  </div>
+</section>
+
+
+{# ======================================================  AFFILIATIONS  === #}
+<section class="section recog-section">
+  <div class="shell">
+    <div class="page-head">
+      <h2 class="page-heading">Affiliation And <span>Recognitions</span></h2>
+      <span class="page-rule"></span>
+    </div>
+
+    <div class="recog-grid">
+      {% for item in recognitions %}
+        <a class="recog-card"
+           href="{% if item.url %}{{ item.url }}{% else %}{% static item.file %}{% endif %}"
+           target="_blank" rel="noopener noreferrer"
+           {% if not item.url %}type="application/pdf"{% endif %}>
+          <span class="recog-card__name">{{ item.name }}</span>
+          <span class="recog-card__more">
+            View More
+            <svg aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg>
+            <span class="sr-only">
+              {% if item.url %}(opens in a new tab){% else %}(PDF, opens in a new tab){% endif %}
+            </span>
+          </span>
+        </a>
+      {% endfor %}
+    </div>
+
+    <!-- <p class="recog-note">
+      The linked documents are placeholders while the signed certificates are
+      being collected. For a certified copy in the meantime, please contact the
+      Registrar's office on <a href="mailto:{{ site.email }}">{{ site.email }}</a>.
+    </p> -->
+  </div>
+</section>
+
+{% endblock %}

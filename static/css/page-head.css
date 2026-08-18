@@ -1,0 +1,58 @@
+/* ==========================================================================
+   Shared inner-page furniture: the photo banner and the section heading with
+   its rule.
+
+   Used by About Us and Recognition & Approvals, and loaded alongside whatever
+   page-specific stylesheet those pages carry. Restyle a banner here and every
+   page using it follows — which is the point of it not living in about.css.
+
+   Header, navigation and footer are NOT here; they come from main.css.
+   ========================================================================== */
+
+/* ----------------------------------------------------------- banner ------ */
+.page-banner {
+  display: flex;
+  align-items: center;
+  min-height: 260px;
+  padding: 40px 0;
+  background-color: var(--darker);
+  background-size: cover;
+  background-position: center;
+  text-align: center;
+}
+.page-banner__title {
+  margin: 0;
+  color: #fff;
+  font-size: clamp(20px, 3vw, 34px);
+  font-weight: 800;
+  line-height: 1.25;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, .55);
+}
+
+/* --------------------------------------------------- heading + rule ------ */
+.page-head { margin-bottom: 18px; }
+.page-heading {
+  margin: 0;
+  color: var(--ink);
+  font-size: clamp(21px, 2.4vw, 29px);
+  font-weight: 800;
+  line-height: 1.3;
+}
+/* The second half of a two-part heading, e.g. "Why <span>Choose Us</span>". */
+.page-heading span { color: var(--red); }
+.page-rule {
+  display: block;
+  width: 62px;
+  height: 3px;
+  margin-top: 10px;
+  background: var(--red);
+}
+
+/* ------------------------------------------------------- responsive ----- */
+@media (max-width: 991.98px) {
+  .page-banner { min-height: 200px; }
+}
+
+@media (max-width: 767.98px) {
+  .page-banner { min-height: 170px; padding: 30px 0; }
+}

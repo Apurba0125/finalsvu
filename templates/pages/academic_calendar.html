@@ -1,0 +1,226 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% comment %}
+===========================================================================
+ACADEMIC CALENDAR  —  served at /page/academic-calendar/
+                      by website.views.academic_calendar
+---------------------------------------------------------------------------
+Header, navigation and footer come from base.html. Do not add them here.
+
+ALL THE DATES LIVE IN THIS FILE — there is nothing to change in data.py or
+views.py to update the calendar. Edit the tables below directly.
+
+HOW TO EDIT
+  Change a date      Edit the text inside the <p class="cal-date"> line.
+  Add a second date  Copy a whole <p class="cal-date">…</p> line and put it
+                     to the same <td>. Stacked lines are separated
+                     automatically by a dashed rule, which is how the UG and
+                     PG dates sit together in one row.
+  Add a row          Copy a whole <tr>…</tr> block. The first cell is the
+                     label (<th scope="row">), the second holds the dates.
+  Grey out a row     Add class="is-past" to its <tr> — useful for a window
+                     that has already closed.
+  Add a semester     Copy a whole <div class="cal-block">…</div> section.
+  Add a footnote     Add an <li> in .cal-notes at the bottom.
+
+Styling is static/css/calendar.css (this page only) plus page-head.css for
+the banner. The parenthetical half of a date line — "(all PG programmes)" —
+is wrapped in <span> so it prints grey; drop the span for solid text.
+
+Source: Proposed Academic Calendar 2026-27, Annexure - I, prepared by the
+Examination Committee on 3rd August 2026. Update SESSION and the committee
+line below when a new calendar is approved.
+===========================================================================
+{% endcomment %}
+
+{% block title %}Academic Calendar 2026-27 | {{ site.site_name }}{% endblock %}
+{% block meta_description %}Proposed Academic Calendar 2026-27 for Swami Vivekananda University — class commencement, internal examinations, form fill-up, practical and theory examination dates for the odd and even semesters.{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/page-head.css' %}">
+  <link rel="stylesheet" href="{% static 'css/calendar.css' %}">
+{% endblock %}
+
+{% block content %}
+
+{# =========================================================== BANNER === #}
+<section class="page-banner"
+         style="background-image: linear-gradient(0deg, rgba(10,10,10,.72), rgba(10,10,10,.55)), url('{% static 'img/about/team.png' %}');">
+  <div class="shell">
+    <h1 class="page-banner__title">Academic Calendar 2026-27</h1>
+  </div>
+</section>
+
+<section class="section">
+  <div class="shell">
+
+    <div class="page-head">
+      <h2 class="page-heading">Proposed Academic <span>Calendar 2026-27</span></h2>
+      <span class="page-rule"></span>
+    </div>
+
+    <p style="color:var(--muted);font-size:.88rem;margin-bottom:28px">
+      Prepared by the Examination Committee in its meeting held on 3rd August, 2026
+      (Annexure&nbsp;-&nbsp;I). All dates marked <em>probable</em> are subject to
+      confirmation by the Controller of Examinations.
+    </p>
+
+
+    {# ============================================ ODD SEMESTER, 2026 === #}
+    <div class="cal-block">
+      <div class="cal-block__head">
+        <h3 class="cal-block__title">Odd Semester Examinations, 2026</h3>
+        <span class="cal-block__note">July 2026 &ndash; January 2027</span>
+      </div>
+
+      <div class="cal-scroll">
+        <table class="cal-table">
+          <caption class="sr-only">Odd semester 2026 examination schedule</caption>
+          <tbody>
+
+            <tr class="is-past">
+              <th scope="row">Date of Commencement of Classes</th>
+              <td>
+                <p class="cal-date">1st July, 2026 <span>(all Diploma &amp; UG programmes &mdash; already started)</span></p>
+                <p class="cal-date">7th August, 2026 <span>(all PG programmes)</span></p>
+              </td>
+            </tr>
+
+            <tr>
+              <th scope="row">1st Internal Examinations</th>
+              <td>
+                <p class="cal-date">2nd September, 2026 &ndash; 10th September, 2026 <span>(all Diploma &amp; UG programmes of studies)</span></p>
+                <p class="cal-date">14th September, 2026 &ndash; 19th September, 2026 <span>(all PG programmes)</span></p>
+              </td>
+            </tr>
+
+            <tr>
+              <th scope="row">2nd Internal Examinations</th>
+              <td>
+                <p class="cal-date">1st October, 2026 &ndash; 9th October, 2026 <span>(Diploma and U.G.)</span></p>
+                <p class="cal-date">9th October, 2026 &ndash; 14th October, 2026 <span>(all P.G. programmes)</span></p>
+              </td>
+            </tr>
+
+            <tr>
+              <th scope="row">Form Fill-up Date <span style="font-weight:400">(for Odd Semester Examination, 2026)</span></th>
+              <td>
+                <p class="cal-date">2nd November, 2026 &ndash; 12th November, 2026 <span>(without late fine)</span></p>
+                <p class="cal-date">13th November, 2026 &ndash; 14th November, 2026 <span>(with late fine)</span></p>
+              </td>
+            </tr>
+
+            <tr>
+              <th scope="row">Date of Practical Examinations</th>
+              <td>
+                <p class="cal-date">16th November, 2026 &ndash; 21st November, 2026</p>
+              </td>
+            </tr>
+
+            <tr>
+              <th scope="row">Probable Date of Commencement of Theory Examinations</th>
+              <td>
+                <p class="cal-date">25th November, 2026</p>
+              </td>
+            </tr>
+
+            <tr>
+              <th scope="row">Probable Date of Publication of Results</th>
+              <td>
+                <p class="cal-date">12th January, 2027</p>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
+    {# =========================================== EVEN SEMESTER, 2027 === #}
+    <div class="cal-block">
+      <div class="cal-block__head">
+        <h3 class="cal-block__title">Even Semester Examinations, 2027</h3>
+        <span class="cal-block__note">January 2027 &ndash; June 2027</span>
+      </div>
+
+      <div class="cal-scroll">
+        <table class="cal-table">
+          <caption class="sr-only">Even semester 2027 examination schedule</caption>
+          <tbody>
+
+            <tr>
+              <th scope="row">Commencement of Classes</th>
+              <td>
+                <p class="cal-date">4th January, 2027</p>
+              </td>
+            </tr>
+
+            <tr>
+              <th scope="row">1st Internal Examinations</th>
+              <td>
+                <p class="cal-date">22nd February, 2027 &ndash; 27th February, 2027</p>
+              </td>
+            </tr>
+
+            <tr>
+              <th scope="row">2nd Internal Examinations</th>
+              <td>
+                <p class="cal-date">19th April, 2027 &ndash; 24th April, 2027</p>
+              </td>
+            </tr>
+
+            <tr>
+              <th scope="row">Form Fill-up Date <span style="font-weight:400">(for Even Semester, 2027)</span></th>
+              <td>
+                <p class="cal-date">4th May, 2027 &ndash; 11th May, 2027 <span>(without late fine)</span></p>
+                <p class="cal-date">12th May, 2027 &amp; 13th May, 2027 <span>(with late fine)</span></p>
+              </td>
+            </tr>
+
+            <tr>
+              <th scope="row">Schedule of Practical Examinations</th>
+              <td>
+                <p class="cal-date">14th May, 2027 &ndash; 22nd May, 2027</p>
+              </td>
+            </tr>
+
+            <tr>
+              <th scope="row">Probable Date of Commencement of Theory Examinations</th>
+              <td>
+                <p class="cal-date">26th May, 2027</p>
+              </td>
+            </tr>
+
+            <tr>
+              <th scope="row">Probable Date of Publication of Results</th>
+              <td>
+                <p class="cal-date">30th June, 2027</p>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
+    {# ==================================================== FOOTNOTES === #}
+    <div class="cal-notes">
+      <ul>
+        <li>
+          The date of holding of Part&nbsp;I Examinations, 2027 (including internal,
+          practical, theoretical and internship, if any) in Physiotherapy courses of
+          studies shall be formulated in the meeting of the Board of Studies of the
+          programme following the norms and rules of NCAHP, and must be submitted to
+          the office of the Controller of Examinations by the Head/Coordinator of the
+          programme well ahead of the commencement of examinations, for circulation
+          and processing.
+        </li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% load static %}
+<header class="header">
+  <div class="shell header__inner">
+
+    <a class="header__brand" href="{% url 'website:home' %}" aria-label="{{ site.site_name }} — home">
+      <img class="header__crest" src="{% static site.logo %}"
+           alt="{{ site.site_name }} crest" width="64" height="64" loading="eager">
+      <span class="brand-lockup">
+        <span class="brand-lockup__name">{{ site.site_name }}</span>
+        {% if site.tagline %}<small>{{ site.tagline }}</small>{% endif %}
+      </span>
+    </a>
+
+    <div class="header__info">
+      <div class="info-block">
+        <span class="info-block__label">ADMISSION HELPLINE</span>
+        <div class="info-block__body">
+          {% for phone in site.phones %}
+            <a href="{{ phone|tel_href }}">{{ phone }}</a>
+          {% endfor %}
+          {% if site.toll_free %}
+            <a class="toll-free" href="{{ site.toll_free|tel_href }}">{{ site.toll_free }} <strong>(Toll Free)</strong></a>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="info-block">
+        <span class="info-block__label">LOCATE US</span>
+        <div class="info-block__body">
+          {{ site.address_line1 }}<br>
+          {{ site.address_line2 }}
+        </div>
+      </div>
+    </div>
+
+    <div class="header__cta">
+      {% if site.pay_fee_url %}
+        <a class="cta-pill" href="{{ site.pay_fee_url }}" target="_blank" rel="noopener noreferrer">PAY FEE ONLINE</a>
+      {% endif %}
+
+      <a class="cta-stack" href="{{ site.ugc_documents_url }}">
+        <span class="cta-stack__title">UGC</span>
+        <span class="cta-stack__sub">Compliance Documents</span>
+      </a>
+
+      <div class="cta-apply">
+        <span class="cta-apply__label">{{ site.admission_banner_text }}</span>
+        <a class="btn btn--red btn--sm" href="{{ site.apply_now_url }}">APPLY NOW &raquo;</a>
+      </div>
+    </div>
+
+    <button class="header__toggle" id="nav-toggle" type="button"
+            aria-label="Open the main menu" aria-expanded="false" aria-controls="site-nav">
+      <svg aria-hidden="true" focusable="false"><use href="#i-menu"></use></svg>
+    </button>
+  </div>
+</header>

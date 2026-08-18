@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% comment %}
+===========================================================================
+OUR MENTORS  —  served at /page/our-mentors/ by website.views.our_mentors
+---------------------------------------------------------------------------
+Header, navigation and footer come from base.html. Do not add them here.
+
+Same construction as Our Team: the panels come from
+includes/people_stack.html and are styled by static/css/team.css, so
+restyling a panel there updates both pages.
+
+The source build also carried a video hero above these panels, but it was
+commented out in that file and depended on Swiper and Font Awesome, neither
+of which this build loads. It is not reproduced here.
+
+TO ADD, REMOVE OR REORDER A MENTOR
+Edit the MENTORS list in website/data.py.
+
+ON MESSAGES: every mentor currently has an empty "messages" list, so the
+panels show photo, name and role only. The reason is written above the list
+in data.py — the source repeated one placeholder paragraph across all 17
+people. Fill in a real message and that panel starts rendering it.
+===========================================================================
+{% endcomment %}
+
+{% block title %}Our Mentors | {{ site.site_name }}{% endblock %}
+{% block meta_description %}The mentors and advisors guiding Swami Vivekananda University — vice-chancellors, scientists and academics from institutions across India and abroad.{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/team.css' %}">
+{% endblock %}
+
+{% block content %}
+  {% include "includes/people_stack.html" with people=mentors %}
+{% endblock %}

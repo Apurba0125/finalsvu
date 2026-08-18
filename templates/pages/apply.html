@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Apply Online — {{ site.site_name }}{% endblock %}
+
+{% block content %}
+{% include "includes/page_hero.html" %}
+
+<section class="section">
+  <div class="shell" style="max-width:720px">
+    <div class="panel">
+      <h2 class="panel__head">Admission Enquiry</h2>
+      <div class="panel__body">
+        {% include "includes/enquiry_form.html" with ajax=1 %}
+      </div>
+    </div>
+
+    <p style="margin-top:18px;font-size:.85rem;color:var(--muted)">
+      Prefer to talk to someone? Call the admission helpline on
+      {% for phone in site.phones %}<a href="{{ phone|tel_href }}">{{ phone }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}
+      {% if site.toll_free %} or {{ site.toll_free }} (toll free){% endif %}.
+    </p>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Us — {{ site.site_name }}{% endblock %}
+
+{% block content %}
+{% include "includes/page_hero.html" %}
+
+<section class="section">
+  <div class="shell home-band__grid" style="align-items:start">
+
+    <div>
+      <div class="panel">
+        <h2 class="panel__head">Reach Us</h2>
+        <div class="panel__body">
+          <ul class="meta-list">
+            <li><span class="k">Address</span>
+              <span>{{ site.address_line1 }},<br>{{ site.address_line2 }}</span></li>
+            <li><span class="k">Email</span>
+              <span><a href="mailto:{{ site.email }}">{{ site.email }}</a></span></li>
+            {% for phone in site.phones %}
+              <li><span class="k">{% if forloop.first %}Helpline{% endif %}</span>
+                <span><a href="{{ phone|tel_href }}">{{ phone }}</a></span></li>
+            {% endfor %}
+            {% if site.toll_free %}
+              <li><span class="k">Toll free</span>
+                <span><a href="{{ site.toll_free|tel_href }}">{{ site.toll_free }}</a>
+                  {% if site.toll_free_hours %}<br>{{ site.toll_free_hours }}{% endif %}</span></li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div style="grid-column:span 2">
+      <div class="panel">
+        <h2 class="panel__head">Help Desk</h2>
+        <div class="panel__body">
+          {% if sent %}
+            <div class="alert alert--success" role="status">
+              Thank you — your message has reached the help desk. We will reply by email.
+            </div>
+          {% endif %}
+
+          <form action="{% url 'website:contact' %}" method="post" novalidate>
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+              <div class="alert alert--error" role="alert">
+                {% for error in form.non_field_errors %}{{ error }}{% endfor %}
+              </div>
+            {% endif %}
+
+            <div class="sr-only" aria-hidden="true">
+              <label>Company <input type="text" name="company" tabindex="-1" autocomplete="off"></label>
+            </div>
+
+            {% for field in form %}
+              {% if field.name != "company" %}
+                <div class="form-field{% if field.errors %} has-error{% endif %}">
+                  <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                  {{ field }}
+                  {% for error in field.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+                </div>
+              {% endif %}
+            {% endfor %}
+
+            <button class="btn btn--gold" type="submit">Send message</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+{% endblock %}

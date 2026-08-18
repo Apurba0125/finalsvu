@@ -1,0 +1,57 @@
+{% load static %}
+{% comment %}
+Scroll-stacked people panels, shared by Our Team and Our Mentors.
+
+Each panel is sticky at top:0, so the next one rides up and covers the one
+before it. Styling is static/css/team.css, which the including page links.
+
+Expects:
+  people      list of {name, role, photo, messages}
+  stack_title heading, with the emphasised half in <strong> (marked safe)
+  stack_lead  optional sentence under the rule
+
+The intro band is a <header> rather than a <div> so the alternating-side rules
+key off :nth-of-type(even) on the article panels — under :nth-child the band
+would count as child 1 and flip every panel to the wrong side.
+{% endcomment %}
+
+<section class="team-stack" aria-label="{{ stack_label|default:'People' }}">
+
+  <header class="team-stack__head">
+    <div class="shell">
+      <h1 class="team-stack__title">{{ stack_title }}</h1>
+      <span class="team-stack__rule"></span>
+      {% if stack_lead %}<p class="team-stack__lead">{{ stack_lead }}</p>{% endif %}
+    </div>
+  </header>
+
+  {% for person in people %}
+    <article class="team-panel">
+      <div class="shell">
+        <div class="team-row">
+
+          <figure class="team-shot">
+            <img src="{% static person.photo %}"
+                 alt="{{ person.name }}, {{ person.role }}"
+                 width="440" height="520"
+                 {% if forloop.first %}loading="eager" fetchpriority="high"{% else %}loading="lazy"{% endif %}>
+          </figure>
+
+          <div class="team-speech">
+            <span class="team-index">
+              {{ forloop.counter|stringformat:"02d" }} <em>/ {{ people|length|stringformat:"02d" }}</em>
+            </span>
+            <h2 class="team-name">{{ person.name }}</h2>
+            <p class="team-role">{{ person.role }}</p>
+            <span class="team-rule"></span>
+            {% for paragraph in person.messages %}
+              <p class="team-message">{{ paragraph }}</p>
+            {% endfor %}
+          </div>
+
+        </div>
+      </div>
+    </article>
+  {% endfor %}
+
+</section>

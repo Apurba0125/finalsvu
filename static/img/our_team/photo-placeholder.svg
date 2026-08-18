@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" width="800" height="1000" role="img" aria-label="Photograph coming soon">
+  <!-- 4:5 portrait so it fills the panel's photo slot without object-fit
+       cropping anything meaningful. Colours match the beige/gold placeholder
+       the page used before real photographs were available. -->
+  <rect width="800" height="1000" fill="#f6efe0"/>
+  <g fill="#b39b62">
+    <circle cx="400" cy="430" r="105"/>
+    <path d="M400 570c-115 0-208 78-208 174v36h416v-36c0-96-93-174-208-174z"/>
+  </g>
+</svg>

@@ -1,0 +1,152 @@
+/* ==========================================================================
+   Academic Calendar  —  loaded only by templates/pages/academic_calendar.html
+
+   Everything here styles the two semester tables and the notes below them.
+   The banner and the heading-with-rule come from page-head.css, the header,
+   navigation and footer from main.css.
+   ========================================================================== */
+
+/* --------------------------------------------------------- semester ------ */
+.cal-block { margin-bottom: 42px; }
+.cal-block:last-child { margin-bottom: 0; }
+
+/* The strip above each table: "ODD SEMESTER EXAMINATIONS, 2026". */
+.cal-block__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px 16px;
+  padding: 12px 18px;
+  background: var(--dark);
+  color: #fff;
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+.cal-block__title {
+  margin: 0;
+  font-size: clamp(15px, 1.5vw, 18px);
+  font-weight: 800;
+  letter-spacing: .4px;
+  text-transform: uppercase;
+  color: #fff;
+}
+.cal-block__note { font-size: .78rem; color: rgba(255, 255, 255, .75); }
+
+/* ----------------------------------------------------------- table ------- */
+/* Wrapper scrolls on small screens instead of stretching the page. */
+.cal-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  background: #fff;
+  box-shadow: var(--shadow-sm);
+  border-radius: 0 0 var(--radius) var(--radius);
+}
+
+.cal-table {
+  width: 100%;
+  min-width: 620px;
+  border-collapse: collapse;
+  font-size: .88rem;
+}
+.cal-table th,
+.cal-table td {
+  border: 1px solid var(--line);
+  padding: 12px 16px;
+  text-align: left;
+  vertical-align: top;
+}
+/* First column: the label ("1st Internal Examinations"). */
+.cal-table th[scope="row"] {
+  width: 38%;
+  font-weight: 700;
+  color: var(--ink);
+  background: var(--page-alt);
+}
+.cal-table tbody tr:hover td { background: #fffdf5; }
+
+/* One date line inside a cell.  Several may stack in the same cell — that is
+   how a row like "Commencement of Classes" carries both the UG and PG date. */
+.cal-date { margin: 0; }
+.cal-date + .cal-date { margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--line); }
+/* The "(all PG programmes)" half of a line. */
+.cal-date span { color: var(--muted); }
+
+/* Highlights a row that has already passed or needs attention — add
+   class="is-past" to a <tr>. */
+.cal-table tr.is-past th[scope="row"],
+.cal-table tr.is-past td { opacity: .62; }
+
+/* ----------------------------------------------------------- notes ------- */
+.cal-notes {
+  margin-top: 26px;
+  padding: 18px 20px;
+  background: var(--page-alt);
+  border-left: 4px solid var(--gold);
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+.cal-notes ul { margin: 0; padding-left: 1.1em; }
+.cal-notes li { font-size: .86rem; color: var(--ink-soft); }
+.cal-notes li + li { margin-top: 10px; }
+
+/* ------------------------------------------------------- responsive ----- */
+/* Below 768px a two-column table cannot hold its 620px floor, so the row
+   stacks instead: the label becomes a small caption above its dates and
+   nothing scrolls sideways.  Same treatment .meta-list gets in main.css. */
+@media (max-width: 767.98px) {
+  .cal-scroll { overflow-x: visible; }
+  .cal-table { min-width: 0; font-size: .84rem; }
+  .cal-table, .cal-table tbody, .cal-table tr,
+  .cal-table th, .cal-table td { display: block; }
+
+  .cal-table tr { border-bottom: 1px solid var(--line); }
+  .cal-table tr:last-child { border-bottom: 0; }
+
+  .cal-table th[scope="row"],
+  .cal-table td { width: auto; border: 0; padding: 0 14px; }
+
+  .cal-table th[scope="row"] {
+    padding-top: 14px;
+    padding-bottom: 5px;
+    background: transparent;
+    color: var(--accent);
+    font-size: .72rem;
+    font-weight: 800;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+  }
+  /* The "(for Odd Semester Examination, 2026)" half of a label. */
+  .cal-table th[scope="row"] span { text-transform: none; letter-spacing: 0; }
+
+  .cal-table td { padding-bottom: 14px; }
+  .cal-table tbody tr:hover td { background: transparent; }
+
+  .cal-block__head { border-radius: var(--radius) var(--radius) 0 0; }
+}
+
+@media (max-width: 575.98px) {
+  .cal-block { margin-bottom: 30px; }
+  .cal-notes { padding: 15px 16px; }
+}
+
+/* ----------------------------------------------------------- print ------ */
+/* A calendar gets printed and pinned to a noticeboard, so keep the grid and
+   stop a semester from splitting across two sheets. */
+@media print {
+  .page-banner { min-height: 0; padding: 0; background: none !important; }
+  .page-banner__title { color: #000; text-shadow: none; font-size: 18pt; }
+
+  .cal-block { margin-bottom: 22px; break-inside: avoid; page-break-inside: avoid; }
+  .cal-scroll { overflow: visible; box-shadow: none; }
+  .cal-block__head { background: none; color: #000; padding: 8px 0; }
+  .cal-block__title { color: #000; }
+  .cal-block__note { color: #444; }
+
+  .cal-table { min-width: 0; font-size: 10pt; }
+  .cal-table th, .cal-table td { border: 1px solid #999; padding: 6px 8px; }
+  .cal-table th[scope="row"] { background: none; }
+  .cal-table tr.is-past th[scope="row"],
+  .cal-table tr.is-past td { opacity: 1; }
+  .cal-date span { color: #444; }
+
+  .cal-notes { border-left: 2px solid #999; background: none; }
+}

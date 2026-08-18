@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% comment %}
+===========================================================================
+OUR TEAM  —  served at /page/our-team/ by website.views.our_team
+---------------------------------------------------------------------------
+Header, navigation and footer come from base.html. Do not add them here.
+
+The panels themselves are in includes/people_stack.html, shared with Our
+Mentors, and styled by static/css/team.css (linked below). Each panel is
+sticky at top:0 so the next rides up and covers the one before it.
+
+TO ADD, REMOVE OR REORDER A PERSON
+Edit the TEAM list in website/data.py — nothing in this file changes. The
+panels alternate sides on their own (:nth-of-type in team.css) and the "/ NN"
+counter reads the list length, so both follow automatically.
+
+TO CHANGE A PHOTO
+Put the file in static/img/our_team/ and point that person's "photo" key at
+it. Portrait crops best: the slot is tall on desktop and square below 992px,
+and the image is cover-fitted from the top, so faces survive the crop.
+
+NOTE ON COMMENTS: the hash-style Django comment {# … #} covers a SINGLE line.
+For a multi-line note use a comment/endcomment pair like this one, or the text
+leaks onto the page.
+===========================================================================
+{% endcomment %}
+
+{% block title %}Our Team | {{ site.site_name }}{% endblock %}
+{% block meta_description %}Meet the leadership and administration of Swami Vivekananda University — the Chancellor, Vice Chancellor, Registrar, Directors and senior academic staff.{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/team.css' %}">
+{% endblock %}
+
+{% block content %}
+  {% include "includes/people_stack.html" with people=team %}
+{% endblock %}

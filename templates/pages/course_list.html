@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Schools &amp; Courses — {{ site.site_name }}{% endblock %}
+
+{% block content %}
+{% include "includes/page_hero.html" %}
+
+<section class="section">
+  <div class="shell">
+
+    <div class="chip-row" role="group" aria-label="Filter by programme">
+      <a class="chip {% if not selected_program %}is-active{% endif %}"
+         href="?{% if selected_school %}school={{ selected_school }}{% endif %}">All programmes</a>
+      {% for program in programs %}
+        <a class="chip {% if selected_program == program.slug %}is-active{% endif %}"
+           href="?program={{ program.slug }}{% if selected_school %}&amp;school={{ selected_school }}{% endif %}">{{ program.name }}</a>
+      {% endfor %}
+    </div>
+
+    <div class="chip-row" role="group" aria-label="Filter by school">
+      <a class="chip {% if not selected_school %}is-active{% endif %}"
+         href="?{% if selected_program %}program={{ selected_program }}{% endif %}">All schools</a>
+      {% for school in schools %}
+        <a class="chip {% if selected_school == school.slug %}is-active{% endif %}"
+           href="?school={{ school.slug }}{% if selected_program %}&amp;program={{ selected_program }}{% endif %}">{{ school.name }}</a>
+      {% endfor %}
+    </div>
+
+    {# Departments appear once a school is chosen — school, then department. #}
+    {% if departments %}
+      <div class="chip-row" role="group" aria-label="Filter by department">
+        <a class="chip {% if not selected_department %}is-active{% endif %}"
+           href="?school={{ selected_school }}{% if selected_program %}&amp;program={{ selected_program }}{% endif %}">All departments</a>
+        {% for department in departments %}
+          <a class="chip {% if selected_department == department.slug %}is-active{% endif %}"
+             href="?department={{ department.slug }}{% if selected_program %}&amp;program={{ selected_program }}{% endif %}">{{ department.name }}</a>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    {% if courses %}
+      <div class="auto-grid">
+        {% for course in courses %}
+          <div class="card">
+            <h2 style="font-size:1.02rem">{{ course.name }}</h2>
+            <ul class="meta-list">
+              <li><span class="k">School</span><span>{{ course.school_name }}</span></li>
+              <li><span class="k">Department</span><span>{{ course.department_name }}</span></li>
+              <li><span class="k">Programme</span><span>{{ course.program_name }}</span></li>
+              <li><span class="k">Duration</span><span>{{ course.duration }}</span></li>
+              <li><span class="k">Intake</span><span>{{ course.total_seats }} seats</span></li>
+            </ul>
+            <p><a class="btn btn--outline-gold btn--sm" href="{{ course.url }}">View Details</a></p>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <svg aria-hidden="true"><use href="#i-book"></use></svg>
+        <p>No courses match that combination. Try clearing a filter.</p>
+      </div>
+    {% endif %}
+
+  </div>
+</section>
+{% endblock %}

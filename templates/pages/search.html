@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Search — {{ site.site_name }}{% endblock %}
+{% block robots %}noindex, follow{% endblock %}
+
+{% block content %}
+{% include "includes/page_hero.html" %}
+
+<section class="section">
+  <div class="shell" style="max-width:860px">
+
+    <form action="{% url 'website:search' %}" method="get" role="search" class="form-field">
+      <label for="page-search">Search the website</label>
+      <input type="search" id="page-search" name="q" value="{{ query }}"
+             placeholder="Course, school, event or notice…" maxlength="80" required>
+      <p style="margin-top:10px"><button class="btn btn--gold btn--sm" type="submit">Search</button></p>
+    </form>
+
+    {% if query %}
+      {% if results %}
+        <ul class="notice-board__list">
+          {% for item in results %}
+            <li class="notice-item">
+              <span class="notice-item__date">{{ item.type }}</span>
+              <a class="notice-item__title" href="{{ item.url }}">{{ item.title }}</a>
+              {% if item.excerpt %}
+                <p style="font-size:.84rem;color:var(--muted);margin:4px 0 0">{{ item.excerpt|truncatechars:150 }}</p>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <div class="empty-state">
+          <svg aria-hidden="true"><use href="#i-search"></use></svg>
+          <p>Nothing matched “{{ query }}”. Try a different keyword.</p>
+        </div>
+      {% endif %}
+    {% endif %}
+
+  </div>
+</section>
+{% endblock %}

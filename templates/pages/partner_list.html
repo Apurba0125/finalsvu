@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Industry Partners — {{ site.site_name }}{% endblock %}
+
+{% block content %}
+{% include "includes/page_hero.html" %}
+
+<section class="section">
+  <div class="shell">
+    <div class="enlist-grid">
+      {% for partner in partners %}
+        <div class="enlist-card">
+          <div class="enlist-card__media">
+            <img src="{% static partner.logo %}" alt="{{ partner.name }} logo"
+                 loading="lazy" width="300" height="200">
+          </div>
+          <p class="enlist-card__title">{{ partner.name }}</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

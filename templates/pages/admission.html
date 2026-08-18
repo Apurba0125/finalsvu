@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Admission — {{ site.site_name }}{% endblock %}
+
+{% block content %}
+{% include "includes/page_hero.html" %}
+
+<section class="section">
+  <div class="shell home-band__grid" style="align-items:start">
+
+    <div style="grid-column:span 2">
+      {% if steps %}
+        <h2 class="section-title section-title--underline">
+          <span class="h-dark">ADMISSION</span> <span class="h-accent">PROCESS</span>
+        </h2>
+        <div class="centres">
+          {% for step in steps %}
+            <div class="centre">
+              <span class="centre__icon" aria-hidden="true">{{ forloop.counter }}</span>
+              <div>
+                <h3 class="centre__title">{{ step.title }}</h3>
+                <p class="centre__text">{{ step.description }}</p>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if scholarships %}
+        <h2 class="section-title section-title--underline">
+          <span class="h-dark">SCHOLARSHIPS</span> <span class="h-accent">&amp; WAIVERS</span>
+        </h2>
+        <div class="auto-grid">
+          {% for item in scholarships %}
+            <div class="card">
+              <h3>{{ item.title }}</h3>
+              {% if item.percentage %}<p><strong>{{ item.percentage }}% waiver</strong></p>{% endif %}
+              <p>{{ item.description }}</p>
+              {% if item.criteria %}<p><em>{{ item.criteria }}</em></p>{% endif %}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if featured_courses %}
+        <h2 class="section-title section-title--underline">
+          <span class="h-dark">POPULAR</span> <span class="h-accent">COURSES</span>
+        </h2>
+        <div class="auto-grid">
+          {% for course in featured_courses %}
+            <div class="card">
+              <h3 style="font-size:1rem">{{ course.name }}</h3>
+              <ul class="meta-list">
+                <li><span class="k">Duration</span><span>{{ course.duration }}</span></li>
+                <li><span class="k">School</span><span>{{ course.school_name }}</span></li>
+              </ul>
+              <p><a class="btn btn--outline-gold btn--sm" href="{{ course.url }}">View Details</a></p>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+
+    <aside class="enquiry-panel">
+      <div class="panel">
+        <h2 class="panel__head">Enquiry Form</h2>
+        <div class="panel__body">
+          <div class="enquiry-panel__scroll">
+            {% include "includes/enquiry_form.html" with ajax=1 %}
+          </div>
+        </div>
+      </div>
+
+      {% if site.admission_ad_image %}
+        <div class="enquiry-ad">
+          <img src="{% static site.admission_ad_image %}"
+               alt="{{ site.admission_banner_text }}" width="450" height="700" loading="lazy">
+        </div>
+      {% endif %}
+    </aside>
+
+  </div>
+</section>
+{% endblock %}

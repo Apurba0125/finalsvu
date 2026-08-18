@@ -1,0 +1,306 @@
+/* ==========================================================================
+   About Us  —  /page/about-svu/
+   Loaded only by templates/pages/about.html, on top of main.css.
+
+   Ported from the earlier build's department/about pages. The header, footer
+   and navigation come from base.html; the photo banner and the section
+   heading come from page-head.css, which this page loads first and shares
+   with Recognition & Approvals. What is left here is unique to About Us:
+   the split intro, the tab panel, the affiliations and the award cards.
+
+   Colours reuse the tokens already in main.css (--red for the active pill,
+   --ink, --line, --radius), plus one local navy for the resting pills so the
+   panel matches the reference design.
+   ========================================================================== */
+
+:root {
+  --about-navy: #1b3a8f;
+  --about-navy-dark: #16307a;
+}
+
+/* ------------------------------------------------------------ intro ----- */
+.about-intro__grid {
+  display: grid;
+  grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr);
+  align-items: center;
+  gap: 48px;
+}
+.about-intro__media {
+  overflow: hidden;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+.about-intro__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-height: 340px;
+  object-fit: cover;
+  transition: transform .6s ease;
+}
+.about-intro__media:hover img { transform: scale(1.05); }
+.about-intro__body p {
+  margin: 0;
+  color: #4a4a4a;
+  font-size: .92rem;
+  line-height: 1.85;
+  text-align: justify;
+}
+.about-intro__body p + p { margin-top: 14px; }
+
+/* ------------------------------------------------------------- tabs ----- */
+/* Tinted so the tabbed block reads as its own zone against the white intro. */
+.about-tabs { background: #f7f8fb; }
+
+.about-tab-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0 0 28px;
+  padding: 0;
+  list-style: none;
+}
+/* The <li> is the flex item so the button can fill it edge to edge — that
+   keeps every pill the same height when a long label wraps to two lines. */
+.about-tab-item { flex: 1 1 170px; display: flex; }
+.about-tab {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  padding: 12px 18px;
+  border: 0;
+  border-radius: 26px;
+  background-color: var(--about-navy);
+  color: #fff;
+  font: inherit;
+  font-size: .8rem;
+  font-weight: 700;
+  line-height: 1.3;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color var(--transition);
+}
+.about-tab:hover { background-color: var(--about-navy-dark); color: #fff; }
+.about-tab.is-active { background-color: var(--red); }
+.about-tab:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+/* Mobile control. Hidden here, swapped in under 768px where four pills wrap to
+   three rows and cost more height than the panel content. A native <select>
+   would be drawn by the OS and ignore the pill shape, so this opens the real
+   list instead — same buttons, no second copy of the labels to keep in sync. */
+.about-tab-toggle {
+  display: none;
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 13px 18px;
+  border: 0;
+  border-radius: 26px;
+  background-color: var(--about-navy);
+  color: #fff;
+  font: inherit;
+  font-size: .84rem;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+}
+.about-tab-toggle svg {
+  width: 12px; height: 12px;
+  fill: currentColor;
+  flex-shrink: 0;
+  transition: transform var(--transition);
+}
+.about-tab-toggle[aria-expanded="true"] svg { transform: rotate(180deg); }
+.about-tab-toggle:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+/* ------------------------------------------------------------ panes ----- */
+.about-pane { display: none; }
+.about-pane.is-active { display: block; animation: aboutBlockIn .45s ease both; }
+
+.about-pane__heading {
+  margin: 0 0 12px;
+  font-size: clamp(18px, 2vw, 23px);
+  font-weight: 800;
+  color: var(--ink);
+}
+.about-pane__intro {
+  margin: 0 0 22px;
+  color: #4a4a4a;
+  font-size: .92rem;
+  line-height: 1.8;
+  text-align: justify;
+}
+
+.about-points { list-style: none; margin: 0; padding: 0; }
+.about-point { display: flex; align-items: flex-start; gap: 14px; }
+.about-point + .about-point { margin-top: 18px; }
+.about-point__icon {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 34px; height: 34px;
+  border-radius: 4px;
+  background: var(--about-navy);
+  color: #fff;
+}
+.about-point__icon svg { width: 17px; height: 17px; fill: currentColor; }
+.about-point p {
+  margin: 0;
+  color: #4a4a4a;
+  font-size: .89rem;
+  line-height: 1.75;
+  text-align: justify;
+}
+.about-point strong { color: var(--ink); }
+
+/* --------------------------------------------- awards tab: photo + copy -- */
+.about-split {
+  display: grid;
+  grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+  gap: clamp(22px, 3vw, 40px);
+  align-items: start;
+}
+.about-split__media { margin: 0; }
+.about-split__media img {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+.about-split__copy p {
+  margin: 0;
+  color: #4a4a4a;
+  font-size: .92rem;
+  line-height: 1.85;
+  text-align: justify;
+}
+.about-split__copy p + p { margin-top: 14px; }
+.about-split__copy strong { color: var(--ink); }
+
+/* ------------------------------------------- sub-blocks inside a pane ---- */
+.about-subsection { margin-top: 40px; }
+.about-subheading {
+  margin: 0;
+  color: var(--ink);
+  font-size: clamp(17px, 1.9vw, 22px);
+  font-weight: 800;
+  line-height: 1.3;
+}
+.about-subsection .page-rule { margin: 10px 0 20px; }
+
+.about-affiliation + .about-affiliation { margin-top: 22px; }
+.about-affiliation__title {
+  margin: 0 0 8px;
+  color: var(--ink);
+  font-size: clamp(16px, 1.7vw, 19px);
+  font-weight: 800;
+  line-height: 1.35;
+}
+.about-affiliation p {
+  margin: 0;
+  max-width: 90ch;
+  color: #4a4a4a;
+  font-size: .92rem;
+  line-height: 1.85;
+}
+.about-affiliation strong { color: var(--ink); }
+
+/* ------------------------------------------------------ award cards ----- */
+.about-awards__lead {
+  margin: 0 0 20px;
+  color: #4a4a4a;
+  font-size: .92rem;
+  line-height: 1.8;
+}
+.about-award-list { display: grid; gap: 20px; }
+.about-award {
+  padding: 22px 26px;
+  border-radius: var(--radius);
+  /* Tinted panel with a red spine, so a run of near-identical write-ups still
+     reads as separate entries when scrolled past quickly. */
+  background: #e8f1fb;
+  border-left: 4px solid var(--red);
+}
+.about-award p {
+  margin: 0;
+  color: #3f4a57;
+  font-size: .87rem;
+  line-height: 1.8;
+  text-align: justify;
+}
+.about-award p + p { margin-top: 10px; }
+.about-award strong { color: #16202c; font-weight: 700; }
+.about-award__lead { color: #16202c; }
+
+/* ------------------------------------------------- reveal on tab open ---- */
+@keyframes aboutBlockIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+/* The list wrapper is excluded: its cards animate individually below, and
+   fading the wrapper too nests one opacity transition inside another. */
+.about-pane.is-active .about-subsection > *:not(.about-award-list),
+.about-pane.is-active .about-award { animation: aboutBlockIn .5s ease both; }
+
+/* Stagger by position, so adding an award needs no per-card bookkeeping.
+   Past the sixth card the wait stops being pleasant, so it holds flat. */
+.about-pane.is-active .about-award:nth-child(1) { animation-delay: .04s; }
+.about-pane.is-active .about-award:nth-child(2) { animation-delay: .10s; }
+.about-pane.is-active .about-award:nth-child(3) { animation-delay: .16s; }
+.about-pane.is-active .about-award:nth-child(4) { animation-delay: .22s; }
+.about-pane.is-active .about-award:nth-child(5) { animation-delay: .28s; }
+.about-pane.is-active .about-award:nth-child(n+6) { animation-delay: .34s; }
+
+/* ------------------------------------------------------- responsive ----- */
+@media (max-width: 991.98px) {
+  .about-intro__grid { grid-template-columns: minmax(0, 1fr); gap: 26px; }
+  .about-intro__media img { max-height: 300px; }
+  .about-tab-item { flex: 1 1 140px; }
+  .about-tab { font-size: .76rem; padding: 11px 14px; }
+  .about-split { grid-template-columns: minmax(0, 1fr); gap: 22px; }
+  /* Capped: at full width the photo dwarfs the text it illustrates. */
+  .about-split__media { max-width: 460px; margin-inline: auto; }
+}
+
+@media (max-width: 767.98px) {
+  /* Justified text over a narrow measure opens rivers of white space. */
+  .about-intro__body p,
+  .about-pane__intro,
+  .about-point p,
+  .about-split__copy p,
+  .about-award p { text-align: left; }
+
+  /* The pill list becomes the dropdown: collapsed until the toggle opens it,
+     then stacked full width so every option keeps its rounded shape. */
+  .about-tab-toggle { display: flex; margin-bottom: 22px; }
+  /* The gap below has to live on the toggle: while the menu is shut the list
+     is display:none and contributes no margin of its own. */
+  .about-tab-toggle[aria-expanded="true"] { margin-bottom: 10px; }
+  .about-tab-nav {
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 0;
+    margin-bottom: 22px;
+  }
+  .about-tab-nav.is-open { display: flex; }
+  .about-tab-item { flex: 0 0 auto; }
+  .about-tab { text-align: left; padding: 12px 18px; }
+  .about-award { padding: 18px 20px; }
+}
+
+@media (max-width: 575.98px) {
+  .about-point { gap: 11px; }
+  .about-point__icon { width: 28px; height: 28px; }
+  .about-point__icon svg { width: 15px; height: 15px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-intro__media:hover img { transform: none; }
+  .about-pane.is-active,
+  .about-pane.is-active .about-subsection > *,
+  .about-pane.is-active .about-award { animation: none; opacity: 1; }
+}

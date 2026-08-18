@@ -1,0 +1,382 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% comment %}
+===========================================================================
+ABOUT US  —  served at /page/about-svu/ by website.views.about
+---------------------------------------------------------------------------
+Header, navigation and footer come from base.html. Do not add them here.
+
+Styling: page-head.css gives the banner and the section heading with its
+rule (shared with Recognition & Approvals); about.css is only what this
+page adds on top — the split intro, the tab panel and the award cards.
+
+To add a tab, add two things that reference the same id:
+  1. a list item + button in .about-tab-nav   data-tab-target="#pane-X"
+  2. a .about-pane below                      id="pane-X"
+Exactly one button carries "is-active" and one pane carries "is-active", and
+they must be the same tab. The mobile dropdown builds its label from that
+same list, so there is nothing extra to keep in step.
+
+Tab switching is plain JS in static/js/main.js (initAboutTabs) — this build
+has no Bootstrap, so there is no data-bs-toggle here.
+===========================================================================
+{% endcomment %}
+
+{% block title %}About Us | {{ site.site_name }}{% endblock %}
+{% block meta_description %}Swami Vivekananda University, established in 2019 at Barrackpore, West Bengal — affiliations, recognitions and the awards won since inception.{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/page-head.css' %}">
+  <link rel="stylesheet" href="{% static 'css/about.css' %}">
+{% endblock %}
+
+{% block content %}
+
+{# ===========================================================  BANNER  === #}
+<section class="page-banner"
+         style="background-image: linear-gradient(0deg, rgba(10,10,10,.72), rgba(10,10,10,.55)), url('{% static 'img/about/team.png' %}');">
+  <div class="shell">
+    <h1 class="page-banner__title">About Us</h1>
+  </div>
+</section>
+
+
+{# ====================================================  WHY CHOOSE US  === #}
+<section class="section section--white about-intro">
+  <div class="shell about-intro__grid">
+
+    <div class="about-intro__media">
+      <img src="{% static 'img/about/campus.jpg' %}"
+           alt="The Swami Vivekananda University campus at Barrackpore, with the WE LOVE SVU installation on the lawn"
+           width="900" height="620" loading="lazy">
+    </div>
+
+    <div class="about-intro__body">
+      <div class="page-head">
+        <h2 class="page-heading">Why <span>Choose Us</span></h2>
+        <span class="page-rule"></span>
+      </div>
+      <p>
+        Welcome to Swami Vivekananda University. Established in 2019, it is among the most
+        promising and upcoming private universities in Eastern India. With more than 10,000
+        students, 500 research scholars and 300 faculty members, it has always been the
+        university's endeavour to transform bold ambitions of the future generations into
+        life-changing realities. Under the guidance of eminent national and international
+        scholars as mentors, the university is well defined by the spirit of innovation and
+        enterprise. Students are provided with fully air conditioned classrooms, a high-quality
+        learning environment with smart classrooms, an extensive library with digital resources,
+        well-equipped laboratories with modern pedagogical tools, a hybrid mode of education
+        system, ICT based teaching methods, and highly qualified, well-trained and encouraging
+        educators. The university provides a wide range of diploma, graduation and
+        post-graduation courses along with doctoral degree programmes in multiple disciplines.
+      </p>
+      <p>
+        The aesthetic campus forms the centre of attraction for the students as it includes
+        greeneries and water bodies, and along with that, it is also furnished with a gymnasium,
+        cafeteria, open air theatre, auditorium, and all other possible amenities of the modern
+        times. Most importantly, the university also facilitates a number of scholarships to help
+        students financially to pursue their dreams.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+
+{# =============================================================  TABS  === #}
+<section class="section about-tabs" data-about-tabs>
+  <div class="shell">
+
+    <button class="about-tab-toggle" type="button" data-about-tab-toggle
+            aria-expanded="false" aria-controls="aboutTabNav">
+      <span data-about-tab-current>Mission &amp; Vision</span>
+      <svg aria-hidden="true" focusable="false"><use href="#i-caret"></use></svg>
+    </button>
+
+    <ul class="about-tab-nav" id="aboutTabNav" role="tablist" aria-label="About the university">
+      <li class="about-tab-item" role="presentation">
+        <button class="about-tab is-active" type="button" role="tab" id="tab-mission"
+                data-tab-target="#pane-mission" aria-controls="pane-mission"
+                aria-selected="true">Mission &amp; Vision</button>
+      </li>
+      <li class="about-tab-item" role="presentation">
+        <button class="about-tab" type="button" role="tab" id="tab-values"
+                data-tab-target="#pane-values" aria-controls="pane-values"
+                aria-selected="false">Our Core Values</button>
+      </li>
+      <li class="about-tab-item" role="presentation">
+        <button class="about-tab" type="button" role="tab" id="tab-features"
+                data-tab-target="#pane-features" aria-controls="pane-features"
+                aria-selected="false">Salient Features</button>
+      </li>
+      <li class="about-tab-item" role="presentation">
+        <button class="about-tab" type="button" role="tab" id="tab-awards"
+                data-tab-target="#pane-awards" aria-controls="pane-awards"
+                aria-selected="false">Awards &amp; Recognitions</button>
+      </li>
+    </ul>
+
+    {% comment %}
+    The three panes below are written in the university's voice rather than
+    transcribed from an official document. Replace them with the official
+    mission, values and features statements when those are available. The
+    Awards pane after them, and the affiliation dates inside it, are real.
+    {% endcomment %}
+    <div class="about-pane is-active" id="pane-mission" role="tabpanel"
+         aria-labelledby="tab-mission" tabindex="0">
+      <h2 class="about-pane__heading">Mission &amp; Vision</h2>
+      <p class="about-pane__intro">
+        Swami Vivekananda University was founded to widen access to higher education in Eastern
+        India without lowering what that education demands. The mission works out as:
+      </p>
+      <ul class="about-points">
+        <li class="about-point">
+          <span class="about-point__icon" aria-hidden="true">
+            <svg focusable="false"><use href="#i-book"></use></svg>
+          </span>
+          <p><strong>Education:</strong> to deliver diploma, undergraduate, postgraduate and
+          doctoral programmes that hold their value in the workplace, taught by faculty who are
+          still active in their own fields.</p>
+        </li>
+        <li class="about-point">
+          <span class="about-point__icon" aria-hidden="true">
+            <svg focusable="false"><use href="#i-lab"></use></svg>
+          </span>
+          <p><strong>Research:</strong> to build a research culture that reaches undergraduates,
+          not only scholars — supported by funded laboratories and departmental research groups.</p>
+        </li>
+        <li class="about-point">
+          <span class="about-point__icon" aria-hidden="true">
+            <svg focusable="false"><use href="#i-handshake"></use></svg>
+          </span>
+          <p><strong>Industry connection:</strong> to keep curricula answerable to what employers
+          actually need, through partnerships, internships and professional bodies.</p>
+        </li>
+        <li class="about-point">
+          <span class="about-point__icon" aria-hidden="true">
+            <svg focusable="false"><use href="#i-users"></use></svg>
+          </span>
+          <p><strong>Access:</strong> to make sure a capable student is never turned away by cost,
+          through scholarships and financial assistance.</p>
+        </li>
+      </ul>
+    </div>
+
+    <div class="about-pane" id="pane-values" role="tabpanel"
+         aria-labelledby="tab-values" tabindex="0">
+      <h2 class="about-pane__heading">Our Core Values</h2>
+      <p class="about-pane__intro">
+        The values that shape how the university teaches, researches and grows:
+      </p>
+      <ul class="about-points">
+        <li class="about-point">
+          <span class="about-point__icon" aria-hidden="true">
+            <svg focusable="false"><use href="#i-excellence"></use></svg>
+          </span>
+          <p><strong>Excellence:</strong> holding teaching, assessment and research to a standard
+          that stands up outside the campus gates.</p>
+        </li>
+        <li class="about-point">
+          <span class="about-point__icon" aria-hidden="true">
+            <svg focusable="false"><use href="#i-innovation"></use></svg>
+          </span>
+          <p><strong>Innovation:</strong> treating new methods, tools and ideas as the normal way
+          of working rather than an occasional experiment.</p>
+        </li>
+        <li class="about-point">
+          <span class="about-point__icon" aria-hidden="true">
+            <svg focusable="false"><use href="#i-scales"></use></svg>
+          </span>
+          <p><strong>Integrity:</strong> honest evaluation, honest research and honest dealing
+          with students and their families.</p>
+        </li>
+        <li class="about-point">
+          <span class="about-point__icon" aria-hidden="true">
+            <svg focusable="false"><use href="#i-users"></use></svg>
+          </span>
+          <p><strong>Inclusion:</strong> a campus where background, language and means do not
+          decide how far a student gets.</p>
+        </li>
+      </ul>
+    </div>
+
+    <div class="about-pane" id="pane-features" role="tabpanel"
+         aria-labelledby="tab-features" tabindex="0">
+      <h2 class="about-pane__heading">Salient Features</h2>
+      <p class="about-pane__intro">What a student actually finds on arrival:</p>
+      <ul class="about-points">
+        <li class="about-point">
+          <span class="about-point__icon" aria-hidden="true">
+            <svg focusable="false"><use href="#i-classroom"></use></svg>
+          </span>
+          <p>Fully air conditioned smart classrooms with ICT based teaching and a hybrid mode of
+          delivery.</p>
+        </li>
+        <li class="about-point">
+          <span class="about-point__icon" aria-hidden="true">
+            <svg focusable="false"><use href="#i-library"></use></svg>
+          </span>
+          <p>An extensive library with digital resources, alongside laboratories equipped with
+          modern pedagogical tools.</p>
+        </li>
+        <li class="about-point">
+          <span class="about-point__icon" aria-hidden="true">
+            <svg focusable="false"><use href="#i-leaf"></use></svg>
+          </span>
+          <p>A green campus with water bodies, a gymnasium, cafeteria, open air theatre and
+          auditorium.</p>
+        </li>
+        <li class="about-point">
+          <span class="about-point__icon" aria-hidden="true">
+            <svg focusable="false"><use href="#i-graduation"></use></svg>
+          </span>
+          <p>Diploma through doctoral programmes across engineering, science, management, law,
+          allied health and the humanities.</p>
+        </li>
+      </ul>
+    </div>
+
+    {# Real copy, with the photo beside it. #}
+    <div class="about-pane" id="pane-awards" role="tabpanel"
+         aria-labelledby="tab-awards" tabindex="0">
+      <div class="about-split">
+        <figure class="about-split__media">
+          <img src="{% static 'img/about/award-news18-2024.jpg' %}"
+               alt="Swami Vivekananda University accepting a trophy at the News18 Bangla Education Eminence 2024 awards"
+               width="800" height="600" loading="lazy">
+        </figure>
+        <div class="about-split__copy">
+          <p>
+            At <strong>Swami Vivekananda University</strong>, we take pride in our commitment to
+            excellence, innovation, and leadership in education. Our institution's dedication to
+            academic rigour, research, and community engagement has earned us numerous prestigious
+            awards and recognitions. These accolades reflect the hard work and exceptional
+            achievements of our faculty, students, and alumni. From awards recognising
+            groundbreaking research and teaching excellence to honours for our contributions to
+            the community and professional fields, these recognitions underscore our role as a
+            leader in higher education.
+          </p>
+          <p>
+            Each award not only highlights our accomplishments but also inspires us to continue
+            striving for excellence and making a positive impact on the world. We invite you to
+            explore this section and learn more about the prestigious awards and recognitions that
+            showcase the exceptional quality and impact of Swami Vivekananda University. As we
+            continue to advance and innovate, these honours inspire us to pursue even greater
+            achievements and uphold our legacy of excellence.
+          </p>
+        </div>
+      </div>
+
+      {% comment %}
+      Affiliations and the award list sit inside this pane, so they appear only
+      once this tab is chosen. Note: {# #} covers ONE line only — a two-line
+      hash comment leaks onto the page, so multi-line notes use this tag pair.
+      {% endcomment %}
+      <div class="about-subsection">
+        <h3 class="about-subheading">Affiliations</h3>
+        <span class="page-rule"></span>
+
+        <div class="about-affiliation">
+          <h4 class="about-affiliation__title">Recognised by the West Bengal Government</h4>
+          <p>
+            On <strong>4th September 2019</strong>, the Swami Vivekananda University Bill, 2019
+            was passed by the West Bengal Legislative Assembly.
+          </p>
+        </div>
+
+        <div class="about-affiliation">
+          <h4 class="about-affiliation__title">Permission from the Department of Higher Education, West Bengal</h4>
+          <p>
+            We received permission to start the academic and administrative activities of Swami
+            Vivekananda University from the Department of Higher Education, West Bengal on
+            <strong>5th December 2019</strong>.
+          </p>
+        </div>
+      </div>
+
+      {% comment %}
+      To add an award, copy one .about-award block. The stagger is handled by
+      nth-child in about.css, so a new card slots into the sequence on its own.
+      {% endcomment %}
+      <div class="about-subsection">
+        <h3 class="about-subheading">Awards &amp; Recognitions</h3>
+        <span class="page-rule"></span>
+        <p class="about-awards__lead">
+          We are elated to share the list of the prestigious awards that we have won in different
+          categories over the past years.
+        </p>
+
+        <div class="about-award-list">
+
+          <article class="about-award">
+            <p class="about-award__lead">
+              Swami Vivekananda University won the coveted <strong>News18 Bangla Education Eminence
+              Award 2024 for Most Promising University in Eastern India on 21st June 2024.</strong>
+            </p>
+            <p>
+              The News18 Bangla Education Eminence Award 2024 honours outstanding contributions to
+              the field of education. Recognising institutions and individuals who demonstrate
+              exceptional academic excellence, innovative teaching methods, and impactful community
+              engagement, this prestigious award highlights those who drive educational advancement
+              and inspire future leaders.
+            </p>
+          </article>
+
+          <article class="about-award">
+            <p class="about-award__lead">
+              Swami Vivekananda University won the prestigious <strong>Zee Education Excellence
+              Award 2024 for Excellence in Academic Infrastructure &amp; Activities on 26th June
+              2024.</strong>
+            </p>
+            <p>
+              The Zee Education Excellence Award 2024 celebrates outstanding achievements in the
+              field of education. Presented by Zee Media, it honours institutions, educators and
+              innovators who demonstrate exceptional quality in teaching, research and educational
+              leadership.
+            </p>
+          </article>
+
+          <article class="about-award">
+            <p class="about-award__lead">
+              Swami Vivekananda University won the esteemed <strong>ABP Ananda Shiksha Samman 2024
+              for Excellence in Academic Infrastructure on 27th June 2024.</strong>
+            </p>
+            <p>
+              The ABP Ananda Shiksha Samman 2024 recognises exceptional achievements in education.
+              Presented by ABP Ananda, it honours institutions and educators who have made
+              significant contributions to advancing educational standards and practices.
+            </p>
+          </article>
+
+          <article class="about-award">
+            <p class="about-award__lead">
+              Swami Vivekananda Group of Institutes won the prestigious <strong>ABP Ananda Shiksha
+              Samman 2023 for Outstanding Academic Excellence on 10th June 2023.</strong>
+            </p>
+            <p>
+              The award celebrates excellence in teaching, innovative educational methods and
+              impactful community initiatives — a mark of distinction for those shaping the future
+              of education with commitment.
+            </p>
+          </article>
+
+          <article class="about-award">
+            <p class="about-award__lead">
+              Swami Vivekananda University won the prestigious <strong>News18 Bangla Education
+              Eminence Award 2022 for Excellence in Academic Performance on 28th May 2022.</strong>
+            </p>
+            <p>
+              Awarded by News18 Bangla, a leading media outlet, it celebrates achievements that
+              elevate educational standards and foster transformative learning experiences.
+            </p>
+          </article>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+{% endblock %}

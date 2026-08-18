@@ -1,0 +1,108 @@
+{% comment %}
+The gold enquiry panel. Views pass: enquiry_form, captcha_token, captcha_image.
+`ajax=1` lets main.js submit it in place; without JS it posts normally.
+{% endcomment %}
+<form class="enquiry-form"
+      action="{% url 'website:enquiry_submit' %}" method="post"
+      data-enquiry-form
+      {% if ajax %}data-ajax="1"{% endif %}
+      data-cities-url="{% url 'website:api_cities' %}"
+      data-courses-url="{% url 'website:api_courses' %}"
+      novalidate>
+  {% csrf_token %}
+  <input type="hidden" name="captcha_token" value="{{ captcha_token }}">
+
+  <div class="form-status">
+    {% if enquiry_form.non_field_errors %}
+      <div class="alert alert--error" role="alert">
+        {% for error in enquiry_form.non_field_errors %}{{ error }}{% endfor %}
+      </div>
+    {% endif %}
+  </div>
+
+  {# Honeypot — hidden from people, tempting to bots. #}
+  <div class="sr-only" aria-hidden="true">
+    <label>Company <input type="text" name="company" tabindex="-1" autocomplete="off"></label>
+  </div>
+
+  <div class="form-field{% if enquiry_form.name.errors %} has-error{% endif %}">
+    <label class="sr-only" for="{{ enquiry_form.name.id_for_label }}">Name</label>
+    {{ enquiry_form.name }}
+    {% for error in enquiry_form.name.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+  </div>
+
+  <div class="form-field{% if enquiry_form.email.errors %} has-error{% endif %}">
+    <label class="sr-only" for="{{ enquiry_form.email.id_for_label }}">Email address</label>
+    {{ enquiry_form.email }}
+    {% for error in enquiry_form.email.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+  </div>
+
+  <div class="form-field{% if enquiry_form.mobile.errors %} has-error{% endif %}">
+    <label class="sr-only" for="{{ enquiry_form.mobile.id_for_label }}">Mobile number</label>
+    <div class="phone-group">
+      <span class="phone-group__code">+91</span>
+      {{ enquiry_form.mobile }}
+    </div>
+    {% for error in enquiry_form.mobile.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+  </div>
+
+  <div class="form-row form-row--2">
+    <div class="form-field{% if enquiry_form.state.errors %} has-error{% endif %}">
+      <label class="sr-only" for="{{ enquiry_form.state.id_for_label }}">State</label>
+      {{ enquiry_form.state }}
+      {% for error in enquiry_form.state.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+    </div>
+    <div class="form-field{% if enquiry_form.city.errors %} has-error{% endif %}">
+      <label class="sr-only" for="{{ enquiry_form.city.id_for_label }}">City</label>
+      {{ enquiry_form.city }}
+      {% for error in enquiry_form.city.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+    </div>
+  </div>
+
+  {# Programme and department come first — together they narrow the course list. #}
+  <div class="form-row form-row--2">
+    <div class="form-field{% if enquiry_form.program.errors %} has-error{% endif %}">
+      <label class="sr-only" for="{{ enquiry_form.program.id_for_label }}">Programme</label>
+      {{ enquiry_form.program }}
+      {% for error in enquiry_form.program.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+    </div>
+    <div class="form-field{% if enquiry_form.department.errors %} has-error{% endif %}">
+      <label class="sr-only" for="{{ enquiry_form.department.id_for_label }}">Department</label>
+      {{ enquiry_form.department }}
+      {% for error in enquiry_form.department.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+    </div>
+  </div>
+
+  <div class="form-field{% if enquiry_form.course.errors %} has-error{% endif %}">
+    <label class="sr-only" for="{{ enquiry_form.course.id_for_label }}">Course</label>
+    {{ enquiry_form.course }}
+    {% for error in enquiry_form.course.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+  </div>
+
+  <div class="captcha-row">
+    <div class="captcha-box">
+      <img class="captcha-image" src="{{ captcha_image }}" alt="Verification characters" width="130" height="46">
+      <button class="captcha-refresh" type="button" data-endpoint="{% url 'website:api_captcha' %}"
+              aria-label="Get a new verification image">
+        <svg aria-hidden="true" focusable="false"><use href="#i-refresh"></use></svg>
+      </button>
+    </div>
+    <div class="form-field{% if enquiry_form.captcha.errors %} has-error{% endif %}">
+      <label class="sr-only" for="{{ enquiry_form.captcha.id_for_label }}">Enter the characters shown</label>
+      {{ enquiry_form.captcha }}
+      {% for error in enquiry_form.captcha.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+    </div>
+  </div>
+
+  <div class="form-field{% if enquiry_form.consent.errors %} has-error{% endif %}">
+    <label class="consent" for="{{ enquiry_form.consent.id_for_label }}">
+      {{ enquiry_form.consent }}
+      <span>I authorise {{ site.site_name }} to contact me with updates &amp; notifications via
+        email, SMS, RCS, WhatsApp and voice call. This consent will override any registration
+        for DNC/NDNC.</span>
+    </label>
+    {% for error in enquiry_form.consent.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+  </div>
+
+  <button class="btn btn--gold btn--block" type="submit">SUBMIT</button>
+</form>

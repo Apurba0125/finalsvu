@@ -1,0 +1,92 @@
+/* ==========================================================================
+   Recognition & Approvals  —  /page/recognition-approvals/
+   Loaded ALONGSIDE page-head.css, which supplies the banner and the section
+   heading with its rule. This file is only the affiliation cards.
+   ========================================================================== */
+
+.recog-section { background: #f2f2f2; }
+
+/* Wider than the 62px page-head.css default: under a three-word heading like
+   "Affiliation And Recognitions" the short rule reads as a stray dash. */
+.recog-section .page-rule { width: 125px; }
+
+.recog-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 26px;
+}
+
+.recog-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  /* Equal height across the row whatever the name wraps to. */
+  min-height: 96px;
+  padding: 22px 20px;
+  background: #dde7fa;
+  text-align: center;
+  /* The clipped bottom-right corner. clip-path rather than a rotated
+     pseudo-element, so the notch shows the section background through it
+     instead of a coloured patch that would break on any other backdrop. */
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%);
+  transition: background var(--transition), transform var(--transition);
+}
+.recog-card:hover { background: #cfdef8; transform: translateY(-3px); }
+
+/* clip-path crops an outline, so the focus ring is drawn as an inset shadow
+   instead — otherwise the corner of it is sliced off with the card. */
+.recog-card:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 3px var(--red);
+}
+
+.recog-card__name {
+  color: #16202c;
+  font-size: .93rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+.recog-card__more {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--red);
+  font-size: .84rem;
+  font-weight: 600;
+}
+.recog-card__more svg {
+  width: 11px; height: 11px;
+  fill: currentColor;
+  transition: transform var(--transition);
+}
+.recog-card:hover .recog-card__more svg { transform: translateX(3px); }
+
+/* A short line under the grid noting that the documents are placeholders. */
+.recog-note {
+  margin: 26px 0 0;
+  color: var(--muted);
+  font-size: .82rem;
+  line-height: 1.65;
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+@media (max-width: 1000px) {
+  .recog-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+}
+
+@media (max-width: 600px) {
+  .recog-grid { grid-template-columns: 1fr; gap: 16px; }
+  .recog-card { min-height: 0; padding: 20px 18px; }
+  .recog-section .page-rule { width: 90px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .recog-card,
+  .recog-card__more svg { transition: none; }
+  .recog-card:hover { transform: none; }
+  .recog-card:hover .recog-card__more svg { transform: none; }
+}

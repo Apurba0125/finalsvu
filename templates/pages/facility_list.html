@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}SVU Facilities — {{ site.site_name }}{% endblock %}
+
+{% block content %}
+{% include "includes/page_hero.html" %}
+
+<section class="section">
+  <div class="shell">
+    <div class="auto-grid">
+      {% for facility in facilities %}
+        <div class="school-card">
+          <div class="school-card__media">
+            <img src="{% static facility.image %}" alt="{{ facility.title }}"
+                 loading="lazy" width="700" height="394">
+          </div>
+          <div class="school-card__body">
+            <h2 class="school-card__title">{{ facility.title }}</h2>
+            <p class="school-card__desc">{{ facility.description }}</p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

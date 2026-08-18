@@ -1,0 +1,229 @@
+/* ==========================================================================
+   Our Team  —  /page/our-team/
+   Loaded only by templates/pages/our_team.html, on top of main.css.
+
+   Ported from the earlier build's mentors.css, keeping only the scroll-stacked
+   panels (the video hero and Swiper carousel that file also carried belong to
+   a different page and are not here). Header, nav and footer come from
+   base.html like every other page.
+
+   Every panel is sticky at top:0, so the next one rides up and covers the one
+   before it rather than pushing it off.
+   ========================================================================== */
+
+/* The dark floor the panels sit on. Only ever seen for a frame during an
+   overscroll bounce, but without it that gap flashes white. */
+.team-stack { background: var(--darker); }
+
+/* Intro band. Deliberately NOT sticky: it scrolls away normally and the first
+   panel rides up over it, which is what sets the stacking effect going. */
+.team-stack__head {
+  padding: clamp(52px, 7.5vw, 92px) 0 clamp(46px, 6.5vw, 78px);
+  background: var(--darker);
+  color: #fff;
+  text-align: center;
+}
+.team-stack__title {
+  margin: 0;
+  font-size: clamp(27px, 4vw, 50px);
+  font-weight: 300;
+  line-height: 1.14;
+  letter-spacing: -.01em;
+  color: #fff;
+}
+/* Second half drops to its own line and carries the weight. */
+.team-stack__title strong { display: block; font-weight: 800; }
+.team-stack__rule {
+  display: block;
+  width: 54px;
+  height: 2px;
+  margin: 26px auto 0;
+  background: rgba(255, 255, 255, .65);
+}
+.team-stack__lead {
+  max-width: 60ch;
+  margin: 22px auto 0;
+  color: #cfcfcf;
+  font-size: .92rem;
+  line-height: 1.75;
+}
+
+/* ------------------------------------------------------------- panel ----- */
+.team-panel {
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: center;
+  min-height: 100vh;
+  padding: 56px 0;
+  background: var(--paper);
+  /* Upward shadow: the only thing that reads as "this panel is on top of the
+     previous one" once the two backgrounds are close in tone. */
+  box-shadow: 0 -30px 60px rgba(0, 0, 0, .22);
+}
+/* svh ignores the mobile URL bar, so the panel does not jump as it hides. */
+@supports (min-height: 100svh) {
+  .team-panel { min-height: 100svh; }
+}
+.team-panel:nth-of-type(even) { background: var(--page-alt); }
+
+.team-row {
+  display: grid;
+  grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr);
+  gap: clamp(32px, 5vw, 72px);
+  align-items: center;
+  width: 100%;
+}
+/* Alternate the sides so two people in a row never look like the same slide.
+   The track widths flip too, otherwise the photo lands in the text column. */
+.team-panel:nth-of-type(even) .team-row {
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr);
+}
+.team-panel:nth-of-type(even) .team-shot { order: 2; }
+
+/* ------------------------------------------------------------- photo ----- */
+.team-shot {
+  position: relative;
+  justify-self: center;
+  width: 100%;
+  max-width: 440px;
+  margin: 0;
+}
+.team-shot img {
+  display: block;
+  width: 100%;
+  /* Capped against the viewport rather than set by aspect-ratio: a panel
+     taller than the screen would stick with its own bottom off-screen and the
+     text under it could never be scrolled to. */
+  height: min(58vh, 520px);
+  object-fit: cover;
+  object-position: top center;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  position: relative;
+  z-index: 1;
+  background: #ececec;
+}
+/* Offset outline. Above the panel background but below the photo, so only the
+   part that overhangs shows. */
+.team-shot::after {
+  content: "";
+  position: absolute;
+  right: -16px;
+  bottom: -16px;
+  width: 55%;
+  height: 45%;
+  border: 2px solid var(--red);
+  border-radius: var(--radius);
+  z-index: 0;
+}
+.team-panel:nth-of-type(even) .team-shot::after { right: auto; left: -16px; }
+
+/* ------------------------------------------------------------ speech ----- */
+/* 96ch, well past the ~60ch a pure reading measure would want, deliberately.
+   These messages run to ~1500 characters over as many as five paragraphs. At
+   60ch the tallest panel needed more height than a laptop viewport, and a
+   sticky panel taller than the screen pins at top:0 with its bottom below the
+   fold and no way to scroll to it — the end of the message becomes
+   unreachable. Widening the measure is what fixes that; type size alone could
+   not. Past ~96ch nothing more is gained: the photo becomes the taller column
+   and starts setting the panel height instead. */
+.team-speech { min-width: 0; max-width: 96ch; }
+
+.team-index {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 5px;
+  font-size: .8rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+  color: var(--red);
+}
+.team-index em { font-style: normal; font-weight: 700; color: var(--muted); }
+
+.team-name {
+  margin: 14px 0 5px;
+  font-size: clamp(25px, 3.1vw, 38px);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -.01em;
+  color: var(--ink);
+}
+.team-role {
+  margin: 0;
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.team-rule {
+  display: block;
+  width: 56px;
+  height: 3px;
+  margin: 24px 0;
+  border-radius: 2px;
+  background: var(--red);
+}
+
+/* Sized so the longest message fits one panel rather than running past the
+   fold. Below ~12.5px this stops being comfortable to read, so if a future
+   message still overflows, cut the copy rather than the type. */
+.team-message {
+  margin: 0;
+  font-size: clamp(12.5px, .92vw, 13.5px);
+  line-height: 1.7;
+  color: #4a4a4a;
+  text-align: justify;
+}
+/* Several people run two to five paragraphs. margin:0 above keeps a single
+   paragraph tight under the rule, so the gap goes between consecutive ones. */
+.team-message + .team-message { margin-top: 10px; }
+
+/* ==========================================================================
+   Responsive
+   Below 992px the columns stack, and a photo on top of a paragraph no longer
+   fits one screen. Sticky is dropped there so the panels simply flow; the
+   height guard catches short desktop windows for the same reason.
+   ========================================================================== */
+@media (max-width: 991.98px), (max-height: 700px) {
+  .team-panel {
+    position: static;
+    min-height: 0;
+    padding: 56px 0;
+    box-shadow: none;
+    border-top: 1px solid rgba(0, 0, 0, .07);
+  }
+}
+
+@media (max-width: 991.98px) {
+  .team-row,
+  .team-panel:nth-of-type(even) .team-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+    justify-items: center;
+    text-align: center;
+  }
+  /* Photo first on every panel — alternating sides leaves a column empty. */
+  .team-shot,
+  .team-panel:nth-of-type(even) .team-shot { order: -1; max-width: 300px; }
+  /* Square matches the source headshots, so nothing gets cropped. */
+  .team-shot img { height: auto; aspect-ratio: 1 / 1; }
+  .team-shot::after,
+  .team-panel:nth-of-type(even) .team-shot::after {
+    right: -12px; left: auto; bottom: -12px;
+  }
+  .team-rule { margin: 20px auto; }
+  /* Justification opens rivers of white space over a narrow measure. */
+  .team-message { text-align: left; }
+}
+
+@media (max-width: 575.98px) {
+  .team-panel { padding: 44px 0; }
+  .team-shot { max-width: 240px; }
+  .team-message { line-height: 1.8; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .team-panel { transition: none; }
+}

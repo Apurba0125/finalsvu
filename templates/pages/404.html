@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Page not found — {{ site.site_name }}{% endblock %}
+{% block robots %}noindex, nofollow{% endblock %}
+
+{% block content %}
+{% include "includes/page_hero.html" %}
+
+<section class="section">
+  <div class="shell">
+    <div class="empty-state">
+      <svg aria-hidden="true"><use href="#i-file"></use></svg>
+      <p>We could not find that page. It may have moved, or the link may be out of date.</p>
+      <p style="margin-top:14px">
+        <a class="btn btn--gold btn--sm" href="{% url 'website:home' %}">Back to home</a>
+        <a class="btn btn--outline-gold btn--sm" href="{% url 'website:search' %}">Search the site</a>
+      </p>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,735 @@
+"""Every page of the site is built here.
+
+There is no database in this build.  Each view takes what it needs from
+``website/data.py``, decorates it (URLs, real ``date`` objects, pagination) and
+renders a template.  When the content later moves into models, the templates
+stay exactly as they are and only the lookups in this file change.
+"""
+import datetime
+import logging
+
+from django.core.paginator import Paginator
+from django.http import JsonResponse
+from django.shortcuts import redirect, render
+from django.urls import reverse
+from django.utils.html import escape
+from django.utils.text import slugify
+from django.utils.safestring import mark_safe
+from django.views.decorators.http import require_GET, require_POST
+
+from . import captcha, data
+from .forms import ContactForm, EnquiryForm
+
+logger = logging.getLogger(__name__)
+
+PAGE_SIZE = 9
+
+
+# ---------------------------------------------------------------- helpers
+def _as_date(value):
+    """'2026-05-23' -> ``datetime.date(2026, 5, 23)``; pass anything else through."""
+    if isinstance(value, (datetime.date, datetime.datetime)):
+        return value
+    try:
+        return datetime.datetime.strptime(str(value)[:10], "%Y-%m-%d").date()
+    except (TypeError, ValueError):
+        return None
+
+
+def _events():
+    """Events, newest first, with a resolved URL and a real date."""
+    items = []
+    for row in data.EVENTS:
+        item = dict(row)
+        item["event_date"] = _as_date(row.get("event_date"))
+        item["url"] = reverse("website:event_detail", args=[row["slug"]])
+        items.append(item)
+    items.sort(key=lambda e: e["event_date"] or datetime.date.min, reverse=True)
+    return items
+
+
+def _notices():
+    items = []
+    for row in data.NOTICES:
+        item = dict(row)
+        item["date"] = _as_date(row.get("date"))
+        item["url"] = reverse("website:notice_detail", args=[row["slug"]])
+        items.append(item)
+    items.sort(key=lambda n: n["date"] or datetime.date.min, reverse=True)
+    return items
+
+
+def _schools():
+    items = []
+    for row in data.SCHOOLS:
+        item = dict(row)
+        item["url"] = reverse("website:school_detail", args=[row["slug"]])
+        items.append(item)
+    return items
+
+
+def _departments(school=None):
+    """Departments, each carrying the school it belongs to.
+
+    ``school`` narrows the list to one school slug, which is what the school
+    page needs when it lists its own departments.
+    """
+    school_names = {s["slug"]: s["name"] for s in data.SCHOOLS}
+    items = []
+    for row in data.DEPARTMENTS:
+        if school and row["school"] != school:
+            continue
+        item = dict(row)
+        item["url"] = reverse("website:department_detail", args=[row["slug"]])
+        item["school_name"] = school_names.get(row["school"], "")
+        item["school_url"] = (
+            reverse("website:school_detail", args=[row["school"]])
+            if row["school"] in school_names else ""
+        )
+        item["course_count"] = sum(1 for c in data.COURSES
+                                   if c["department"] == row["slug"])
+        items.append(item)
+    return items
+
+
+def _courses():
+    school_names = {s["slug"]: s["name"] for s in data.SCHOOLS}
+    department_names = {d["slug"]: d["name"] for d in data.DEPARTMENTS}
+    program_names = {p["slug"]: p["name"] for p in data.PROGRAMS}
+    items = []
+    for row in data.COURSES:
+        item = dict(row)
+        item["url"] = reverse("website:course_detail", args=[row["slug"]])
+        item["school_name"] = school_names.get(row["school"], "")
+        item["department_name"] = department_names.get(row["department"], "")
+        item["program_name"] = program_names.get(row["program"], "")
+        item["school_url"] = (
+            reverse("website:school_detail", args=[row["school"]])
+            if row["school"] in school_names else ""
+        )
+        item["department_url"] = (
+            reverse("website:department_detail", args=[row["department"]])
+            if row["department"] in department_names else ""
+        )
+        items.append(item)
+    return items
+
+
+def _find(items, slug, key="slug"):
+    for item in items:
+        if item.get(key) == slug:
+            return item
+    return None
+
+
+def _paginate(request, items):
+    paginator = Paginator(items, PAGE_SIZE)
+    return paginator.get_page(request.GET.get("page"))
+
+
+def _nav_title(path):
+    """Look up a menu label for a URL, so placeholder pages get a real heading."""
+    for entry in data.MAIN_NAV:
+        if entry["href"] == path:
+            return entry["title"]
+        for child in entry["children"]:
+            if child["href"] == path:
+                return child["title"]
+    for entry in data.TOP_NAV + data.FOOTER_LINKS["useful"]:
+        if entry.get("href") == path or entry.get("url") == path:
+            return entry["title"]
+    return ""
+
+
+def _fresh_captcha(form=None):
+    token, image = captcha.issue()
+    if form is not None:
+        form.fields["captcha_token"].initial = token
+    return token, image
+
+
+def _enquiry_context(form=None):
+    """Bound-or-blank enquiry form plus a freshly issued CAPTCHA."""
+    form = form or EnquiryForm()
+    token, image = _fresh_captcha(form)
+    return {"enquiry_form": form, "captcha_token": token, "captcha_image": image}
+
+
+# ---------------------------------------------------------------- homepage
+def home(request):
+    events = _events()
+    context = {
+        "hero_video": data.HERO_VIDEO,
+        "notices": _notices()[:5],
+        "quick_links": data.QUICK_LINKS,
+        "enlistments": data.ENLISTMENTS,
+        "offerings": data.OFFERINGS,
+        "schools": _schools(),
+        "videos": data.VIDEOS,
+        "events": [e for e in events if e["is_featured"]] or events[:6],
+        # CHANCELLOR is commented out in data.py for now — the band hides
+        # itself rather than taking the homepage down with it.
+        "chancellor": getattr(data, "CHANCELLOR", None),
+        "centres": data.CENTRES,
+        "testimonials": data.TESTIMONIALS,
+    }
+    context.update(_enquiry_context())
+    return render(request, "pages/home.html", context)
+
+
+# ---------------------------------------------------------------- academics
+NUMBER_WORDS = ["No", "One", "Two", "Three", "Four", "Five", "Six", "Seven",
+                "Eight", "Nine", "Ten", "Eleven", "Twelve"]
+
+
+def _count_word(number):
+    """3 -> 'Three'.  Falls back to the digits once past the table."""
+    return NUMBER_WORDS[number] if number < len(NUMBER_WORDS) else str(number)
+
+
+def school_list(request):
+    schools = _schools()
+    return render(request, "pages/school_list.html", {
+        "schools": schools,
+        "hero_title": "SVU Schools",
+        # Counted from SCHOOLS rather than written out, so adding or removing a
+        # school never leaves the wrong number on the page.
+        "hero_subtitle": "%s schools covering engineering, management, sciences, agriculture, "
+                         "computer science, health, humanities and law."
+                         % _count_word(len(schools)),
+        "crumbs": [{"label": "Academics"}, {"label": "SVU Schools"}],
+    })
+
+
+def school_detail(request, slug):
+    school = _find(data.SCHOOLS, slug)
+    if not school:
+        return error_404(request, None)
+
+    # A school lists its departments, and each department carries its own
+    # courses — school -> department -> course, the way the academics tree runs.
+    courses = [c for c in _courses() if c["school"] == slug]
+    departments = _departments(school=slug)
+    for department in departments:
+        department["courses"] = [c for c in courses
+                                 if c["department"] == department["slug"]]
+
+    return render(request, "pages/school_detail.html", {
+        "school": school,
+        "departments": departments,
+        "courses": courses,
+        "programs": [p for p in data.PROGRAMS
+                     if any(c["program"] == p["slug"] for c in courses)],
+        "hero_title": school["name"],
+        "hero_subtitle": school["short_description"],
+        "hero_image": school["card_image"],
+        "crumbs": [
+            {"label": "Academics"},
+            {"label": "SVU Schools", "url": reverse("website:school_list")},
+            {"label": school["name"]},
+        ],
+    })
+
+
+def _department_tabs(department):
+    """Tab panels for a department, falling back to the generic set.
+
+    The default copy carries a ``{department}`` placeholder so a department
+    with no bespoke text still reads as its own page.
+    """
+    tabs = data.DEPARTMENT_TABS.get(department["slug"])
+    if tabs is None:
+        tabs = data.DEFAULT_DEPARTMENT_TABS
+
+    def fill(value):
+        return value.replace("{department}", department["name"]) if value else value
+
+    panels = []
+    for index, row in enumerate(tabs):
+        tab = dict(row)
+        tab["slug"] = row.get("slug") or slugify(row["title"]) or "tab-%d" % (index + 1)
+        tab["heading"] = fill(row.get("heading") or row["title"])
+        tab["intro"] = fill(row.get("intro", ""))
+        tab["body"] = [fill(p) for p in row.get("body", [])]
+        tab["points"] = [{"label": fill(p.get("label", "")), "text": fill(p.get("text", ""))}
+                         for p in row.get("points", [])]
+        tab["icon"] = row.get("icon") or "book"
+        panels.append(tab)
+    return panels
+
+
+def department_list(request):
+    """Every department, grouped under the school it belongs to."""
+    groups = []
+    for school in _schools():
+        departments = _departments(school=school["slug"])
+        if departments:
+            groups.append({"school": school, "departments": departments})
+
+    return render(request, "pages/department_list.html", {
+        "groups": groups,
+        "hero_title": "Departments",
+        "hero_subtitle": "Every department of the university, listed under its school.",
+        "crumbs": [{"label": "Academics"}, {"label": "Departments"}],
+    })
+
+
+def department_detail(request, slug):
+    department = _find(_departments(), slug)
+    if not department:
+        return error_404(request, None)
+
+    school = _find(data.SCHOOLS, department["school"])
+    courses = [c for c in _courses() if c["department"] == slug]
+
+    return render(request, "pages/department_detail.html", {
+        "department": department,
+        "school": school,
+        "courses": courses,
+        "faculty": data.DEPARTMENT_FACULTY.get(slug, []),
+        "tabs": _department_tabs(department),
+        "siblings": [d for d in _departments(school=department["school"])
+                     if d["slug"] != slug],
+        "hero_title": department["name"],
+        "hero_subtitle": department["short_description"],
+        "hero_image": school["card_image"] if school else "",
+        "crumbs": [
+            {"label": "Academics"},
+            {"label": "SVU Schools", "url": reverse("website:school_list")},
+            {"label": department["school_name"], "url": department["school_url"]},
+            {"label": department["name"]},
+        ],
+    })
+
+
+def course_list(request):
+    courses = _courses()
+    selected_school = request.GET.get("school", "")
+    selected_department = request.GET.get("department", "")
+    selected_program = request.GET.get("program", "")
+
+    # Picking a department implies its school, so a stale school in the query
+    # string never fights with it.
+    if selected_department:
+        parent = _find(data.DEPARTMENTS, selected_department)
+        if not parent:
+            selected_department = ""
+        else:
+            selected_school = parent["school"]
+
+    if selected_school:
+        courses = [c for c in courses if c["school"] == selected_school]
+    if selected_department:
+        courses = [c for c in courses if c["department"] == selected_department]
+    if selected_program:
+        courses = [c for c in courses if c["program"] == selected_program]
+
+    # Only offer department chips for the school in view; the full list of
+    # seventeen would swamp the filter row.
+    departments = _departments(school=selected_school) if selected_school else []
+
+    return render(request, "pages/course_list.html", {
+        "courses": courses,
+        "schools": data.SCHOOLS,
+        "departments": departments,
+        "programs": data.PROGRAMS,
+        "selected_school": selected_school,
+        "selected_department": selected_department,
+        "selected_program": selected_program,
+        "hero_title": "Schools & Courses",
+        "hero_subtitle": "Undergraduate, postgraduate, diploma and doctoral programmes "
+                         "offered across the university.",
+        "crumbs": [{"label": "Academics"}, {"label": "Schools & Courses"}],
+    })
+
+
+def course_detail(request, slug):
+    course = _find(_courses(), slug)
+    if not course:
+        return error_404(request, None)
+
+    # Nearest first: other courses of the same department, then the rest of
+    # the school if the department is a small one.
+    others = [c for c in _courses() if c["slug"] != slug]
+    related = [c for c in others if c["department"] == course["department"]]
+    related += [c for c in others
+                if c["school"] == course["school"]
+                and c["department"] != course["department"]]
+
+    context = {
+        "course": course,
+        "related": related[:6],
+        "hero_title": course["name"],
+        "hero_subtitle": "%s  |  %s" % (course["program_name"], course["duration"]),
+        "crumbs": [
+            {"label": "Academics"},
+            {"label": "Schools & Courses", "url": reverse("website:course_list")},
+            {"label": course["name"]},
+        ],
+    }
+    context.update(_enquiry_context())
+    return render(request, "pages/course_detail.html", context)
+
+
+def facility_list(request):
+    return render(request, "pages/facility_list.html", {
+        "facilities": data.FACILITIES,
+        "hero_title": "SVU Facilities",
+        "hero_subtitle": "One of the best-in-class infrastructures on campus, built around "
+                         "how students actually study, train and unwind.",
+        "crumbs": [{"label": "Campus Life"}, {"label": "SVU Facilities"}],
+    })
+
+
+def partner_list(request):
+    return render(request, "pages/partner_list.html", {
+        "partners": data.PARTNERS,
+        "hero_title": "Industry Partners",
+        "hero_subtitle": "Organisations that work with us on curriculum, training, "
+                         "internships and placement.",
+        "crumbs": [{"label": "Centre"}, {"label": "Industry Collaboration"}],
+    })
+
+
+# ---------------------------------------------------------------- admission
+def admission(request):
+    context = {
+        "steps": data.ADMISSION_STEPS,
+        "scholarships": data.SCHOLARSHIPS,
+        "programs": data.PROGRAMS,
+        "featured_courses": [c for c in _courses() if c["is_featured"]],
+        "hero_title": "Admission",
+        "hero_subtitle": data.SITE["admission_banner_text"],
+        "crumbs": [{"label": "Admission"}],
+    }
+    context.update(_enquiry_context())
+    return render(request, "pages/admission.html", context)
+
+
+def apply_online(request):
+    """Full-page enquiry form. Handles both a normal POST and the AJAX POST."""
+    if request.method == "POST":
+        return enquiry_submit(request)
+
+    context = {
+        "hero_title": "Apply Online",
+        "hero_subtitle": "Fill in the form and our admission team will call you back.",
+        "crumbs": [
+            {"label": "Admission", "url": reverse("website:admission")},
+            {"label": "Apply Online"},
+        ],
+    }
+    context.update(_enquiry_context())
+    return render(request, "pages/apply.html", context)
+
+
+@require_POST
+def enquiry_submit(request):
+    """Validate an enquiry.
+
+    Nothing is stored yet — the submission is logged so the flow can be tested
+    end to end.  Persisting it is a one-line change once the model exists.
+    """
+    form = EnquiryForm(request.POST)
+    is_ajax = request.headers.get("X-Requested-With") == "XMLHttpRequest"
+
+    if form.is_valid():
+        logger.info("Enquiry received: %s", {
+            k: v for k, v in form.cleaned_data.items()
+            if k not in ("captcha", "captcha_token", "company")
+        })
+        message = ("Thank you! Your enquiry has been received. "
+                   "Our admission team will contact you shortly.")
+        if is_ajax:
+            return JsonResponse({"ok": True, "message": message})
+        context = {
+            "hero_title": "Thank you",
+            "hero_subtitle": message,
+            "crumbs": [
+                {"label": "Admission", "url": reverse("website:admission")},
+                {"label": "Thank you"},
+            ],
+        }
+        context.update(_enquiry_context())
+        return render(request, "pages/enquiry_thanks.html", context)
+
+    if is_ajax:
+        token, image = captcha.issue()
+        return JsonResponse(
+            {"ok": False, "errors": form.errors.get_json_data(),
+             "captcha_token": token, "captcha_image": image},
+            status=400,
+        )
+
+    context = {
+        "hero_title": "Apply Online",
+        "hero_subtitle": "Please correct the highlighted fields.",
+        "crumbs": [
+            {"label": "Admission", "url": reverse("website:admission")},
+            {"label": "Apply Online"},
+        ],
+    }
+    context.update(_enquiry_context(form))
+    return render(request, "pages/apply.html", context)
+
+
+# ---------------------------------------------------------------- events
+def event_list(request):
+    return render(request, "pages/event_list.html", {
+        "page_obj": _paginate(request, _events()),
+        "hero_title": "Events",
+        "hero_subtitle": "Seminars, collaborations, celebrations and academic programmes "
+                         "from across the campus.",
+        "crumbs": [{"label": "Events"}],
+    })
+
+
+def event_detail(request, slug):
+    events = _events()
+    event = _find(events, slug)
+    if not event:
+        return error_404(request, None)
+
+    return render(request, "pages/event_detail.html", {
+        "event": event,
+        "related": [e for e in events if e["slug"] != slug][:3],
+        "hero_title": "Events",
+        "crumbs": [
+            {"label": "Events", "url": reverse("website:event_list")},
+            {"label": event["title"][:60]},
+        ],
+    })
+
+
+def notice_list(request):
+    return render(request, "pages/notice_list.html", {
+        "page_obj": _paginate(request, _notices()),
+        "hero_title": "Notice Board",
+        "hero_subtitle": "Examination, registration and administrative notices.",
+        "crumbs": [{"label": "Events"}, {"label": "Notices"}],
+    })
+
+
+def notice_detail(request, slug):
+    notices = _notices()
+    notice = _find(notices, slug)
+    if not notice:
+        return error_404(request, None)
+
+    return render(request, "pages/notice_detail.html", {
+        "notice": notice,
+        "related": [n for n in notices if n["slug"] != slug][:5],
+        "hero_title": "Notice",
+        "crumbs": [
+            {"label": "Notices", "url": reverse("website:notice_list")},
+            {"label": notice["title"][:60]},
+        ],
+    })
+
+
+# ---------------------------------------------------------------- static pages
+def about(request):
+    """About Us — a bespoke page, so it gets its own template rather than the
+    generic editorial one. The markup lives in ``templates/pages/about.html``.
+    """
+    return render(request, "pages/about.html")
+
+
+def our_team(request):
+    """Leadership and administration, one scroll-stacked panel per person."""
+    return render(request, "pages/our_team.html", {
+        "team": data.TEAM,
+        "stack_label": "The people behind %s" % data.SITE["site_name"],
+        "stack_title": mark_safe(
+            "The People Behind <strong>%s</strong>" % escape(data.SITE["site_name"])),
+        "stack_lead": "The leadership, academic direction and administration guiding "
+                      "the university.",
+    })
+
+
+def our_mentors(request):
+    """Mentors and advisors, using the same stacked panels as the team page."""
+    return render(request, "pages/our_mentors.html", {
+        "mentors": data.MENTORS,
+        "stack_label": "Mentors and advisors",
+        "stack_title": mark_safe("Meet the Minds <strong>Shaping Our University</strong>"),
+        "stack_lead": "Vice-chancellors, scientists and academics from institutions "
+                      "across India and abroad, guiding the university's growth.",
+    })
+
+
+def academic_calendar(request):
+    """Academic Calendar — every date lives in the template, not here.
+
+    Edit ``templates/pages/academic_calendar.html`` to change the schedule.
+    """
+    return render(request, "pages/academic_calendar.html")
+
+
+def recognition_approvals(request):
+    """Statutory approvals, each card linking a document."""
+    return render(request, "pages/recognition_approvals.html",
+                  {"recognitions": data.RECOGNITIONS})
+
+
+def page_detail(request, slug):
+    """Render an editorial page.
+
+    Pages that have not been written yet still resolve, using the label from the
+    navigation, so no menu item ever leads to a dead end.
+    """
+    page = data.PAGES.get(slug)
+    if page is None:
+        title = _nav_title("/page/%s/" % slug) or slug.replace("-", " ").title()
+        page = {
+            "title": title,
+            "subtitle": "",
+            "content": "",
+            "is_placeholder": True,
+        }
+
+    return render(request, "pages/page_detail.html", {
+        "page": page,
+        "hero_title": page["title"],
+        "hero_subtitle": page.get("subtitle", ""),
+        "crumbs": [{"label": page["title"]}],
+    })
+
+
+def faq(request):
+    grouped = {}
+    for item in data.FAQS:
+        grouped.setdefault(item["category"], []).append(item)
+
+    return render(request, "pages/faq.html", {
+        "faq_groups": [{"category": k, "items": v} for k, v in grouped.items()],
+        "hero_title": "Frequently Asked Questions",
+        "hero_subtitle": "Answers to what applicants and students ask us most often.",
+        "crumbs": [{"label": "FAQ"}],
+    })
+
+
+def contact(request):
+    form = ContactForm(request.POST or None)
+    sent = False
+    if request.method == "POST" and form.is_valid():
+        logger.info("Contact message received: %s", {
+            k: v for k, v in form.cleaned_data.items() if k != "company"})
+        sent = True
+        form = ContactForm()
+
+    return render(request, "pages/contact.html", {
+        "form": form,
+        "sent": sent,
+        "hero_title": "Contact Us",
+        "hero_subtitle": "Reach the admission helpline, the help desk or the campus office.",
+        "crumbs": [{"label": "Contact Us"}],
+    })
+
+
+def search(request):
+    query = (request.GET.get("q") or "").strip()
+    results = []
+
+    if query:
+        needle = query.lower()
+
+        def matches(*values):
+            return any(needle in str(v or "").lower() for v in values)
+
+        for school in _schools():
+            if matches(school["name"], school["short_description"], school["description"]):
+                results.append({"type": "School", "title": school["name"],
+                                "url": school["url"],
+                                "excerpt": school["short_description"]})
+        for department in _departments():
+            if matches(department["name"], department["short_description"]):
+                results.append({"type": "Department", "title": department["name"],
+                                "url": department["url"],
+                                "excerpt": "%s  |  %s" % (department["school_name"],
+                                                          department["short_description"])})
+        for course in _courses():
+            if matches(course["name"], course["eligibility"], course["school_name"],
+                       course["department_name"]):
+                results.append({"type": "Course", "title": course["name"],
+                                "url": course["url"],
+                                "excerpt": "%s  |  %s" % (course["department_name"],
+                                                          course["duration"])})
+        for event in _events():
+            if matches(event["title"], event["excerpt"]):
+                results.append({"type": "Event", "title": event["title"],
+                                "url": event["url"], "excerpt": event["excerpt"]})
+        for notice in _notices():
+            if matches(notice["title"], notice["body"]):
+                results.append({"type": "Notice", "title": notice["title"],
+                                "url": notice["url"], "excerpt": notice["body"]})
+        # About Us is not in PAGES (it has its own template), so it is indexed
+        # here by hand rather than being silently unsearchable.
+        about_blurb = ("Established in 2019 at Barrackpore, West Bengal. Affiliations, "
+                       "recognitions, mission, core values and the awards won since "
+                       "inception.")
+        if matches("About Us About SVU", about_blurb):
+            results.append({"type": "Page", "title": "About Us",
+                            "url": reverse("website:about"),
+                            "excerpt": about_blurb})
+
+        for slug, page in data.PAGES.items():
+            if matches(page["title"], page["content"]):
+                results.append({"type": "Page", "title": page["title"],
+                                "url": reverse("website:page_detail", args=[slug]),
+                                "excerpt": page["subtitle"]})
+
+    return render(request, "pages/search.html", {
+        "query": query,
+        "results": results,
+        "hero_title": "Search",
+        "hero_subtitle": ('%d result%s for "%s"' % (len(results),
+                                                    "" if len(results) == 1 else "s", query))
+        if query else "Type a keyword to search the website.",
+        "crumbs": [{"label": "Search"}],
+    })
+
+
+# ---------------------------------------------------------------- JSON endpoints
+@require_GET
+def api_cities(request):
+    """Cities for the selected state — drives the dependent dropdown."""
+    state = request.GET.get("state", "")
+    cities = data.CITIES.get(state, [])
+    return JsonResponse({"results": [{"id": c, "name": c} for c in cities]})
+
+
+@require_GET
+def api_courses(request):
+    """Courses for the selected programme and/or department.
+
+    Either filter may be omitted, so the dropdown still fills in when the
+    visitor has only chosen one of the two.
+    """
+    program = request.GET.get("program", "")
+    department = request.GET.get("department", "")
+
+    courses = [
+        c for c in data.COURSES
+        if (not program or c["program"] == program)
+        and (not department or c["department"] == department)
+    ]
+    return JsonResponse({"results": [{"id": c["slug"], "name": c["name"]} for c in courses]})
+
+
+@require_GET
+def api_captcha(request):
+    token, image = captcha.issue()
+    return JsonResponse({"token": token, "image": image})
+
+
+# ---------------------------------------------------------------- errors
+def error_404(request, exception=None):
+    return render(request, "pages/404.html", {
+        "hero_title": "Page not found",
+        "crumbs": [{"label": "Not found"}],
+    }, status=404)
+
+
+def error_500(request):
+    return render(request, "pages/500.html", status=500)

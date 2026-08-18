@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ school.name }} — {{ site.site_name }}{% endblock %}
+{% block meta_description %}{{ school.short_description }}{% endblock %}
+
+{% block content %}
+{% include "includes/page_hero.html" %}
+
+<section class="section">
+  <div class="shell">
+    <div class="prose prose--full">
+      <p>{{ school.description }}</p>
+    </div>
+
+    {% if departments %}
+      <h2 class="section-title section-title--underline">
+        <span class="h-dark">DEPARTMENTS &amp;</span> <span class="h-accent">COURSES</span>
+      </h2>
+
+      {% for department in departments %}
+        <div class="dept-block">
+          <div class="dept-block__head">
+            <h3 class="dept-block__title">
+              <a href="{{ department.url }}">{{ department.name }}</a>
+            </h3>
+            <span class="dept-block__count">
+              {{ department.course_count }} course{{ department.course_count|pluralize }}
+            </span>
+          </div>
+          <p class="dept-block__desc">{{ department.short_description }}</p>
+
+          {% if department.courses %}
+            <div class="auto-grid">
+              {% for course in department.courses %}
+                <div class="card">
+                  <h4 style="font-size:.98rem">{{ course.name }}</h4>
+                  <ul class="meta-list">
+                    <li><span class="k">Programme</span><span>{{ course.program_name }}</span></li>
+                    <li><span class="k">Duration</span><span>{{ course.duration }}</span></li>
+                    <li><span class="k">Intake</span><span>{{ course.total_seats }} seats</span></li>
+                  </ul>
+                  <p><a class="btn btn--outline-gold btn--sm" href="{{ course.url }}">View Details</a></p>
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <p class="dept-block__desc">Course details for this department will be published shortly.</p>
+          {% endif %}
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="empty-state">
+        <svg aria-hidden="true"><use href="#i-book"></use></svg>
+        <p>Department details for this school will be published shortly.</p>
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

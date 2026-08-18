@@ -1,0 +1,222 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% comment %}
+===========================================================================
+DEPARTMENT PAGE  —  /academics/departments/[slug]/
+                    served by website.views.department_detail
+---------------------------------------------------------------------------
+Section order: intro, courses, faculty, tab panel, sibling departments.
+
+WHERE THE CONTENT COMES FROM  —  all of it is in website/data.py:
+  the department itself   DEPARTMENTS          (name, school, description)
+  its courses             COURSES              (each row names its department)
+  the faculty slider      DEPARTMENT_FACULTY   keyed by department slug
+  the tab panel           DEPARTMENT_TABS      keyed by department slug,
+                          falling back to DEFAULT_DEPARTMENT_TABS
+
+Nothing on this page needs editing to add a teacher or change a tab — add
+the row in data.py and it appears here.
+
+The slider is the site carousel from main.js; data-autoplay="6000" is what
+makes it advance on its own. It pauses on hover, on focus and while the
+visitor drags, and stays still for prefers-reduced-motion.
+===========================================================================
+{% endcomment %}
+
+{% block title %}{{ department.name }} — {{ site.site_name }}{% endblock %}
+{% block meta_description %}{{ department.short_description }}{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/page-head.css' %}">
+  <link rel="stylesheet" href="{% static 'css/department.css' %}">
+{% endblock %}
+
+{% block content %}
+{% include "includes/page_hero.html" %}
+
+<section class="section">
+  <div class="shell">
+    <div class="prose prose--full">
+      {# Just the name — several departments are already named "Department of …", #}
+      {# so prefixing another "The Department of" doubles the word.               #}
+      <p>
+        {{ department.name }} is part of the
+        {% if department.school_url %}
+          <a href="{{ department.school_url }}">{{ department.school_name }}</a>.
+        {% else %}
+          {{ department.school_name }}.
+        {% endif %}
+        {{ department.short_description }}
+      </p>
+    </div>
+
+    {% if courses %}
+      <h2 class="section-title section-title--underline">
+        <span class="h-dark">COURSES</span> <span class="h-accent">OFFERED</span>
+      </h2>
+
+      <div class="auto-grid">
+        {% for course in courses %}
+          <div class="card">
+            <h3 style="font-size:1.02rem">{{ course.name }}</h3>
+            <ul class="meta-list">
+              <li><span class="k">Programme</span><span>{{ course.program_name }}</span></li>
+              <li><span class="k">Duration</span><span>{{ course.duration }}</span></li>
+              <li><span class="k">Intake</span><span>{{ course.total_seats }} seats</span></li>
+            </ul>
+            <p><a class="btn btn--outline-gold btn--sm" href="{{ course.url }}">View Details</a></p>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <svg aria-hidden="true"><use href="#i-book"></use></svg>
+        <p>Course details for this department will be published shortly.</p>
+      </div>
+    {% endif %}
+
+    {# ================================================== OUR FACULTY === #}
+    {# Hidden entirely until DEPARTMENT_FACULTY in data.py has this slug. #}
+    {% if faculty %}
+      <div class="page-head" style="margin-top:44px">
+        <h2 class="page-heading">Our <span>Faculty</span></h2>
+        <span class="page-rule"></span>
+      </div>
+
+      <div class="carousel" data-carousel data-autoplay="6000">
+        <button class="carousel__nav carousel__nav--prev" type="button"
+                aria-label="Previous faculty members">
+          <svg aria-hidden="true" focusable="false"><use href="#i-chevron-left"></use></svg>
+        </button>
+
+        <div class="carousel__track">
+          {% for person in faculty %}
+            <article class="carousel__item">
+              <div class="faculty-card">
+
+                <div class="faculty-card__avatar">
+                  {% if person.photo %}
+                    <img src="{% static person.photo %}" alt="{{ person.name }}"
+                         loading="lazy" width="138" height="138">
+                  {% else %}
+                    <svg aria-hidden="true" focusable="false"><use href="#i-experts"></use></svg>
+                  {% endif %}
+                </div>
+
+                <h3 class="faculty-card__name">{{ person.name }}</h3>
+                {% if person.designation %}
+                  <p class="faculty-card__role">{{ person.designation }}</p>
+                {% endif %}
+
+                <ul class="faculty-card__meta">
+                  {% if person.qualification %}
+                    <li><span class="k">Qualification</span><span class="v">{{ person.qualification }}</span></li>
+                  {% endif %}
+                  {% if person.publications %}
+                    <li><span class="k">Publications</span><span class="v">{{ person.publications }}</span></li>
+                  {% endif %}
+                  {% if person.experience %}
+                    <li><span class="k">Experience</span><span class="v">{{ person.experience }}</span></li>
+                  {% endif %}
+                  {% if person.research_area %}
+                    <li><span class="k">Research Area</span><span class="v">{{ person.research_area }}</span></li>
+                  {% endif %}
+                </ul>
+
+                {% if person.profile_url %}
+                  <a class="faculty-card__more" href="{{ person.profile_url }}">
+                    Read More
+                    <svg aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg>
+                  </a>
+                {% endif %}
+
+              </div>
+            </article>
+          {% endfor %}
+        </div>
+
+        <button class="carousel__nav carousel__nav--next" type="button"
+                aria-label="Next faculty members">
+          <svg aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg>
+        </button>
+
+        <div class="carousel__dots dots dots--dark"></div>
+      </div>
+    {% endif %}
+
+
+    {# ============================================ MISSION / VISION === #}
+    {% if tabs %}
+      <div class="dept-tabs" data-tabs style="margin-top:44px">
+
+        <div class="dept-tabs__nav" role="tablist"
+             aria-label="About the {{ department.name }} department">
+          {% for tab in tabs %}
+            <button class="tab-btn{% if forloop.first %} is-active{% endif %}"
+                    type="button" role="tab"
+                    id="tab-{{ tab.slug }}"
+                    data-tab-target="#pane-{{ tab.slug }}"
+                    aria-controls="pane-{{ tab.slug }}"
+                    aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+                    tabindex="{% if forloop.first %}0{% else %}-1{% endif %}">{{ tab.title }}</button>
+          {% endfor %}
+        </div>
+
+        {% for tab in tabs %}
+          <div class="tab-pane{% if forloop.first %} is-active{% endif %}"
+               id="pane-{{ tab.slug }}" role="tabpanel"
+               aria-labelledby="tab-{{ tab.slug }}" tabindex="0">
+
+            <h3 class="tab-pane__title">{{ tab.heading }}</h3>
+
+            {% if tab.intro %}<p class="tab-pane__intro">{{ tab.intro }}</p>{% endif %}
+
+            {% if tab.points %}
+              <ul class="tab-points">
+                {% for point in tab.points %}
+                  <li>
+                    <span class="tab-points__icon" aria-hidden="true">
+                      <svg focusable="false"><use href="#i-{{ tab.icon }}"></use></svg>
+                    </span>
+                    <p class="tab-points__text">
+                      {% if point.label %}<strong>{{ point.label }}:</strong> {% endif %}{{ point.text }}
+                    </p>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+
+            {% if tab.body %}
+              <div class="tab-pane__body">
+                {% for paragraph in tab.body %}<p>{{ paragraph }}</p>{% endfor %}
+              </div>
+            {% endif %}
+
+            {% if tab.signature %}
+              <div class="tab-sign">
+                <p class="tab-sign__name">{{ tab.signature.name }}</p>
+                <p class="tab-sign__role">{{ tab.signature.role }}</p>
+              </div>
+            {% endif %}
+
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+
+    {% if siblings %}
+      <h2 class="section-title section-title--underline">
+        <span class="h-dark">OTHER DEPARTMENTS IN THIS</span> <span class="h-accent">SCHOOL</span>
+      </h2>
+
+      <div class="chip-row">
+        {% for item in siblings %}
+          <a class="chip" href="{{ item.url }}">{{ item.name }}</a>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Notice Board — {{ site.site_name }}{% endblock %}
+
+{% block content %}
+{% include "includes/page_hero.html" %}
+
+<section class="section">
+  <div class="shell">
+    {% if page_obj %}
+      <div class="panel">
+        <div class="panel__body">
+          <ul class="notice-board__list">
+            {% for notice in page_obj %}
+              <li class="notice-item {% if notice.is_important %}is-important{% endif %}">
+                <span class="notice-item__date">{{ notice.date|date:"d M Y" }}</span>
+                <a class="notice-item__title" href="{{ notice.url }}">
+                  {{ notice.title }}
+                  {% if notice.is_important %}<span class="notice-item__flag">New</span>{% endif %}
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+
+      {% include "includes/pagination.html" %}
+    {% else %}
+      <div class="empty-state">
+        <svg aria-hidden="true"><use href="#i-inbox"></use></svg>
+        <p>There are no notices at the moment.</p>
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

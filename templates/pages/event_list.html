@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Events — {{ site.site_name }}{% endblock %}
+
+{% block content %}
+{% include "includes/page_hero.html" %}
+
+<section class="section">
+  <div class="shell">
+    {% if page_obj %}
+      <div class="auto-grid">
+        {% for event in page_obj %}
+          <article class="event-card">
+            <div class="event-card__media">
+              <img src="{% static event.cover_image %}" alt="{{ event.alt_text }}"
+                   loading="lazy" width="600" height="450">
+            </div>
+            <div class="event-card__body">
+              <span class="event-card__date">{{ event.event_date|date:"d M Y" }}</span>
+              <h2 class="event-card__title">{{ event.title|truncatechars:130 }}</h2>
+              <div class="event-card__footer">
+                <a class="btn btn--outline-gold btn--sm" href="{{ event.url }}">View Details</a>
+              </div>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+
+      {% include "includes/pagination.html" %}
+    {% else %}
+      <div class="empty-state">
+        <svg aria-hidden="true"><use href="#i-calendar"></use></svg>
+        <p>No events have been published yet.</p>
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

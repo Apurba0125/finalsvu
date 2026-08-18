@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Departments — {{ site.site_name }}{% endblock %}
+{% block meta_description %}Every department of the university, listed under the school it belongs to.{% endblock %}
+
+{% block content %}
+{% include "includes/page_hero.html" %}
+
+<section class="section">
+  <div class="shell">
+    {% for group in groups %}
+      <h2 class="section-title section-title--underline">
+        <a href="{{ group.school.url }}" class="h-dark">{{ group.school.name }}</a>
+      </h2>
+
+      <div class="auto-grid">
+        {% for department in group.departments %}
+          <div class="dept-card">
+            <span class="dept-card__school">{{ group.school.name }}</span>
+            <h3 class="dept-card__title">{{ department.name }}</h3>
+            <p class="dept-card__desc">{{ department.short_description }}</p>
+            <div class="dept-card__footer">
+              <a class="btn btn--outline-gold btn--sm" href="{{ department.url }}">
+                {{ department.course_count }} course{{ department.course_count|pluralize }}
+              </a>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% empty %}
+      <div class="empty-state">
+        <svg aria-hidden="true"><use href="#i-book"></use></svg>
+        <p>Department details will be published shortly.</p>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

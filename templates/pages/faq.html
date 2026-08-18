@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}FAQ — {{ site.site_name }}{% endblock %}
+
+{% block content %}
+{% include "includes/page_hero.html" %}
+
+<section class="section">
+  <div class="shell" style="max-width:860px">
+    {% for group in faq_groups %}
+      <h2 class="section-title section-title--underline">
+        <span class="h-dark">{{ group.category|upper }}</span>
+      </h2>
+
+      {% for item in group.items %}
+        <div class="faq-item">
+          <button class="faq-item__q" type="button" aria-expanded="false"
+                  aria-controls="faq-{{ forloop.parentloop.counter }}-{{ forloop.counter }}">
+            {{ item.question }}
+          </button>
+          <div class="faq-item__a" id="faq-{{ forloop.parentloop.counter }}-{{ forloop.counter }}" hidden>
+            {{ item.answer|linebreaks }}
+          </div>
+        </div>
+      {% endfor %}
+    {% empty %}
+      <div class="empty-state">
+        <svg aria-hidden="true"><use href="#i-inbox"></use></svg>
+        <p>No questions have been published yet.</p>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

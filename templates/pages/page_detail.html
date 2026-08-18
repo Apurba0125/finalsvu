@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page.title }} — {{ site.site_name }}{% endblock %}
+
+{% block content %}
+{% include "includes/page_hero.html" %}
+
+<section class="section">
+  <div class="shell">
+    {% if page.content %}
+      <div class="prose">{{ page.content|safe }}</div>
+    {% else %}
+      <div class="empty-state">
+        <svg aria-hidden="true"><use href="#i-file"></use></svg>
+        <p>This page is being prepared. The content for
+          <strong>{{ page.title }}</strong> will be published shortly.</p>
+        <p style="margin-top:14px">
+          <a class="btn btn--outline-gold btn--sm" href="{% url 'website:contact' %}">Contact the help desk</a>
+        </p>
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}
