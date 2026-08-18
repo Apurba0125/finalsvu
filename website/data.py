@@ -394,13 +394,13 @@ ENLISTMENTS = [
 #   url         only if the video is not on YouTube; otherwise it is built
 #               from youtube_id below.
 VIDEOS = [
- {'title': 'Swami Vivekananda University',
-  'highlight': 'Top University in Kolkata',
+ {'title': 'Virtual Lab',
+  'highlight': 'This Lab Exists Only on Your Screen',
   'youtube_id': 'QI4D_vYJdRg',
   'image': ''},
- {'title': 'SVU Ranked Among Top 10',
-  'highlight': 'Media Colleges in India',
-  'youtube_id': 'ScMzIvxBSi4',
+ {'title': ' Law Moot Court',
+  'highlight': 'Not a Real Court⚖️... But It Feels Exactly Like One!',
+  'youtube_id': 'mWRA03EiuGo',
   'image': ''},
 
  # TODO: these four carry the two sample ids above so the slider has something
@@ -409,18 +409,18 @@ VIDEOS = [
   'highlight': 'A Day on Campus',
   'youtube_id': '-Vk2kn4AYVQ',
   'image': ''},
- {'title': 'Placements & Recruiters',
-  'highlight': 'Where Our Students Go',
-  'youtube_id': 'ScMzIvxBSi4',
+ {'title': 'OT Zones',
+  'highlight': 'What Are the Different Zones in an Operation Theatre',
+  'youtube_id': 'GzY85e3B8l0',
   'image': ''},
- {'title': 'Research & Innovation',
-  'highlight': 'Inside Our Laboratories',
-  'youtube_id': 'aqz-KE-bpKQ',
-  'image': ''},
- {'title': 'Convocation',
-  'highlight': 'Moments from the Ceremony',
-  'youtube_id': 'ScMzIvxBSi4',
-  'image': ''},
+#  {'title': 'Research & Innovation',
+#   'highlight': 'Inside Our Laboratories',
+#   'youtube_id': 'aqz-KE-bpKQ',
+#   'image': ''},
+#  {'title': 'Convocation',
+#   'highlight': 'Moments from the Ceremony',
+#   'youtube_id': 'ScMzIvxBSi4',
+#   'image': ''},
 ]
 
 # 'url' is where the card sends the visitor: the ordinary YouTube watch page,
@@ -469,32 +469,32 @@ CENTRES = [{'title': 'Centre for Innovation & Entrepreneurship',
   'url': ''}]
 
 # --------------------------------------------------------------------------
-TESTIMONIALS = [{'name': 'Poulomi Paul',
+TESTIMONIALS = [{'name': 'Bikash Mondal',
   'role': 'Student - SVU',
-  'department': 'Dept of Journalism and Mass Communication',
+  'department': 'B.Tech CSE',
   'quote': 'SVU consistently provided us with opportunities to enhance my skills beyond the '
            'classroom. Whether through industry interface or focused internship programs, this '
            'proactive approach to learning helped me secure a position as a Trainee Account '
            "Executive with India's Leading PR Agency in Mumbai.",
-  'photo': 'img/people/student-1.jpg',
+  'photo': 'img/student1_com.png',
   'detail_url': ''},
- {'name': 'Abhijit Parira',
+ {'name': 'Anup Majhi',
   'role': 'Student - SVU',
-  'department': 'Dept of Journalism and Mass Communication',
+  'department': 'B.Tech CSE',
   'quote': 'I was always passionate about news and its technical aspect but was unsure to take '
            'up Media Studies. After visiting a couple of media colleges, I walked into the '
            'campus of Swami Vivekananda University and felt that it was the right place for my '
            'studies. Today, I am working with a national news channel.',
-  'photo': 'img/people/student-2.jpg',
+  'photo': 'img/student3_com.png',
   'detail_url': ''},
- {'name': 'Sujal Shaw',
+ {'name': 'Mounik Ghosh',
   'role': 'Student - SVU',
   'department': 'B.Tech CSE',
   'quote': 'I am a student of B.Tech (CSE). I am excited to share that I have landed a '
            'placement in both LLOYD LEE COMPANY AND TCS (TATA CONSULTANCY SERVICES). This is '
            'possible because of the immense support of the faculty of the Computer Science '
            'Department.',
-  'photo': 'img/people/student-3.jpg',
+  'photo': 'img/student4.png',
   'detail_url': ''}]
 
 # --------------------------------------------------------------------------
@@ -1503,71 +1503,72 @@ EVENTS = [
 
 
 
- {'slug': 'swami-vivekananda-university-one-of-the-eastern-indias-leading-multidi',
-  'title': 'SVU has entered into a strategic collaboration with GreenAI Services Pvt. Ltd.',
-  'event_date': '2026-06-22',
-  'venue': 'SVU Campus, New Town, Kolkata',
-  'excerpt': "Swami Vivekananda University, one of the Eastern India's leading "
-             'multidisciplinary universities, has entered into a strategic collaboration with '
-             'Greenax Services Pvt. Ltd.The programme saw enthusiastic participation from '
-             'students, faculty members…',
-  'description': "<p>Swami Vivekananda University, one of the Eastern India's leading "
-                 'multidisciplinary universities, has entered into a strategic collaboration '
-                 'with Greenax Services Pvt. Ltd.</p><p>The programme saw enthusiastic '
-                 'participation from students, faculty members and invited guests across '
-                 'departments.</p>',
-  'cover_image': 'img/events/event-4.jpg',
-  'alt_text': "Swami Vivekananda University, one of the Eastern India's leading "
-              'multidisciplinary universities, has entered into a strategic collaboration with '
-              'Greenax Service',
-  'is_featured': False},
- {'slug': 'swami-vivekananda-university-had-the-privilege-of-hosting-an-exclusive',
-  'title': 'SVU hosted an exclusive session with H.E. Mr. Bishnu Prasad Gautam, Ambassador of '
-           'Nepal to India',
-  'event_date': '2026-06-07',
-  'venue': 'SVU Campus, New Town, Kolkata',
-  'excerpt': 'Swami Vivekananda University had the privilege of hosting an exclusive session '
-             'with H.E. Mr. Bishnu Prasad Gautam, Ambassador of Nepal to IndiaThe programme '
-             'saw enthusiastic participation from students, faculty members…',
-  'description': '<p>Swami Vivekananda University had the privilege of hosting an exclusive '
-                 'session with H.E. Mr. Bishnu Prasad Gautam, Ambassador of Nepal to '
-                 'India</p><p>The programme saw enthusiastic participation from students, '
-                 'faculty members and invited guests across departments.</p>',
-  'cover_image': 'img/events/event-5.jpg',
-  'alt_text': 'Swami Vivekananda University had the privilege of hosting an exclusive session '
-              'with H.E. Mr. Bishnu Prasad Gautam, Ambassador of Nepal to India',
-  'is_featured': False},
- {'slug': 'upcoming-event-faculty-development-programme-organised-by-department-o',
-  'title': 'Faculty Development Programme on Intersectionality: Beyond Single-Axis Thinking',
-  'event_date': '2026-05-24',
-  'venue': 'SVU Campus, New Town, Kolkata',
-  'excerpt': 'Upcoming event — Faculty development programme organised by Department of '
-             'Sociology: SVU Intersectionality on methods beyond singles — Axis thinkingThe '
-             'programme saw enthusiastic participation from students, faculty members and '
-             'invited…',
-  'description': '<p>Upcoming event — Faculty development programme organised by Department of '
-                 'Sociology: SVU Intersectionality on methods beyond singles — Axis '
-                 'thinking</p><p>The programme saw enthusiastic participation from students, '
-                 'faculty members and invited guests across departments.</p>',
-  'cover_image': 'img/events/event-6.jpg',
-  'alt_text': 'Upcoming event — Faculty development programme organised by Department of '
-              'Sociology: SVU Intersectionality on methods beyond singles — Axis thinking',
-  'is_featured': False},
- {'slug': 'convocation-2026-swami-vivekananda-university-confers-degrees-on-the-g',
-  'title': 'Convocation 2026 - SVU confers degrees on the graduating batch across all schools',
-  'event_date': '2026-05-12',
-  'venue': 'SVU Campus, New Town, Kolkata',
-  'excerpt': 'Convocation 2026 — Swami Vivekananda University confers degrees on the '
-             'graduating batch across all schoolsThe programme saw enthusiastic participation '
-             'from students, faculty members and invited guests across departments.',
-  'description': '<p>Convocation 2026 — Swami Vivekananda University confers degrees on the '
-                 'graduating batch across all schools</p><p>The programme saw enthusiastic '
-                 'participation from students, faculty members and invited guests across '
-                 'departments.</p>',
-  'cover_image': 'img/events/event-7.jpg',
-  'alt_text': 'Convocation 2026 — Swami Vivekananda University confers degrees on the '
-              'graduating batch across all schools',
-  'is_featured': False}]
+#  {'slug': 'swami-vivekananda-university-one-of-the-eastern-indias-leading-multidi',
+#   'title': 'SVU has entered into a strategic collaboration with GreenAI Services Pvt. Ltd.',
+#   'event_date': '2026-06-22',
+#   'venue': 'SVU Campus, New Town, Kolkata',
+#   'excerpt': "Swami Vivekananda University, one of the Eastern India's leading "
+#              'multidisciplinary universities, has entered into a strategic collaboration with '
+#              'Greenax Services Pvt. Ltd.The programme saw enthusiastic participation from '
+#              'students, faculty members…',
+#   'description': "<p>Swami Vivekananda University, one of the Eastern India's leading "
+#                  'multidisciplinary universities, has entered into a strategic collaboration '
+#                  'with Greenax Services Pvt. Ltd.</p><p>The programme saw enthusiastic '
+#                  'participation from students, faculty members and invited guests across '
+#                  'departments.</p>',
+#   'cover_image': 'img/events/event-4.jpg',
+#   'alt_text': "Swami Vivekananda University, one of the Eastern India's leading "
+#               'multidisciplinary universities, has entered into a strategic collaboration with '
+#               'Greenax Service',
+#   'is_featured': False},
+#  {'slug': 'swami-vivekananda-university-had-the-privilege-of-hosting-an-exclusive',
+#   'title': 'SVU hosted an exclusive session with H.E. Mr. Bishnu Prasad Gautam, Ambassador of '
+#            'Nepal to India',
+#   'event_date': '2026-06-07',
+#   'venue': 'SVU Campus, New Town, Kolkata',
+#   'excerpt': 'Swami Vivekananda University had the privilege of hosting an exclusive session '
+#              'with H.E. Mr. Bishnu Prasad Gautam, Ambassador of Nepal to IndiaThe programme '
+#              'saw enthusiastic participation from students, faculty members…',
+#   'description': '<p>Swami Vivekananda University had the privilege of hosting an exclusive '
+#                  'session with H.E. Mr. Bishnu Prasad Gautam, Ambassador of Nepal to '
+#                  'India</p><p>The programme saw enthusiastic participation from students, '
+#                  'faculty members and invited guests across departments.</p>',
+#   'cover_image': 'img/events/event-5.jpg',
+#   'alt_text': 'Swami Vivekananda University had the privilege of hosting an exclusive session '
+#               'with H.E. Mr. Bishnu Prasad Gautam, Ambassador of Nepal to India',
+#   'is_featured': False},
+#  {'slug': 'upcoming-event-faculty-development-programme-organised-by-department-o',
+#   'title': 'Faculty Development Programme on Intersectionality: Beyond Single-Axis Thinking',
+#   'event_date': '2026-05-24',
+#   'venue': 'SVU Campus, New Town, Kolkata',
+#   'excerpt': 'Upcoming event — Faculty development programme organised by Department of '
+#              'Sociology: SVU Intersectionality on methods beyond singles — Axis thinkingThe '
+#              'programme saw enthusiastic participation from students, faculty members and '
+#              'invited…',
+#   'description': '<p>Upcoming event — Faculty development programme organised by Department of '
+#                  'Sociology: SVU Intersectionality on methods beyond singles — Axis '
+#                  'thinking</p><p>The programme saw enthusiastic participation from students, '
+#                  'faculty members and invited guests across departments.</p>',
+#   'cover_image': 'img/events/event-6.jpg',
+#   'alt_text': 'Upcoming event — Faculty development programme organised by Department of '
+#               'Sociology: SVU Intersectionality on methods beyond singles — Axis thinking',
+#   'is_featured': False},
+#  {'slug': 'convocation-2026-swami-vivekananda-university-confers-degrees-on-the-g',
+#   'title': 'Convocation 2026 - SVU confers degrees on the graduating batch across all schools',
+#   'event_date': '2026-05-12',
+#   'venue': 'SVU Campus, New Town, Kolkata',
+#   'excerpt': 'Convocation 2026 — Swami Vivekananda University confers degrees on the '
+#              'graduating batch across all schoolsThe programme saw enthusiastic participation '
+#              'from students, faculty members and invited guests across departments.',
+#   'description': '<p>Convocation 2026 — Swami Vivekananda University confers degrees on the '
+#                  'graduating batch across all schools</p><p>The programme saw enthusiastic '
+#                  'participation from students, faculty members and invited guests across '
+#                  'departments.</p>',
+#   'cover_image': 'img/events/event-7.jpg',
+#   'alt_text': 'Convocation 2026 — Swami Vivekananda University confers degrees on the '
+#               'graduating batch across all schools',
+#   'is_featured': False}
+]
 
 # --------------------------------------------------------------------------
 NOTICES = [{'slug': 'revision-of-examination-date-id-ud-zoha',
