@@ -1,0 +1,113 @@
+/* ==========================================================================
+   Contact page  —  loaded only by templates/pages/contact.html
+
+   The details column used to borrow the homepage's three-column grid, which
+   left it about 90px wide: the address wrapped over eight lines and every
+   phone number broke in half.  It gets its own two-column layout here.
+   ========================================================================== */
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 26px;
+  align-items: start;
+}
+
+/* ------------------------------------------------------- detail card ---- */
+.contact-card {
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  border-top: 3px solid var(--gold);
+  padding: 26px 24px;
+}
+.contact-card__title {
+  margin: 0 0 4px;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--ink);
+}
+.contact-card__lead {
+  margin: 0 0 22px;
+  font-size: .86rem;
+  color: var(--muted);
+}
+
+/* One detail: label on its own line, value in full width beneath it. */
+.contact-item {
+  padding: 14px 0;
+  border-top: 1px solid var(--line);
+}
+.contact-item:first-of-type { border-top: 0; padding-top: 0; }
+
+.contact-item__label {
+  display: block;
+  font-size: .95rem;
+  font-weight: 800;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+.contact-item__value {
+  margin: 0;
+  font-size: .92rem;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  /* An email address is one unbreakable token; without this it sets a floor
+     on the column width and pushes the layout out. */
+  overflow-wrap: anywhere;
+}
+.contact-item__value a { color: var(--ink-soft); }
+.contact-item__value a:hover { color: var(--accent); }
+.contact-item__value--stack a { display: block; }
+.contact-item__note { display: block; font-size: .78rem; color: var(--muted); }
+
+.contact-card__actions {
+  margin-top: 22px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* --------------------------------------------------------------- form --- */
+.contact-form__head {
+  margin: 0 0 4px;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--ink);
+}
+.contact-form__lead {
+  margin: 0 0 20px;
+  font-size: .86rem;
+  color: var(--muted);
+}
+/* Name/email and mobile/subject pair up once there is room for two. */
+.contact-form__row { display: grid; grid-template-columns: 1fr; gap: 0 18px; }
+
+/* --------------------------------------------------------------- map ---- */
+.contact-map {
+  margin-top: 26px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  background: var(--page-alt);
+  line-height: 0;
+}
+.contact-map iframe { width: 100%; height: 340px; border: 0; }
+
+/* --------------------------------------------------------- responsive --- */
+@media (min-width: 768px) {
+  .contact-form__row { grid-template-columns: 1fr 1fr; }
+}
+
+@media (min-width: 992px) {
+  /* Details fixed-ish, form takes the rest — the old layout gave the details
+     a third of a third of the shell. */
+  .contact-grid { grid-template-columns: minmax(320px, 400px) minmax(0, 1fr); gap: 30px; }
+}
+
+@media (max-width: 575.98px) {
+  .contact-card { padding: 22px 18px; }
+  .contact-map iframe { height: 260px; }
+}

@@ -1,61 +1,120 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% comment %}
+===========================================================================
+CONTACT US  —  /contact/  served by website.views.contact
+
+Every detail on the left comes from SITE in website/data.py — address,
+phones, email, website, whatsapp — so nothing here needs editing to change
+a phone number. The map uses SITE['map_embed_url'].
+
+The details column deliberately does NOT reuse home-band__grid: that grid is
+built for the homepage's notice/welcome/enquiry row and squeezed this column
+to about 90px, which broke the address over eight lines.
+===========================================================================
+{% endcomment %}
 
 {% block title %}Contact Us — {{ site.site_name }}{% endblock %}
+{% block meta_description %}Reach {{ site.site_name }} — admission helpline, help desk, campus address and directions.{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/contact.css' %}">
+{% endblock %}
 
 {% block content %}
 {% include "includes/page_hero.html" %}
 
 <section class="section">
-  <div class="shell home-band__grid" style="align-items:start">
+  <div class="shell contact-grid">
 
-    <div>
-      <div class="panel">
-        <h2 class="panel__head">Reach Us</h2>
-        <div class="panel__body">
-          <ul class="meta-list">
-            <li><span class="k">Address</span>
-              <span>{{ site.address_line1 }},<br>{{ site.address_line2 }}</span></li>
-            <li><span class="k">Email</span>
-              <span><a href="mailto:{{ site.email }}">{{ site.email }}</a></span></li>
-            {% for phone in site.phones %}
-              <li><span class="k">{% if forloop.first %}Helpline{% endif %}</span>
-                <span><a href="{{ phone|tel_href }}">{{ phone }}</a></span></li>
-            {% endfor %}
-            {% if site.toll_free %}
-              <li><span class="k">Toll free</span>
-                <span><a href="{{ site.toll_free|tel_href }}">{{ site.toll_free }}</a>
-                  {% if site.toll_free_hours %}<br>{{ site.toll_free_hours }}{% endif %}</span></li>
-            {% endif %}
-          </ul>
-        </div>
+    {# ------------------------------------------------------ details ---- #}
+    <aside class="contact-card">
+      <h2 class="contact-card__title">Reach Us</h2>
+      <p class="contact-card__lead">Campus office hours are 10:00 AM to 5:00 PM, Monday to Saturday.</p>
+
+      <div class="contact-item">
+        <span class="contact-item__label">Address</span>
+        <p class="contact-item__value">
+          {{ site.address_line1 }}{% if site.address_line2 %}<br>{{ site.address_line2 }}{% endif %}
+        </p>
       </div>
-    </div>
 
-    <div style="grid-column:span 2">
-      <div class="panel">
-        <h2 class="panel__head">Help Desk</h2>
-        <div class="panel__body">
-          {% if sent %}
-            <div class="alert alert--success" role="status">
-              Thank you — your message has reached the help desk. We will reply by email.
+      <div class="contact-item">
+        <span class="contact-item__label">Email</span>
+        <p class="contact-item__value">
+          <a href="mailto:{{ site.email }}">{{ site.email }}</a>
+        </p>
+      </div>
+
+      <div class="contact-item">
+        <span class="contact-item__label">Helpline</span>
+        <p class="contact-item__value contact-item__value--stack">
+          {% for phone in site.phones %}<a href="{{ phone|tel_href }}">{{ phone }}</a>{% endfor %}
+        </p>
+      </div>
+
+      {% if site.toll_free %}
+        <div class="contact-item">
+          <span class="contact-item__label">Toll free</span>
+          <p class="contact-item__value">
+            <a href="{{ site.toll_free|tel_href }}">{{ site.toll_free }}</a>
+            {% if site.toll_free_hours %}<span class="contact-item__note">{{ site.toll_free_hours }}</span>{% endif %}
+          </p>
+        </div>
+      {% endif %}
+
+      {% if site.website %}
+        <div class="contact-item">
+          <span class="contact-item__label">Website</span>
+          <p class="contact-item__value">
+            <a href="{{ site.website }}" target="_blank" rel="noopener noreferrer">{{ site.website }}</a>
+          </p>
+        </div>
+      {% endif %}
+
+      <div class="contact-card__actions">
+        {% if site.map_url %}
+          <a class="btn btn--outline-gold btn--sm" href="{{ site.map_url }}"
+             target="_blank" rel="noopener noreferrer">Get directions</a>
+        {% endif %}
+        {% if site.whatsapp_url %}
+          <a class="btn btn--outline-gold btn--sm" href="{{ site.whatsapp_url }}"
+             target="_blank" rel="noopener noreferrer">WhatsApp us</a>
+        {% endif %}
+        <a class="btn btn--gold btn--sm" href="{% url 'website:apply' %}">Apply online</a>
+      </div>
+    </aside>
+
+    {# --------------------------------------------------------- form ---- #}
+    <div>
+      <div class="contact-card">
+        <h2 class="contact-form__head">Help Desk</h2>
+        <p class="contact-form__lead">Send us a message and we will reply by email.</p>
+
+        {% if sent %}
+          <div class="alert alert--success" role="status">
+            Thank you — your message has reached the help desk. We will reply by email.
+          </div>
+        {% endif %}
+
+        <form action="{% url 'website:contact' %}" method="post" novalidate>
+          {% csrf_token %}
+
+          {% if form.non_field_errors %}
+            <div class="alert alert--error" role="alert">
+              {% for error in form.non_field_errors %}{{ error }}{% endfor %}
             </div>
           {% endif %}
 
-          <form action="{% url 'website:contact' %}" method="post" novalidate>
-            {% csrf_token %}
+          {# Honeypot — hidden from people, tempting to bots. #}
+          <div class="sr-only" aria-hidden="true">
+            <label>Company <input type="text" name="company" tabindex="-1" autocomplete="off"></label>
+          </div>
 
-            {% if form.non_field_errors %}
-              <div class="alert alert--error" role="alert">
-                {% for error in form.non_field_errors %}{{ error }}{% endfor %}
-              </div>
-            {% endif %}
-
-            <div class="sr-only" aria-hidden="true">
-              <label>Company <input type="text" name="company" tabindex="-1" autocomplete="off"></label>
-            </div>
-
+          <div class="contact-form__row">
             {% for field in form %}
-              {% if field.name != "company" %}
+              {% if field.name == "name" or field.name == "email" %}
                 <div class="form-field{% if field.errors %} has-error{% endif %}">
                   <label for="{{ field.id_for_label }}">{{ field.label }}</label>
                   {{ field }}
@@ -63,11 +122,42 @@
                 </div>
               {% endif %}
             {% endfor %}
+          </div>
 
-            <button class="btn btn--gold" type="submit">Send message</button>
-          </form>
-        </div>
+          <div class="contact-form__row">
+            {% for field in form %}
+              {% if field.name == "mobile" or field.name == "subject" %}
+                <div class="form-field{% if field.errors %} has-error{% endif %}">
+                  <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                  {{ field }}
+                  {% for error in field.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+
+          {% for field in form %}
+            {% if field.name == "message" %}
+              <div class="form-field{% if field.errors %} has-error{% endif %}">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% for error in field.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+              </div>
+            {% endif %}
+          {% endfor %}
+
+          <button class="btn btn--gold" type="submit">Send message</button>
+        </form>
       </div>
+
+      {% if site.map_embed_url %}
+        <div class="contact-map">
+          <iframe src="{{ site.map_embed_url }}"
+                  title="Map showing {{ site.site_name }}"
+                  loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+                  allowfullscreen></iframe>
+        </div>
+      {% endif %}
     </div>
 
   </div>

@@ -19,6 +19,10 @@ SITE = {'site_name': 'Swami Vivekananda University',
 #  'toll_free_hours': '10AM to 6PM',
  'email': 'info@swamivivekanandauniversity.ac.in',
  'website': 'https://www.swamivivekanandauniversity.ac.in',
+ # Contact page: 'map_url' is the Get directions button, 'map_embed_url' the
+ # map shown under the form.  Blank either one and that piece disappears.
+ 'map_url': 'https://www.google.com/maps/search/?api=1&query=Swami+Vivekananda+University+Barrackpore',
+ 'map_embed_url': 'https://www.google.com/maps?q=Swami+Vivekananda+University,+Telinipara,+Barasat+-+Barrackpore+Rd,+Bara+Kanthalia,+West+Bengal+700121&output=embed',
  'whatsapp_number': '7044086270',
  'whatsapp_url': 'https://wa.me/917044086270',
  'marquee_text': 'Beware of fake agents/consultants!! SVU does not take admission through any '
@@ -212,6 +216,11 @@ MAIN_NAV = [{'title': 'About SVU',
                ]},
 
 {'title': 'UGC-2f','href': '#','is_external': True,},
+
+{'title': 'Contact','href': '/contact/','is_external': False},
+
+
+
  # Full URL off to the main university site, so is_external is True — that is
  # what opens it in a new tab.  'children' must be present even when empty:
  # the menu and the page-title lookup both walk it.
