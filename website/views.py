@@ -266,7 +266,17 @@ def _asset(value):
         return ""
     if value.startswith(("http://", "https://", "//", "/", "mailto:", "tel:")):
         return value
-    return static_url(value)
+    try:
+        return static_url(value)
+    except ValueError:
+        # With DEBUG off the manifest storage raises rather than handing back a
+        # URL for a file that was never collected. Treat that the same as no
+        # value at all: the templates already hide an empty photo or profile
+        # link, so a typo in data.py costs that one link instead of returning
+        # 500 for the whole department. The warning is what makes it findable.
+        logger.warning("data.py refers to a static file that does not exist: %r",
+                       value)
+        return ""
 
 
 def _faculty(slug):

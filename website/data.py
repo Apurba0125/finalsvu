@@ -782,7 +782,7 @@ DEPARTMENT_FACULTY = {
    'publications': '250+',
    'experience': '25+ years',
    'research_area': 'Machine Learning, Computer Vision',
-   'profile_url': 'img/faculty/cv.pdf'},
+   'profile_url': ''},
 
   {'name': 'Ranjan kumar Mondal',
    'designation': 'Assistant Professor',
