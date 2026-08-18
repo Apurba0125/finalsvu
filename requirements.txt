@@ -1,1 +1,8 @@
 Django>=4.2,<5.0
+
+# Production server used by Render (see render.yaml).
+gunicorn>=21.2,<23
+
+# Serves static files straight from the web process, so the site needs no
+# separate static host or CDN.  Also gzip/brotli-compresses them at build time.
+whitenoise[brotli]>=6.6,<7

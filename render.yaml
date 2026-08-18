@@ -1,0 +1,40 @@
+# Render Blueprint — https://render.com/docs/blueprint-spec
+#
+# On Render: New -> Blueprint -> pick the Apurba0125/finalsvu repo.  Render
+# reads this file, creates the service and redeploys on every push to main.
+#
+# There is no database: the whole site renders from website/data.py, so this
+# is a single web service and nothing else.
+services:
+  - type: web
+    name: svu-website
+    runtime: python
+    plan: free
+    region: singapore          # closest Render region to Kolkata
+    branch: main
+    buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --no-input"
+    startCommand: "gunicorn config.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 60"
+    healthCheckPath: /
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.4"
+
+      # Generated once by Render and kept for the life of the service, so
+      # the dev-only fallback in settings.py is never used in production.
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+
+      # Anything other than "1" turns DEBUG off, which also switches on the
+      # HTTPS redirect, HSTS, secure cookies and hashed static filenames.
+      - key: DJANGO_DEBUG
+        value: "0"
+
+      # settings.py already trusts RENDER_EXTERNAL_HOSTNAME automatically.
+      # Add a custom domain here once one is pointed at the service, e.g.
+      #   www.swamivivekanandauniversity.ac.in,swamivivekanandauniversity.ac.in
+      - key: DJANGO_ALLOWED_HOSTS
+        value: "localhost,127.0.0.1"
+
+      # Matching https:// origins for the custom domain, comma separated.
+      - key: DJANGO_CSRF_TRUSTED_ORIGINS
+        value: ""

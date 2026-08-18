@@ -31,6 +31,17 @@ CSRF_TRUSTED_ORIGINS = [
     if o.strip()
 ]
 
+# Render publishes the service's own hostname here.  Trusting it automatically
+# means a fresh deploy answers on its .onrender.com address without anyone
+# having to copy that name into an environment variable first.
+RENDER_HOST = os.environ.get("RENDER_EXTERNAL_HOSTNAME", "").strip()
+if RENDER_HOST:
+    if RENDER_HOST not in ALLOWED_HOSTS:
+        ALLOWED_HOSTS.append(RENDER_HOST)
+    origin = "https://%s" % RENDER_HOST
+    if origin not in CSRF_TRUSTED_ORIGINS:
+        CSRF_TRUSTED_ORIGINS.append(origin)
+
 
 INSTALLED_APPS = [
     "django.contrib.staticfiles",
@@ -39,6 +50,10 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    # Must sit directly after SecurityMiddleware: it answers requests for
+    # /static/ itself, so the site needs no separate static host in production.
+    # In DEBUG the runserver still serves static files, so this is a no-op then.
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.middleware.gzip.GZipMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -78,6 +93,17 @@ STATIC_URL = "static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
+# WhiteNoise stamps a content hash into each filename at collectstatic time and
+# serves them with a long cache life.  Editing main.css or main.js therefore
+# changes its URL, so a browser can never keep showing a stale copy.
+if not DEBUG:
+    STORAGES = {
+        "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
+        "staticfiles": {
+            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        },
+    }
+
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # --- Security ---------------------------------------------------------------
@@ -86,6 +112,10 @@ SECURE_REFERRER_POLICY = "same-origin"
 X_FRAME_OPTIONS = "DENY"
 
 if not DEBUG:
+    # Render terminates TLS at its proxy and forwards plain HTTP, so without
+    # this Django believes every request is insecure and SECURE_SSL_REDIRECT
+    # below sends the browser round an endless redirect loop.
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
     SECURE_SSL_REDIRECT = True
     SECURE_HSTS_SECONDS = 31536000
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
