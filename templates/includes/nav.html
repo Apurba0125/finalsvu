@@ -11,13 +11,13 @@
   <ul class="nav__list shell">
     <li class="nav__item">
       <a class="nav__link {% is_current '/' %}" href="{% url 'website:home' %}" aria-label="Home">
-        <svg aria-hidden="true" focusable="false"><use href="#i-book"></use></svg>
+        <svg aria-hidden="true" focusable="false"><use href="#i-home"></use></svg>
         <span class="sr-only">Home</span>
       </a>
     </li>
 
     {% for entry in main_nav %}
-      <li class="nav__item{% if entry.children %} nav__item--has-children{% endif %}">
+      <li class="nav__item{% if entry.children %} nav__item--has-children{% endif %}{% if entry.columns %} nav__item--mega{% endif %}">
         <a class="nav__link {% is_current entry.href %}"
            href="{{ entry.href }}"
            {% if entry.is_external %}target="_blank" rel="noopener noreferrer"{% endif %}
@@ -29,7 +29,9 @@
         </a>
 
         {% if entry.children %}
-          <ul class="nav__submenu">
+          {# 'columns' on a MAIN_NAV entry in data.py widens the dropdown into #}
+          {# the multi-column panel; without it the menu stays one column.     #}
+          <ul class="nav__submenu{% if entry.columns %} nav__submenu--mega{% endif %}">
             {% for child in entry.children %}
               <li>
                 <a href="{{ child.href }}"

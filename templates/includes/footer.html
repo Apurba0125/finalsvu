@@ -1,12 +1,48 @@
+{% load static %}
+{% comment %}
+Footer. Same dark theme as before; the columns are data-driven now.
+
+  column 1  brand — SITE logo, site_name, tagline, footer_about, SOCIAL_LINKS
+  column 2  contact — SITE email, phones, address
+  the rest  FOOTER_LINKS in data.py, one column per entry, in order
+
+To add or drop a link column, edit FOOTER_LINKS — nothing here needs changing.
+{% endcomment %}
 <footer class="footer">
   <div class="shell footer__grid">
 
+    {# ------------------------------------------------------- brand ---- #}
+    <div class="footer__brand">
+      <div class="footer__brand-head">
+        {% if site.logo %}
+          <img class="footer__logo" src="{% static site.logo %}"
+               alt="{{ site.site_name }} logo" width="56" height="56" loading="lazy">
+        {% endif %}
+        <p class="footer__brand-name">{{ site.site_name }}</p>
+      </div>
+
+      {% if site.tagline %}<p class="footer__tagline">{{ site.tagline }}</p>{% endif %}
+      {% if site.footer_about %}<p class="footer__about">{{ site.footer_about }}</p>{% endif %}
+
+      {% if social_links %}
+        <div class="footer__social">
+          {% for link in social_links %}
+            <a href="{{ link.url }}" target="_blank" rel="noopener noreferrer"
+               aria-label="{{ site.short_name }} on {{ link.label }}">
+              <svg aria-hidden="true" focusable="false"><use href="#i-{{ link.platform }}"></use></svg>
+            </a>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+
+    {# ----------------------------------------------------- contact ---- #}
     <div>
-      <h2 class="footer__title">Office Address</h2>
+      <h2 class="footer__title">Contact Us</h2>
       <ul class="footer__contact">
         <li>
-          <svg aria-hidden="true" focusable="false"><use href="#i-pin"></use></svg>
-          <span>{{ site.address_line1 }},<br>{{ site.address_line2 }}</span>
+          <svg aria-hidden="true" focusable="false"><use href="#i-mail"></use></svg>
+          <a href="mailto:{{ site.email }}">{{ site.email }}</a>
         </li>
         {% for phone in site.phones %}
           <li>
@@ -22,64 +58,25 @@
           </li>
         {% endif %}
         <li>
-          <svg aria-hidden="true" focusable="false"><use href="#i-mail"></use></svg>
-          <a href="mailto:{{ site.email }}">{{ site.email }}</a>
+          <svg aria-hidden="true" focusable="false"><use href="#i-pin"></use></svg>
+          <span>{{ site.address_line1 }}{% if site.address_line2 %}<br>{{ site.address_line2 }}{% endif %}</span>
         </li>
-        {% if site.website %}
-          <li>
-            <svg aria-hidden="true" focusable="false"><use href="#i-globe"></use></svg>
-            <a href="{{ site.website }}" target="_blank" rel="noopener noreferrer">{{ site.website }}</a>
-          </li>
-        {% endif %}
       </ul>
+    </div>
 
-      {% if social_links %}
-        <div class="footer__social">
-          {% for link in social_links %}
-            <a href="{{ link.url }}" target="_blank" rel="noopener noreferrer"
-               aria-label="{{ site.short_name }} on {{ link.label }}">
-              <svg aria-hidden="true" focusable="false"><use href="#i-{{ link.platform }}"></use></svg>
-            </a>
+    {# ------------------------------------------- link columns --------- #}
+    {% for column in footer_links %}
+      <div>
+        <h2 class="footer__title">{{ column.title }}</h2>
+        <ul class="footer__list">
+          {% for link in column.links %}
+            <li>
+              <a href="{{ link.url }}"{% if link.is_external %} target="_blank" rel="noopener noreferrer"{% endif %}>{{ link.title }}</a>
+            </li>
           {% endfor %}
-        </div>
-      {% endif %}
-    </div>
-
-    <div>
-      <h2 class="footer__title">Useful Links</h2>
-      <ul class="footer__list">
-        {% for link in footer_links.useful %}
-          <li>
-            <a href="{{ link.url }}"{% if link.is_external %} target="_blank" rel="noopener noreferrer"{% endif %}>{{ link.title }}</a>
-          </li>
-        {% endfor %}
-      </ul>
-    </div>
-
-    <div>
-      <h2 class="footer__title">External Links</h2>
-      <ul class="footer__list">
-        {% for link in footer_links.external %}
-          <li>
-            <a href="{{ link.url }}" target="_blank" rel="noopener noreferrer">{{ link.title }}</a>
-          </li>
-        {% endfor %}
-      </ul>
-    </div>
-
-    <div>
-      <h2 class="footer__title">Follow Us</h2>
-      <div class="footer__social-embed">
-        <div class="fb-card">
-          <div class="fb-card__name">{{ site.site_name }}</div>
-          <div class="fb-card__meta">Stay updated with campus news, events and admission alerts.</div>
-          {% if site.facebook_page_url %}
-            <a class="btn btn--blue btn--sm" href="{{ site.facebook_page_url }}"
-               target="_blank" rel="noopener noreferrer">Follow on Facebook</a>
-          {% endif %}
-        </div>
+        </ul>
       </div>
-    </div>
+    {% endfor %}
 
   </div>
 </footer>

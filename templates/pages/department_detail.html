@@ -95,9 +95,11 @@ visitor drags, and stays still for prefers-reduced-motion.
             <article class="carousel__item">
               <div class="faculty-card">
 
+                {# photo and profile_url are already resolved in the view, so #}
+                {# both a static path and a full URL work — no {% static %}. #}
                 <div class="faculty-card__avatar">
                   {% if person.photo %}
-                    <img src="{% static person.photo %}" alt="{{ person.name }}"
+                    <img src="{{ person.photo }}" alt="{{ person.name }}"
                          loading="lazy" width="138" height="138">
                   {% else %}
                     <svg aria-hidden="true" focusable="false"><use href="#i-experts"></use></svg>
@@ -125,9 +127,11 @@ visitor drags, and stays still for prefers-reduced-motion.
                 </ul>
 
                 {% if person.profile_url %}
-                  <a class="faculty-card__more" href="{{ person.profile_url }}">
+                  <a class="faculty-card__more" href="{{ person.profile_url }}"
+                     {% if person.is_file %}target="_blank" rel="noopener noreferrer"{% endif %}>
                     Read More
                     <svg aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg>
+                    {% if person.is_file %}<span class="sr-only">(PDF, opens in a new tab)</span>{% endif %}
                   </a>
                 {% endif %}
 

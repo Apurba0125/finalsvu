@@ -48,7 +48,8 @@
     <aside class="panel notice-board" aria-labelledby="notice-heading">
       <h2 class="panel__head" id="notice-heading">Notice Board</h2>
       <div class="panel__body">
-        <ul class="notice-board__list">
+        {# data-autoscroll = pixels per second; remove it to stop the drift. #}
+        <ul class="notice-board__list" data-autoscroll="26">
           {% for notice in notices %}
             <li class="notice-item {% if notice.is_important %}is-important{% endif %}">
               <span class="notice-item__date">{{ notice.date|date:"d M Y" }}</span>
@@ -116,11 +117,12 @@
 <section class="section section--white" aria-labelledby="enlisted-heading">
   <div class="shell">
     <h2 class="section-title section-title--center" id="enlisted-heading">
-      <span class="h-dark">WE ARE NOW</span> <span class="h-accent">ENLISTED</span>
+      <span class="h-dark">Trusted by Thousands,</span> <span class="h-accent">Recognised Worldwide</span>
     </h2>
-    <p class="section-subtitle">{{ site.site_name|upper }} IS PROUDLY FEATURED ON ALL THESE OFFICIAL PLATFORMS</p>
-
-    <div class="enlist-grid">
+    <p class="section-subtitle">{{ site.site_name|upper }} IS PROUDLY FEATURED ON ALL THESE </p>
+<p class="section-subtitle">Growing Every Year, Excelling Every Way.</p>
+    {# Drifts sideways for ever, so three logos loop as happily as thirty. #}
+    <div class="enlist-strip" data-autoscroll="34" data-autoscroll-axis="x">
       {% for item in enlistments %}
         <div class="enlist-card">
           <div class="enlist-card__media">
@@ -142,7 +144,7 @@
 <section class="offerings" aria-labelledby="offerings-heading">
   <div class="shell--wide shell offerings__grid">
     <div class="offerings__media">
-      <img src="{% static 'img/library-shelf.svg' %}" alt="" aria-hidden="true" loading="lazy">
+      <img src="{% static 'img/library-shelf.jpeg' %}" alt="" aria-hidden="true" loading="lazy">
       <h2 class="offerings__media-title" id="offerings-heading">Explore<br>Our Offerings</h2>
     </div>
 
@@ -171,7 +173,7 @@
       <span class="h-dark">SVU</span> <span class="h-accent">SCHOOLS</span>
     </h2>
 
-    <div class="carousel" data-carousel>
+    <div class="carousel" data-carousel data-autoplay="5000">
       <button class="carousel__nav carousel__nav--prev" type="button" aria-label="Previous schools">
         <svg aria-hidden="true" focusable="false"><use href="#i-chevron-left"></use></svg>
       </button>
@@ -210,28 +212,44 @@
 {# ========================= 6. Videos ========================= #}
 {% if videos %}
 <section class="section section--tight section--white" aria-label="Featured videos">
-  <div class="shell video-grid">
-    {% for video in videos %}
-      <div class="video-card">
-        <h2 class="video-card__title">
-          <span class="h-dark">{{ video.title }}</span>
-          {% if video.highlight %}<span class="h-accent">{{ video.highlight }}</span>{% endif %}
-        </h2>
-        <div class="video-embed">
-          {# Nothing is requested from YouTube until the visitor clicks. #}
-          <button class="video-facade" type="button"
-                  data-src="{{ video.embed_url }}"
-                  data-title="{{ video.title }}"
-                  aria-label="Play video: {{ video.title }}">
-            <img src="{{ video.thumbnail_url }}" alt="" loading="lazy" width="480" height="360">
-            <span class="video-facade__play" aria-hidden="true">
-              <svg focusable="false"><use href="#i-play"></use></svg>
-            </span>
-            <span class="video-facade__hint">Click to play — loads YouTube</span>
-          </button>
-        </div>
+  <div class="shell">
+    <div class="carousel video-carousel" data-carousel data-autoplay="7000">
+      <button class="carousel__nav carousel__nav--prev" type="button" aria-label="Previous videos">
+        <svg aria-hidden="true" focusable="false"><use href="#i-chevron-left"></use></svg>
+      </button>
+
+      <div class="carousel__track">
+        {% for video in videos %}
+          <article class="carousel__item">
+            <div class="video-card">
+              <h2 class="video-card__title">
+                <span class="h-dark">{{ video.title }}</span>
+                {% if video.highlight %}<span class="h-accent">{{ video.highlight }}</span>{% endif %}
+              </h2>
+              <div class="video-embed">
+                {# Opens the video on YouTube; nothing is embedded in the page. #}
+                <a class="video-facade" href="{{ video.url }}"
+                   target="_blank" rel="noopener noreferrer"
+                   aria-label="Watch on YouTube: {{ video.title }} (opens in a new tab)">
+                  <img src="{% if video.image %}{% static video.image %}{% else %}{{ video.thumbnail_url }}{% endif %}"
+                       alt="" loading="lazy" width="480" height="360">
+                  <span class="video-facade__play" aria-hidden="true">
+                    <svg focusable="false"><use href="#i-play"></use></svg>
+                  </span>
+                  <span class="video-facade__hint">Watch on YouTube</span>
+                </a>
+              </div>
+            </div>
+          </article>
+        {% endfor %}
       </div>
-    {% endfor %}
+
+      <button class="carousel__nav carousel__nav--next" type="button" aria-label="Next videos">
+        <svg aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg>
+      </button>
+
+      <div class="carousel__dots dots dots--dark"></div>
+    </div>
   </div>
 </section>
 {% endif %}
@@ -245,7 +263,7 @@
       <span class="h-dark">LATEST</span> <span class="h-accent">EVENTS</span>
     </h2>
 
-    <div class="carousel carousel--triple" data-carousel>
+    <div class="carousel carousel--triple" data-carousel data-autoplay="6000">
       <button class="carousel__nav carousel__nav--prev" type="button" aria-label="Previous events">
         <svg aria-hidden="true" focusable="false"><use href="#i-chevron-left"></use></svg>
       </button>
@@ -293,7 +311,7 @@
         <h2 class="chancellor__title" id="chancellor-heading">Chancellor's Message</h2>
         <span class="chancellor__quote-mark" aria-hidden="true">&ldquo;</span>
         <p class="chancellor__text">{{ chancellor.excerpt }}</p>
-        <a class="btn btn--gold btn--sm" href="{% url 'website:page_detail' 'chancellors-message' %}">Read More</a>
+        <a class="btn btn--gold btn--sm" href="{% url 'website:chancellors_message' %}">Read More</a>
 
         <div class="chancellor__divider"></div>
 
@@ -339,7 +357,8 @@
       <span class="h-dark">THE</span> <span class="h-accent">SVUites</span>
     </h2>
 
-    <div class="carousel carousel--double" data-carousel>
+    {# Slower than the others: a testimonial has to be read, not glanced at. #}
+    <div class="carousel carousel--double" data-carousel data-autoplay="8000">
       <button class="carousel__nav carousel__nav--prev" type="button" aria-label="Previous testimonials">
         <svg aria-hidden="true" focusable="false"><use href="#i-chevron-left"></use></svg>
       </button>

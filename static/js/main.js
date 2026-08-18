@@ -224,6 +224,10 @@
         var paused = false;
 
         function tick() {
+          /* Once a facade has been swapped for a real player, sliding the
+             track out from under someone mid-video would be maddening — so
+             the first play ends the autoplay for good. */
+          if (carousel.querySelector("iframe")) { stop(); return; }
           if (paused || document.hidden || pageCount() < 2) { return; }
           // Wrap on the real scroll position, not on the page arithmetic: with
           // 5 items at 4-per-view the last page is a partial one, and page
@@ -299,6 +303,100 @@
         return b.classList.contains("is-active");
       })[0] || buttons[0];
       select(initial);
+    });
+  }
+
+  /* ----------------------------------------------------------------------
+     3c. Auto-scrolling list — notice board (vertical), logo strip (horizontal)
+     A ticker, not a carousel: the list keeps its native scrolling and the
+     items simply drift. Opt in with data-autoscroll="26" on the list, where
+     the number is pixels per second, plus data-autoscroll-axis="x" to drift
+     sideways instead of up.
+
+     Unlike a paged carousel this never sits still for want of a full extra
+     page — three logos loop just as happily as thirty.
+     ---------------------------------------------------------------------- */
+  function initAutoScroll() {
+    $$("[data-autoscroll]").forEach(function (list) {
+      var horizontal = list.getAttribute("data-autoscroll-axis") === "x";
+      var originals = Array.prototype.slice.call(list.children);
+      // Nothing to do if motion is unwanted, or if everything already fits.
+      if (prefersReducedMotion || originals.length < 2) { return; }
+      // A vertical list with nothing hidden has no reason to move. A logo
+      // strip is the opposite case: looping is the point, so it always runs.
+      if (!horizontal && list.scrollHeight <= list.clientHeight + 4) { return; }
+
+      var speed = parseFloat(list.getAttribute("data-autoscroll")) || 26;
+
+      /* A second copy of the list is what makes the wrap invisible: by the
+         time the first copy has scrolled out of sight, the clone sits in
+         exactly its place, so resetting to the top is never seen. The copies
+         are hidden from screen readers and taken out of the tab order — they
+         are the same notices twice. */
+      originals.forEach(function (node) {
+        var copy = node.cloneNode(true);
+        copy.setAttribute("aria-hidden", "true");
+        $$("a", copy).forEach(function (a) { a.setAttribute("tabindex", "-1"); });
+        list.appendChild(copy);
+      });
+
+      function offset(node) {
+        return horizontal ? node.offsetLeft : node.offsetTop;
+      }
+      function at() {
+        return horizontal ? list.scrollLeft : list.scrollTop;
+      }
+      function moveTo(value) {
+        if (horizontal) { list.scrollLeft = value; } else { list.scrollTop = value; }
+      }
+
+      function measure() {
+        // Distance from the first original to the first clone — the exact
+        // point at which the list may snap back with nothing visibly moving.
+        return offset(list.children[originals.length]) - offset(list.children[0]);
+      }
+
+      var loopSize = measure();
+      var pos = at();
+      var lastFrame = null;
+      var ourScroll = 0;
+      var paused = false;
+
+      function frame(now) {
+        if (lastFrame === null) { lastFrame = now; }
+        var elapsed = now - lastFrame;
+        lastFrame = now;
+
+        if (!paused && !document.hidden && loopSize > 0) {
+          pos += speed * elapsed / 1000;
+          if (pos >= loopSize) { pos -= loopSize; }
+          moveTo(pos);                   // fractional, so the drift is smooth
+          ourScroll = at();
+        }
+        requestAnimationFrame(frame);
+      }
+
+      /* Hovering stops it — the titles are links, and no one should have to
+         chase a moving target to click one. */
+      ["mouseenter", "focusin", "touchstart", "pointerdown"].forEach(function (evt) {
+        list.addEventListener(evt, function () { paused = true; }, { passive: true });
+      });
+      ["mouseleave", "focusout", "touchend", "pointerup"].forEach(function (evt) {
+        list.addEventListener(evt, function () { paused = false; }, { passive: true });
+      });
+
+      // Scrolled by hand? Carry on from there rather than yanking it back.
+      list.addEventListener("scroll", function () {
+        if (Math.abs(at() - ourScroll) > 1.5) { pos = at(); }
+      }, { passive: true });
+
+      var resizeTimer;
+      window.addEventListener("resize", function () {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function () { loopSize = measure(); }, 200);
+      });
+
+      requestAnimationFrame(frame);
     });
   }
 
@@ -691,6 +789,7 @@
     initNavigation();
     initHeroVideo();
     initCarousels();
+    initAutoScroll();
     initTabPanels();
     initAboutTabs();
     initScrollWidgets();

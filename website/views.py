@@ -11,8 +11,9 @@ import logging
 from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
+from django.templatetags.static import static as static_url
 from django.urls import reverse
-from django.utils.html import escape
+from django.utils.html import escape, strip_tags
 from django.utils.text import slugify
 from django.utils.safestring import mark_safe
 from django.views.decorators.http import require_GET, require_POST
@@ -132,10 +133,14 @@ def _nav_title(path):
     for entry in data.MAIN_NAV:
         if entry["href"] == path:
             return entry["title"]
-        for child in entry["children"]:
+        # A menu entry with no dropdown may simply omit 'children'; insisting
+        # on the key here took every placeholder page down with a KeyError.
+        for child in entry.get("children") or []:
             if child["href"] == path:
                 return child["title"]
-    for entry in data.TOP_NAV + data.FOOTER_LINKS["useful"]:
+    # FOOTER_LINKS is a list of columns, each with its own 'links'.
+    footer = [link for column in data.FOOTER_LINKS for link in column["links"]]
+    for entry in data.TOP_NAV + footer:
         if entry.get("href") == path or entry.get("url") == path:
             return entry["title"]
     return ""
@@ -156,6 +161,22 @@ def _enquiry_context(form=None):
 
 
 # ---------------------------------------------------------------- homepage
+HOME_EVENT_COUNT = 8
+
+
+def _home_events(events):
+    """Featured events first, then the newest of the rest.
+
+    Taking *only* the featured ones left the slider with exactly as many
+    cards as fit across the screen, so it had nothing to scroll and its
+    arrows sat permanently disabled.  Topping the list up keeps it moving
+    while the flagged events still lead.
+    """
+    featured = [e for e in events if e["is_featured"]]
+    rest = [e for e in events if not e["is_featured"]]
+    return (featured + rest)[:HOME_EVENT_COUNT]
+
+
 def home(request):
     events = _events()
     context = {
@@ -166,7 +187,7 @@ def home(request):
         "offerings": data.OFFERINGS,
         "schools": _schools(),
         "videos": data.VIDEOS,
-        "events": [e for e in events if e["is_featured"]] or events[:6],
+        "events": _home_events(events),
         # CHANCELLOR is commented out in data.py for now — the band hides
         # itself rather than taking the homepage down with it.
         "chancellor": getattr(data, "CHANCELLOR", None),
@@ -231,6 +252,37 @@ def school_detail(request, slug):
     })
 
 
+def _asset(value):
+    """Turn a data.py asset reference into something usable in ``href``/``src``.
+
+    ``'img/faculty/cv.pdf'``      -> ``'/static/img/faculty/cv.pdf'``
+    ``'https://example.com/cv'``  -> unchanged
+    ``'/page/our-team/'``         -> unchanged
+
+    Without this a bare static path would be read as a relative link and
+    resolve against the current page, which 404s.
+    """
+    if not value:
+        return ""
+    if value.startswith(("http://", "https://", "//", "/", "mailto:", "tel:")):
+        return value
+    return static_url(value)
+
+
+def _faculty(slug):
+    """Faculty for a department, with photo and profile links resolved."""
+    people = []
+    for row in data.DEPARTMENT_FACULTY.get(slug, []):
+        person = dict(row)
+        person["photo"] = _asset(row.get("photo"))
+        person["profile_url"] = _asset(row.get("profile_url"))
+        # A PDF should open in its own tab; an internal page should not.
+        person["is_file"] = person["profile_url"].lower().endswith(
+            (".pdf", ".doc", ".docx"))
+        people.append(person)
+    return people
+
+
 def _department_tabs(department):
     """Tab panels for a department, falling back to the generic set.
 
@@ -286,7 +338,7 @@ def department_detail(request, slug):
         "department": department,
         "school": school,
         "courses": courses,
-        "faculty": data.DEPARTMENT_FACULTY.get(slug, []),
+        "faculty": _faculty(slug),
         "tabs": _department_tabs(department),
         "siblings": [d for d in _departments(school=department["school"])
                      if d["slug"] != slug],
@@ -558,6 +610,20 @@ def our_mentors(request):
     })
 
 
+def chancellors_message(request):
+    """The full message, with the portrait beside it.
+
+    Content is the CHANCELLOR dict in data.py — the same one the homepage
+    band reads, so the excerpt and the message never drift apart.
+    """
+    chancellor = getattr(data, "CHANCELLOR", None)
+    if not chancellor:
+        return error_404(request, None)
+
+    return render(request, "pages/chancellors_message.html",
+                  {"chancellor": chancellor})
+
+
 def academic_calendar(request):
     """Academic Calendar — every date lives in the template, not here.
 
@@ -672,6 +738,15 @@ def search(request):
             results.append({"type": "Page", "title": "About Us",
                             "url": reverse("website:about"),
                             "excerpt": about_blurb})
+
+        # Same story for the Chancellor's Message — its text lives in
+        # CHANCELLOR rather than PAGES, so index it by hand.
+        chancellor = getattr(data, "CHANCELLOR", None)
+        if chancellor and matches("Chancellor's Message", chancellor.get("excerpt"),
+                                  strip_tags(chancellor.get("full_message", ""))):
+            results.append({"type": "Page", "title": "Chancellor's Message",
+                            "url": reverse("website:chancellors_message"),
+                            "excerpt": chancellor.get("excerpt", "")})
 
         for slug, page in data.PAGES.items():
             if matches(page["title"], page["content"]):

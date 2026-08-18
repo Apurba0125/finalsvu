@@ -47,6 +47,8 @@ urlpatterns = [
          name="recognition_approvals"),
     path("page/academic-calendar/", views.academic_calendar,
          name="academic_calendar"),
+    path("page/chancellors-message/", views.chancellors_message,
+         name="chancellors_message"),
     path("page/<slug:slug>/", views.page_detail, name="page_detail"),
     path("contact/", views.contact, name="contact"),
     path("faq/", views.faq, name="faq"),

@@ -1,0 +1,111 @@
+/* ==========================================================================
+   Chancellor's Message  —  loaded only by
+   templates/pages/chancellors_message.html
+
+   Portrait beside the message on a wide screen, portrait above it on a narrow
+   one. The banner and the heading-with-rule come from page-head.css.
+   ========================================================================== */
+
+.chancellor-page {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 30px;
+  align-items: start;
+}
+
+/* --------------------------------------------------------- portrait ----- */
+.chancellor-portrait {
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  border-bottom: 4px solid var(--gold);
+  overflow: hidden;
+  max-width: 340px;
+  margin: 0 auto;
+  width: 100%;
+}
+.chancellor-portrait__media {
+  aspect-ratio: 4 / 5;
+  background: var(--page-alt);
+}
+.chancellor-portrait__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+}
+.chancellor-portrait__body { padding: 16px 18px 20px; text-align: center; }
+.chancellor-portrait__name {
+  margin: 0 0 4px;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--ink);
+}
+.chancellor-portrait__role {
+  margin: 0;
+  font-size: .74rem;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--red);
+}
+.chancellor-portrait__org {
+  margin: 6px 0 0;
+  font-size: .78rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+/* ---------------------------------------------------------- message ----- */
+.chancellor-message__lead {
+  margin: 0 0 20px;
+  padding-left: 18px;
+  border-left: 3px solid var(--gold);
+  font-size: 1.02rem;
+  font-weight: 600;
+  color: var(--ink);
+  font-style: italic;
+}
+.chancellor-message__body { color: var(--ink-soft); }
+.chancellor-message__body p { margin: 0 0 1.1em; text-align: justify; }
+.chancellor-message__body p:last-child { margin-bottom: 0; }
+
+/* The opening quote mark sits in the margin, so it decorates the text
+   without pushing the first line out of alignment with the portrait. */
+.chancellor-message__body > p:first-of-type::before {
+  content: "\201C";
+  float: left;
+  margin: -6px 8px -6px 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 3.4rem;
+  line-height: 1;
+  color: var(--gold);
+}
+
+.chancellor-sign {
+  margin-top: 26px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+.chancellor-sign__name { margin: 0; font-weight: 800; color: var(--ink); }
+.chancellor-sign__role { margin: 2px 0 0; font-size: .82rem; color: var(--muted); }
+
+/* ------------------------------------------------------- responsive ----- */
+@media (min-width: 768px) {
+  /* Portrait column is fixed-ish; the message takes the rest. */
+  .chancellor-page { grid-template-columns: minmax(240px, 320px) minmax(0, 1fr); gap: 40px; }
+  .chancellor-portrait { margin: 0; }
+  /* The message is long — keep the face in view while it is read. */
+  .chancellor-portrait { position: sticky; top: 90px; }
+}
+
+@media (min-width: 1200px) {
+  .chancellor-page { grid-template-columns: 340px minmax(0, 1fr); gap: 56px; }
+  .chancellor-message__body { font-size: 1.02rem; }
+}
+
+@media (max-width: 767.98px) {
+  .chancellor-message__body p { text-align: left; }
+  .chancellor-message__lead { font-size: .96rem; padding-left: 14px; }
+}

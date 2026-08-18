@@ -144,6 +144,9 @@ table { border-collapse: collapse; width: 100%; }
     animation-duration: .001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: .001ms !important;
+    /* Zero the delays too — the nav's hover-intent lead-in would otherwise
+       survive here and read as lag rather than as motion. */
+    transition-delay: 0s !important;
   }
 }
 
@@ -638,6 +641,9 @@ table { border-collapse: collapse; width: 100%; }
   text-transform: uppercase;
   white-space: nowrap;
   border-bottom: 3px solid transparent;
+  /* Without this the highlight and the underline snap on/off, which is what
+     makes a hover read as mechanical. */
+  transition: background .18s ease, border-bottom-color .18s ease, color .18s ease;
 }
 .nav__link:hover,
 .nav__link:focus,
@@ -648,7 +654,17 @@ table { border-collapse: collapse; width: 100%; }
   border-bottom-color: var(--ink);
 }
 .nav__link svg { width: 16px; height: 16px; fill: currentColor; flex-shrink: 0; }
-.nav__caret { width: 9px; height: 9px; fill: currentColor; opacity: .8; }
+.nav__caret {
+  width: 9px; height: 9px;
+  fill: currentColor;
+  opacity: .8;
+  transition: transform .22s ease, opacity .18s ease;
+}
+.nav__item--has-children:hover > .nav__link .nav__caret,
+.nav__item--has-children:focus-within > .nav__link .nav__caret {
+  transform: rotate(180deg);
+  opacity: 1;
+}
 
 .nav__submenu {
   position: absolute;
@@ -663,8 +679,15 @@ table { border-collapse: collapse; width: 100%; }
   border-radius: 0 0 var(--radius) var(--radius);
   opacity: 0;
   visibility: hidden;
-  transform: translateY(8px);
-  transition: opacity var(--transition), transform var(--transition), visibility var(--transition);
+  transform: translateY(6px);
+  /* CLOSING. The delay is deliberate: it gives the pointer time to travel
+     diagonally from the menu label down into the panel without the panel
+     vanishing under it. visibility flips only after the fade has finished,
+     so the panel is never clickable while invisible. */
+  transition:
+    opacity .2s ease .14s,
+    transform .2s ease .14s,
+    visibility 0s linear .34s;
   z-index: 70;
 }
 .nav__item:hover > .nav__submenu,
@@ -673,6 +696,13 @@ table { border-collapse: collapse; width: 100%; }
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
+  /* OPENING. The 90ms lead-in is hover intent — sweeping the pointer across
+     the bar to reach a far item no longer flickers every menu open on the
+     way past.  Decelerating curve so it settles instead of stopping dead. */
+  transition:
+    opacity .24s cubic-bezier(.22, .61, .36, 1) .09s,
+    transform .24s cubic-bezier(.22, .61, .36, 1) .09s,
+    visibility 0s linear .09s;
 }
 /* Flip the last dropdowns so they never overflow the viewport */
 .nav__item:nth-last-child(-n+3) .nav__submenu { left: auto; right: 0; }
@@ -684,12 +714,61 @@ table { border-collapse: collapse; width: 100%; }
   font-size: .82rem;
   font-weight: 600;
   border-left: 3px solid transparent;
+  transition: background .16s ease, color .16s ease, border-left-color .16s ease;
 }
 .nav__submenu a:hover,
 .nav__submenu a:focus {
   background: #faf6e4;
   color: var(--accent);
   border-left-color: var(--gold);
+}
+
+/* Mega dropdown ---------------------------------------------------------
+   For a menu with too many links to read as one tall column ("At a Glance").
+   Turned on by 'columns' on the MAIN_NAV entry in data.py.
+
+   It is centred on the viewport rather than hung off the item's left edge:
+   a 1080px panel dropped from an item sitting two-thirds along the bar would
+   otherwise run off the right of the screen. */
+/* The item drops out of the positioning flow so the panel below anchors to
+   .nav (full width of the bar) instead of to this one menu item — otherwise
+   "centred" means centred on the word "At a Glance", which throws a 1080px
+   panel off the left edge of the screen. */
+.nav__item--mega { position: static; }
+
+.nav__submenu--mega {
+  left: 50%;
+  right: auto;
+  transform: translate(-50%, 6px);
+  width: min(1080px, calc(100vw - 32px));
+  min-width: 0;
+  padding: 20px 22px;
+  column-count: 3;
+  column-gap: 30px;
+}
+/* Beats the "flip the last dropdowns" rule above, whose selector is more
+   specific — without this a mega menu near the end of the bar jumps right. */
+.nav__item:nth-last-child(-n+3) .nav__submenu--mega { left: 50%; right: auto; }
+
+.nav__item:hover > .nav__submenu--mega,
+.nav__item:focus-within > .nav__submenu--mega,
+.nav__item.is-open > .nav__submenu--mega { transform: translate(-50%, 0); }
+
+/* A two-line label must not be split down the middle by the column break. */
+.nav__submenu--mega li { break-inside: avoid; page-break-inside: avoid; }
+.nav__submenu--mega a {
+  padding: 8px 10px;
+  border-left: 0;
+  border-radius: var(--radius-sm);
+  color: var(--ink);
+  font-size: .84rem;
+}
+.nav__submenu--mega a:hover,
+.nav__submenu--mega a:focus { background: #faf6e4; color: var(--accent); }
+
+@media (max-width: 1199.98px) {
+  /* Less room, so two columns rather than three squeezed ones. */
+  .nav__submenu--mega { column-count: 2; width: min(760px, calc(100vw - 32px)); }
 }
 
 .nav__close, .nav__mobile-head { display: none; }
@@ -877,6 +956,9 @@ table { border-collapse: collapse; width: 100%; }
   max-height: 330px;
   overflow-y: auto;
   scrollbar-width: thin;
+  /* The ticker moves this by setting scrollTop every frame; smooth scrolling
+     would queue an animation per frame and turn the drift into a stutter. */
+  scroll-behavior: auto;
 }
 .notice-board__list::-webkit-scrollbar { width: 6px; }
 .notice-board__list::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
@@ -1131,6 +1213,29 @@ table { border-collapse: collapse; width: 100%; }
   gap: 24px;
   text-align: center;
 }
+
+/* Logo strip ------------------------------------------------------------
+   Same cards as the grid above, laid in a row that drifts sideways under
+   main.js (data-autoscroll-axis="x"). The scrollbar is hidden — the motion
+   is the affordance, and dragging still works. */
+.enlist-strip {
+  display: flex;
+  gap: 24px;
+  overflow-x: auto;
+  text-align: center;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  /* The ticker writes scrollLeft every frame; smooth scrolling would queue an
+     animation per frame and turn the drift into a stutter. */
+  scroll-behavior: auto;
+}
+.enlist-strip::-webkit-scrollbar { display: none; }
+.enlist-strip .enlist-card { flex: 0 0 calc(100% - 12px); }
+
+/* The tinted second card is a grid-position rule; in a looping strip the
+   clones would re-tint at the wrong place, so every card sits on the same
+   neutral panel and the logos themselves carry the colour. */
+.enlist-strip .enlist-card:nth-child(2) .enlist-card__media { background: #eee; }
 .enlist-card__media {
   background: #eee;
   aspect-ratio: 16 / 11;
@@ -1363,6 +1468,15 @@ table { border-collapse: collapse; width: 100%; }
   grid-template-columns: 1fr;
   gap: 24px;
 }
+
+/* Video carousel --------------------------------------------------------
+   The generic carousel steps up to 3 and then 4 items across; a video
+   thumbnail that narrow is unreadable, so this one holds at two. */
+.video-carousel .carousel__item { flex-basis: 100%; }
+@media (min-width: 768px) {
+  .video-carousel .carousel__item { flex-basis: calc((100% - 18px) / 2); }
+}
+.video-carousel .video-card { height: 100%; }
 .video-card__title {
   font-size: .95rem;
   text-transform: uppercase;
@@ -1781,6 +1895,41 @@ table { border-collapse: collapse; width: 100%; }
   grid-template-columns: 1fr;
   gap: 30px;
 }
+
+/* Brand column ---------------------------------------------------------- */
+.footer__brand-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.footer__logo {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #fff;
+  flex: none;
+}
+.footer__brand-name {
+  margin: 0;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 800;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+.footer__tagline {
+  margin: 0 0 14px;
+  font-size: .82rem;
+  color: var(--gold);
+}
+.footer__about {
+  margin: 0 0 18px;
+  font-size: .84rem;
+  line-height: 1.75;
+  color: #bdbdbd;
+  text-align: justify;
+}
 .footer__title {
   color: #fff;
   font-size: .95rem;
@@ -1967,6 +2116,9 @@ table { border-collapse: collapse; width: 100%; }
     opacity: 1;
     visibility: visible;
     transform: none;
+    /* The drawer opens by display, not by fade — carrying the desktop
+       hover-intent delays over would just make the tap feel unresponsive. */
+    transition: none;
     box-shadow: none;
     border-top: 0;
     border-radius: 0;
@@ -1978,6 +2130,23 @@ table { border-collapse: collapse; width: 100%; }
   .nav__item.is-open > .nav__submenu { display: block; }
   .nav__submenu a { padding: 12px 16px 12px 30px; min-height: 44px; }
   .nav__item:nth-last-child(-n+3) .nav__submenu { right: auto; }
+
+  /* In the drawer the mega menu is just a long accordion list like any other
+     — columns and the centring transform would both fight the off-canvas. */
+  .nav__submenu--mega,
+  .nav__item:nth-last-child(-n+3) .nav__submenu--mega {
+    column-count: 1;
+    width: auto;
+    left: auto;
+    transform: none;
+    padding: 0;
+  }
+  .nav__item.is-open > .nav__submenu--mega { transform: none; }
+  .nav__submenu--mega a {
+    padding: 12px 16px 12px 30px;
+    border-radius: 0;
+    font-size: .82rem;
+  }
 
 
   .nav-scrim {
@@ -2063,10 +2232,13 @@ table { border-collapse: collapse; width: 100%; }
 
   .quicklinks { grid-template-columns: 1fr 1fr; }
   .enlist-grid { grid-template-columns: repeat(2, 1fr); }
+  .enlist-strip .enlist-card { flex: 0 0 calc((100% - 24px) / 2); }
   .offerings__panel { grid-template-columns: 1fr 1fr; padding: 32px 28px; }
   .video-grid { grid-template-columns: 1fr 1fr; }
   .carousel__item { flex-basis: calc((100% - 18px) / 2); }
   .footer__grid { grid-template-columns: 1fr 1fr; }
+  /* Brand blurb spans both columns rather than sitting in a narrow half. */
+  .footer__brand { grid-column: 1 / -1; }
   .subfooter__inner { justify-content: space-between; text-align: left; }
   .float-actions { right: 20px; bottom: 22px; }
 }
@@ -2075,6 +2247,10 @@ table { border-collapse: collapse; width: 100%; }
 @media (min-width: 768px) {
   .section { padding: 52px 0; }
   .enlist-grid { grid-template-columns: repeat(3, 1fr); }
+  /* Three across, matching the grid this replaced. */
+  .enlist-strip .enlist-card { flex: 0 0 calc((100% - 48px) / 3); }
+  /* Three link columns beside each other; brand still spans the full row. */
+  .footer__grid { grid-template-columns: repeat(3, 1fr); }
   .carousel__nav { display: grid; }
   .carousel__item { flex-basis: calc((100% - 36px) / 3); }
   .hero__caption {
@@ -2119,7 +2295,13 @@ table { border-collapse: collapse; width: 100%; }
   .carousel--triple .carousel__item { flex-basis: calc((100% - 36px) / 3); }
   .carousel--double .carousel__item { flex-basis: calc((100% - 18px) / 2); }
 
-  .footer__grid { grid-template-columns: 1.1fr 1fr 1fr 1.2fr; }
+  /* Six columns: brand, contact, then the four from FOOTER_LINKS.  The brand
+     and contact columns get more room because their content is prose and
+     addresses rather than short link labels. */
+  .footer__grid { grid-template-columns: 1.5fr 1.2fr repeat(4, 1fr); gap: 26px; }
+  /* Back to a single column of the six — the full-width span is only for the
+     narrower layouts above, where the blurb would be squeezed into a half. */
+  .footer__brand { grid-column: auto; }
   .carousel__nav--prev { left: -18px; }
   .carousel__nav--next { right: -18px; }
 

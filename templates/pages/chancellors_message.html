@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% comment %}
+===========================================================================
+CHANCELLOR'S MESSAGE  —  served at /page/chancellors-message/
+                         by website.views.chancellors_message
+
+Reached from the "Read More" button in the chancellor band on the homepage.
+
+ALL THE CONTENT IS THE 'CHANCELLOR' DICT IN website/data.py:
+  photo         the portrait beside the message
+  name          printed under the portrait and again as the sign-off
+  designation   e.g. 'CHANCELLOR'
+  institution   printed under the name
+  excerpt       the short pull-quote, also used on the homepage
+  full_message  the message itself — HTML, so wrap paragraphs in <p>...</p>
+
+There is no separate copy of this text anywhere else; edit CHANCELLOR and
+both the homepage band and this page follow.
+===========================================================================
+{% endcomment %}
+
+{% block title %}Chancellor's Message | {{ site.site_name }}{% endblock %}
+{% block meta_description %}{{ chancellor.excerpt }}{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/page-head.css' %}">
+  <link rel="stylesheet" href="{% static 'css/chancellor.css' %}">
+{% endblock %}
+
+{% block content %}
+
+{# =========================================================== BANNER === #}
+<section class="page-banner"
+         style="background-image: linear-gradient(0deg, rgba(10,10,10,.72), rgba(10,10,10,.55)), url('{% static 'img/about/campus.jpg' %}');">
+  <div class="shell">
+    <h1 class="page-banner__title">Chancellor's Message</h1>
+  </div>
+</section>
+
+<section class="section">
+  <div class="shell">
+    <div class="chancellor-page">
+
+      {# ------------------------------------------------ portrait ------ #}
+      <aside class="chancellor-portrait">
+        {% if chancellor.photo %}
+          <div class="chancellor-portrait__media">
+            <img src="{% static chancellor.photo %}"
+                 alt="{{ chancellor.name }}, {{ chancellor.designation|title }}"
+                 width="340" height="425">
+          </div>
+        {% endif %}
+        <!-- <div class="chancellor-portrait__body">
+          <p class="chancellor-portrait__name">{{ chancellor.name }}</p>
+          <p class="chancellor-portrait__role">{{ chancellor.designation }}</p>
+          {% if chancellor.institution %}
+            <p class="chancellor-portrait__org">{{ chancellor.institution }}</p>
+          {% endif %}
+        </div> -->
+      </aside>
+
+      {# ------------------------------------------------- message ------ #}
+      <div class="chancellor-message">
+        <div class="page-head">
+          <h2 class="page-heading">From the <span>Chancellor's Desk</span></h2>
+          <span class="page-rule"></span>
+        </div>
+
+        {% if chancellor.excerpt %}
+          <p class="chancellor-message__lead">{{ chancellor.excerpt }}</p>
+        {% endif %}
+
+        <div class="chancellor-message__body">
+          {{ chancellor.full_message|safe }}
+        </div>
+
+        <div class="chancellor-sign">
+          <p class="chancellor-sign__name">{{ chancellor.name }}</p>
+          <p class="chancellor-sign__role">
+            {{ chancellor.designation|title }}{% if chancellor.institution %},
+            {{ chancellor.institution }}{% endif %}
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+{% endblock %}

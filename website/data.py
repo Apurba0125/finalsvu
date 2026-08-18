@@ -12,8 +12,8 @@ SITE = {'site_name': 'Swami Vivekananda University',
  'short_name': 'SVU',
  'tagline': 'Excellence. Innovation. Entrepreneurship',
  'logo': 'img/logo.jpeg',
- 'address_line1': 'Telinipara, Barasat - Barrackpore Rd Bara Kanthalia',
- 'address_line2': 'West Bengal - 700121.',
+ 'address_line1': 'Telinipara, Barasat - Barrackpore Rd Bara Kanthalia West Bengal - 700121.',
+
  'phones': ['+91-7044086270', '+91-7980333922', '+91-9830278216', '+91-8961334184'],
 #  'toll_free': '1800 121 8383',
 #  'toll_free_hours': '10AM to 6PM',
@@ -50,6 +50,10 @@ SITE = {'site_name': 'Swami Vivekananda University',
                  'students can grow and develop in a safe and supportive environment.',
  'admission_ad_image': 'img/branding/admission-ad.jpg',
  'facebook_page_url': 'https://www.facebook.com/SwamiVivekanandaUniversityOfficial',
+ # The paragraph under the logo in the footer's first column.
+ 'footer_about': 'Swami Vivekananda University was established in the year 2019 by Swami '
+                 'Vivekananda Group of Institutions (RERF) and over the last couple of years '
+                 'has grown in rapid strides to transform it into a reputed University.',
  'copyright_text': 'Copyright © SVU. All Rights Reserved.',
  'designer_credit': '',
  'designer_url': '',
@@ -85,7 +89,7 @@ MAIN_NAV = [{'title': 'About SVU',
                {'title': "Our Mentors", 'href': '/page/our-mentors/', 'is_external': False},
                {'title': "Recognition & Approvals", 'href': '/page/recognition-approvals/', 'is_external': False},
                 ]},
- {'title': 'Academics',
+ {'title': 'Programs',
   'href': '/academics/schools/',
   'is_external': False,
   'children': [{'title': 'SVU Schools', 'href': '/academics/schools/', 'is_external': False},
@@ -94,47 +98,70 @@ MAIN_NAV = [{'title': 'About SVU',
                 'is_external': False},
                {'title': 'Schools & Courses',
                 'href': '/academics/courses/',
-                'is_external': False},
-               {'title': 'Academic Calendar',
-                'href': '/page/academic-calendar/',
-                'is_external': False},
-               {'title': 'Library', 'href': 'https://svu.knimbus.com/portal/v2/default/home', 'is_external': True},]},
- {'title': 'Admission',
+                'is_external': False},]},
+               
+              
+ {'title': 'Academic',
   'href': '/admission/',
   'is_external': False,
-  'children': [{'title': 'Admission Process', 'href': '/admission/', 'is_external': False},
-               {'title': 'Apply Online', 'href': '/admission/apply/', 'is_external': False},
-               {'title': 'Scholarships', 'href': '/page/scholarships/', 'is_external': False},
-               {'title': 'Fee Refund Policy',
-                'href': '/page/fee-refund-policy/',
-                'is_external': False}]},
- {'title': 'Campus Life',
-  'href': '/academics/facilities/',
+  'children': [{'title': 'Academics Overview', 'href': '#', 'is_external': False},
+               {'title': 'List of Holidays', 'href': '#', 'is_external': False},
+               {'title': 'Library', 'href': 'https://svu.knimbus.com/portal/v2/default/home', 'is_external': True},
+               {'title': 'Academic Calendar','href': '/page/academic-calendar/', 'is_external': False},
+                ]},
+ # 'columns': 3 turns this dropdown into the wide three-column panel.  Any
+ # nav entry can use it; without the key the menu stays a single column.
+ # Items fill the first column top to bottom, then the second, then the third,
+ # so keep the list in the order you want to read down the columns.
+ {'title': 'At a Glance',
+  'href': '#',
   'is_external': False,
-  'children': [{'title': 'SVU Facilities',
-                'href': '/academics/facilities/',
-                'is_external': False},
-               {'title': 'Hostel', 'href': '/page/hostel/', 'is_external': False},
-               {'title': 'Sports', 'href': '/page/sports/', 'is_external': False},
-               {'title': 'Clubs & Societies',
-                'href': '/page/clubs-societies/',
-                'is_external': False}]},
+  'columns': 3,
+  'children': [{'title': 'Academic Patent & IPR', 'href': '/page/academic-patent-ipr/', 'is_external': False},
+               {'title': 'Academic Activities', 'href': '/page/academic-activities/', 'is_external': False},
+               {'title': 'Appreciations', 'href': '/page/appreciations/', 'is_external': False},
+               {'title': 'Annual Report', 'href': '/page/annual-report/', 'is_external': False},
+               {'title': 'Book', 'href': '/page/book/', 'is_external': False},
+               {'title': 'Brochure', 'href': '/page/brochure/', 'is_external': False},
+               {'title': 'Building Plan', 'href': '/page/building-plan/', 'is_external': False},
+               {'title': 'Centre For Excellence', 'href': '/page/centre-of-excellence/', 'is_external': False},
+               {'title': 'Centre For Faculty Development Programme', 'href': '/page/centre-faculty-development/', 'is_external': False},
+
+               {'title': 'Disclosure', 'href': '/page/public-self-disclosure/', 'is_external': False},
+               {'title': 'Centre For Skill Enhancement', 'href': '/page/centre-skill-enhancement/', 'is_external': False},
+               {'title': 'Collaboration', 'href': '/page/collaboration/', 'is_external': False},
+               {'title': 'Consultancy', 'href': '/page/consultancy/', 'is_external': False},
+               {'title': 'E-Resource', 'href': '/page/e-resource/', 'is_external': False},
+               {'title': 'Gallery', 'href': '/page/gallery/', 'is_external': False},
+               {'title': 'IIC', 'href': '/page/iic/', 'is_external': False},
+               {'title': 'Journals', 'href': '/page/journals/', 'is_external': False},
+               {'title': 'Incubation Centre', 'href': '/page/incubation-centre/', 'is_external': False},
+               {'title': 'Newsletter', 'href': '/page/newsletter/', 'is_external': False},
+
+               {'title': 'Publication', 'href': '/page/publication/', 'is_external': False},
+               {'title': 'Project', 'href': '/page/project/', 'is_external': False},
+               {'title': 'Regulations', 'href': '/page/regulations/', 'is_external': False},
+               {'title': 'Student Handbook', 'href': '/page/student-handbook/', 'is_external': False},
+               {'title': 'Social Outreach Activities', 'href': '/page/social-outreach-activities/', 'is_external': False},
+               {'title': 'Testing Facilities', 'href': '/page/testing-facilities/', 'is_external': False},
+               {'title': 'University Press', 'href': '/page/university-press/', 'is_external': False},
+               {'title': 'Vivek Jyoti Samman', 'href': '/page/vivek-jyoti-samman/', 'is_external': False}]},
  {'title': 'Events', 'href': '/events/', 'is_external': False, 'children': []},
- {'title': 'IQAC',
-  'href': '/page/iqac/',
-  'is_external': False,
-  'children': [{'title': 'About IQAC', 'href': '/page/iqac/', 'is_external': False},
-               {'title': 'AQAR Reports', 'href': '/page/aqar-reports/', 'is_external': False},
-               {'title': 'Feedback', 'href': '/page/iqac-feedback/', 'is_external': False}]},
+#  {'title': 'IQAC',
+#   'href': '/page/iqac/',
+#   'is_external': False,
+#   'children': [{'title': 'About IQAC', 'href': '/page/iqac/', 'is_external': False},
+#                {'title': 'AQAR Reports', 'href': '/page/aqar-reports/', 'is_external': False},
+#                {'title': 'Feedback', 'href': '/page/iqac-feedback/', 'is_external': False}]},
  {'title': 'Student Form',
   'href': '/page/student-forms/',
   'is_external': False,
   'children': []},
- {'title': 'NIRF',
-  'href': '/page/nirf/',
-  'is_external': False,
-  'children': [{'title': 'NIRF 2026', 'href': '/page/nirf/', 'is_external': False},
-               {'title': 'Data Templates', 'href': '/page/nirf-data/', 'is_external': False}]},
+#  {'title': 'NIRF',
+#   'href': '/page/nirf/',
+#   'is_external': False,
+#   'children': [{'title': 'NIRF 2026', 'href': '/page/nirf/', 'is_external': False},
+#                {'title': 'Data Templates', 'href': '/page/nirf-data/', 'is_external': False}]},
  {'title': 'Centre',
   'href': '/page/centre-of-excellence/',
   'is_external': False,
@@ -150,7 +177,7 @@ MAIN_NAV = [{'title': 'About SVU',
                {'title': 'Industry Collaboration',
                 'href': '/academics/industry-partners/',
                 'is_external': False}]},
- {'title': 'WILP', 'href': '/page/wilp/', 'is_external': False, 'children': []},
+
  {'title': 'Student Welfare Committees',
   'href': '/page/student-welfare/',
   'is_external': False,
@@ -166,53 +193,70 @@ MAIN_NAV = [{'title': 'About SVU',
                {'title': 'SC/ST Committee',
                 'href': '/page/sc-st-committee/',
                 'is_external': False}]},
- {'title': 'Examination',
-  'href': '/page/examination/',
+
+# {'title': 'Payment','href': 'https://www.swamivivekanandauniversity.ac.in/Pay-online/','is_external': True,},
+ {'title': 'Notice',
+  'href': '#',
   'is_external': False,
-  'children': [{'title': 'Examination Notice',
+  'children': [{'title': 'Notice',
                 'href': '/page/examination/',
                 'is_external': False},
-               {'title': 'Results', 'href': '/page/results/', 'is_external': False},
-               {'title': 'Question Papers',
-                'href': '/page/question-papers/',
-                'is_external': False}]}]
+               {'title': 'Career', 'href': '/page/career/', 'is_external': False},
+               ]},
 
+ {'title': 'Media',
+  'href': '#',
+  'is_external': False,
+  'children': [{'title': 'Blogs','href': '/page/blogs/','is_external': False},
+               {'title': 'Svu Podcast', 'href': '/page/svu-podcast/', 'is_external': False},
+               ]},
+
+{'title': 'UGC-2f','href': '#','is_external': True,},
+ # Full URL off to the main university site, so is_external is True — that is
+ # what opens it in a new tab.  'children' must be present even when empty:
+ # the menu and the page-title lookup both walk it.
+ ]
 # --------------------------------------------------------------------------
-FOOTER_LINKS = {'useful': [{'title': 'About Us', 'url': '/page/about-svu/', 'is_external': False},
-            {'title': 'Contact Us', 'url': '/contact/', 'is_external': False},
-            {'title': 'Our Courses', 'url': '/academics/courses/', 'is_external': False},
-            {'title': 'Job Opportunities', 'url': '/page/careers/', 'is_external': False},
-            {'title': 'Public Self-Disclosure',
-             'url': '/page/public-self-disclosure/',
-             'is_external': False},
-            {'title': 'Blog', 'url': '/page/blog/', 'is_external': False},
-            {'title': 'SVU-IBSC', 'url': '/page/svu-ibsc/', 'is_external': False},
-            {'title': "COMMUNICATION : SVU's Academic Media Journal",
-             'url': '/page/communication-journal/',
-             'is_external': False},
-            {'title': 'Purchase RFP/RFQ', 'url': '/page/purchase-rfp/', 'is_external': False},
-            {'title': 'Terms & Conditions',
-             'url': '/page/terms-conditions/',
-             'is_external': False},
-            {'title': 'Fee Refund Policy',
-             'url': '/page/fee-refund-policy/',
-             'is_external': False}],
- 'external': [{'title': 'UGC', 'url': 'https://www.ugc.gov.in/', 'is_external': True},
-              {'title': 'UGC e-samadhan',
-               'url': 'https://www.ugc.gov.in/e-samadhan',
-               'is_external': True},
-              {'title': 'Ministry of Education',
-               'url': 'https://www.education.gov.in/',
-               'is_external': True},
-              {'title': 'Shodhganga',
-               'url': 'https://shodhganga.inflibnet.ac.in/',
-               'is_external': True},
-              {'title': 'Shodhgangotri',
-               'url': 'https://shodhgangotri.inflibnet.ac.in/',
-               'is_external': True},
-              {'title': 'Handbook on Basics of Cyber Hygiene for Higher Education Institutions',
-               'url': 'https://www.ugc.gov.in/',
-               'is_external': True}]}
+# The footer's link columns, left to right.  Add, remove or reorder a column
+# here and the footer follows — the grid works out how many there are.
+#
+# The first two columns of the footer are NOT here: the brand blurb comes from
+# SITE['footer_about'] and the contact column from SITE's address, phones and
+# email, so those details are never written down twice.
+#
+# Two columns may share a title ("Our Links"), which is how a long list is
+# split across two columns without one running much taller than the rest.
+FOOTER_LINKS = [
+ {'title': 'Admissions',
+  'links': [{'title': 'Admission Process', 'url': '/admission/', 'is_external': False},
+            {'title': 'Scholarships', 'url': '/page/scholarships/', 'is_external': False},
+            {'title': 'Fee Structure', 'url': '/page/fee-structure/', 'is_external': False},
+            {'title': 'FAQs', 'url': '/faq/', 'is_external': False}]},
+
+ {'title': 'Our Links',
+  'links': [{'title': 'NPTEL Courses', 'url': 'https://nptel.ac.in/', 'is_external': True},
+            {'title': 'SWAYAM', 'url': 'https://swayam.gov.in/', 'is_external': True},
+            {'title': 'NATS', 'url': 'https://nats.education.gov.in/', 'is_external': True},
+            {'title': 'NDLI', 'url': 'https://ndl.iitkgp.ac.in/', 'is_external': True},
+            {'title': 'e Sodh Ganga', 'url': 'https://shodhganga.inflibnet.ac.in/', 'is_external': True},
+            {'title': 'e-PGPathshala', 'url': 'https://epgp.inflibnet.ac.in/', 'is_external': True},
+            {'title': 'e-Education @ CEC', 'url': 'https://cec.nic.in/', 'is_external': True}]},
+
+ {'title': 'Our Links',
+  'links': [{'title': 'Digilocker', 'url': 'https://www.digilocker.gov.in/', 'is_external': True},
+            {'title': 'NSS', 'url': 'https://nss.gov.in/', 'is_external': True},
+            {'title': 'NCC', 'url': 'https://indiancc.nic.in/', 'is_external': True},
+            {'title': 'IQAC', 'url': '/page/iqac/', 'is_external': False},
+            {'title': 'BLOG', 'url': '/page/blogs/', 'is_external': False}]},
+
+ {'title': 'Quick Links',
+  'links': [{'title': 'Library', 'url': 'https://svu.knimbus.com/portal/v2/default/home', 'is_external': True},
+            {'title': 'Student Services', 'url': '/page/student-services/', 'is_external': False},
+            {'title': 'Placements', 'url': '/page/placements/', 'is_external': False},
+            {'title': 'Research & Innovation', 'url': '/page/research-innovation/', 'is_external': False},
+            {'title': 'Blogs', 'url': '/page/blogs/', 'is_external': False},
+            {'title': 'Contact Us', 'url': '/contact/', 'is_external': False}]},
+]
 
 # --------------------------------------------------------------------------
 # Homepage carousel
@@ -248,10 +292,11 @@ QUICK_LINKS = [{'title': 'Notice', 'description': 'Click to check all Notice', '
  {'title': 'Apply Online',
   'description': 'Join SVU by applying online and pursue your desired course.',
   'url': '/admission/apply/'},
- {'title': 'University Scholarship Foundation',
-  'description': 'The University Scholarship Foundation offers scholarships to meritorious '
-                 'students under special categories.',
-  'url': '/page/scholarships/'},
+ # Hidden for now — uncomment the block to put the card back on the homepage.
+ # {'title': 'University Scholarship Foundation',
+ #  'description': 'The University Scholarship Foundation offers scholarships to meritorious '
+ #                 'students under special categories.',
+ #  'url': '/page/scholarships/'},
  {'title': 'Schools & Courses',
   'description': "SVU schools offer multiple courses to identify and support pupil's diverse "
                  'learning needs.',
@@ -260,10 +305,12 @@ QUICK_LINKS = [{'title': 'Notice', 'description': 'Click to check all Notice', '
   'description': 'An interesting challenge in developing skills for youth and creating a '
                  'strong pipeline of talent is a seemingly…',
   'url': '/academics/industry-partners/'},
- {'title': 'SVU Facilities',
-  'description': 'The Swami Vivekananda University has one of the best-in-class infrastructure '
-                 'and facilities on the campus.',
-  'url': '/academics/facilities/'}]
+ # Hidden for now — uncomment the block to put the card back on the homepage.
+ # {'title': 'SVU Facilities',
+ #  'description': 'The Swami Vivekananda University has one of the best-in-class infrastructure '
+ #                 'and facilities on the campus.',
+ #  'url': '/academics/facilities/'},
+ ]
 
 # --------------------------------------------------------------------------
 # "Explore our offerings" band
@@ -287,45 +334,115 @@ OFFERINGS = [{'title': 'Curriculum',
 
 # --------------------------------------------------------------------------
 # "We are now enlisted" logos
-ENLISTMENTS = [{'title': 'AIMA MAT (for admission to MBA)',
-  'logo': 'img/enlistments/enlist-aima.png',
+# Hidden for now — the whole band disappears from the homepage while this list
+# is empty.  Uncomment the entries to bring it back; nothing else to change.
+ENLISTMENTS = [
+ {'title': 'Honouring Excellence, Empowering Education, Inspiring Tomorrow',
+  'logo': 'img/achivements/481233106_972665624970210_8860091325710493319_n.jpg.jpeg',
   'alt_text': 'All India Management Association logo',
   'url': ''},
- {'title': 'UCEED 2026 (for admission to B.Des)',
-  'logo': 'img/enlistments/enlist-uceed.png',
+ 
+ {'title': 'A Journey of Excellence, Recognition, and Achievement',
+  'logo': 'img/achivements/481979442_972665414970231_8854528053355663625_n.jpg.jpeg',
   'alt_text': 'UCEED 2026 logo',
   'url': ''},
- {'title': 'CLAT 25 (for admission to Law programs)',
-  'logo': 'img/enlistments/enlist-clat.png',
+ {'title': 'Celebrating Achievements That Inspire a Brighter Future',
+  'logo': 'img/achivements/482247234_972659861637453_1522331182250338419_n.jpg.jpeg',
   'alt_text': 'Consortium of National Law Universities logo',
-  'url': ''}]
+  'url': ''},
+ {'title': 'Excellence Recognised, Achievements Celebrated, Futures Inspired',
+  'logo': 'img/achivements/536270821_1105990098304428_367322835841659546_n.jpg.jpeg',
+  'alt_text': 'Consortium of National Law Universities logo',
+  'url': ''},
+ {'title': 'Proud Moments of Academic Excellence and Achievement',
+  'logo': 'img/achivements/540903586_1105990141637757_7221139477378257898_n.jpg.jpeg',
+  'alt_text': 'Consortium of National Law Universities logo',
+  'url': ''},
+ {'title': 'From Excellence to Recognition — A Journey Worth Celebrating',
+  'logo': 'img/achivements/MPTEL_2.jpeg',
+  'alt_text': 'Consortium of National Law Universities logo',
+  'url': ''},
+ {'title': 'Where Dedication Meets Excellence and Achievement',
+  'logo': 'img/achivements/MPTEL_3.jpeg',
+  'alt_text': 'Consortium of National Law Universities logo',
+  'url': ''},
+ {'title': 'Celebrating Minds, Honouring Achievements, Inspiring Generations',
+  'logo': 'img/achivements/MPTEL_4.jpeg',
+  'alt_text': 'Consortium of National Law Universities logo',
+  'url': ''},
+ {'title': 'Recognising Excellence, Celebrating Impact',
+  'logo': 'img/achivements/NPTEL_1.jpeg',
+  'alt_text': 'Consortium of National Law Universities logo',
+  'url': ''},
+
+  {'title': 'Celebrating Excellence, Inspiring Achievement, Shaping the Future',
+    'logo': 'img/achivements/rbangla.jpeg',
+    'alt_text': 'All India Management Association logo',
+    'url': ''},
+ ]
 
 # --------------------------------------------------------------------------
-VIDEOS = [{'title': 'Swami Vivekananda University',
+# The homepage slides through these two at a time.  Clicking a card opens the
+# video on YouTube in a new tab — nothing plays inside the page.
+#
+#   title       shown in near-black
+#   highlight   shown in gold, after the title (optional)
+#   youtube_id  the part after "v=" in the watch URL
+#   image       the picture on the card, e.g. 'img/videos/convocation.jpg'.
+#               Leave it blank and YouTube's own thumbnail for that id is used,
+#               so a new row works before its artwork exists.
+#   url         only if the video is not on YouTube; otherwise it is built
+#               from youtube_id below.
+VIDEOS = [
+ {'title': 'Swami Vivekananda University',
   'highlight': 'Top University in Kolkata',
-  'youtube_id': 'aqz-KE-bpKQ',
-  'embed_url': 'https://www.youtube-nocookie.com/embed/aqz-KE-bpKQ?autoplay=1&rel=0',
-  'thumbnail_url': 'https://i.ytimg.com/vi/aqz-KE-bpKQ/hqdefault.jpg'},
+  'youtube_id': 'QI4D_vYJdRg',
+  'image': ''},
  {'title': 'SVU Ranked Among Top 10',
   'highlight': 'Media Colleges in India',
   'youtube_id': 'ScMzIvxBSi4',
-  'embed_url': 'https://www.youtube-nocookie.com/embed/ScMzIvxBSi4?autoplay=1&rel=0',
-  'thumbnail_url': 'https://i.ytimg.com/vi/ScMzIvxBSi4/hqdefault.jpg'}]
+  'image': ''},
+
+ # TODO: these four carry the two sample ids above so the slider has something
+ # to show — swap in the real uploads and the titles are already in place.
+ {'title': 'Nasha Mukt Yuva for Viksit Bharat',
+  'highlight': 'A Day on Campus',
+  'youtube_id': '-Vk2kn4AYVQ',
+  'image': ''},
+ {'title': 'Placements & Recruiters',
+  'highlight': 'Where Our Students Go',
+  'youtube_id': 'ScMzIvxBSi4',
+  'image': ''},
+ {'title': 'Research & Innovation',
+  'highlight': 'Inside Our Laboratories',
+  'youtube_id': 'aqz-KE-bpKQ',
+  'image': ''},
+ {'title': 'Convocation',
+  'highlight': 'Moments from the Ceremony',
+  'youtube_id': 'ScMzIvxBSi4',
+  'image': ''},
+]
+
+# 'url' is where the card sends the visitor: the ordinary YouTube watch page,
+# opened in a new tab.  'thumbnail_url' is the fallback picture, used only when
+# a row has no 'image' of its own.
+for _video in VIDEOS:
+    _video.setdefault(
+        'url', 'https://www.youtube.com/watch?v=%s' % _video['youtube_id'])
+    _video.setdefault(
+        'thumbnail_url',
+        'https://i.ytimg.com/vi/%s/hqdefault.jpg' % _video['youtube_id'])
 
 # --------------------------------------------------------------------------
-# CHANCELLOR = {'name': 'The Chancellor',
-#  'designation': 'CHANCELLOR',
-#  'institution': 'SWAMI VIVEKANANDA UNIVERSITY (SVU)',
-#  'excerpt': 'Swami Vivekananda University continues to grow from strength to strength, '
-#             'consistently endeavouring to provide its students with unmatched opportunities to '
-#             'excel.',
-#  'full_message': '<p>Swami Vivekananda University continues to grow from strength to strength '
-#                  'with every passing year.</p><p>We consistently endeavour to provide our '
-#                  'students with unmatched opportunities to excel — through an industry-aligned '
-#                  'curriculum, global exposure and a culture of research and '
-#                  'entrepreneurship.</p>',
-#  'photo': 'img/people/chancellor.jpg',
-#  'background_image': ''}
+CHANCELLOR = {'name': 'The Chancellor',
+ 'designation': 'CHANCELLOR',
+ 'institution': 'SWAMI VIVEKANANDA UNIVERSITY (SVU)',
+ 'excerpt': 'Swami Vivekananda University continues to grow from strength to strength, '
+            'consistently endeavouring to provide its students with unmatched opportunities to '
+            'excel.',
+ 'full_message': '<p>I welcome everyone at Swami Vivekananda University. The essential information of this esteemed setup is available in this website. Since its inception, SVU has made rapid strides both in the area of academics and research. The emergence and reputation of SVU in various spheres of academia and industry reflects this rapid growth. The website has been carrying the chronological information. The inception years were really challenging due to pandemic, however, resilience shown by the staff and students helped the university in tiding over the difficult situation. I am hopeful that the SVU will match up to the societal expectation in a demand driven way. I wish SVU all success in future.</p>',
+ 'photo': 'img/our_team/17363489181. Chancellor.png',
+ 'background_image': ''}
 
 # --------------------------------------------------------------------------
 CENTRES = [{'title': 'Centre for Innovation & Entrepreneurship',
@@ -649,15 +766,16 @@ DEPARTMENTS = [
 #   profile_url   link for "Read More"; omit it and the link disappears.
 DEPARTMENT_FACULTY = {
  'department-of-computer-science-engineering': [
-  {'name': 'Faculty Name',
-   'designation': 'Associate Professor',
+  {'name': 'Prof.Somsubhra Gupta',
+   'designation': 'Professor',
    'photo': '',
-   'qualification': 'Ph.D. (Information Technology)',
-   'publications': '26 papers',
-   'experience': '12 years',
+   'qualification': 'Ph.D.',
+   'publications': '250+',
+   'experience': '25+ years',
    'research_area': 'Machine Learning, Computer Vision',
-   'profile_url': ''},
-  {'name': 'Faculty Name',
+   'profile_url': 'img/faculty/cv.pdf'},
+
+  {'name': 'Ranjan kumar Mondal',
    'designation': 'Assistant Professor',
    'photo': '',
    'qualification': 'M.Tech, Ph.D. (pursuing)',
@@ -665,7 +783,7 @@ DEPARTMENT_FACULTY = {
    'experience': '8 years',
    'research_area': 'Cyber Security, Network Forensics',
    'profile_url': ''},
-  {'name': 'Faculty Name',
+  {'name': 'Sourav Saha',
    'designation': 'Assistant Professor',
    'photo': '',
    'qualification': 'M.Tech (Computer Science & Engineering)',
@@ -673,7 +791,7 @@ DEPARTMENT_FACULTY = {
    'experience': '6 years',
    'research_area': 'Data Mining, Natural Language Processing',
    'profile_url': ''},
-  {'name': 'Faculty Name',
+  {'name': 'Jayanta chowdhury',
    'designation': 'Assistant Professor',
    'photo': '',
    'qualification': 'M.Tech (Computer Science & Engineering)',
@@ -681,14 +799,14 @@ DEPARTMENT_FACULTY = {
    'experience': '6 years',
    'research_area': 'Data Mining, Natural Language Processing',
    'profile_url': ''},
-  {'name': 'Faculty Name',
+  {'name': 'Apurba Sarkar',
    'designation': 'Assistant Professor',
    'photo': '',
-   'qualification': 'M.Tech (Information Technology)',
+   'qualification': 'M.Tech cse',
    'publications': '7 papers',
-   'experience': '5 years',
-   'research_area': 'Cloud Computing, Internet of Things',
-   'profile_url': ''},
+   'experience': '3 years',
+   'research_area': 'Machine Learning, Automation',
+   'profile_url': 'img/faculty/Apurba sarkar.pdf'},
  ],
 }
 
@@ -1341,53 +1459,50 @@ PARTNERS = [{'name': 'Tata Consultancy Services', 'logo': 'img/partners/partner-
 
 # --------------------------------------------------------------------------
 # Events and notices
-EVENTS = [{'slug': 'swami-vivekananda-university-celebrated-the-77th-republic-day-on-campu',
-  'title': 'Swami Vivekananda University celebrated the 77th Republic Day on campus with '
-           'patriotic fervour',
-  'event_date': '2026-08-04',
-  'venue': 'SVU Campus, New Town, Kolkata',
-  'excerpt': 'Swami Vivekananda University celebrated the 77th Republic Day on campus with '
-             'patriotic fervour. The ceremony featured an NCC parade, unfurling of the '
-             'national flag, cultural performances by cadetsThe programme saw…',
-  'description': '<p>Swami Vivekananda University celebrated the 77th Republic Day on campus '
-                 'with patriotic fervour. The ceremony featured an NCC parade, unfurling of '
-                 'the national flag, cultural performances by cadets</p><p>The programme saw '
-                 'enthusiastic participation from students, faculty members and invited guests '
-                 'across departments.</p>',
-  'cover_image': 'img/events/event-1.jpg',
-  'alt_text': 'Swami Vivekananda University celebrated the 77th Republic Day on campus with '
-              'patriotic fervour. The ceremony featured an NCC parade, unfurling of the '
-              'national f',
-  'is_featured': True},
- {'slug': 'what-an-incredible-evening-the-department-of-sociology-swami-vivekanan',
-  'title': 'Department of Sociology proudly presented RENAISSANCE 3.0',
-  'event_date': '2026-07-21',
-  'venue': 'SVU Campus, New Town, Kolkata',
-  'excerpt': 'What an incredible evening! The Department of Sociology, Swami Vivekananda '
-             'University, proudly presented RENAISSANCE 3.0 2025The programme saw enthusiastic '
-             'participation from students, faculty members and invited guests across '
-             'departments.',
-  'description': '<p>What an incredible evening! The Department of Sociology, Swami '
-                 'Vivekananda University, proudly presented RENAISSANCE 3.0 2025</p><p>The '
-                 'programme saw enthusiastic participation from students, faculty members and '
-                 'invited guests across departments.</p>',
-  'cover_image': 'img/events/event-2.jpg',
-  'alt_text': 'What an incredible evening! The Department of Sociology, Swami Vivekananda '
-              'University, proudly presented RENAISSANCE 3.0 2025',
-  'is_featured': True},
- {'slug': 'swami-vivekananda-university-warmly-welcomed-esteemed-delegates-from-j',
-  'title': 'Swami Vivekananda University warmly welcomed esteemed delegates from Japan',
-  'event_date': '2026-07-07',
-  'venue': 'SVU Campus, New Town, Kolkata',
-  'excerpt': 'Swami Vivekananda University warmly welcomed esteemed delegates from Japan!The '
-             'programme saw enthusiastic participation from students, faculty members and '
-             'invited guests across departments.',
-  'description': '<p>Swami Vivekananda University warmly welcomed esteemed delegates from '
-                 'Japan!</p><p>The programme saw enthusiastic participation from students, '
-                 'faculty members and invited guests across departments.</p>',
-  'cover_image': 'img/events/event-3.jpg',
-  'alt_text': 'Swami Vivekananda University warmly welcomed esteemed delegates from Japan!',
-  'is_featured': True},
+EVENTS = [
+
+    {
+    'slug': 'swami-vivekananda-university-celebrated-the-80th-independence-day-on-campus',
+    'title': 'Swami Vivekananda University celebrated the 80th Independence Day on campus with patriotic fervour',
+    'event_date': '2026-08-15',
+    'venue': 'SVU Campus, Barrackpore, Kolkata',
+    'excerpt': 'Swami Vivekananda University celebrated the 80th Independence Day on campus with patriotic fervour. The ceremony featured the unfurling of the national flag, an NCC parade, cultural performances and patriotic activities by students and cadets. The programme saw…',
+    'description': '<p>Swami Vivekananda University celebrated the 80th Independence Day on campus with patriotic fervour and enthusiasm. The ceremony featured the unfurling of the national flag, an NCC parade, cultural performances and patriotic activities by students and cadets.</p><p>The programme saw enthusiastic participation from students, faculty members, staff and invited guests from across the university. The celebrations highlighted the values of freedom, unity, patriotism and the responsibilities of the nation’s youth.</p>',
+    'cover_image': 'img/events/1.jfif',
+    'alt_text': 'Swami Vivekananda University celebrated the 80th Independence Day on campus with patriotic fervour, featuring flag hoisting, NCC parade and cultural performances',
+    'is_featured': True,
+},
+
+
+{
+    'slug': 'swami-vivekananda-university-observed-14th-august-as-a-day-of-remembrance',
+    'title': '14th August – A Day of Remembrance " Har Ghar Tiranga" ',
+    'event_date': '2026-08-14',
+    'venue': 'SVU Campus, Barrackpore, Kolkata',
+    'excerpt': 'Swami Vivekananda University, in collaboration with NSS, observed 14th August as a Day of Remembrance, reflecting on the Partition of the Nation and its impact on West Bengal. The programme remembered the past, honoured those who suffered, and inspired a future of peace, unity, and humanity.',
+    'description': '<p>Swami Vivekananda University, in collaboration with NSS, observed 14th August as a Day of Remembrance, reflecting on the Partition of the Nation and its impact on West Bengal.</p><p>The programme provided a solemn moment to remember the past, honour those who suffered, and inspire a future rooted in peace, unity, and humanity.</p><p><strong>“Remembering the Past... Honouring the Suffering... Inspiring the Future.”</strong></p><p>The observance was also aligned with the <strong>Har Ghar Tiranga</strong> initiative, encouraging the spirit of patriotism and national unity among students and members of the university community.</p>',
+    'cover_image': 'img/events/2.jpg',
+    'alt_text': 'Swami Vivekananda University observed 14th August as a Day of Remembrance in collaboration with NSS, reflecting on the Partition of the Nation and its impact on West Bengal',
+    'is_featured': True,
+},
+
+
+
+
+ {
+    'slug': 'swami-vivekananda-university-hosted-smart-india-hackathon-2026',
+    'title': 'Swami Vivekananda University hosted Smart India Hackathon 2026',
+    'event_date': '2026-08-07',
+    'venue': 'SVU Campus, New Town, Kolkata',
+    'excerpt': 'Swami Vivekananda University proudly participated in Smart India Hackathon 2026, bringing together talented students, mentors and faculty members to develop innovative solutions to real-world challenges.',
+    'description': '<p>Swami Vivekananda University proudly participated in <strong>Smart India Hackathon 2026</strong>, providing students with an exciting platform to showcase their creativity, technical skills and innovative thinking.</p><p>The event brought together talented students, faculty members and mentors who collaborated to develop technology-driven solutions to real-world challenges. The programme encouraged teamwork, problem-solving, innovation and entrepreneurship among the participants.</p><p>The initiative reflected SVU’s commitment to fostering a culture of innovation and empowering students to contribute meaningful solutions for a smarter and more developed India.</p>',
+    'cover_image': 'img/events/3.jfif',
+    'alt_text': 'Swami Vivekananda University participated in Smart India Hackathon 2026 with students, mentors and faculty members showcasing innovative solutions',
+    'is_featured': True,
+},
+
+
+
  {'slug': 'swami-vivekananda-university-one-of-the-eastern-indias-leading-multidi',
   'title': 'SVU has entered into a strategic collaboration with GreenAI Services Pvt. Ltd.',
   'event_date': '2026-06-22',
@@ -1617,15 +1732,12 @@ FAQS = [{'question': 'When do admissions for 2026-27 open?',
 # --------------------------------------------------------------------------
 # 'about-svu' is deliberately absent: About Us has its own template and view
 # (templates/pages/about.html), so it is not rendered from this dict.
-PAGES = {'chancellors-message': {'title': "Chancellor's Message",
-                         'subtitle': '',
-                         'content': '<p>Swami Vivekananda University that commenced its '
-                                    'journey as the youngest university in West Bengal in '
-                                    '2017, has completed yet another year successfully, '
-                                    'consistently endeavouring to provide its students with '
-                                    'unmatched opportunities to excel.</p><p>— The Chancellor, '
-                                    'Swami Vivekananda University</p>'},
- 'privacy-policy': {'title': 'Privacy Policy',
+#
+# 'chancellors-message' is absent for the same reason — it has its own page
+# (templates/pages/chancellors_message.html) built from the CHANCELLOR dict
+# further up this file.  Edit CHANCELLOR['full_message'] to change that text;
+# an entry here would simply be ignored, since the dedicated URL matches first.
+PAGES = {'privacy-policy': {'title': 'Privacy Policy',
                     'subtitle': '',
                     'content': '<h2>What we collect</h2><p>When you submit the enquiry or '
                                'contact form we collect your name, e-mail address, mobile '
@@ -2079,79 +2191,79 @@ TEAM = [{'name': 'Dr. Nandan Gupta',
 MENTORS = [{'name': 'Prof. (Dr.) Suranjan Das',
   'role': 'Vice-Chancellor, Adamas University',
   'photo': 'img/our_mentors/suranjan-das.jpg',
-  'messages': []},
+  'messages': ["The Vice Chancellor's office sets the academic direction of the university — curriculum design, research priorities, faculty development and accreditation. Students meet that work in the form of syllabi that keep pace with the field, laboratories that are actually used, and teachers who are still learning themselves."]},
  {'name': 'Prof. (Dr.) Dhrubajyoti Chattopadhyay',
   'role': 'Vice Chancellor, Sister Nivedita University Kolkata',
   'photo': 'img/our_mentors/dhrubajyoti-chattopadhyay.jpg',
-  'messages': []},
+  'messages': ["The Vice Chancellor's office is where a student's record lives: admission, enrolment, examinations, results and the certificates that follow them into their career. Its work is to make sure the administrative side of a degree is never the thing that slows a student down."]},
  {'name': 'Prof. (Dr.) Shorosimohan Dan',
   'role': 'Former Vice Chancellor , The University of Burdwan',
   'photo': 'img/our_mentors/shorosimohan-dan.png',
-  'messages': []},
+  'messages': ["The Vice Chancellor's office is where a student's record lives: admission, enrolment, examinations, results and the certificates that follow them into their career. Its work is to make sure the administrative side of a degree is never the thing that slows a student down."]},
  {'name': 'Prof. (Dr.)Deb Narayan Bandyopadhyay',
   'role': 'Founder Vice Chancellor,Bankura University',
   'photo': 'img/our_mentors/deb-narayan-bandyopadhyay.png',
-  'messages': []},
+  'messages': ["The Vice Chancellor's office is where a student's record lives: admission, enrolment, examinations, results and the certificates that follow them into their career. Its work is to make sure the administrative side of a degree is never the thing that slows a student down."]},
  {'name': 'Prof. (Dr.) Ranjan Chakrabarti',
   'role': 'Former Vice-Chancellor Vidyasar University',
   'photo': 'img/our_mentors/ranjan-chakrabarti.jpg',
-  'messages': []},
+  'messages': ["The Vice Chancellor's office is where a student's record lives: admission, enrolment, examinations, results and the certificates that follow them into their career. Its work is to make sure the administrative side of a degree is never the thing that slows a student down."]},
  {'name': 'Prof.(Dr.) Malayendu Saha',
   'role': 'Former Vice-Chancellor , Kalyani University',
   'photo': 'img/our_mentors/malayendu-saha.jpg',
-  'messages': []},
+  'messages': ["The Vice Chancellor's office is where a student's record lives: admission, enrolment, examinations, results and the certificates that follow them into their career. Its work is to make sure the administrative side of a degree is never the thing that slows a student down."]},
  {'name': 'Prof.(Dr.) Mita Banerjee',
   'role': "Former Vice-Chancellor of The West Bengal University of Teachers' Training "
           'Education Planning and Administration',
   'photo': 'img/our_mentors/mita-banerjee.jpg',
-  'messages': []},
+  'messages': ["The Vice Chancellor's office is where a student's record lives: admission, enrolment, examinations, results and the certificates that follow them into their career. Its work is to make sure the administrative side of a degree is never the thing that slows a student down."]},
  {'name': 'Prof.(Dr.) Swapan Kumar Datta',
   'role': 'Former Vice-Chancellor Visva-Bharati & Biswa Bangla Biswabidyalay',
   'photo': 'img/our_mentors/swapan-kumar-datta.jpg',
-  'messages': []},
+  'messages': ["The Vice Chancellor's office is where a student's record lives: admission, enrolment, examinations, results and the certificates that follow them into their career. Its work is to make sure the administrative side of a degree is never the thing that slows a student down."]},
  {'name': 'Prof.(Dr.) Ashutosh Ghosh',
   'role': 'Former Vice-Chancellor Rani Rashmoni Green University , Former Pro Vice-Chancellor '
           ', (Academic Affairs) University of Calcutta',
   'photo': 'img/our_mentors/ashutosh-ghosh.jpg',
-  'messages': []},
+  'messages': ["The Vice Chancellor's office is where a student's record lives: admission, enrolment, examinations, results and the certificates that follow them into their career. Its work is to make sure the administrative side of a degree is never the thing that slows a student down."]},
  {'name': 'Prof. (Dr.) Nemai Saha',
   'role': 'Former Vice-Chancellor , The University of Burdwan',
   'photo': 'img/our_mentors/nemai-saha.jpg',
-  'messages': []},
+  'messages': ["The Vice Chancellor's office is where a student's record lives: admission, enrolment, examinations, results and the certificates that follow them into their career. Its work is to make sure the administrative side of a degree is never the thing that slows a student down."]},
  {'name': 'Dr. Baidyanath Chakrabarty',
   'role': 'Renowned Gynecologist and IVF Specialist',
   'photo': 'img/our_mentors/baidyanath-chakrabarty.jpg',
-  'messages': []},
+  'messages': ["The Vice Chancellor's office is where a student's record lives: admission, enrolment, examinations, results and the certificates that follow them into their career. Its work is to make sure the administrative side of a degree is never the thing that slows a student down."]},
  {'name': 'Padmashri Bikash Sinha',
   'role': 'Former Director of the Saha Institute of Nuclear Physics and Variable Energy '
           'Cyclotron Centre and the chairman of the Board of Governors of the National '
           'Institute of Technology, Durgapur',
   'photo': 'img/our_mentors/bikash-sinha.jpg',
-  'messages': []},
+  'messages': ["The Vice Chancellor's office is where a student's record lives: admission, enrolment, examinations, results and the certificates that follow them into their career. Its work is to make sure the administrative side of a degree is never the thing that slows a student down."]},
  {'name': 'Prof.(Dr.) Bashabi Fraser',
   'role': 'Professor Emerita of English and Creative Writing Director, Scottish Centre of '
           'Tagore Studies (ScoTs) School of Arts & Creative Industries Edinburgh Napier '
           'University Honorary Fellow, Centre for South Asian Studies, University of Edinburgh',
   'photo': 'img/our_mentors/bashabi-fraser.jpg',
-  'messages': []},
+  'messages': ["The Vice Chancellor's office is where a student's record lives: admission, enrolment, examinations, results and the certificates that follow them into their career. Its work is to make sure the administrative side of a degree is never the thing that slows a student down."]},
  {'name': 'Prof. (Dr.) Neil Fraser',
   'role': 'Professor, School of Social and Political Studies, University of Edinburgh',
   'photo': 'img/our_mentors/neil-fraser.jpg',
-  'messages': []},
+  'messages': ["The Vice Chancellor's office is where a student's record lives: admission, enrolment, examinations, results and the certificates that follow them into their career. Its work is to make sure the administrative side of a degree is never the thing that slows a student down."]},
  {'name': 'Prof.(Dr.) Arun Bandyopadhyay',
   'role': 'Director, Gujarat Biotechnology University, Gandhinagar. Former Director, '
           'CSIR-Indian Institute of Chemical Biology, Kolkata',
   'photo': 'img/our_mentors/arun-bandyopadhyay.jpg',
-  'messages': []},
+  'messages': ["The Vice Chancellor's office is where a student's record lives: admission, enrolment, examinations, results and the certificates that follow them into their career. Its work is to make sure the administrative side of a degree is never the thing that slows a student down."]},
  {'name': 'Prof. (Dr.) Amlan Chakrabarti',
   'role': 'Head IT & Tech. Innovation Cell, Dept. of Higher Education, Govt. of West Bengal, '
           'Professor and Director, A.K. Choudhury School of IT, University of Calcutta',
   'photo': 'img/our_mentors/amlan-chakrabarti.png',
-  'messages': []},
+  'messages': ["The Vice Chancellor's office is where a student's record lives: admission, enrolment, examinations, results and the certificates that follow them into their career. Its work is to make sure the administrative side of a degree is never the thing that slows a student down."]},
  {'name': 'Prof. (Dr.) Debprasad Chattopadhyay',
   'role': 'Founder Director & Scientist G at ICMR-National Institute of Traditional Medicine',
   'photo': 'img/our_mentors/debprasad-chattopadhyay.jpg',
-  'messages': []}]
+  'messages': ["The Vice Chancellor's office is where a student's record lives: admission, enrolment, examinations, results and the certificates that follow them into their career. Its work is to make sure the administrative side of a degree is never the thing that slows a student down."]}]
 
 # --------------------------------------------------------------------------
 # Statutory approvals shown on /page/recognition-approvals/. Each card links a
