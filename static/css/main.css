@@ -2350,7 +2350,9 @@ table { border-collapse: collapse; width: 100%; }
   .btn { padding: 9px 16px; font-size: .76rem; }
   .panel__head { font-size: 1.05rem; }
   .topbar__inner { gap: 8px 12px; }
-  .search-inline input { width: 130px; }
+  /* No width override here. The box is already capped to the space available
+     by .search-inline above, and pinning the input instead leaves the
+     magnifier stranded mid-box with dead white space after it. */
 }
 
 /* ---- Landscape phones: keep the hero from eating the screen ---- */
