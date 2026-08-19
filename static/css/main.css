@@ -965,13 +965,17 @@ table { border-collapse: collapse; width: 100%; }
   margin: 0; padding: 0;
   max-height: 330px;
   overflow-y: auto;
-  scrollbar-width: thin;
+  /* Scrollbar hidden, exactly as on .enlist-strip: the motion is the
+     affordance, and a thumb next to a list that is already drifting on its own
+     jitters the whole time it is on screen. Hidden, not disabled - a wheel or
+     a drag still works, which is what someone reaching for a notice needs. */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   /* The ticker moves this by setting scrollTop every frame; smooth scrolling
      would queue an animation per frame and turn the drift into a stutter. */
   scroll-behavior: auto;
 }
-.notice-board__list::-webkit-scrollbar { width: 6px; }
-.notice-board__list::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
+.notice-board__list::-webkit-scrollbar { display: none; }
 
 .notice-item { padding: 12px 4px; border-bottom: 1px solid var(--line); }
 .notice-item:last-child { border-bottom: 0; }
@@ -1342,6 +1346,10 @@ table { border-collapse: collapse; width: 100%; }
   display: flex;
   gap: 18px;
   overflow-x: auto;
+  /* Spelled out because a lone overflow-x: auto computes overflow-y to auto
+     as well, and the track then scrolls vertically - invisibly, since the
+     scrollbar below is hidden - whenever a card overflows it by a pixel. */
+  overflow-y: hidden;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
   padding-bottom: 6px;
@@ -1712,7 +1720,21 @@ table { border-collapse: collapse; width: 100%; }
   padding: 26px 28px;
   text-align: left;
   height: 100%;
-  background: var(--paper);
+  background-color: var(--paper);
+  /* Laurel-and-mortarboard watermark in the bottom corner, drawn rather than
+     photographed: the CSP is locked to 'self' and the site carries no icon
+     font, so a data URI is how a mark like this gets onto the page. It is
+     background art, which keeps it out of the reading order entirely -
+     nothing here needs announcing to anyone using the page by ear. */
+  /* base64 rather than percent-encoded: the drawing carries rotate() and
+     translate() in its transforms, and a bare ")" inside url() closes the
+     token early for both CSS and Django's static-file rewriter, which then
+     tries to resolve the fragment as a filename and fails the build.
+     base64 cannot contain a character that means anything here. */
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAxMjAgMTIwJyBmaWxsPSdjdXJyZW50Q29sb3InIGNvbG9yPScjZWNlOGRhJz48ZWxsaXBzZSBjeD0nMCcgY3k9JzAnIHJ4PSc3LjQnIHJ5PSczLjQnIHRyYW5zZm9ybT0ndHJhbnNsYXRlKDYwLjAgMTA3LjApIHJvdGF0ZSgxODAuMCknLz48ZWxsaXBzZSBjeD0nMCcgY3k9JzAnIHJ4PSc3LjEnIHJ5PSczLjInIHRyYW5zZm9ybT0ndHJhbnNsYXRlKDcyLjMgMTA1LjIpIHJvdGF0ZSgtMTYzLjMpJy8+PGVsbGlwc2UgY3g9JzAnIGN5PScwJyByeD0nNi43JyByeT0nMy4xJyB0cmFuc2Zvcm09J3RyYW5zbGF0ZSg4My42IDk5LjkpIHJvdGF0ZSgtMTQ2LjcpJy8+PGVsbGlwc2UgY3g9JzAnIGN5PScwJyByeD0nNi40JyByeT0nMi45JyB0cmFuc2Zvcm09J3RyYW5zbGF0ZSg5Mi45IDkxLjYpIHJvdGF0ZSgtMTMwLjApJy8+PGVsbGlwc2UgY3g9JzAnIGN5PScwJyByeD0nNi4wJyByeT0nMi44JyB0cmFuc2Zvcm09J3RyYW5zbGF0ZSg5OS41IDgxLjApIHJvdGF0ZSgtMTEzLjMpJy8+PGVsbGlwc2UgY3g9JzAnIGN5PScwJyByeD0nNS43JyByeT0nMi42JyB0cmFuc2Zvcm09J3RyYW5zbGF0ZSgxMDIuNyA2OS4wKSByb3RhdGUoLTk2LjcpJy8+PGVsbGlwc2UgY3g9JzAnIGN5PScwJyByeD0nNS4zJyByeT0nMi40JyB0cmFuc2Zvcm09J3RyYW5zbGF0ZSgxMDIuMyA1Ni41KSByb3RhdGUoLTgwLjApJy8+PGVsbGlwc2UgY3g9JzAnIGN5PScwJyByeD0nNS4wJyByeT0nMi4zJyB0cmFuc2Zvcm09J3RyYW5zbGF0ZSg5OC40IDQ0LjcpIHJvdGF0ZSgtNjMuMyknLz48ZWxsaXBzZSBjeD0nMCcgY3k9JzAnIHJ4PSc0LjYnIHJ5PScyLjEnIHRyYW5zZm9ybT0ndHJhbnNsYXRlKDkxLjMgMzQuNSkgcm90YXRlKC00Ni43KScvPjxlbGxpcHNlIGN4PScwJyBjeT0nMCcgcng9JzQuMycgcnk9JzIuMCcgdHJhbnNmb3JtPSd0cmFuc2xhdGUoODEuNSAyNi44KSByb3RhdGUoLTMwLjApJy8+PGVsbGlwc2UgY3g9JzAnIGN5PScwJyByeD0nNy40JyByeT0nMy40JyB0cmFuc2Zvcm09J3RyYW5zbGF0ZSg2MC4wIDEwNy4wKSByb3RhdGUoMTgwLjApJy8+PGVsbGlwc2UgY3g9JzAnIGN5PScwJyByeD0nNy4xJyByeT0nMy4yJyB0cmFuc2Zvcm09J3RyYW5zbGF0ZSg0Ny43IDEwNS4yKSByb3RhdGUoMTYzLjMpJy8+PGVsbGlwc2UgY3g9JzAnIGN5PScwJyByeD0nNi43JyByeT0nMy4xJyB0cmFuc2Zvcm09J3RyYW5zbGF0ZSgzNi40IDk5LjkpIHJvdGF0ZSgxNDYuNyknLz48ZWxsaXBzZSBjeD0nMCcgY3k9JzAnIHJ4PSc2LjQnIHJ5PScyLjknIHRyYW5zZm9ybT0ndHJhbnNsYXRlKDI3LjEgOTEuNikgcm90YXRlKDEzMC4wKScvPjxlbGxpcHNlIGN4PScwJyBjeT0nMCcgcng9JzYuMCcgcnk9JzIuOCcgdHJhbnNmb3JtPSd0cmFuc2xhdGUoMjAuNSA4MS4wKSByb3RhdGUoMTEzLjMpJy8+PGVsbGlwc2UgY3g9JzAnIGN5PScwJyByeD0nNS43JyByeT0nMi42JyB0cmFuc2Zvcm09J3RyYW5zbGF0ZSgxNy4zIDY5LjApIHJvdGF0ZSg5Ni43KScvPjxlbGxpcHNlIGN4PScwJyBjeT0nMCcgcng9JzUuMycgcnk9JzIuNCcgdHJhbnNmb3JtPSd0cmFuc2xhdGUoMTcuNyA1Ni41KSByb3RhdGUoODAuMCknLz48ZWxsaXBzZSBjeD0nMCcgY3k9JzAnIHJ4PSc1LjAnIHJ5PScyLjMnIHRyYW5zZm9ybT0ndHJhbnNsYXRlKDIxLjYgNDQuNykgcm90YXRlKDYzLjMpJy8+PGVsbGlwc2UgY3g9JzAnIGN5PScwJyByeD0nNC42JyByeT0nMi4xJyB0cmFuc2Zvcm09J3RyYW5zbGF0ZSgyOC43IDM0LjUpIHJvdGF0ZSg0Ni43KScvPjxlbGxpcHNlIGN4PScwJyBjeT0nMCcgcng9JzQuMycgcnk9JzIuMCcgdHJhbnNmb3JtPSd0cmFuc2xhdGUoMzguNSAyNi44KSByb3RhdGUoMzAuMCknLz48cGF0aCBkPSdNNjAuMCAxMDcuMCBBIDQzLjAgNDMuMCAwIDAgMSA4MS41IDI2LjgnIGZpbGw9J25vbmUnIHN0cm9rZT0nY3VycmVudENvbG9yJyBzdHJva2Utd2lkdGg9JzIuMicgc3Ryb2tlLWxpbmVjYXA9J3JvdW5kJy8+PHBhdGggZD0nTTYwLjAgMTA3LjAgQSA0My4wIDQzLjAgMCAwIDAgMzguNSAyNi44JyBmaWxsPSdub25lJyBzdHJva2U9J2N1cnJlbnRDb2xvcicgc3Ryb2tlLXdpZHRoPScyLjInIHN0cm9rZS1saW5lY2FwPSdyb3VuZCcvPjxwb2x5Z29uIHBvaW50cz0nNjAuMCw1LjAgNjEuNyw5LjYgNjYuNyw5LjggNjIuOCwxMi45IDY0LjEsMTcuNyA2MC4wLDE0LjkgNTUuOSwxNy43IDU3LjIsMTIuOSA1My4zLDkuOCA1OC4zLDkuNicvPjxwb2x5Z29uIHBvaW50cz0nNDAuMCwxNS4wIDQxLjIsMTguMyA0NC44LDE4LjUgNDIuMCwyMC42IDQyLjksMjQuMCA0MC4wLDIyLjEgMzcuMSwyNC4wIDM4LjAsMjAuNiAzNS4yLDE4LjUgMzguOCwxOC4zJy8+PHBvbHlnb24gcG9pbnRzPSc4MC4wLDE1LjAgODEuMiwxOC4zIDg0LjgsMTguNSA4Mi4wLDIwLjYgODIuOSwyNC4wIDgwLjAsMjIuMSA3Ny4xLDI0LjAgNzguMCwyMC42IDc1LjIsMTguNSA3OC44LDE4LjMnLz48cGF0aCBkPSdNNjAgNDIgTDEwMCA1NyBMNjAgNzIgTDIwIDU3IFonLz48cGF0aCBkPSdNMzkgNjIgTDM5IDc4IEw4MSA3OCBMODEgNjIgTDYwIDcwIFonLz48cGF0aCBkPSdNOTggNTggTDk4IDgwJyBmaWxsPSdub25lJyBzdHJva2U9J2N1cnJlbnRDb2xvcicgc3Ryb2tlLXdpZHRoPScyLjQnIHN0cm9rZS1saW5lY2FwPSdyb3VuZCcvPjxjaXJjbGUgY3g9Jzk4JyBjeT0nODQnIHI9JzMuNicvPjwvc3ZnPg==");
+  background-repeat: no-repeat;
+  background-position: right 18px bottom 16px;
+  background-size: 104px 104px;
   box-shadow: var(--shadow);
 }
 /* Round, and centred against the full height of the card so it stays put
@@ -1786,6 +1808,7 @@ table { border-collapse: collapse; width: 100%; }
     gap: 16px;
     padding: 24px 20px;
   }
+  .testimonial { background-size: 82px 82px; background-position: right 12px bottom 12px; }
   .testimonial__photo { width: 116px; height: 116px; }
   .testimonial__body { align-items: center; }
   .testimonial__caption::before { margin-left: auto; margin-right: auto; }
