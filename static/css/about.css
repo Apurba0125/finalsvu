@@ -51,10 +51,9 @@
 .about-intro__body p + p { margin-top: 14px; }
 
 /* ------------------------------------------------------------- tabs ----- */
-/* Tinted so the tabbed block reads as its own zone against the white intro.
-   The pill shades are declared here rather than in :root: nothing outside this
-   section uses them. */
-.about-tabs { background: var(--page-alt); }
+/* The ground comes from .bg-dotted in main.css, on the section element in
+   about.html - it is what makes the tabbed block read as its own zone against
+   the white intro. Nothing to declare here. */
 
 .about-tab-nav {
   display: flex;
