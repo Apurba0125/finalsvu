@@ -478,31 +478,30 @@ CENTRES = [{'title': 'Centre for Innovation & Entrepreneurship',
   'url': ''}]
 
 # --------------------------------------------------------------------------
-TESTIMONIALS = [{'name': 'Bikash Mondal',
+TESTIMONIALS = [
+
+{'name': 'Bikash Mondal',
   'role': 'Student - SVU',
   'department': 'B.Tech CSE',
-  'quote': 'SVU consistently provided us with opportunities to enhance my skills beyond the '
-           'classroom. Whether through industry interface or focused internship programs, this '
-           'proactive approach to learning helped me secure a position as a Trainee Account '
-           "Executive with India's Leading PR Agency in Mumbai.",
+  'quote': 'SVU gave me the skills, confidence, and opportunities to build a successful career.',
   'photo': 'img/student1_com.png',
   'detail_url': ''},
+
+
+
  {'name': 'Anup Majhi',
   'role': 'Student - SVU',
   'department': 'B.Tech CSE',
-  'quote': 'I was always passionate about news and its technical aspect but was unsure to take '
-           'up Media Studies. After visiting a couple of media colleges, I walked into the '
-           'campus of Swami Vivekananda University and felt that it was the right place for my '
-           'studies. Today, I am working with a national news channel.',
+  'quote': 'SVU helped me turn my passion into the skills needed for a successful career.',
   'photo': 'img/student3_com.png',
   'detail_url': ''},
+
+
+
  {'name': 'Mounik Ghosh',
   'role': 'Student - SVU',
   'department': 'B.Tech CSE',
-  'quote': 'I am a student of B.Tech (CSE). I am excited to share that I have landed a '
-           'placement in both LLOYD LEE COMPANY AND TCS (TATA CONSULTANCY SERVICES). This is '
-           'possible because of the immense support of the faculty of the Computer Science '
-           'Department.',
+  'quote': 'My journey at SVU gave me the confidence and knowledge to achieve my career goals.', 
   'photo': 'img/student4.png',
   'detail_url': ''}]
 
