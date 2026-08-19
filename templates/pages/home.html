@@ -98,13 +98,13 @@
       </div>
 
       {% if site.admission_ad_image %}
-        <div class="enquiry-ad">
+        <!-- <div class="enquiry-ad">
           <a href="{{ site.apply_now_url }}">
             <img src="{% static site.admission_ad_image %}"
                  alt="{{ site.admission_banner_text }} — UG, PG and Ph.D programmes at {{ site.site_name }}"
                  width="450" height="700" loading="lazy">
           </a>
-        </div>
+        </div> -->
       {% endif %}
     </aside>
 
@@ -145,7 +145,7 @@
   <div class="shell--wide shell offerings__grid">
     <div class="offerings__media">
       <img src="{% static 'img/library-shelf.jpeg' %}" alt="" aria-hidden="true" loading="lazy">
-      <h2 class="offerings__media-title" id="offerings-heading">Explore<br>Our Offerings</h2>
+      <!-- <h2 class="offerings__media-title" id="offerings-heading">Explore<br>Our Offerings</h2> -->
     </div>
 
     <div class="offerings__panel">
@@ -366,20 +366,27 @@
       <div class="carousel__track">
         {% for person in testimonials %}
           <div class="carousel__item">
+            {# Portrait beside the words, not above them. The opening quote #}
+            {# mark and the short rule over the name are both drawn in CSS,  #}
+            {# so there is no decorative markup here for a reader to wade    #}
+            {# through. The quote carries no typed quotation marks either —  #}
+            {# the mark is the decoration and doubling them reads oddly.     #}
             <figure class="testimonial">
               <img class="testimonial__photo" src="{% static person.photo %}"
-                   alt="{{ person.name }}" width="96" height="96" loading="lazy">
-              <blockquote class="testimonial__quote">&lsquo;{{ person.quote }}&rsquo;</blockquote>
-              <figcaption>
-                <p class="testimonial__name">{{ person.name }}</p>
-                <div class="testimonial__meta">{{ person.role }}</div>
-                {% if person.department %}<div class="testimonial__meta">{{ person.department }}</div>{% endif %}
-              </figcaption>
-              {% if person.detail_url %}
-                <div class="testimonial__footer">
-                  <a class="btn btn--gold btn--sm" href="{{ person.detail_url }}">Know More</a>
-                </div>
-              {% endif %}
+                   alt="{{ person.name }}" width="132" height="132" loading="lazy">
+              <div class="testimonial__body">
+                <blockquote class="testimonial__quote">{{ person.quote }}</blockquote>
+                <figcaption class="testimonial__caption">
+                  <p class="testimonial__name">{{ person.name }}</p>
+                  <div class="testimonial__meta">{{ person.role }}</div>
+                  {% if person.department %}<div class="testimonial__meta">{{ person.department }}</div>{% endif %}
+                  {% if person.detail_url %}
+                    <div class="testimonial__footer">
+                      <a class="btn btn--gold btn--sm" href="{{ person.detail_url }}">Know More</a>
+                    </div>
+                  {% endif %}
+                </figcaption>
+              </div>
             </figure>
           </div>
         {% endfor %}
