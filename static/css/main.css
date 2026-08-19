@@ -1725,11 +1725,14 @@ table { border-collapse: collapse; width: 100%; }
     gap: 24px 14px;
   }
 }
-@media (max-width: 575.98px) {
-  .stats-grid { grid-template-columns: repeat(2, 1fr); }
-}
-@media (max-width: 419.98px) {
-  .stats-grid { grid-template-columns: 1fr; gap: 20px; }
+/* Two across on a phone, all the way down - no single-column step. */
+@media (max-width: 767.98px) {
+  .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 22px 12px; }
+  /* An odd count leaves the last figure alone on its row. Span it so it
+     centres under the pair above rather than sitting in the left column with
+     a hole beside it. Five figures give 2, 2, then 1 centred; an even count
+     never matches this and is left alone. */
+  .stat:last-child:nth-child(odd) { grid-column: 1 / -1; }
 }
 
 /* --------------------------------------------------------------------------
