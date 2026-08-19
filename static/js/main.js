@@ -361,19 +361,45 @@
       var lastFrame = null;
       var ourScroll = 0;
       var paused = false;
+      var rafId = null;
 
       function frame(now) {
         if (lastFrame === null) { lastFrame = now; }
         var elapsed = now - lastFrame;
         lastFrame = now;
 
-        if (!paused && !document.hidden && loopSize > 0) {
+        /* The open drawer is animating a transform of its own, and a scroll
+           write per frame behind it is what makes that slide stutter on a
+           phone. Nothing here is visible while it is open anyway. */
+        var idle = paused || document.hidden || loopSize <= 0 ||
+                   document.body.classList.contains("nav-open");
+
+        if (!idle) {
           pos += speed * elapsed / 1000;
           if (pos >= loopSize) { pos -= loopSize; }
           moveTo(pos);                   // fractional, so the drift is smooth
-          ourScroll = at();
+          /* Deliberately not ourScroll = at(): reading the position straight
+             back after writing it forces a synchronous layout, sixty times a
+             second, on every marquee at once. pos is what was just written,
+             and the hand-scroll test below allows more slack than the
+             browser's rounding can use up. */
+          ourScroll = pos;
         }
-        requestAnimationFrame(frame);
+        rafId = requestAnimationFrame(frame);
+      }
+
+      function start() {
+        if (rafId === null) {
+          lastFrame = null;   // a long pause must not become one long jump
+          rafId = requestAnimationFrame(frame);
+        }
+      }
+
+      function stop() {
+        if (rafId !== null) {
+          cancelAnimationFrame(rafId);
+          rafId = null;
+        }
       }
 
       /* Hovering stops it — the titles are links, and no one should have to
@@ -396,7 +422,18 @@
         resizeTimer = setTimeout(function () { loopSize = measure(); }, 200);
       });
 
-      requestAnimationFrame(frame);
+      /* Only animate what is on screen. Without this both marquees keep
+         writing a scroll position every frame for the whole visit, including
+         while the visitor is several screens further down the page. */
+      if ("IntersectionObserver" in window) {
+        new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) { start(); } else { stop(); }
+          });
+        }, { rootMargin: "100px" }).observe(list);
+      } else {
+        start();
+      }
     });
   }
 

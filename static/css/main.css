@@ -320,26 +320,36 @@ table { border-collapse: collapse; width: 100%; }
   .topbar__social { grid-column: 2; justify-self: center; }
   .topbar__search { grid-column: 3; justify-self: end; margin-left: 0; }
 }
+/* The WIDTH LIVES HERE, on the box, not on the input. The input then flexes
+   to fill whatever is left over, which keeps the magnifier hard against the
+   trailing edge at every viewport. Size the input instead and any rule that
+   makes this box wider leaves the icon stranded mid-box with dead white space
+   after it. */
 .search-inline {
   display: flex;
   align-items: center;
+  width: 225px;
+  max-width: 100%;
   background: #fff;
   border-radius: var(--radius-sm);
   overflow: hidden;
   border: 1px solid rgba(0, 0, 0, .15);
 }
 .search-inline input {
+  flex: 1 1 auto;
+  /* An input carries an automatic minimum width of about 20 characters, which
+     would stop it shrinking inside a narrow box and push the button out. */
+  min-width: 0;
   border: 0;
   padding: 6px 10px;
   font: inherit;
   font-size: .82rem;
-  width: 190px;
-  max-width: 45vw;
   background: transparent;
   color: var(--ink);
 }
 .search-inline input:focus { outline: none; }
 .search-inline button {
+  flex: none;
   border: 0;
   background: transparent;
   padding: 6px 10px;
@@ -2217,7 +2227,6 @@ table { border-collapse: collapse; width: 100%; }
   .topbar__links, .topbar__social { justify-content: center; }
   .topbar__search { margin-left: 0; width: 100%; display: flex; justify-content: center; }
   .search-inline { width: min(100%, 320px); }
-  .search-inline input { width: 100%; max-width: none; }
 }
 
 /* ---- >= 400px ---- */
