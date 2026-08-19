@@ -1698,120 +1698,239 @@ table { border-collapse: collapse; width: 100%; }
 
 /* --------------------------------------------------------------------------
    16. Testimonials
+   --------------------------------------------------------------------------
+   Navy-and-ivory, unlike anything else on the site. The colours are declared
+   as custom properties on the section rather than in :root, because nothing
+   outside this block uses them and :root is where every component looks first.
+
+   Both watermarks are drawn SVG carried as base64 data URIs. The CSP is locked
+   to 'self' and the site deliberately ships no icon font, and base64 rather
+   than percent-encoding because the drawings contain "(" and ")" in their
+   transforms, which close a CSS url() token early and break collectstatic.
    -------------------------------------------------------------------------- */
 .testimonials {
-  background: var(--gold-deep);
-  padding: 44px 0;
-}
-.testimonials .section-title { color: #fff; text-align: center; }
-.testimonials .section-title .h-dark { color: #fff; }
-.testimonials .section-title .h-accent { color: #fff; font-weight: 300; }
+  --tst-navy: #1b3055;
+  --tst-navy-deep: #16294a;
+  --tst-ivory: #f7f5ef;
+  --tst-page: #fbfaf6;
+  --tst-gold: #c2a13c;
+  --tst-gold-line: rgba(194, 161, 60, .45);
+  --tst-body: #33415c;
+  --tst-meta: #55617a;
 
-/* A solid white card on the gold, rather than the translucent panel it used to
-   be. White text on a .06 white wash over gold never had much contrast to work
-   with; dark text on white is the same content at a readable weight, and the
-   gold now reads as the ground the cards sit on instead of tinting them. */
-.testimonial {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 24px;
-  border: 0;
-  border-radius: var(--radius-lg);
-  padding: 26px 28px;
-  text-align: left;
-  height: 100%;
-  background-color: var(--paper);
-  /* Laurel-and-mortarboard watermark in the bottom corner, drawn rather than
-     photographed: the CSP is locked to 'self' and the site carries no icon
-     font, so a data URI is how a mark like this gets onto the page. It is
-     background art, which keeps it out of the reading order entirely -
-     nothing here needs announcing to anyone using the page by ear. */
-  /* base64 rather than percent-encoded: the drawing carries rotate() and
-     translate() in its transforms, and a bare ")" inside url() closes the
-     token early for both CSS and Django's static-file rewriter, which then
-     tries to resolve the fragment as a filename and fails the build.
-     base64 cannot contain a character that means anything here. */
-  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAxMjAgMTIwJyBmaWxsPSdjdXJyZW50Q29sb3InIGNvbG9yPScjZWNlOGRhJz48ZWxsaXBzZSBjeD0nMCcgY3k9JzAnIHJ4PSc3LjQnIHJ5PSczLjQnIHRyYW5zZm9ybT0ndHJhbnNsYXRlKDYwLjAgMTA3LjApIHJvdGF0ZSgxODAuMCknLz48ZWxsaXBzZSBjeD0nMCcgY3k9JzAnIHJ4PSc3LjEnIHJ5PSczLjInIHRyYW5zZm9ybT0ndHJhbnNsYXRlKDcyLjMgMTA1LjIpIHJvdGF0ZSgtMTYzLjMpJy8+PGVsbGlwc2UgY3g9JzAnIGN5PScwJyByeD0nNi43JyByeT0nMy4xJyB0cmFuc2Zvcm09J3RyYW5zbGF0ZSg4My42IDk5LjkpIHJvdGF0ZSgtMTQ2LjcpJy8+PGVsbGlwc2UgY3g9JzAnIGN5PScwJyByeD0nNi40JyByeT0nMi45JyB0cmFuc2Zvcm09J3RyYW5zbGF0ZSg5Mi45IDkxLjYpIHJvdGF0ZSgtMTMwLjApJy8+PGVsbGlwc2UgY3g9JzAnIGN5PScwJyByeD0nNi4wJyByeT0nMi44JyB0cmFuc2Zvcm09J3RyYW5zbGF0ZSg5OS41IDgxLjApIHJvdGF0ZSgtMTEzLjMpJy8+PGVsbGlwc2UgY3g9JzAnIGN5PScwJyByeD0nNS43JyByeT0nMi42JyB0cmFuc2Zvcm09J3RyYW5zbGF0ZSgxMDIuNyA2OS4wKSByb3RhdGUoLTk2LjcpJy8+PGVsbGlwc2UgY3g9JzAnIGN5PScwJyByeD0nNS4zJyByeT0nMi40JyB0cmFuc2Zvcm09J3RyYW5zbGF0ZSgxMDIuMyA1Ni41KSByb3RhdGUoLTgwLjApJy8+PGVsbGlwc2UgY3g9JzAnIGN5PScwJyByeD0nNS4wJyByeT0nMi4zJyB0cmFuc2Zvcm09J3RyYW5zbGF0ZSg5OC40IDQ0LjcpIHJvdGF0ZSgtNjMuMyknLz48ZWxsaXBzZSBjeD0nMCcgY3k9JzAnIHJ4PSc0LjYnIHJ5PScyLjEnIHRyYW5zZm9ybT0ndHJhbnNsYXRlKDkxLjMgMzQuNSkgcm90YXRlKC00Ni43KScvPjxlbGxpcHNlIGN4PScwJyBjeT0nMCcgcng9JzQuMycgcnk9JzIuMCcgdHJhbnNmb3JtPSd0cmFuc2xhdGUoODEuNSAyNi44KSByb3RhdGUoLTMwLjApJy8+PGVsbGlwc2UgY3g9JzAnIGN5PScwJyByeD0nNy40JyByeT0nMy40JyB0cmFuc2Zvcm09J3RyYW5zbGF0ZSg2MC4wIDEwNy4wKSByb3RhdGUoMTgwLjApJy8+PGVsbGlwc2UgY3g9JzAnIGN5PScwJyByeD0nNy4xJyByeT0nMy4yJyB0cmFuc2Zvcm09J3RyYW5zbGF0ZSg0Ny43IDEwNS4yKSByb3RhdGUoMTYzLjMpJy8+PGVsbGlwc2UgY3g9JzAnIGN5PScwJyByeD0nNi43JyByeT0nMy4xJyB0cmFuc2Zvcm09J3RyYW5zbGF0ZSgzNi40IDk5LjkpIHJvdGF0ZSgxNDYuNyknLz48ZWxsaXBzZSBjeD0nMCcgY3k9JzAnIHJ4PSc2LjQnIHJ5PScyLjknIHRyYW5zZm9ybT0ndHJhbnNsYXRlKDI3LjEgOTEuNikgcm90YXRlKDEzMC4wKScvPjxlbGxpcHNlIGN4PScwJyBjeT0nMCcgcng9JzYuMCcgcnk9JzIuOCcgdHJhbnNmb3JtPSd0cmFuc2xhdGUoMjAuNSA4MS4wKSByb3RhdGUoMTEzLjMpJy8+PGVsbGlwc2UgY3g9JzAnIGN5PScwJyByeD0nNS43JyByeT0nMi42JyB0cmFuc2Zvcm09J3RyYW5zbGF0ZSgxNy4zIDY5LjApIHJvdGF0ZSg5Ni43KScvPjxlbGxpcHNlIGN4PScwJyBjeT0nMCcgcng9JzUuMycgcnk9JzIuNCcgdHJhbnNmb3JtPSd0cmFuc2xhdGUoMTcuNyA1Ni41KSByb3RhdGUoODAuMCknLz48ZWxsaXBzZSBjeD0nMCcgY3k9JzAnIHJ4PSc1LjAnIHJ5PScyLjMnIHRyYW5zZm9ybT0ndHJhbnNsYXRlKDIxLjYgNDQuNykgcm90YXRlKDYzLjMpJy8+PGVsbGlwc2UgY3g9JzAnIGN5PScwJyByeD0nNC42JyByeT0nMi4xJyB0cmFuc2Zvcm09J3RyYW5zbGF0ZSgyOC43IDM0LjUpIHJvdGF0ZSg0Ni43KScvPjxlbGxpcHNlIGN4PScwJyBjeT0nMCcgcng9JzQuMycgcnk9JzIuMCcgdHJhbnNmb3JtPSd0cmFuc2xhdGUoMzguNSAyNi44KSByb3RhdGUoMzAuMCknLz48cGF0aCBkPSdNNjAuMCAxMDcuMCBBIDQzLjAgNDMuMCAwIDAgMSA4MS41IDI2LjgnIGZpbGw9J25vbmUnIHN0cm9rZT0nY3VycmVudENvbG9yJyBzdHJva2Utd2lkdGg9JzIuMicgc3Ryb2tlLWxpbmVjYXA9J3JvdW5kJy8+PHBhdGggZD0nTTYwLjAgMTA3LjAgQSA0My4wIDQzLjAgMCAwIDAgMzguNSAyNi44JyBmaWxsPSdub25lJyBzdHJva2U9J2N1cnJlbnRDb2xvcicgc3Ryb2tlLXdpZHRoPScyLjInIHN0cm9rZS1saW5lY2FwPSdyb3VuZCcvPjxwb2x5Z29uIHBvaW50cz0nNjAuMCw1LjAgNjEuNyw5LjYgNjYuNyw5LjggNjIuOCwxMi45IDY0LjEsMTcuNyA2MC4wLDE0LjkgNTUuOSwxNy43IDU3LjIsMTIuOSA1My4zLDkuOCA1OC4zLDkuNicvPjxwb2x5Z29uIHBvaW50cz0nNDAuMCwxNS4wIDQxLjIsMTguMyA0NC44LDE4LjUgNDIuMCwyMC42IDQyLjksMjQuMCA0MC4wLDIyLjEgMzcuMSwyNC4wIDM4LjAsMjAuNiAzNS4yLDE4LjUgMzguOCwxOC4zJy8+PHBvbHlnb24gcG9pbnRzPSc4MC4wLDE1LjAgODEuMiwxOC4zIDg0LjgsMTguNSA4Mi4wLDIwLjYgODIuOSwyNC4wIDgwLjAsMjIuMSA3Ny4xLDI0LjAgNzguMCwyMC42IDc1LjIsMTguNSA3OC44LDE4LjMnLz48cGF0aCBkPSdNNjAgNDIgTDEwMCA1NyBMNjAgNzIgTDIwIDU3IFonLz48cGF0aCBkPSdNMzkgNjIgTDM5IDc4IEw4MSA3OCBMODEgNjIgTDYwIDcwIFonLz48cGF0aCBkPSdNOTggNTggTDk4IDgwJyBmaWxsPSdub25lJyBzdHJva2U9J2N1cnJlbnRDb2xvcicgc3Ryb2tlLXdpZHRoPScyLjQnIHN0cm9rZS1saW5lY2FwPSdyb3VuZCcvPjxjaXJjbGUgY3g9Jzk4JyBjeT0nODQnIHI9JzMuNicvPjwvc3ZnPg==");
+  padding: 56px 0 46px;
+  background-color: var(--tst-page);
+  /* A dot screen, barely there — it stops the ivory reading as a flat fill. */
+  background-image: radial-gradient(circle, rgba(27, 48, 85, .055) 1.1px, transparent 1.5px);
+  background-size: 15px 15px;
+}
+
+/* ---- heading with the rules either side ---- */
+.testimonials .section-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  margin: 0 0 38px;
+  color: var(--tst-navy);
+  font-size: clamp(1.45rem, 1rem + 2.2vw, 2.5rem);
+  font-weight: 800;
+  letter-spacing: .01em;
+  text-transform: uppercase;
+  text-align: center;
+}
+.testimonials .section-title .h-dark { color: var(--tst-navy); font-weight: 800; }
+.testimonials .section-title .h-accent { color: var(--tst-gold); font-weight: 800; }
+
+/* Each rule is two background layers on one empty box — a line that fades out
+   towards the edge of the section, and the dot that caps it next to the words.
+   Drawing it this way keeps two purely decorative elements out of the markup. */
+.testimonials .section-title::before,
+.testimonials .section-title::after {
+  content: "";
+  flex: 1 1 0;
+  max-width: 260px;
+  height: 9px;
   background-repeat: no-repeat;
-  background-position: right 18px bottom 16px;
-  background-size: 104px 104px;
-  box-shadow: var(--shadow);
 }
-/* Round, and centred against the full height of the card so it stays put
-   however long the quote runs. The gold ring is a border on the circle itself
-   with a white outline outside it, which reads as a mount around the portrait
-   rather than a thicker rim on it. */
-.testimonial__photo {
-  align-self: center;
-  width: 132px; height: 132px;
-  object-fit: cover;
-  border: 3px solid var(--accent-soft);
-  border-radius: 50%;
-  outline: 4px solid var(--paper);
-  outline-offset: 0;
-  background: var(--page);
+.testimonials .section-title::before {
+  background-image:
+    radial-gradient(circle, var(--tst-gold) 3px, transparent 3.5px),
+    linear-gradient(90deg, transparent, var(--tst-gold));
+  background-position: right center, left center;
+  background-size: 9px 9px, calc(100% - 14px) 1px;
+}
+.testimonials .section-title::after {
+  background-image:
+    radial-gradient(circle, var(--tst-gold) 3px, transparent 3.5px),
+    linear-gradient(270deg, transparent, var(--tst-gold));
+  background-position: left center, right center;
+  background-size: 9px 9px, calc(100% - 14px) 1px;
 }
 
-/* min-width: 0 lets a long unbroken word wrap instead of widening the column
-   and squeezing the portrait — grid children default to min-content width. */
+/* ---- the card ----
+   No grid: the navy panel is a painted layer rather than a column, and the
+   portrait is positioned on the seam between the two. Laying it out as
+   columns would make the straddling portrait fight the track that holds it. */
+.testimonial {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  min-height: 328px;
+  /* The left inset clears the panel AND the half of the portrait that hangs
+     past it, which is why it is a calc and not a flat value. */
+  padding: 34px 36px 34px calc(30% + 116px);
+  border-radius: 26px;
+  background-color: var(--tst-ivory);
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAxMjAgMTIwJyBmaWxsPSdjdXJyZW50Q29sb3InIGNvbG9yPScjZTZlMmQ0Jz48ZWxsaXBzZSBjeD0nMCcgY3k9JzAnIHJ4PSc3LjQnIHJ5PSczLjQnIHRyYW5zZm9ybT0ndHJhbnNsYXRlKDYwLjAgMTA3LjApIHJvdGF0ZSgxODAuMCknLz48ZWxsaXBzZSBjeD0nMCcgY3k9JzAnIHJ4PSc3LjEnIHJ5PSczLjInIHRyYW5zZm9ybT0ndHJhbnNsYXRlKDcyLjMgMTA1LjIpIHJvdGF0ZSgtMTYzLjMpJy8+PGVsbGlwc2UgY3g9JzAnIGN5PScwJyByeD0nNi43JyByeT0nMy4xJyB0cmFuc2Zvcm09J3RyYW5zbGF0ZSg4My42IDk5LjkpIHJvdGF0ZSgtMTQ2LjcpJy8+PGVsbGlwc2UgY3g9JzAnIGN5PScwJyByeD0nNi40JyByeT0nMi45JyB0cmFuc2Zvcm09J3RyYW5zbGF0ZSg5Mi45IDkxLjYpIHJvdGF0ZSgtMTMwLjApJy8+PGVsbGlwc2UgY3g9JzAnIGN5PScwJyByeD0nNi4wJyByeT0nMi44JyB0cmFuc2Zvcm09J3RyYW5zbGF0ZSg5OS41IDgxLjApIHJvdGF0ZSgtMTEzLjMpJy8+PGVsbGlwc2UgY3g9JzAnIGN5PScwJyByeD0nNS43JyByeT0nMi42JyB0cmFuc2Zvcm09J3RyYW5zbGF0ZSgxMDIuNyA2OS4wKSByb3RhdGUoLTk2LjcpJy8+PGVsbGlwc2UgY3g9JzAnIGN5PScwJyByeD0nNS4zJyByeT0nMi40JyB0cmFuc2Zvcm09J3RyYW5zbGF0ZSgxMDIuMyA1Ni41KSByb3RhdGUoLTgwLjApJy8+PGVsbGlwc2UgY3g9JzAnIGN5PScwJyByeD0nNS4wJyByeT0nMi4zJyB0cmFuc2Zvcm09J3RyYW5zbGF0ZSg5OC40IDQ0LjcpIHJvdGF0ZSgtNjMuMyknLz48ZWxsaXBzZSBjeD0nMCcgY3k9JzAnIHJ4PSc0LjYnIHJ5PScyLjEnIHRyYW5zZm9ybT0ndHJhbnNsYXRlKDkxLjMgMzQuNSkgcm90YXRlKC00Ni43KScvPjxlbGxpcHNlIGN4PScwJyBjeT0nMCcgcng9JzQuMycgcnk9JzIuMCcgdHJhbnNmb3JtPSd0cmFuc2xhdGUoODEuNSAyNi44KSByb3RhdGUoLTMwLjApJy8+PGVsbGlwc2UgY3g9JzAnIGN5PScwJyByeD0nNy40JyByeT0nMy40JyB0cmFuc2Zvcm09J3RyYW5zbGF0ZSg2MC4wIDEwNy4wKSByb3RhdGUoMTgwLjApJy8+PGVsbGlwc2UgY3g9JzAnIGN5PScwJyByeD0nNy4xJyByeT0nMy4yJyB0cmFuc2Zvcm09J3RyYW5zbGF0ZSg0Ny43IDEwNS4yKSByb3RhdGUoMTYzLjMpJy8+PGVsbGlwc2UgY3g9JzAnIGN5PScwJyByeD0nNi43JyByeT0nMy4xJyB0cmFuc2Zvcm09J3RyYW5zbGF0ZSgzNi40IDk5LjkpIHJvdGF0ZSgxNDYuNyknLz48ZWxsaXBzZSBjeD0nMCcgY3k9JzAnIHJ4PSc2LjQnIHJ5PScyLjknIHRyYW5zZm9ybT0ndHJhbnNsYXRlKDI3LjEgOTEuNikgcm90YXRlKDEzMC4wKScvPjxlbGxpcHNlIGN4PScwJyBjeT0nMCcgcng9JzYuMCcgcnk9JzIuOCcgdHJhbnNmb3JtPSd0cmFuc2xhdGUoMjAuNSA4MS4wKSByb3RhdGUoMTEzLjMpJy8+PGVsbGlwc2UgY3g9JzAnIGN5PScwJyByeD0nNS43JyByeT0nMi42JyB0cmFuc2Zvcm09J3RyYW5zbGF0ZSgxNy4zIDY5LjApIHJvdGF0ZSg5Ni43KScvPjxlbGxpcHNlIGN4PScwJyBjeT0nMCcgcng9JzUuMycgcnk9JzIuNCcgdHJhbnNmb3JtPSd0cmFuc2xhdGUoMTcuNyA1Ni41KSByb3RhdGUoODAuMCknLz48ZWxsaXBzZSBjeD0nMCcgY3k9JzAnIHJ4PSc1LjAnIHJ5PScyLjMnIHRyYW5zZm9ybT0ndHJhbnNsYXRlKDIxLjYgNDQuNykgcm90YXRlKDYzLjMpJy8+PGVsbGlwc2UgY3g9JzAnIGN5PScwJyByeD0nNC42JyByeT0nMi4xJyB0cmFuc2Zvcm09J3RyYW5zbGF0ZSgyOC43IDM0LjUpIHJvdGF0ZSg0Ni43KScvPjxlbGxpcHNlIGN4PScwJyBjeT0nMCcgcng9JzQuMycgcnk9JzIuMCcgdHJhbnNmb3JtPSd0cmFuc2xhdGUoMzguNSAyNi44KSByb3RhdGUoMzAuMCknLz48cGF0aCBkPSdNNjAuMCAxMDcuMCBBIDQzLjAgNDMuMCAwIDAgMSA4MS41IDI2LjgnIGZpbGw9J25vbmUnIHN0cm9rZT0nY3VycmVudENvbG9yJyBzdHJva2Utd2lkdGg9JzIuMicgc3Ryb2tlLWxpbmVjYXA9J3JvdW5kJy8+PHBhdGggZD0nTTYwLjAgMTA3LjAgQSA0My4wIDQzLjAgMCAwIDAgMzguNSAyNi44JyBmaWxsPSdub25lJyBzdHJva2U9J2N1cnJlbnRDb2xvcicgc3Ryb2tlLXdpZHRoPScyLjInIHN0cm9rZS1saW5lY2FwPSdyb3VuZCcvPjxwb2x5Z29uIHBvaW50cz0nNjAuMCw1LjAgNjEuNyw5LjYgNjYuNyw5LjggNjIuOCwxMi45IDY0LjEsMTcuNyA2MC4wLDE0LjkgNTUuOSwxNy43IDU3LjIsMTIuOSA1My4zLDkuOCA1OC4zLDkuNicvPjxwb2x5Z29uIHBvaW50cz0nNDAuMCwxNS4wIDQxLjIsMTguMyA0NC44LDE4LjUgNDIuMCwyMC42IDQyLjksMjQuMCA0MC4wLDIyLjEgMzcuMSwyNC4wIDM4LjAsMjAuNiAzNS4yLDE4LjUgMzguOCwxOC4zJy8+PHBvbHlnb24gcG9pbnRzPSc4MC4wLDE1LjAgODEuMiwxOC4zIDg0LjgsMTguNSA4Mi4wLDIwLjYgODIuOSwyNC4wIDgwLjAsMjIuMSA3Ny4xLDI0LjAgNzguMCwyMC42IDc1LjIsMTguNSA3OC44LDE4LjMnLz48cGF0aCBkPSdNNjAgNDIgTDEwMCA1NyBMNjAgNzIgTDIwIDU3IFonLz48cGF0aCBkPSdNMzkgNjIgTDM5IDc4IEw4MSA3OCBMODEgNjIgTDYwIDcwIFonLz48cGF0aCBkPSdNOTggNTggTDk4IDgwJyBmaWxsPSdub25lJyBzdHJva2U9J2N1cnJlbnRDb2xvcicgc3Ryb2tlLXdpZHRoPScyLjQnIHN0cm9rZS1saW5lY2FwPSdyb3VuZCcvPjxjaXJjbGUgY3g9Jzk4JyBjeT0nODQnIHI9JzMuNicvPjwvc3ZnPg==");
+  background-repeat: no-repeat;
+  background-position: right 26px bottom 20px;
+  background-size: 96px 96px;
+  box-shadow: 0 10px 30px rgba(20, 30, 50, .10);
+  overflow: hidden;
+}
+/* The navy panel, with the campus silhouette standing on its bottom edge.
+   z-index: -1 against the card's own stacking context (isolation: isolate)
+   keeps it behind the text without escaping to sit behind the card itself. */
+.testimonial::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 30%;
+  z-index: -1;
+  background-color: var(--tst-navy);
+  background-image:
+    url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAyMDAgMTUwJyBmaWxsPScjMjg0MDZiJz48cmVjdCB4PSc0JyB5PScxMzgnIHdpZHRoPScxOTInIGhlaWdodD0nMTInLz48cmVjdCB4PScxNCcgeT0nMTMwJyB3aWR0aD0nMTcyJyBoZWlnaHQ9JzgnLz48cmVjdCB4PScyNCcgeT0nMTI0JyB3aWR0aD0nMTUyJyBoZWlnaHQ9JzYnLz48cmVjdCB4PScyNCcgeT0nOTInIHdpZHRoPSczMCcgaGVpZ2h0PSczMicvPjxyZWN0IHg9JzE0NicgeT0nOTInIHdpZHRoPSczMCcgaGVpZ2h0PSczMicvPjxyZWN0IHg9JzI5JyB5PSc5Nicgd2lkdGg9JzUnIGhlaWdodD0nMjAnLz48cmVjdCB4PScxNTEnIHk9Jzk2JyB3aWR0aD0nNScgaGVpZ2h0PScyMCcvPjxyZWN0IHg9JzM5JyB5PSc5Nicgd2lkdGg9JzUnIGhlaWdodD0nMjAnLz48cmVjdCB4PScxNjEnIHk9Jzk2JyB3aWR0aD0nNScgaGVpZ2h0PScyMCcvPjxyZWN0IHg9JzQ5JyB5PSc5Nicgd2lkdGg9JzUnIGhlaWdodD0nMjAnLz48cmVjdCB4PScxNzEnIHk9Jzk2JyB3aWR0aD0nNScgaGVpZ2h0PScyMCcvPjxyZWN0IHg9JzU4JyB5PSc4NCcgd2lkdGg9Jzg0JyBoZWlnaHQ9JzQwJy8+PHJlY3QgeD0nNjMnIHk9JzkwJyB3aWR0aD0nNycgaGVpZ2h0PSczMCcvPjxyZWN0IHg9Jzc2JyB5PSc5MCcgd2lkdGg9JzcnIGhlaWdodD0nMzAnLz48cmVjdCB4PSc4OScgeT0nOTAnIHdpZHRoPSc3JyBoZWlnaHQ9JzMwJy8+PHJlY3QgeD0nMTAyJyB5PSc5MCcgd2lkdGg9JzcnIGhlaWdodD0nMzAnLz48cmVjdCB4PScxMTUnIHk9JzkwJyB3aWR0aD0nNycgaGVpZ2h0PSczMCcvPjxyZWN0IHg9JzEyOCcgeT0nOTAnIHdpZHRoPSc3JyBoZWlnaHQ9JzMwJy8+PHJlY3QgeD0nNTQnIHk9Jzc0JyB3aWR0aD0nOTInIGhlaWdodD0nMTAnLz48cG9seWdvbiBwb2ludHM9JzEwMCw1NCAxNDgsNzQgNTIsNzQnLz48cmVjdCB4PSc4NCcgeT0nMzQnIHdpZHRoPSczMicgaGVpZ2h0PScyMCcvPjxwYXRoIGQ9J004NCAzNiBhMTYgMTggMCAwIDEgMzIgMCBaJy8+PHJlY3QgeD0nOTYnIHk9JzIwJyB3aWR0aD0nOCcgaGVpZ2h0PSc4Jy8+PGNpcmNsZSBjeD0nMTAwJyBjeT0nMTUnIHI9JzQnLz48cmVjdCB4PSc5OScgeT0nNCcgd2lkdGg9JzInIGhlaWdodD0nOScvPjwvc3ZnPg=="),
+    linear-gradient(160deg, var(--tst-navy), var(--tst-navy-deep));
+  background-repeat: no-repeat, no-repeat;
+  background-position: center bottom, center;
+  background-size: 152px auto, cover;
+}
+/* Hairline gold frame, inset from the card edge. */
+.testimonial::after {
+  content: "";
+  position: absolute;
+  inset: 9px;
+  border: 1px solid var(--tst-gold-line);
+  border-radius: 19px;
+  pointer-events: none;
+}
+
+/* Centred on the panel's right edge, so it reads as one portrait bridging the
+   two halves rather than a photograph dropped on either of them. */
+.testimonial__photo {
+  position: absolute;
+  left: 30%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 196px; height: 196px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 7px solid #fff;
+  outline: 2px solid var(--tst-gold);
+  outline-offset: 2px;
+  background: #e7e7e7;
+  box-shadow: 0 8px 22px rgba(20, 30, 50, .18);
+}
+
 .testimonial__body {
   display: flex;
   flex-direction: column;
   min-width: 0;
 }
-/* The opening mark, sized off its own line-height because the glyph carries
-   very deep internal leading and would otherwise push the quote down the
-   card. */
+/* Sized off its own line-height: the glyph carries very deep internal leading
+   and would otherwise push the quote down the card. */
 .testimonial__body::before {
   content: "\201C";
   font-family: var(--font-serif);
-  font-size: 2.8rem;
-  line-height: .72;
-  color: var(--accent-soft);
+  font-size: 3.4rem;
+  line-height: .7;
+  color: var(--tst-gold);
 }
 .testimonial__quote {
-  font-style: italic;
-  color: var(--ink-soft);
-  font-size: .9rem;
-  line-height: 1.7;
-  margin: 10px 0 16px;
+  margin: 14px 0 20px;
+  color: var(--tst-body);
+  font-size: .95rem;
+  line-height: 1.85;
 }
-/* margin-top: auto pins the name block to the foot of the card, so two cards
-   holding quotes of different lengths still line their names up with each
-   other. */
+/* margin-top: auto pins the name block to the foot, so two cards holding
+   quotes of different lengths still line their names up with each other. */
 .testimonial__caption { margin-top: auto; }
 .testimonial__caption::before {
   content: "";
   display: block;
-  width: 54px;
+  width: 74px;
   height: 2px;
-  margin-bottom: 12px;
-  background: var(--accent-soft);
+  margin-bottom: 14px;
+  background: var(--tst-gold);
 }
 .testimonial__name {
+  margin: 0 0 6px;
+  color: var(--tst-navy);
   font-weight: 800;
-  color: var(--ink);
+  font-size: 1.08rem;
+  letter-spacing: .02em;
   text-transform: uppercase;
-  font-size: .92rem;
-  margin: 0 0 3px;
 }
-.testimonial__meta { font-size: .78rem; color: var(--muted); font-weight: 600; }
-.testimonial__footer { padding-top: 12px; }
+.testimonial__meta {
+  color: var(--tst-meta);
+  font-size: .88rem;
+  font-weight: 500;
+  line-height: 1.75;
+}
+.testimonial__footer { padding-top: 14px; }
 
-/* One column on a phone: side by side leaves the quote about fifteen
-   characters wide, which is unreadable. */
-@media (max-width: 767.98px) {
+/* The shared arrows are built for a dark ground; on ivory they need their own
+   weight and a navy chevron. */
+.testimonials .carousel__nav {
+  width: 46px; height: 46px;
+  background: #fff;
+  color: var(--tst-navy);
+  box-shadow: 0 6px 18px rgba(20, 30, 50, .16);
+}
+.testimonials .carousel__nav:hover { background: var(--tst-gold); color: #fff; }
+.testimonials .carousel__nav svg { width: 18px; height: 18px; }
+.testimonials .carousel__dots { margin-top: 26px; }
+
+/* ---- stacked ----
+   Side by side stops working long before the phone: the quote column collapses
+   while the portrait keeps its diameter. The panel becomes a band across the
+   top and the portrait sits on its lower edge, which is the same idea turned
+   ninety degrees. */
+@media (max-width: 991.98px) {
   .testimonial {
-    grid-template-columns: 1fr;
-    justify-items: center;
+    min-height: 0;
+    padding: 218px 24px 30px;
     text-align: center;
-    gap: 16px;
-    padding: 24px 20px;
+    align-items: center;
+    background-position: right 14px bottom 14px;
+    background-size: 74px 74px;
   }
-  .testimonial { background-size: 82px 82px; background-position: right 12px bottom 12px; }
-  .testimonial__photo { width: 116px; height: 116px; }
+  .testimonial::before {
+    width: 100%;
+    height: 128px;
+    bottom: auto;
+    background-size: 118px auto, cover;
+  }
+  .testimonial__photo {
+    left: 50%;
+    top: 128px;
+    width: 152px; height: 152px;
+    border-width: 6px;
+  }
   .testimonial__body { align-items: center; }
   .testimonial__caption::before { margin-left: auto; margin-right: auto; }
+}
+
+@media (max-width: 575.98px) {
+  .testimonial { padding: 196px 18px 26px; border-radius: 20px; }
+  .testimonial::before { height: 116px; }
+  .testimonial__photo { top: 116px; width: 136px; height: 136px; }
+  .testimonial::after { inset: 7px; border-radius: 14px; }
+  .testimonial__quote { font-size: .9rem; line-height: 1.75; }
 }
 
 /* --------------------------------------------------------------------------
