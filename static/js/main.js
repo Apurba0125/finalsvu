@@ -60,6 +60,17 @@
       var link = $(".nav__link", item);
       if (!link) { return; }
 
+      /* Did the tap land on the caret rather than the label? Walking up beats
+         closest() here because the target is usually the <use> inside the
+         <svg>, and closest() on an SVG element is not safe everywhere. */
+      function onCaret(node) {
+        while (node && node !== link) {
+          if (node.classList && node.classList.contains("nav__caret")) { return true; }
+          node = node.parentNode;
+        }
+        return false;
+      }
+
       link.addEventListener("click", function (e) {
         var isMobile = window.matchMedia("(max-width: 991.98px)").matches;
         if (!isMobile) { return; }
@@ -67,23 +78,34 @@
         var submenu = $(".nav__submenu", item);
         if (!submenu) { return; }
 
-        // First tap expands; the parent link only navigates once open.
-        if (!item.classList.contains("is-open")) {
-          e.preventDefault();
-          $$(".nav__item--has-children.is-open", nav).forEach(function (other) {
-            if (other !== item) {
-              other.classList.remove("is-open");
-              var l = $(".nav__link", other);
-              if (l) { l.setAttribute("aria-expanded", "false"); }
-            }
-          });
-          item.classList.add("is-open");
-          link.setAttribute("aria-expanded", "true");
-        } else if (!link.getAttribute("href") || link.getAttribute("href") === "#") {
-          e.preventDefault();
-          item.classList.remove("is-open");
-          link.setAttribute("aria-expanded", "false");
+        var href = link.getAttribute("href");
+        var goesNowhere = !href || href === "#";
+
+        /* The caret is the open/close control and never navigates. The label
+           beside it stays an ordinary link, because several parents (Academic,
+           Centre, Student Welfare Committees) point at a page that none of
+           their children repeats — collapsing the whole row into a toggle
+           would leave those three unreachable from the drawer. */
+        if (item.classList.contains("is-open")) {
+          if (onCaret(e.target) || goesNowhere) {
+            e.preventDefault();
+            item.classList.remove("is-open");
+            link.setAttribute("aria-expanded", "false");
+          }
+          return;
         }
+
+        // First tap expands, whether it landed on the caret or the label.
+        e.preventDefault();
+        $$(".nav__item--has-children.is-open", nav).forEach(function (other) {
+          if (other !== item) {
+            other.classList.remove("is-open");
+            var l = $(".nav__link", other);
+            if (l) { l.setAttribute("aria-expanded", "false"); }
+          }
+        });
+        item.classList.add("is-open");
+        link.setAttribute("aria-expanded", "true");
       });
     });
 

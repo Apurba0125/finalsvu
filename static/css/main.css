@@ -2120,6 +2120,15 @@ table { border-collapse: collapse; width: 100%; }
   .nav__link:hover, .nav__item.is-open > .nav__link { background: #faf6e4; }
   .nav__caret { transition: transform var(--transition); }
   .nav__item.is-open > .nav__link .nav__caret { transform: rotate(180deg); }
+  /* The caret opens and closes the submenu, so it needs a finger-sized target
+     of its own rather than the 16px the glyph occupies. The padding grows the
+     hit area and the negative margin takes that growth back out of the layout,
+     so the arrow does not move. */
+  .nav__link .nav__caret {
+    box-sizing: content-box;
+    padding: 14px;
+    margin: -14px -14px -14px 0;
+  }
 
   .nav__submenu {
     position: static;
