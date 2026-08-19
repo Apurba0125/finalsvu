@@ -215,7 +215,7 @@ MAIN_NAV = [{'title': 'About SVU',
                {'title': 'Svu Podcast', 'href': '/page/svu-podcast/', 'is_external': False},
                ]},
 
-{'title': 'UGC-2f','href': '#','is_external': True,},
+{'title': 'UGC-2f','href': '#','is_external': False,},
 
 {'title': 'Contact','href': '/contact/','is_external': False},
 
@@ -279,7 +279,7 @@ HERO_VIDEO = {
     'youtube_id': '',
 
     # Shown before the video paints, and to anyone on a data saver.
-    'poster': 'img/slides/slide-1.jpg',
+#     'poster': 'img/slides/slide-1.jpg',
 
     'headline': 'Reinvent yourself at Swami Vivekananda University',
     'subtext': 'UG, PG and Ph.D programmes across engineering, management, sciences, '
