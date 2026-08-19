@@ -1856,7 +1856,7 @@ table { border-collapse: collapse; width: 100%; }
   color: var(--tst-body);
   /* Fluid rather than fixed: the quote column is a percentage of the card, so
      a flat size reads small on a wide screen and cramped on a narrow one. */
-  font-size: clamp(.95rem, .92rem + .22vw, 1.08rem);
+  font-size: clamp(.85rem, .8rem + .28vw, 1.06rem);
   line-height: 1.42;
 }
 /* margin-top: auto pins the name block to the foot, so two cards holding
@@ -1935,7 +1935,7 @@ table { border-collapse: collapse; width: 100%; }
   .testimonial::before { height: 96px; }
   .testimonial__photo { top: 96px; width: 120px; height: 120px; aspect-ratio: auto; }
   .testimonial::after { inset: 7px; border-radius: 14px; }
-  .testimonial__quote { line-height: 1.72; }
+  .testimonial__quote { line-height: 1.55; }
 }
 
 /* --------------------------------------------------------------------------
