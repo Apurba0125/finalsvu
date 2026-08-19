@@ -396,17 +396,27 @@
           <span class="centre__icon{% if centre.image %} centre__icon--photo{% endif %}"
                 aria-hidden="true">
             {% if centre.image %}
-              <img src="{% static centre.image %}" alt="" width="62" height="62" loading="lazy">
+              {# 4:3 here, not 62x62 — the ratio hint has to match what the CSS #}
+              {# draws or the card jumps when the picture arrives.               #}
+              <img src="{% static centre.image %}" alt="{{ centre.alt_text }}"
+                   width="400" height="300" loading="lazy" decoding="async">
             {% else %}
               <svg focusable="false"><use href="#i-{{ centre.icon }}"></use></svg>
             {% endif %}
           </span>
-          <div>
-            <h3 class="centre__title">
-              {% if centre.url %}<a href="{{ centre.url }}">{{ centre.title }}</a>{% else %}{{ centre.title }}{% endif %}
-            </h3>
-            <p class="centre__text">{{ centre.description }}</p>
-          </div>
+          {# Both are optional. A centre carrying only a picture would otherwise #}
+          {# render an empty heading and an empty paragraph, which is a heading  #}
+          {# with no text for anyone navigating by headings.                     #}
+          {% if centre.title or centre.description %}
+            <div>
+              {% if centre.title %}
+                <h3 class="centre__title">
+                  {% if centre.url %}<a href="{{ centre.url }}">{{ centre.title }}</a>{% else %}{{ centre.title }}{% endif %}
+                </h3>
+              {% endif %}
+              {% if centre.description %}<p class="centre__text">{{ centre.description }}</p>{% endif %}
+            </div>
+          {% endif %}
         </div>
       {% endfor %}
     </div>

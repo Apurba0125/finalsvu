@@ -459,35 +459,44 @@ CHANCELLOR = {'name': 'The Chancellor',
 # in one at a time without anything breaking in between.
 #
 #   image  path under static/, e.g. 'img/centres/innovation.jpg'. Left blank
-#          the icon is drawn instead. It is cropped to a circle, so put the
-#          subject in the middle and prefer a square original.
+#          the icon is drawn instead. It is cropped to 4:3 and filled, so a
+#          wide original keeps its edges and a tall one loses them.
+#   alt_text  what the picture says, for anyone who cannot see it. With title
+#          and description blank this is the ONLY text the centre has, so it
+#          cannot be left empty - an image carrying the name of a centre is
+#          content, not decoration.
 #   icon   a symbol id from templates/includes/icons.html, minus the "i-".
-CENTRES = [{'title': 'Centre for Innovation & Entrepreneurship',
-  'description': 'It aims at fuelling the principal ambitions of the students by developing '
-                 'innovative thinking, and by stimulating entrepreneurial skills.',
-  'image': '',            # no photograph yet - the icon shows
+CENTRES = [
+    {'title': '',
+  'description': '',
+  'image': 'img/slides/coe.png',            # no photograph yet - the icon shows
+  'alt_text': 'Centre for Innovation & Entrepreneurship',
   'icon': 'innovation',
   'url': ''},
- {'title': 'Industry Collaboration',
-  'description': 'We believe that students require proper grooming along with quality academic '
-                 'input to become industry ready. With this view, the university offers '
-                 'Industry Connect Program.',
-  'image': '',            # no photograph yet - the icon shows
+
+ {'title': '',
+  'description': '',
+  'image': 'img/slides/coex.png',            # no photograph yet - the icon shows
+  'alt_text': 'Industry Collaboration',
   'icon': 'industry',
   'url': ''},
- {'title': 'Centre of Excellence',
-  'description': 'The Centre of Excellence established in 2018 at SWAMI VIVEKANANDA UNIVERSITY '
-                 'aims at fuelling the principal ambitions of the student. The entity nurtures '
-                 'and builds the aspiration to achieve.',
-  'image': '',            # no photograph yet - the icon shows
+
+
+ {'title': '',
+  'description': '',
+  'image': 'img/slides/ic.png',            # no photograph yet - the icon shows
+  'alt_text': 'Centre of Excellence',
   'icon': 'excellence',
   'url': ''},
- {'title': 'Swami Vivekananda Centre for Women Studies',
-  'description': "Centre for Women's Studies at SVU seeks to provide an interdisciplinary and "
-                 'comparative framework for the students to study gender related aspects.',
-  'image': '',            # no photograph yet - the icon shows
+
+
+ {'title': '',
+  'description': "",     
+  'image': 'img/slides/ws.png',            # no photograph yet - the icon shows
+  'alt_text': 'Swami Vivekananda Centre for Women Studies',
   'icon': 'women',
-  'url': ''}]
+  'url': ''}
+  ]
 
 # --------------------------------------------------------------------------
 TESTIMONIALS = [
