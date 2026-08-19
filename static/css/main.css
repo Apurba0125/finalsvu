@@ -1779,16 +1779,16 @@ table { border-collapse: collapse; width: 100%; }
   flex-direction: column;
   justify-content: center;
   height: 100%;
-  min-height: 336px;
+  min-height: 306px;
   /* The left inset clears the panel AND the half of the portrait that hangs
      past it, which is why it is a calc and not a flat value. */
-  padding: 34px 38px 26px 48.1%;
-  border-radius: 26px;
+  padding: 28px 32px 22px 46%;
+  border-radius: 22px;
   background-color: var(--tst-ivory);
   background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAxMjAgMTIwJyBmaWxsPSdjdXJyZW50Q29sb3InIGNvbG9yPScjZTZlMmQ0Jz48ZWxsaXBzZSBjeD0nMCcgY3k9JzAnIHJ4PSc3LjQnIHJ5PSczLjQnIHRyYW5zZm9ybT0ndHJhbnNsYXRlKDYwLjAgMTA3LjApIHJvdGF0ZSgxODAuMCknLz48ZWxsaXBzZSBjeD0nMCcgY3k9JzAnIHJ4PSc3LjEnIHJ5PSczLjInIHRyYW5zZm9ybT0ndHJhbnNsYXRlKDcyLjMgMTA1LjIpIHJvdGF0ZSgtMTYzLjMpJy8+PGVsbGlwc2UgY3g9JzAnIGN5PScwJyByeD0nNi43JyByeT0nMy4xJyB0cmFuc2Zvcm09J3RyYW5zbGF0ZSg4My42IDk5LjkpIHJvdGF0ZSgtMTQ2LjcpJy8+PGVsbGlwc2UgY3g9JzAnIGN5PScwJyByeD0nNi40JyByeT0nMi45JyB0cmFuc2Zvcm09J3RyYW5zbGF0ZSg5Mi45IDkxLjYpIHJvdGF0ZSgtMTMwLjApJy8+PGVsbGlwc2UgY3g9JzAnIGN5PScwJyByeD0nNi4wJyByeT0nMi44JyB0cmFuc2Zvcm09J3RyYW5zbGF0ZSg5OS41IDgxLjApIHJvdGF0ZSgtMTEzLjMpJy8+PGVsbGlwc2UgY3g9JzAnIGN5PScwJyByeD0nNS43JyByeT0nMi42JyB0cmFuc2Zvcm09J3RyYW5zbGF0ZSgxMDIuNyA2OS4wKSByb3RhdGUoLTk2LjcpJy8+PGVsbGlwc2UgY3g9JzAnIGN5PScwJyByeD0nNS4zJyByeT0nMi40JyB0cmFuc2Zvcm09J3RyYW5zbGF0ZSgxMDIuMyA1Ni41KSByb3RhdGUoLTgwLjApJy8+PGVsbGlwc2UgY3g9JzAnIGN5PScwJyByeD0nNS4wJyByeT0nMi4zJyB0cmFuc2Zvcm09J3RyYW5zbGF0ZSg5OC40IDQ0LjcpIHJvdGF0ZSgtNjMuMyknLz48ZWxsaXBzZSBjeD0nMCcgY3k9JzAnIHJ4PSc0LjYnIHJ5PScyLjEnIHRyYW5zZm9ybT0ndHJhbnNsYXRlKDkxLjMgMzQuNSkgcm90YXRlKC00Ni43KScvPjxlbGxpcHNlIGN4PScwJyBjeT0nMCcgcng9JzQuMycgcnk9JzIuMCcgdHJhbnNmb3JtPSd0cmFuc2xhdGUoODEuNSAyNi44KSByb3RhdGUoLTMwLjApJy8+PGVsbGlwc2UgY3g9JzAnIGN5PScwJyByeD0nNy40JyByeT0nMy40JyB0cmFuc2Zvcm09J3RyYW5zbGF0ZSg2MC4wIDEwNy4wKSByb3RhdGUoMTgwLjApJy8+PGVsbGlwc2UgY3g9JzAnIGN5PScwJyByeD0nNy4xJyByeT0nMy4yJyB0cmFuc2Zvcm09J3RyYW5zbGF0ZSg0Ny43IDEwNS4yKSByb3RhdGUoMTYzLjMpJy8+PGVsbGlwc2UgY3g9JzAnIGN5PScwJyByeD0nNi43JyByeT0nMy4xJyB0cmFuc2Zvcm09J3RyYW5zbGF0ZSgzNi40IDk5LjkpIHJvdGF0ZSgxNDYuNyknLz48ZWxsaXBzZSBjeD0nMCcgY3k9JzAnIHJ4PSc2LjQnIHJ5PScyLjknIHRyYW5zZm9ybT0ndHJhbnNsYXRlKDI3LjEgOTEuNikgcm90YXRlKDEzMC4wKScvPjxlbGxpcHNlIGN4PScwJyBjeT0nMCcgcng9JzYuMCcgcnk9JzIuOCcgdHJhbnNmb3JtPSd0cmFuc2xhdGUoMjAuNSA4MS4wKSByb3RhdGUoMTEzLjMpJy8+PGVsbGlwc2UgY3g9JzAnIGN5PScwJyByeD0nNS43JyByeT0nMi42JyB0cmFuc2Zvcm09J3RyYW5zbGF0ZSgxNy4zIDY5LjApIHJvdGF0ZSg5Ni43KScvPjxlbGxpcHNlIGN4PScwJyBjeT0nMCcgcng9JzUuMycgcnk9JzIuNCcgdHJhbnNmb3JtPSd0cmFuc2xhdGUoMTcuNyA1Ni41KSByb3RhdGUoODAuMCknLz48ZWxsaXBzZSBjeD0nMCcgY3k9JzAnIHJ4PSc1LjAnIHJ5PScyLjMnIHRyYW5zZm9ybT0ndHJhbnNsYXRlKDIxLjYgNDQuNykgcm90YXRlKDYzLjMpJy8+PGVsbGlwc2UgY3g9JzAnIGN5PScwJyByeD0nNC42JyByeT0nMi4xJyB0cmFuc2Zvcm09J3RyYW5zbGF0ZSgyOC43IDM0LjUpIHJvdGF0ZSg0Ni43KScvPjxlbGxpcHNlIGN4PScwJyBjeT0nMCcgcng9JzQuMycgcnk9JzIuMCcgdHJhbnNmb3JtPSd0cmFuc2xhdGUoMzguNSAyNi44KSByb3RhdGUoMzAuMCknLz48cGF0aCBkPSdNNjAuMCAxMDcuMCBBIDQzLjAgNDMuMCAwIDAgMSA4MS41IDI2LjgnIGZpbGw9J25vbmUnIHN0cm9rZT0nY3VycmVudENvbG9yJyBzdHJva2Utd2lkdGg9JzIuMicgc3Ryb2tlLWxpbmVjYXA9J3JvdW5kJy8+PHBhdGggZD0nTTYwLjAgMTA3LjAgQSA0My4wIDQzLjAgMCAwIDAgMzguNSAyNi44JyBmaWxsPSdub25lJyBzdHJva2U9J2N1cnJlbnRDb2xvcicgc3Ryb2tlLXdpZHRoPScyLjInIHN0cm9rZS1saW5lY2FwPSdyb3VuZCcvPjxwb2x5Z29uIHBvaW50cz0nNjAuMCw1LjAgNjEuNyw5LjYgNjYuNyw5LjggNjIuOCwxMi45IDY0LjEsMTcuNyA2MC4wLDE0LjkgNTUuOSwxNy43IDU3LjIsMTIuOSA1My4zLDkuOCA1OC4zLDkuNicvPjxwb2x5Z29uIHBvaW50cz0nNDAuMCwxNS4wIDQxLjIsMTguMyA0NC44LDE4LjUgNDIuMCwyMC42IDQyLjksMjQuMCA0MC4wLDIyLjEgMzcuMSwyNC4wIDM4LjAsMjAuNiAzNS4yLDE4LjUgMzguOCwxOC4zJy8+PHBvbHlnb24gcG9pbnRzPSc4MC4wLDE1LjAgODEuMiwxOC4zIDg0LjgsMTguNSA4Mi4wLDIwLjYgODIuOSwyNC4wIDgwLjAsMjIuMSA3Ny4xLDI0LjAgNzguMCwyMC42IDc1LjIsMTguNSA3OC44LDE4LjMnLz48cGF0aCBkPSdNNjAgNDIgTDEwMCA1NyBMNjAgNzIgTDIwIDU3IFonLz48cGF0aCBkPSdNMzkgNjIgTDM5IDc4IEw4MSA3OCBMODEgNjIgTDYwIDcwIFonLz48cGF0aCBkPSdNOTggNTggTDk4IDgwJyBmaWxsPSdub25lJyBzdHJva2U9J2N1cnJlbnRDb2xvcicgc3Ryb2tlLXdpZHRoPScyLjQnIHN0cm9rZS1saW5lY2FwPSdyb3VuZCcvPjxjaXJjbGUgY3g9Jzk4JyBjeT0nODQnIHI9JzMuNicvPjwvc3ZnPg==");
   background-repeat: no-repeat;
-  background-position: right 38px bottom 30px;
-  background-size: 84px 88px;
+  background-position: right 30px bottom 24px;
+  background-size: 74px 78px;
   box-shadow: 0 10px 30px rgba(20, 30, 50, .10);
   overflow: hidden;
 }
@@ -1799,7 +1799,7 @@ table { border-collapse: collapse; width: 100%; }
   content: "";
   position: absolute;
   left: 0; top: 0; bottom: 0;
-  width: 27.7%;
+  width: 26.5%;
   z-index: -1;
   background-color: var(--tst-navy);
   background-image:
@@ -1813,9 +1813,9 @@ table { border-collapse: collapse; width: 100%; }
 .testimonial::after {
   content: "";
   position: absolute;
-  inset: 9px;
+  inset: 8px;
   border: 1px solid var(--tst-gold-line);
-  border-radius: 19px;
+  border-radius: 16px;
   pointer-events: none;
 }
 
@@ -1826,7 +1826,7 @@ table { border-collapse: collapse; width: 100%; }
   left: 22.6%;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: 34.4%;
+  width: 31%;
   aspect-ratio: 1;
   border-radius: 50%;
   object-fit: cover;
@@ -1847,12 +1847,12 @@ table { border-collapse: collapse; width: 100%; }
 .testimonial__body::before {
   content: "\201C";
   font-family: var(--font-serif);
-  font-size: clamp(2.3rem, 1.95rem + 1vw, 2.9rem);
+  font-size: clamp(2.1rem, 1.8rem + .9vw, 2.6rem);
   line-height: .64;
   color: var(--tst-gold);
 }
 .testimonial__quote {
-  margin: 10px 0 16px;
+  margin: 8px 0 14px;
   color: var(--tst-body);
   /* Fluid rather than fixed: the quote column is a percentage of the card, so
      a flat size reads small on a wide screen and cramped on a narrow one. */
@@ -1865,22 +1865,22 @@ table { border-collapse: collapse; width: 100%; }
 .testimonial__caption::before {
   content: "";
   display: block;
-  width: 56px;
+  width: 50px;
   height: 2px;
-  margin-bottom: 15px;
+  margin-bottom: 12px;
   background: var(--tst-gold);
 }
 .testimonial__name {
   margin: 0 0 4px;
   color: var(--tst-navy);
   font-weight: 800;
-  font-size: clamp(1.05rem, 1rem + .32vw, 1.28rem);
+  font-size: clamp(1rem, .95rem + .28vw, 1.18rem);
   letter-spacing: .02em;
   text-transform: uppercase;
 }
 .testimonial__meta {
   color: var(--tst-meta);
-  font-size: clamp(.9rem, .87rem + .15vw, 1rem);
+  font-size: clamp(.85rem, .83rem + .12vw, .95rem);
   font-weight: 500;
   line-height: 1.62;
 }
@@ -1906,7 +1906,7 @@ table { border-collapse: collapse; width: 100%; }
 @media (max-width: 991.98px) {
   .testimonial {
     min-height: 0;
-    padding: 178px 24px 22px;
+    padding: 164px 24px 20px;
     min-height: 0;
     text-align: center;
     align-items: center;
@@ -1915,14 +1915,14 @@ table { border-collapse: collapse; width: 100%; }
   }
   .testimonial::before {
     width: 100%;
-    height: 108px;
+    height: 100px;
     bottom: auto;
     background-size: 118px auto, cover;
   }
   .testimonial__photo {
     left: 50%;
-    top: 108px;
-    width: 132px; height: 132px;
+    top: 100px;
+    width: 120px; height: 120px;
     aspect-ratio: auto;
     border-width: 6px;
   }
@@ -1931,9 +1931,9 @@ table { border-collapse: collapse; width: 100%; }
 }
 
 @media (max-width: 575.98px) {
-  .testimonial { padding: 160px 18px 20px; border-radius: 20px; }
-  .testimonial::before { height: 96px; }
-  .testimonial__photo { top: 96px; width: 120px; height: 120px; aspect-ratio: auto; }
+  .testimonial { padding: 148px 18px 18px; border-radius: 18px; }
+  .testimonial::before { height: 88px; }
+  .testimonial__photo { top: 88px; width: 108px; height: 108px; aspect-ratio: auto; }
   .testimonial::after { inset: 7px; border-radius: 14px; }
   .testimonial__quote { line-height: 1.55; }
 }
