@@ -2288,6 +2288,11 @@ table { border-collapse: collapse; width: 100%; }
     -webkit-overflow-scrolling: touch;
   }
   .nav.is-open { transform: translateX(0); }
+  /* The drawer and the sticky top bar are the same element, and .nav.is-stuck
+     outranks .nav on specificity, so it would apply here too. Pinned back to
+     fixed: a class left over from a wider viewport must not drop the drawer
+     into the flow as a full-height block covering the page. */
+  .nav.is-stuck { position: fixed; }
 
   .nav__mobile-head {
     display: flex;

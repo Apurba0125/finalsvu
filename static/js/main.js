@@ -498,14 +498,31 @@
   function initScrollWidgets() {
     var toTop = $("#to-top");
     var nav = $("#site-nav");
-    var navOffset = nav ? nav.offsetTop : 0;
+    var navOffset = 0;
     var ticking = false;
+
+    function measure() {
+      if (!nav) { return; }
+      /* offsetTop only means anything while the bar is in flow. Below 992px
+         the same element is the off-canvas drawer, fixed at top: 0, so it
+         reads 0 and every scroll position would count as past it. */
+      if (window.innerWidth >= 992) {
+        nav.classList.remove("is-stuck");
+        navOffset = nav.offsetTop;
+      }
+    }
 
     function onScroll() {
       var y = window.pageYOffset || document.documentElement.scrollTop;
       if (toTop) { toTop.classList.toggle("is-visible", y > 400); }
-      if (nav && window.innerWidth >= 992) {
-        nav.classList.toggle("is-stuck", y > navOffset);
+      if (nav) {
+        /* The width test has to be part of the toggle, not a guard around it.
+           Guarding meant the class was never cleared on the way DOWN through
+           992px, and .nav.is-stuck is position: sticky - which outranks the
+           drawer's position: fixed on specificity. A stale class therefore
+           dropped the closed drawer back into the flow as a full-height white
+           block, and the page looked blank. */
+        nav.classList.toggle("is-stuck", window.innerWidth >= 992 && y > navOffset);
       }
       ticking = false;
     }
@@ -522,6 +539,16 @@
         window.scrollTo({ top: 0, behavior: prefersReducedMotion ? "auto" : "smooth" });
       });
     }
+
+    /* Crossing the breakpoint without scrolling still has to settle the class,
+       and the offset is only correct once the bar is back in flow. */
+    var resizeTimer;
+    window.addEventListener("resize", function () {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(function () { measure(); onScroll(); }, 150);
+    });
+
+    measure();
     onScroll();
   }
 
