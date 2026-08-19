@@ -1101,6 +1101,70 @@
   }
 
   /* ----------------------------------------------------------------------
+     10. Counting figures
+     Counts up the first time the figure scrolls into view, then stops being
+     watched so it never replays on the way back past.
+     ---------------------------------------------------------------------- */
+  function initCounters() {
+    var counters = $$("[data-count-to]");
+    if (!counters.length) { return; }
+
+    function decimalsOf(el) {
+      return parseInt(el.getAttribute("data-count-decimals"), 10) || 0;
+    }
+
+    /* Group the whole part only. Running the separator over the string after
+       toFixed would put commas inside the decimals as well. */
+    function format(value, decimals) {
+      var parts = value.toFixed(decimals).split(".");
+      parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      return parts.join(".");
+    }
+
+    function run(el) {
+      var target = parseFloat(el.getAttribute("data-count-to"));
+      if (isNaN(target)) { return; }
+      var decimals = decimalsOf(el);
+      var duration = parseInt(el.getAttribute("data-count-duration"), 10) || 1600;
+
+      if (prefersReducedMotion || duration <= 0) {
+        el.textContent = format(target, decimals);
+        return;
+      }
+
+      var startedAt = null;
+      function frame(now) {
+        if (startedAt === null) { startedAt = now; }
+        var t = Math.min((now - startedAt) / duration, 1);
+        // Ease out: quick off the mark, settling onto the figure rather than
+        // stopping dead on it.
+        el.textContent = format(target * (1 - Math.pow(1 - t, 3)), decimals);
+        if (t < 1) { requestAnimationFrame(frame); }
+      }
+      requestAnimationFrame(frame);
+    }
+
+    /* Zero them first. The markup ships the final figure so the page still
+       states it with no JS at all, but once we are running the count has to
+       start from the bottom rather than flash the answer and then climb. */
+    counters.forEach(function (el) { el.textContent = format(0, decimalsOf(el)); });
+
+    if (!("IntersectionObserver" in window)) {
+      counters.forEach(run);
+      return;
+    }
+
+    var observer = new IntersectionObserver(function (entries, obs) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) { return; }
+        obs.unobserve(entry.target);
+        run(entry.target);
+      });
+    }, { threshold: 0.4 });
+    counters.forEach(function (el) { observer.observe(el); });
+  }
+
+  /* ----------------------------------------------------------------------
      Bootstrap
      ---------------------------------------------------------------------- */
   function init() {
@@ -1116,6 +1180,7 @@
     initEnquiryForms();
     initLazyImages();
     initPhotoViewer();
+    initCounters();
   }
 
   if (document.readyState === "loading") {

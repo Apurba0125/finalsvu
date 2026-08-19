@@ -1431,29 +1431,54 @@ COURSES = [
 # --------------------------------------------------------------------------
 FACILITIES = [{'slug': 'digital-library',
   'title': 'Digital Library',
-  'image': 'img/facilities/facility-1.jpg',
+  'image': 'img/facilities/12.jpg',
   'description': 'An online storehouse of textbooks, notes, journals, e-thesis, maps and rare '
                  'books.'},
  {'slug': 'smart-classrooms',
   'title': 'Smart Classrooms',
-  'image': 'img/facilities/facility-2.jpg',
+  'image': 'img/facilities/classroom.jpg',
   'description': 'Digital whiteboards make learning interactive across every lecture hall.'},
  {'slug': 'laboratories',
   'title': 'Laboratories',
-  'image': 'img/facilities/facility-3.jpg',
+  'image': 'img/facilities/lab.png',
   'description': 'Well-equipped engineering, science, pharmacy and nursing laboratories.'},
  {'slug': 'hostel',
   'title': 'Hostel',
-  'image': 'img/facilities/facility-4.jpg',
+  'image': 'img/school-placeholder.svg',
   'description': 'Separate, secure hostel accommodation for male and female students.'},
  {'slug': 'sports-complex',
   'title': 'Sports Complex',
-  'image': 'img/facilities/facility-5.jpg',
+  'image': 'img/facilities/sports.jpg',
   'description': 'Indoor and outdoor sporting facilities including a gymnasium.'},
  {'slug': 'cafeteria',
   'title': 'Cafeteria',
-  'image': 'img/facilities/facility-6.jpg',
+  'image': 'img/school-placeholder.svg',
   'description': 'Multi-cuisine cafeteria serving hygienic and affordable meals.'}]
+
+# --------------------------------------------------------------------------
+# The counting figures under the video carousel.
+#
+# TODO: every value is 0. Put the real figures in before this goes in front of
+# anyone — these are published as statements of fact about the university, so
+# they should come from someone who knows them rather than be guessed at. The
+# section hides itself while the list is empty, but NOT while the values are
+# zero, so zeros will show if they are left here.
+#
+#   value    the number to count up to. Plain int or float, no commas and no
+#            "+" — the separator is added while counting and the suffix is its
+#            own field, so 8500 renders as 8,500+
+#   suffix   drawn after the number and never animated: '+', '%', 'k', or ''
+#   label    the caption under it
+#
+# Four across on a wide screen, so a count that is a multiple of four leaves no
+# orphan at the end of the row.
+STATS = [
+ {'value': 200, 'suffix': '+', 'label': 'Industry Collaborations'},
+ {'value': 50, 'suffix': '+', 'label': 'International MoUs'},
+ {'value': 500, 'suffix': '+', 'label': 'Patents Filed'},
+ {'value': 60, 'suffix': '+', 'label': 'Programs Offered'},
+ {'value': 3000, 'suffix': '+', 'label': 'Alumni Network'},
+ ]
 
 # --------------------------------------------------------------------------
 # Life at SVU — the eight-tile photo grid on the home page, and the eight pages
@@ -1464,12 +1489,11 @@ FACILITIES = [{'slug': 'digital-library',
 # row is ever left short.
 #
 # ON THE PHOTOGRAPHS
-#   Most of these are placeholders, not photographs. Every img/facilities/*.jpg
-#   is a 600x450 flat graphic with the facility name drawn on it — open
-#   facility-4.jpg and it simply reads "Hostel". Only The Campus is a real
-#   photograph. Drop the real files in and change the path here; nothing else
-#   needs touching. 'placeholder': True marks the ones still waiting, and is
-#   what the grid uses to keep the label readable over flat artwork.
+#   All eight are real photographs now. The alt text below was written from
+#   the subject each file was given rather than from the picture itself, so
+#   check it says what is actually in the frame: it is the only description
+#   anyone using the page by ear will get. 'placeholder': True marks a tile
+#   still waiting for artwork; none are, at present.
 #
 # alt_text is not decorative. It is the only description of the picture for
 # anyone who cannot see it, so write what is in the frame rather than repeating
@@ -1477,19 +1501,19 @@ FACILITIES = [{'slug': 'digital-library',
 LIFE_AT_SVU = [
  {'slug': 'library',
   'title': 'Library',
-  'image': 'img/facilities/facility-1.jpg',
-  'alt_text': 'Placeholder artwork for the university library',
-  'placeholder': True},
+  'image': 'img/facilities/12.jpg',
+  'alt_text': 'Students at the shelves in the university library',
+  'placeholder': False},
  {'slug': 'laboratory',
   'title': 'Laboratory',
-  'image': 'img/facilities/facility-3.jpg',
-  'alt_text': 'Placeholder artwork for the university laboratories',
-  'placeholder': True},
+  'image': 'img/facilities/lab.png',
+  'alt_text': 'Students working at the benches in a university laboratory',
+  'placeholder': False},
  {'slug': 'classroom',
   'title': 'Classroom',
-  'image': 'img/facilities/facility-2.jpg',
-  'alt_text': 'Placeholder artwork for the smart classrooms',
-  'placeholder': True},
+  'image': 'img/facilities/classroom.jpg',
+  'alt_text': 'A class in progress in one of the lecture rooms',
+  'placeholder': False},
  {'slug': 'campus-building',
   'title': 'Campus Building',
   'image': 'img/about/campus.jpg',
@@ -1497,24 +1521,24 @@ LIFE_AT_SVU = [
   'placeholder': False},
  {'slug': 'gardening',
   'title': 'Gardening',
-  'image': 'img/school-placeholder.svg',
-  'alt_text': 'Placeholder artwork for the campus gardens',
-  'placeholder': True},
+  'image': 'img/facilities/garden.jpg',
+  'alt_text': 'Students and staff tending the flower beds on campus',
+  'placeholder': False},
  {'slug': 'sports',
   'title': 'Sports',
-  'image': 'img/facilities/facility-5.jpg',
-  'alt_text': 'Placeholder artwork for the sports complex',
-  'placeholder': True},
+  'image': 'img/facilities/sports.jpg',
+  'alt_text': 'A match under way on the campus sports ground',
+  'placeholder': False},
  {'slug': 'group-study',
   'title': 'Group Study',
-  'image': 'img/school-placeholder.svg',
-  'alt_text': 'Placeholder artwork for group study on campus',
-  'placeholder': True},
+  'image': 'img/facilities/groupstudy.jpg',
+  'alt_text': 'Students working through a text together',
+  'placeholder': False},
  {'slug': 'practical-laboratory',
   'title': 'Practical Laboratory',
-  'image': 'img/school-placeholder.svg',
-  'alt_text': 'Placeholder artwork for the practical laboratories',
-  'placeholder': True}]
+  'image': 'img/facilities/lab-2.jpg',
+  'alt_text': 'Bench work under supervision in a practical laboratory',
+  'placeholder': False}]
 
 # --------------------------------------------------------------------------
 PARTNERS = [{'name': 'Tata Consultancy Services', 'logo': 'img/partners/partner-1.png', 'url': ''},

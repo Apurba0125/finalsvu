@@ -161,6 +161,9 @@ table { border-collapse: collapse; width: 100%; }
   padding-inline: var(--gutter);
 }
 .shell--wide { max-width: 1440px; }
+/* No ceiling at all, only the gutter: for a band meant to run the width of
+   the viewport rather than line up with the rest of the page. */
+.shell--full { max-width: none; }
 
 .section { padding: 40px 0; }
 .section--tight { padding: 26px 0; }
@@ -1669,7 +1672,68 @@ table { border-collapse: collapse; width: 100%; }
 .event-card__footer { margin-top: auto; padding-top: 6px; }
 
 /* --------------------------------------------------------------------------
-   16. Chancellor + centres
+   16. Counting figures
+   -------------------------------------------------------------------------- */
+/* One row, however many figures there are. grid-auto-flow: column means the
+   count is not written into the CSS at all: a sixth figure added in data.py
+   takes its place on the same line rather than dropping to a second row. */
+.stats-grid {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: 18px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.stat { text-align: center; }
+
+/* tabular-nums is not decoration here: with proportional digits a 1 is
+   narrower than a 4, so the figure would jitter sideways the whole way up the
+   count and drag the label under it along. */
+.stat__figure {
+  margin: 0 0 8px;
+  color: var(--ink);
+  font-size: clamp(1.35rem, 1rem + 1.3vw, 2.1rem);
+  font-weight: 800;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+.stat__label {
+  margin: 0;
+  color: var(--muted);
+  font-size: clamp(.7rem, .66rem + .18vw, .84rem);
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+
+/* Dividers only while they are all on one row. Once the list wraps, a rule
+   down the left edge of the first figure in a new row points at nothing. */
+@media (min-width: 992px) {
+  .stat + .stat { border-left: 1px solid var(--line); }
+}
+
+/* One line is a desktop idea. Below it the row has to wrap, which means
+   switching the flow back to rows - grid-auto-flow: column would otherwise
+   keep packing everything into one line however narrow it gets. */
+@media (max-width: 991.98px) {
+  .stats-grid {
+    grid-auto-flow: row;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px 14px;
+  }
+}
+@media (max-width: 575.98px) {
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 419.98px) {
+  .stats-grid { grid-template-columns: 1fr; gap: 20px; }
+}
+
+/* --------------------------------------------------------------------------
+   17. Chancellor + centres
    -------------------------------------------------------------------------- */
 .chancellor-band { padding: 0 0 40px; }
 .chancellor-grid {
@@ -1775,7 +1839,7 @@ table { border-collapse: collapse; width: 100%; }
 .centre__text { font-size: .85rem; color: var(--muted); margin: 0; }
 
 /* --------------------------------------------------------------------------
-   17. Testimonials
+   18. Testimonials
    --------------------------------------------------------------------------
    Navy-and-ivory, unlike anything else on the site. The colours are declared
    as custom properties on the section rather than in :root, because nothing
@@ -2017,7 +2081,7 @@ table { border-collapse: collapse; width: 100%; }
 }
 
 /* --------------------------------------------------------------------------
-   18. Page shell (inner pages)
+   19. Page shell (inner pages)
    -------------------------------------------------------------------------- */
 .page-hero {
   background: var(--dark);
@@ -2173,7 +2237,7 @@ table { border-collapse: collapse; width: 100%; }
 .faq-item__a[hidden] { display: none; }
 
 /* --------------------------------------------------------------------------
-   19. Footer
+   20. Footer
    -------------------------------------------------------------------------- */
 .footer {
   background: var(--darker);
@@ -2298,7 +2362,7 @@ table { border-collapse: collapse; width: 100%; }
 .subfooter__links { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
 
 /* --------------------------------------------------------------------------
-   20. Floating actions
+   21. Floating actions
    -------------------------------------------------------------------------- */
 .float-actions {
   position: fixed;
@@ -2342,7 +2406,7 @@ table { border-collapse: collapse; width: 100%; }
 .float-top svg { width: 18px; height: 18px; fill: currentColor; }
 
 /* --------------------------------------------------------------------------
-   21. Responsive — progressive enhancement upward
+   22. Responsive — progressive enhancement upward
    -------------------------------------------------------------------------- */
 
 /* ---- Mobile navigation (below 992px) ---- */
@@ -2771,7 +2835,7 @@ table { border-collapse: collapse; width: 100%; }
 }
 
 /* --------------------------------------------------------------------------
-   22. Print
+   23. Print
    -------------------------------------------------------------------------- */
 @media print {
   .topbar, .nav, .marquee, .hero, .float-actions, .header__cta,

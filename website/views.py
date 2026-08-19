@@ -189,6 +189,7 @@ def home(request):
         "offerings": data.OFFERINGS,
         "schools": _schools(),
         "videos": data.VIDEOS,
+        "stats": data.STATS,
         "events": _home_events(events),
         # CHANCELLOR is commented out in data.py for now — the band hides
         # itself rather than taking the homepage down with it.

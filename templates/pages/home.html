@@ -41,6 +41,33 @@
 {% endif %}
 
 
+{# ====================== 1b. Counting figures ====================== #}
+{# Sits under the hero, so it is the first thing after the headline. Values  #}
+{# live in STATS in data.py. The figure counts up the first time it          #}
+{# scrolls into view and then stops being watched, so it does not replay     #}
+{# every time the visitor scrolls past.                                      #}
+{% if stats %}
+<section class="section stats" aria-label="Swami Vivekananda University in numbers">
+  <div class="shell shell--full">
+    <ul class="stats-grid">
+      {% for stat in stats %}
+        <li class="stat">
+          {# The visible figure is mid-count for a second and a half, which is #}
+          {# nothing to read aloud, so the whole statement is given once here  #}
+          {# and the animation is hidden from assistive software.              #}
+          <span class="sr-only">{{ stat.value }}{{ stat.suffix }} {{ stat.label }}</span>
+          <p class="stat__figure" aria-hidden="true">
+            <span data-count-to="{{ stat.value }}">0</span>{{ stat.suffix }}
+          </p>
+          <p class="stat__label" aria-hidden="true">{{ stat.label }}</p>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+{% endif %}
+
+
 {# =============== 2. Notice board / Welcome / Enquiry =============== #}
 <section class="home-band">
   <div class="shell home-band__grid">
