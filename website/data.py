@@ -1456,40 +1456,65 @@ FACILITIES = [{'slug': 'digital-library',
   'description': 'Multi-cuisine cafeteria serving hygienic and affordable meals.'}]
 
 # --------------------------------------------------------------------------
-# Life at SVU — the eight-tile photo grid on the home page.
+# Life at SVU — the eight-tile photo grid on the home page, and the eight pages
+# behind it (templates/pages/life/<slug>.html, routed by views.life_detail).
 #
-# Order is the reading order of the grid: four across on a wide screen, so the
-# list is read left to right, top row then bottom. Add a ninth entry and the
-# grid simply wraps; keep it to a multiple of four and no row is left short.
+# Order is the reading order of the grid: four across on a wide screen, read
+# left to right, top row then bottom. Keep the count a multiple of four and no
+# row is ever left short.
 #
-# alt_text is not decorative here. These are the only words describing the
-# photographs to anyone who cannot see them, so write what is in the frame.
+# ON THE PHOTOGRAPHS
+#   Most of these are placeholders, not photographs. Every img/facilities/*.jpg
+#   is a 600x450 flat graphic with the facility name drawn on it — open
+#   facility-4.jpg and it simply reads "Hostel". Only The Campus is a real
+#   photograph. Drop the real files in and change the path here; nothing else
+#   needs touching. 'placeholder': True marks the ones still waiting, and is
+#   what the grid uses to keep the label readable over flat artwork.
+#
+# alt_text is not decorative. It is the only description of the picture for
+# anyone who cannot see it, so write what is in the frame rather than repeating
+# the title — "Sports" is not a description of a volleyball match.
 LIFE_AT_SVU = [
- {'title': 'Digital Library',
+ {'slug': 'library',
+  'title': 'Library',
   'image': 'img/facilities/facility-1.jpg',
-  'alt_text': 'A student reading between the shelves of the university library'},
- {'title': 'Laboratories',
+  'alt_text': 'Placeholder artwork for the university library',
+  'placeholder': True},
+ {'slug': 'laboratory',
+  'title': 'Laboratory',
   'image': 'img/facilities/facility-3.jpg',
-  'alt_text': 'Students in lab coats working through a practical at the bench'},
- {'title': 'Smart Classrooms',
+  'alt_text': 'Placeholder artwork for the university laboratories',
+  'placeholder': True},
+ {'slug': 'classroom',
+  'title': 'Classroom',
   'image': 'img/facilities/facility-2.jpg',
-  'alt_text': 'A lecture in progress in one of the smart classrooms'},
- {'title': 'The Campus',
+  'alt_text': 'Placeholder artwork for the smart classrooms',
+  'placeholder': True},
+ {'slug': 'campus-building',
+  'title': 'Campus Building',
   'image': 'img/about/campus.jpg',
-  'alt_text': 'The Barrackpore campus, with the WE LOVE SVU installation on the lawn'},
- {'title': 'Hostel',
-  'image': 'img/facilities/facility-4.jpg',
-  'alt_text': 'Hostel accommodation on campus'},
- {'title': 'Sports',
+  'alt_text': 'The Barrackpore campus, with the WE LOVE SVU installation on the lawn',
+  'placeholder': False},
+ {'slug': 'gardening',
+  'title': 'Gardening',
+  'image': 'img/school-placeholder.svg',
+  'alt_text': 'Placeholder artwork for the campus gardens',
+  'placeholder': True},
+ {'slug': 'sports',
+  'title': 'Sports',
   'image': 'img/facilities/facility-5.jpg',
-  'alt_text': 'A match under way on the outdoor courts of the sports complex'},
- {'title': 'Cafeteria',
-  'image': 'img/facilities/facility-6.jpg',
-  'alt_text': 'Students at the multi-cuisine cafeteria between classes'},
- {'title': 'Campus Life',
-  'image': 'img/events/1.jfif',
-  'alt_text': 'Independence Day on campus, with the national flag, an NCC parade '
-              'and cultural performances by students and cadets'}]
+  'alt_text': 'Placeholder artwork for the sports complex',
+  'placeholder': True},
+ {'slug': 'group-study',
+  'title': 'Group Study',
+  'image': 'img/school-placeholder.svg',
+  'alt_text': 'Placeholder artwork for group study on campus',
+  'placeholder': True},
+ {'slug': 'practical-laboratory',
+  'title': 'Practical Laboratory',
+  'image': 'img/school-placeholder.svg',
+  'alt_text': 'Placeholder artwork for the practical laboratories',
+  'placeholder': True}]
 
 # --------------------------------------------------------------------------
 PARTNERS = [{'name': 'Tata Consultancy Services', 'logo': 'img/partners/partner-1.png', 'url': ''},

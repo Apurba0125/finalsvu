@@ -9,8 +9,9 @@ import datetime
 import logging
 
 from django.core.paginator import Paginator
-from django.http import JsonResponse
+from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, render
+from django.template import TemplateDoesNotExist
 from django.templatetags.static import static as static_url
 from django.urls import reverse
 from django.utils.html import escape, strip_tags
@@ -657,6 +658,31 @@ def gallery(request):
     claims the URL first and renders an empty editorial placeholder.
     """
     return render(request, "pages/gallery.html")
+
+
+def life_detail(request, slug):
+    """One Life at SVU page — Library, Laboratory, Classroom and the rest.
+
+    Each has its own template under ``templates/pages/life/`` so the copy and
+    the photographs on one can change without touching the other seven. This
+    view only resolves the slug and hands over.
+
+    The slug has to be one named in ``LIFE_AT_SVU``, so a mistyped URL is a 404
+    rather than an attempt to render a template that is not there. A row added
+    to data.py before its template exists is a 404 too, for the same reason a
+    missing faculty file is no longer a 500: a gap in the content should cost
+    that one page, not the request.
+    """
+    tile = _find(data.LIFE_AT_SVU, slug)
+    if tile is None:
+        raise Http404("No Life at SVU page called %r" % slug)
+
+    try:
+        return render(request, "pages/life/%s.html" % slug, {"tile": tile})
+    except TemplateDoesNotExist:
+        logger.warning("LIFE_AT_SVU lists %r but pages/life/%s.html is missing",
+                       slug, slug)
+        raise Http404("Life at SVU page %r has no template yet" % slug)
 
 
 def page_detail(request, slug):

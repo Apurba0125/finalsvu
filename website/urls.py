@@ -49,6 +49,7 @@ urlpatterns = [
          name="academic_calendar"),
     path("page/chancellors-message/", views.chancellors_message,
          name="chancellors_message"),
+    path("life-at-svu/<slug:slug>/", views.life_detail, name="life_detail"),
     path("page/gallery/", views.gallery, name="gallery"),
     path("page/<slug:slug>/", views.page_detail, name="page_detail"),
     path("contact/", views.contact, name="contact"),

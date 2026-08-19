@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% comment %}
+===========================================================================
+LABORATORY  —  /life-at-svu/laboratory/
+---------------------------------------------------------------------------
+Served by website.views.life_detail, which resolves the slug against
+LIFE_AT_SVU in data.py and renders this file. The row there controls the home
+page tile; this file controls the page behind it. The two are independent —
+rewording the tile does not touch this copy, and rewriting this page does not
+touch the tile.
+
+TO ADD A PHOTOGRAPH
+  1. Put the file in static/img/life/laboratory/
+  2. Copy one "photo cell" block below and change the src and the alt
+  3. Run:  python manage.py collectstatic --noinput
+     Not optional once DEBUG is off — WhiteNoise's manifest storage raises
+     ValueError for a path it never collected, so a missing file takes the
+     page down rather than showing a broken image.
+
+  Cells are a fixed height and the photograph is cropped to fill, so portrait,
+  landscape and square originals all come out identical in the grid. Clicking
+  one opens it whole, uncropped.
+
+  Rows are four across, so a count that is a multiple of four never leaves an
+  orphan tile at the end on a wide screen.
+
+THE VIEWER
+  data-viewer on the grid makes it one gallery; data-viewer-item on a cell
+  makes it a frame. That is the whole contract — no index numbers to keep in
+  step, so a photograph can be dropped into the middle without renumbering
+  anything after it. The viewer itself is initPhotoViewer in main.js, styled
+  at the foot of gallery.css. The caption under an enlarged photograph is that
+  image's own alt text, so writing a good alt does double duty.
+
+NOTE ON COMMENTS: the hash-style Django comment covers a SINGLE line. For a
+multi-line note use a comment/endcomment pair like this one, or the text leaks
+onto the page and any tag inside it actually runs.
+===========================================================================
+{% endcomment %}
+
+{% block title %}Laboratory | {{ site.site_name }}{% endblock %}
+{% block meta_description %}The laboratories at Swami Vivekananda University, across engineering, science, pharmacy and nursing.{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/page-head.css' %}">
+  <link rel="stylesheet" href="{% static 'css/gallery.css' %}">
+{% endblock %}
+
+{% block content %}
+
+{# =======================================================  BANNER  ======= #}
+<section class="page-banner"
+         style="background-image: linear-gradient(0deg, rgba(10,10,10,.72), rgba(10,10,10,.55)), url('{% static 'img/about/campus.jpg' %}');">
+  <div class="shell">
+    <h1 class="page-banner__title">Laboratory</h1>
+  </div>
+</section>
+
+
+{# ========================================================  PHOTOS  ====== #}
+<section class="section">
+  <div class="shell">
+    <div class="page-head">
+      <h2 class="page-heading">The <span>Laboratory</span></h2>
+      <span class="page-rule"></span>
+    </div>
+
+    <p class="gallery-lead">Engineering, science, pharmacy and nursing laboratories, equipped for the practicals each programme sets and open to project work outside them.</p>
+
+    <div class="gallery-grid-lg" data-viewer="laboratory">
+
+      <!-- ---- photo cell ---- -->
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static tile.image %}" alt="{{ tile.alt_text }}">
+      </button>
+
+      {% comment %}
+      Copy the block above for each further photograph. Only the first cell
+      goes without loading="lazy" — it is above the fold, and deferring it just
+      delays the first paint. Every one after it should carry it:
+
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/life/laboratory/two.jpg' %}"
+             alt="Say what is in the frame"
+             loading="lazy">
+      </button>
+      {% endcomment %}
+
+    </div>
+  </div>
+</section>
+
+{% endblock %}

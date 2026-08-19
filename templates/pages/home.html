@@ -140,9 +140,9 @@
 
 
 {# ===================== 3b. Life at SVU ===================== #}
-{# Eight photographs from LIFE_AT_SVU in data.py, four across. The tiles are  #}
-{# plain images, not links: they say what the place is like, and there is no  #}
-{# separate page behind each one to send anyone to.                           #}
+{# Eight tiles from LIFE_AT_SVU in data.py, four across, each linking to its  #}
+{# own page under templates/pages/life/. Add a tile by adding a row there and #}
+{# a template beside the other eight; nothing here needs editing.             #}
 {% if life_at_svu %}
 <section class="section life-at" aria-labelledby="life-heading">
   <div class="shell">
@@ -155,10 +155,13 @@
         {# width/height are the intrinsic ratio, not the rendered size: they   #}
         {# reserve the right box before the file arrives so the grid does not  #}
         {# jump as each photograph loads.                                      #}
-        <figure class="life-tile">
+        <a class="life-tile" href="{% url 'website:life_detail' tile.slug %}">
           <img src="{% static tile.image %}" alt="{{ tile.alt_text }}"
                width="400" height="300" loading="lazy" decoding="async">
-        </figure>
+          {# Real text, not lettering baked into the artwork: it names the    #}
+          {# link as well as the tile, and it can be translated or restyled.  #}
+          <span class="life-tile__label">{{ tile.title }}</span>
+        </a>
       {% endfor %}
     </div>
   </div>
