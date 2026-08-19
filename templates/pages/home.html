@@ -389,8 +389,17 @@
     <div class="centres">
       {% for centre in centres %}
         <div class="centre">
-          <span class="centre__icon" aria-hidden="true">
-            <svg focusable="false"><use href="#i-{{ centre.icon }}"></use></svg>
+          {# Photograph when data.py has one, the sprite icon when it does not. #}
+          {# The medallion is decorative either way - the title sits right      #}
+          {# beside it - so the image carries an empty alt rather than repeating #}
+          {# the name to anyone using the page by ear.                          #}
+          <span class="centre__icon{% if centre.image %} centre__icon--photo{% endif %}"
+                aria-hidden="true">
+            {% if centre.image %}
+              <img src="{% static centre.image %}" alt="" width="62" height="62" loading="lazy">
+            {% else %}
+              <svg focusable="false"><use href="#i-{{ centre.icon }}"></use></svg>
+            {% endif %}
           </span>
           <div>
             <h3 class="centre__title">

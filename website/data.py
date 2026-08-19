@@ -315,10 +315,10 @@ QUICK_LINKS = [{'title': 'Notice', 'description': 'Click to check all Notice', '
                  'strong pipeline of talent is a seemingly…',
   'url': '/academics/industry-partners/'},
  # Hidden for now — uncomment the block to put the card back on the homepage.
- # {'title': 'SVU Facilities',
- #  'description': 'The Swami Vivekananda University has one of the best-in-class infrastructure '
- #                 'and facilities on the campus.',
- #  'url': '/academics/facilities/'},
+#  {'title': 'SVU Facilities',
+#   'description': 'The Swami Vivekananda University has one of the best-in-class infrastructure '
+#                  'and facilities on the campus.',
+#   'url': '/academics/facilities/'},
  ]
 
 # --------------------------------------------------------------------------
@@ -454,26 +454,38 @@ CHANCELLOR = {'name': 'The Chancellor',
  'background_image': ''}
 
 # --------------------------------------------------------------------------
+# The medallion beside each centre takes a photograph when one is set and falls
+# back to the sprite icon named in 'icon' when it is not, so these can be filled
+# in one at a time without anything breaking in between.
+#
+#   image  path under static/, e.g. 'img/centres/innovation.jpg'. Left blank
+#          the icon is drawn instead. It is cropped to a circle, so put the
+#          subject in the middle and prefer a square original.
+#   icon   a symbol id from templates/includes/icons.html, minus the "i-".
 CENTRES = [{'title': 'Centre for Innovation & Entrepreneurship',
   'description': 'It aims at fuelling the principal ambitions of the students by developing '
                  'innovative thinking, and by stimulating entrepreneurial skills.',
+  'image': '',            # no photograph yet - the icon shows
   'icon': 'innovation',
   'url': ''},
  {'title': 'Industry Collaboration',
   'description': 'We believe that students require proper grooming along with quality academic '
                  'input to become industry ready. With this view, the university offers '
                  'Industry Connect Program.',
+  'image': '',            # no photograph yet - the icon shows
   'icon': 'industry',
   'url': ''},
  {'title': 'Centre of Excellence',
   'description': 'The Centre of Excellence established in 2018 at SWAMI VIVEKANANDA UNIVERSITY '
                  'aims at fuelling the principal ambitions of the student. The entity nurtures '
                  'and builds the aspiration to achieve.',
+  'image': '',            # no photograph yet - the icon shows
   'icon': 'excellence',
   'url': ''},
  {'title': 'Swami Vivekananda Centre for Women Studies',
   'description': "Centre for Women's Studies at SVU seeks to provide an interdisciplinary and "
                  'comparative framework for the students to study gender related aspects.',
+  'image': '',            # no photograph yet - the icon shows
   'icon': 'women',
   'url': ''}]
 
@@ -1442,18 +1454,19 @@ FACILITIES = [{'slug': 'digital-library',
   'title': 'Laboratories',
   'image': 'img/facilities/lab.png',
   'description': 'Well-equipped engineering, science, pharmacy and nursing laboratories.'},
- {'slug': 'hostel',
-  'title': 'Hostel',
-  'image': 'img/school-placeholder.svg',
-  'description': 'Separate, secure hostel accommodation for male and female students.'},
+#  {'slug': 'hostel',
+#   'title': 'Hostel',
+#   'image': 'img/school-placeholder.svg',
+#   'description': 'Separate, secure hostel accommodation for male and female students.'},
  {'slug': 'sports-complex',
   'title': 'Sports Complex',
   'image': 'img/facilities/sports.jpg',
   'description': 'Indoor and outdoor sporting facilities including a gymnasium.'},
- {'slug': 'cafeteria',
-  'title': 'Cafeteria',
-  'image': 'img/school-placeholder.svg',
-  'description': 'Multi-cuisine cafeteria serving hygienic and affordable meals.'}]
+#  {'slug': 'cafeteria',
+#   'title': 'Cafeteria',
+#   'image': 'img/school-placeholder.svg',
+#   'description': 'Multi-cuisine cafeteria serving hygienic and affordable meals.'}
+]
 
 # --------------------------------------------------------------------------
 # The counting figures under the video carousel.

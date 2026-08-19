@@ -1831,6 +1831,22 @@ table { border-collapse: collapse; width: 100%; }
   z-index: 2;
 }
 .centre__icon svg { width: 24px; height: 24px; fill: currentColor; }
+
+/* With a photograph the medallion becomes a frame rather than a badge: the
+   gold ground would only show as a rim behind the picture, and the 5px border
+   already there does that job better. Same 62px footprint either way, so the
+   connector line running down the column does not have to know which it is. */
+.centre__icon--photo {
+  background: var(--page);
+  overflow: hidden;
+}
+.centre__icon--photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+}
 .centre__title {
   font-size: 1.05rem;
   font-weight: 400;
