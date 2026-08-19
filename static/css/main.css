@@ -1699,32 +1699,35 @@ table { border-collapse: collapse; width: 100%; }
 .testimonials .section-title .h-dark { color: #fff; }
 .testimonials .section-title .h-accent { color: #fff; font-weight: 300; }
 
-/* Portrait in its own column, words in the other. The card keeps the white
-   border, the cut corners and the translucent fill it always had — only the
-   arrangement inside it changed. */
+/* A solid white card on the gold, rather than the translucent panel it used to
+   be. White text on a .06 white wash over gold never had much contrast to work
+   with; dark text on white is the same content at a readable weight, and the
+   gold now reads as the ground the cards sit on instead of tinting them. */
 .testimonial {
   display: grid;
   grid-template-columns: auto 1fr;
   gap: 24px;
-  border: 2px solid #fff;
-  border-radius: 0 60px 0 60px;
+  border: 0;
+  border-radius: var(--radius-lg);
   padding: 26px 28px;
   text-align: left;
   height: 100%;
-  background: rgba(255, 255, 255, .06);
+  background: var(--paper);
+  box-shadow: var(--shadow);
 }
-/* Round now, and centred against the whole card however long the quote runs.
-   The ring is drawn with outline rather than a second border so it sits
-   outside the frame without being part of the circle. */
+/* Round, and centred against the full height of the card so it stays put
+   however long the quote runs. The gold ring is a border on the circle itself
+   with a white outline outside it, which reads as a mount around the portrait
+   rather than a thicker rim on it. */
 .testimonial__photo {
   align-self: center;
   width: 132px; height: 132px;
   object-fit: cover;
-  border: 3px solid #fff;
+  border: 3px solid var(--accent-soft);
   border-radius: 50%;
-  outline: 2px solid rgba(255, 255, 255, .45);
-  outline-offset: 4px;
-  background: #ddd;
+  outline: 4px solid var(--paper);
+  outline-offset: 0;
+  background: var(--page);
 }
 
 /* min-width: 0 lets a long unbroken word wrap instead of widening the column
@@ -1734,24 +1737,26 @@ table { border-collapse: collapse; width: 100%; }
   flex-direction: column;
   min-width: 0;
 }
-/* The opening mark, sized off its own line-height so the glyph's very deep
-   internal leading does not push the quote down the card. */
+/* The opening mark, sized off its own line-height because the glyph carries
+   very deep internal leading and would otherwise push the quote down the
+   card. */
 .testimonial__body::before {
   content: "\201C";
   font-family: var(--font-serif);
   font-size: 2.8rem;
   line-height: .72;
-  color: rgba(255, 255, 255, .55);
+  color: var(--accent-soft);
 }
 .testimonial__quote {
   font-style: italic;
-  color: #fff;
+  color: var(--ink-soft);
   font-size: .9rem;
   line-height: 1.7;
   margin: 10px 0 16px;
 }
 /* margin-top: auto pins the name block to the foot of the card, so two cards
-   of unequal quote length still line their names up with each other. */
+   holding quotes of different lengths still line their names up with each
+   other. */
 .testimonial__caption { margin-top: auto; }
 .testimonial__caption::before {
   content: "";
@@ -1759,16 +1764,16 @@ table { border-collapse: collapse; width: 100%; }
   width: 54px;
   height: 2px;
   margin-bottom: 12px;
-  background: rgba(255, 255, 255, .6);
+  background: var(--accent-soft);
 }
 .testimonial__name {
   font-weight: 800;
-  color: #fff;
+  color: var(--ink);
   text-transform: uppercase;
   font-size: .92rem;
   margin: 0 0 3px;
 }
-.testimonial__meta { font-size: .78rem; color: #fff; font-weight: 600; }
+.testimonial__meta { font-size: .78rem; color: var(--muted); font-weight: 600; }
 .testimonial__footer { padding-top: 12px; }
 
 /* One column on a phone: side by side leaves the quote about fifteen
