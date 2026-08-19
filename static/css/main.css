@@ -1270,7 +1270,55 @@ table { border-collapse: collapse; width: 100%; }
 }
 
 /* --------------------------------------------------------------------------
-   13. Explore our offerings
+   13. Life at SVU
+   -------------------------------------------------------------------------- */
+/* Red rather than the site's gold accent, matching the heading in the design
+   this section was built from. Scoped, so no other section title moves. */
+.life-at .section-title .h-accent { color: var(--red); }
+
+.life-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+/* aspect-ratio rather than a fixed height: the tile keeps the same shape at
+   every column count, so portrait, landscape and square originals all crop to
+   one grid instead of setting the height of their own row. */
+.life-tile {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  border-radius: 10px;
+  background: var(--page);
+  aspect-ratio: 4 / 3;
+}
+.life-tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform .6s ease;
+}
+.life-tile:hover img { transform: scale(1.06); }
+
+/* 4 -> 3 -> 2 -> 1. Four columns are unreadable well before the phone: at the
+   tablet breakpoint each tile is about 170px across, which is too small to
+   make out a room in. */
+@media (max-width: 1199.98px) {
+  .life-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+}
+@media (max-width: 767.98px) {
+  .life-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+}
+@media (max-width: 479.98px) {
+  .life-grid { grid-template-columns: 1fr; gap: 14px; }
+  /* One per row can afford to be wider than it is tall. */
+  .life-tile { aspect-ratio: 3 / 2; }
+}
+
+/* --------------------------------------------------------------------------
+   14. Explore our offerings
    -------------------------------------------------------------------------- */
 .offerings { background: var(--gold); position: relative; }
 .offerings__grid {
@@ -1339,7 +1387,7 @@ table { border-collapse: collapse; width: 100%; }
 .offering__text { font-size: .86rem; color: var(--ink-soft); margin: 0; }
 
 /* --------------------------------------------------------------------------
-   14. Carousels (schools / events / testimonials)
+   15. Carousels (schools / events / testimonials)
    -------------------------------------------------------------------------- */
 .carousel { position: relative; }
 
@@ -1592,7 +1640,7 @@ table { border-collapse: collapse; width: 100%; }
 .event-card__footer { margin-top: auto; padding-top: 6px; }
 
 /* --------------------------------------------------------------------------
-   15. Chancellor + centres
+   16. Chancellor + centres
    -------------------------------------------------------------------------- */
 .chancellor-band { padding: 0 0 40px; }
 .chancellor-grid {
@@ -1698,7 +1746,7 @@ table { border-collapse: collapse; width: 100%; }
 .centre__text { font-size: .85rem; color: var(--muted); margin: 0; }
 
 /* --------------------------------------------------------------------------
-   16. Testimonials
+   17. Testimonials
    --------------------------------------------------------------------------
    Navy-and-ivory, unlike anything else on the site. The colours are declared
    as custom properties on the section rather than in :root, because nothing
@@ -1940,7 +1988,7 @@ table { border-collapse: collapse; width: 100%; }
 }
 
 /* --------------------------------------------------------------------------
-   17. Page shell (inner pages)
+   18. Page shell (inner pages)
    -------------------------------------------------------------------------- */
 .page-hero {
   background: var(--dark);
@@ -2096,7 +2144,7 @@ table { border-collapse: collapse; width: 100%; }
 .faq-item__a[hidden] { display: none; }
 
 /* --------------------------------------------------------------------------
-   18. Footer
+   19. Footer
    -------------------------------------------------------------------------- */
 .footer {
   background: var(--darker);
@@ -2221,7 +2269,7 @@ table { border-collapse: collapse; width: 100%; }
 .subfooter__links { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
 
 /* --------------------------------------------------------------------------
-   19. Floating actions
+   20. Floating actions
    -------------------------------------------------------------------------- */
 .float-actions {
   position: fixed;
@@ -2265,7 +2313,7 @@ table { border-collapse: collapse; width: 100%; }
 .float-top svg { width: 18px; height: 18px; fill: currentColor; }
 
 /* --------------------------------------------------------------------------
-   20. Responsive — progressive enhancement upward
+   21. Responsive — progressive enhancement upward
    -------------------------------------------------------------------------- */
 
 /* ---- Mobile navigation (below 992px) ---- */
@@ -2694,7 +2742,7 @@ table { border-collapse: collapse; width: 100%; }
 }
 
 /* --------------------------------------------------------------------------
-   21. Print
+   22. Print
    -------------------------------------------------------------------------- */
 @media print {
   .topbar, .nav, .marquee, .hero, .float-actions, .header__cta,

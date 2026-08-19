@@ -184,6 +184,7 @@ def home(request):
         "notices": _notices()[:5],
         "quick_links": data.QUICK_LINKS,
         "enlistments": data.ENLISTMENTS,
+        "life_at_svu": data.LIFE_AT_SVU,
         "offerings": data.OFFERINGS,
         "schools": _schools(),
         "videos": data.VIDEOS,
