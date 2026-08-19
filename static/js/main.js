@@ -291,6 +291,20 @@
       var panes = $$(".tab-pane", scope);
       if (!buttons.length || !panes.length) { return; }
 
+      /* Optional dropdown control for narrow screens, where the pill row would
+         wrap to more height than the panel it navigates. Absent above the
+         breakpoint and absent entirely on any tab panel that does not ship
+         one, so all three lookups are allowed to come back empty. */
+      var nav = $(".dept-tabs__nav", scope);
+      var toggle = $("[data-tabs-toggle]", scope);
+      var label = toggle ? $("[data-tabs-current]", toggle) : null;
+
+      function closeNav() {
+        if (!nav || !toggle) { return; }
+        nav.classList.remove("is-open");
+        toggle.setAttribute("aria-expanded", "false");
+      }
+
       function select(button, focus) {
         var target = $(button.getAttribute("data-tab-target"), scope);
         if (!target) { return; }
@@ -301,6 +315,12 @@
           b.setAttribute("tabindex", b === button ? "0" : "-1");
         });
         panes.forEach(function (p) { p.classList.toggle("is-active", p === target); });
+
+        /* Keep the dropdown label right even when the pill was clicked on a
+           wide screen and the window is narrowed afterwards. */
+        if (label) { label.textContent = button.textContent.trim(); }
+        closeNav();
+
         if (focus) { button.focus(); }
       }
 
@@ -325,6 +345,19 @@
         return b.classList.contains("is-active");
       })[0] || buttons[0];
       select(initial);
+
+      if (toggle && nav) {
+        toggle.addEventListener("click", function () {
+          var open = nav.classList.toggle("is-open");
+          toggle.setAttribute("aria-expanded", open ? "true" : "false");
+        });
+        document.addEventListener("click", function (e) {
+          if (!nav.contains(e.target) && !toggle.contains(e.target)) { closeNav(); }
+        });
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape") { closeNav(); }
+        });
+      }
     });
   }
 

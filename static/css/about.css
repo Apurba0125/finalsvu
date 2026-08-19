@@ -8,15 +8,17 @@
    with Recognition & Approvals. What is left here is unique to About Us:
    the split intro, the tab panel, the affiliations and the award cards.
 
-   Colours reuse the tokens already in main.css (--red for the active pill,
-   --ink, --line, --radius), plus one local navy for the resting pills so the
-   panel matches the reference design.
-   ========================================================================== */
+   Colours come from main.css and nowhere else: --blue and --blue-dark for the
+   pills, --red for the active pill and the award spine, --ink and --ink-soft
+   for text, --page-alt and --paper for the grounds.
 
-:root {
-  --about-navy: #1b3a8f;
-  --about-navy-dark: #16307a;
-}
+   This file used to declare a royal blue of its own in :root, carried over
+   from the build it was ported from. Two things were wrong with that. :root is
+   the wrong home for a colour one page uses, since every other component reads
+   it first. And the shade was a near-miss for --blue, which the department tab
+   panel already uses for the same component - so the two panels looked alike
+   without ever being the same colour. They share the tokens now.
+   ========================================================================== */
 
 /* ------------------------------------------------------------ intro ----- */
 .about-intro__grid {
@@ -41,7 +43,7 @@
 .about-intro__media:hover img { transform: scale(1.05); }
 .about-intro__body p {
   margin: 0;
-  color: #4a4a4a;
+  color: var(--ink-soft);
   font-size: .92rem;
   line-height: 1.85;
   text-align: justify;
@@ -49,8 +51,10 @@
 .about-intro__body p + p { margin-top: 14px; }
 
 /* ------------------------------------------------------------- tabs ----- */
-/* Tinted so the tabbed block reads as its own zone against the white intro. */
-.about-tabs { background: #f7f8fb; }
+/* Tinted so the tabbed block reads as its own zone against the white intro.
+   The pill shades are declared here rather than in :root: nothing outside this
+   section uses them. */
+.about-tabs { background: var(--page-alt); }
 
 .about-tab-nav {
   display: flex;
@@ -70,7 +74,7 @@
   padding: 12px 18px;
   border: 0;
   border-radius: 26px;
-  background-color: var(--about-navy);
+  background-color: var(--blue);
   color: #fff;
   font: inherit;
   font-size: .8rem;
@@ -80,7 +84,7 @@
   cursor: pointer;
   transition: background-color var(--transition);
 }
-.about-tab:hover { background-color: var(--about-navy-dark); color: #fff; }
+.about-tab:hover { background-color: var(--blue-dark); color: #fff; }
 .about-tab.is-active { background-color: var(--red); }
 .about-tab:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 
@@ -99,7 +103,7 @@
   padding: 13px 18px;
   border: 0;
   border-radius: 26px;
-  background-color: var(--about-navy);
+  background-color: var(--blue);
   color: #fff;
   font: inherit;
   font-size: .84rem;
@@ -128,7 +132,7 @@
 }
 .about-pane__intro {
   margin: 0 0 22px;
-  color: #4a4a4a;
+  color: var(--ink-soft);
   font-size: .92rem;
   line-height: 1.8;
   text-align: justify;
@@ -143,13 +147,13 @@
   place-items: center;
   width: 34px; height: 34px;
   border-radius: 4px;
-  background: var(--about-navy);
+  background: var(--blue);
   color: #fff;
 }
 .about-point__icon svg { width: 17px; height: 17px; fill: currentColor; }
 .about-point p {
   margin: 0;
-  color: #4a4a4a;
+  color: var(--ink-soft);
   font-size: .89rem;
   line-height: 1.75;
   text-align: justify;
@@ -172,7 +176,7 @@
 }
 .about-split__copy p {
   margin: 0;
-  color: #4a4a4a;
+  color: var(--ink-soft);
   font-size: .92rem;
   line-height: 1.85;
   text-align: justify;
@@ -202,7 +206,7 @@
 .about-affiliation p {
   margin: 0;
   max-width: 90ch;
-  color: #4a4a4a;
+  color: var(--ink-soft);
   font-size: .92rem;
   line-height: 1.85;
 }
@@ -211,7 +215,7 @@
 /* ------------------------------------------------------ award cards ----- */
 .about-awards__lead {
   margin: 0 0 20px;
-  color: #4a4a4a;
+  color: var(--ink-soft);
   font-size: .92rem;
   line-height: 1.8;
 }
@@ -219,21 +223,23 @@
 .about-award {
   padding: 22px 26px;
   border-radius: var(--radius);
-  /* Tinted panel with a red spine, so a run of near-identical write-ups still
-     reads as separate entries when scrolled past quickly. */
-  background: #e8f1fb;
+  /* White on the tinted ground with a red spine, so a run of near-identical
+     write-ups still reads as separate entries when scrolled past quickly -
+     the same card treatment the rest of the site uses. */
+  background: var(--paper);
   border-left: 4px solid var(--red);
+  box-shadow: var(--shadow-xs);
 }
 .about-award p {
   margin: 0;
-  color: #3f4a57;
+  color: var(--ink-soft);
   font-size: .87rem;
   line-height: 1.8;
   text-align: justify;
 }
 .about-award p + p { margin-top: 10px; }
-.about-award strong { color: #16202c; font-weight: 700; }
-.about-award__lead { color: #16202c; }
+.about-award strong { color: var(--ink); font-weight: 700; }
+.about-award__lead { color: var(--ink); }
 
 /* ------------------------------------------------- reveal on tab open ---- */
 @keyframes aboutBlockIn {

@@ -154,7 +154,19 @@ visitor drags, and stays still for prefers-reduced-motion.
     {% if tabs %}
       <div class="dept-tabs" data-tabs style="margin-top:44px">
 
-        <div class="dept-tabs__nav" role="tablist"
+        {# Under 768px five pills cost three rows, and five on a phone, for a #}
+        {# panel whose content is often shorter than its own navigation. They  #}
+        {# collapse behind this control, the same pattern the About Us panel   #}
+        {# uses. It is a real button rather than a <select> so the pills keep   #}
+        {# their shape and there is no second copy of the labels to keep in     #}
+        {# step. Hidden above 768px, where the pills fit on one row.            #}
+        <button class="dept-tabs__toggle" type="button" data-tabs-toggle
+                aria-expanded="false" aria-controls="deptTabNav">
+          <span data-tabs-current>{{ tabs.0.title }}</span>
+          <svg aria-hidden="true" focusable="false"><use href="#i-caret"></use></svg>
+        </button>
+
+        <div class="dept-tabs__nav" id="deptTabNav" role="tablist"
              aria-label="About the {{ department.name }} department">
           {% for tab in tabs %}
             <button class="tab-btn{% if forloop.first %} is-active{% endif %}"
