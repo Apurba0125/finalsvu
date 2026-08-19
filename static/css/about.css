@@ -51,9 +51,12 @@
 .about-intro__body p + p { margin-top: 14px; }
 
 /* ------------------------------------------------------------- tabs ----- */
-/* The ground comes from .bg-dotted in main.css, on the section element in
-   about.html - it is what makes the tabbed block read as its own zone against
-   the white intro. Nothing to declare here. */
+/* Transparent on purpose. body already carries the site's dot screen over
+   --page (main.css), and this section sits between two white blocks, so
+   letting that texture through is what makes the tabbed zone read as its own.
+   Painting a flat --page-alt here covered the dots up, which is the whole
+   reason this looked wrong against the rest of the site. */
+.about-tabs { background: transparent; }
 
 .about-tab-nav {
   display: flex;

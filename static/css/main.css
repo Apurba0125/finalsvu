@@ -162,20 +162,6 @@ table { border-collapse: collapse; width: 100%; }
 }
 .shell--wide { max-width: 1440px; }
 
-/* The site's one background texture: a fine dot screen over the page grey.
-   Declared here rather than in the page stylesheets so the sections carrying
-   it cannot drift apart from one another. Put the class on whatever element
-   owns the zone - a full-bleed section on About Us, a panel on a department
-   page - and it tiles either way.
-
-   The dot is a radial-gradient stop rather than an image: no request, no
-   asset to keep, and it stays crisp at any zoom. */
-.bg-dotted {
-  background-color: var(--page);
-  background-image: radial-gradient(circle, rgba(0, 0, 0, .055) 1.2px, transparent 1.6px);
-  background-size: 10px 10px;
-}
-
 .section { padding: 40px 0; }
 .section--tight { padding: 26px 0; }
 .section--alt { background: var(--page-alt); }

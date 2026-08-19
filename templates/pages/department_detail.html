@@ -152,7 +152,7 @@ visitor drags, and stays still for prefers-reduced-motion.
 
     {# ============================================ MISSION / VISION === #}
     {% if tabs %}
-      <div class="dept-tabs bg-dotted" data-tabs style="margin-top:44px">
+      <div class="dept-tabs" data-tabs style="margin-top:44px">
 
         {# Under 768px five pills cost three rows, and five on a phone, for a #}
         {# panel whose content is often shorter than its own navigation. They  #}
@@ -163,7 +163,10 @@ visitor drags, and stays still for prefers-reduced-motion.
         <button class="dept-tabs__toggle" type="button" data-tabs-toggle
                 aria-expanded="false" aria-controls="deptTabNav">
           <span data-tabs-current>{{ tabs.0.title }}</span>
-          <svg aria-hidden="true" focusable="false"><use href="#i-caret"></use></svg>
+          {# Sized in the markup as well as the CSS: an <svg> with no #}
+          {# intrinsic size falls back to 300x150, so a stylesheet that #}
+          {# has not loaded yet puts a full-width chevron on the page.  #}
+          <svg width="12" height="8" aria-hidden="true" focusable="false"><use href="#i-caret"></use></svg>
         </button>
 
         <div class="dept-tabs__nav" id="deptTabNav" role="tablist"
