@@ -9,7 +9,7 @@ NOTICE BOARD  —  /notices/
 Header and footer come from base.html. Do not add them here.
 
 THIS PAGE IS WRITTEN BY HAND
-  It is not built from NOTICES in data.py. Edit the table below directly.
+  It is not built from NOTICES in data.py. Edit the cards below directly.
 
   NOTICES still feeds the small board on the home page, so a notice that
   should appear in both places has to be written in both. That is the trade
@@ -19,19 +19,25 @@ THIS PAGE IS WRITTEN BY HAND
   /notices/<slug>/ address redirects here.
 
 TO ADD A NOTICE
-  Copy one "notice row" block and edit it. Newest at the top — nothing sorts
-  this table for you, and nothing renumbers it either, so fix the numbers in
-  the first column when you insert a row above an existing one.
+  Copy one "notice card" block and edit it. Newest first — nothing sorts these
+  for you.
 
-  Every cell carries a data-label. Below 768px the header row is taken off
-  screen and each label is drawn back in front of its own value, which is what
-  turns a four-column row into a readable card on a phone. A cell without one
-  loses its heading there, so keep them when copying.
+  Two across on a wide screen, one on a phone, so an even number of cards
+  never leaves a gap beside the last one.
+
+  The pieces of a card:
+    is-important on the article   turns the left spine red
+    notice-card__date            the date line
+    notice-item__flag            the red NEW badge
+    notice-card__text            an optional line under the title; drop the
+                                 whole <p> for a card that is title only
+    notice-card__foot            the download button; drop the whole <div>
+                                 when there is nothing to download
 
 TO ATTACH A PDF
   1. Put the file in static/documents/
-  2. Swap the em dash in the last cell for the download link — the commented
-     block at the foot of the table is the shape to copy.
+  2. Uncomment the notice-card__foot block in that card and put the real file
+     name in
   3. Run:  python manage.py collectstatic --noinput
      Not optional once DEBUG is off. WhiteNoise's manifest storage raises
      ValueError for a path it never collected, so a missing file takes this
@@ -58,79 +64,75 @@ onto the page and any tag inside it actually runs.
 
 <section class="section">
   <div class="shell">
-    <div class="notice-scroll">
-      <table class="notice-table">
-        <caption class="sr-only">
-          Notices from Swami Vivekananda University, newest first
-        </caption>
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Date</th>
-            <th scope="col">Notice</th>
-            <th scope="col">Download</th>
-          </tr>
-        </thead>
-        <tbody>
+    <div class="notice-grid">
 
-          {# ---- notice row ---- #}
-          <tr>
-            <td class="notice-table__num" data-label="#">1</td>
-            <td class="notice-table__date" data-label="Date">23 May 2026</td>
-            <td class="notice-table__title" data-label="Notice">
-              Notification &mdash; Revision of Date of Examination due to change in
-              date of holiday on account of Id-Ud-Zoha (Bakrid)
-              <span class="notice-item__flag">New</span>
-            </td>
-            <td class="notice-table__file" data-label="Download">
-              <span class="notice-none" aria-hidden="true">&mdash;</span>
-              <span class="sr-only">No document attached</span>
-            </td>
-          </tr>
+      {# ---- notice card ---- #}
+      <article class="notice-card is-important">
+        <div class="notice-card__head">
+          <span class="notice-card__date">23 May 2026</span>
+          <span class="notice-item__flag">New</span>
+        </div>
+        <h2 class="notice-card__title">
+          Notification &mdash; Revision of Date of Examination due to change in
+          date of holiday on account of Id-Ud-Zoha (Bakrid)
+        </h2>
+        <p class="notice-card__text">
+          The revised schedule is available with the Controller of Examinations.
+        </p>
+      </article>
 
-          {# ---- notice row ---- #}
-          <tr>
-            <td class="notice-table__num" data-label="#">2</td>
-            <td class="notice-table__date" data-label="Date">23 May 2026</td>
-            <td class="notice-table__title" data-label="Notice">
-              Notice &mdash; Change in date of holiday on account of Id-Ud-Zoha (Bakrid)
-              <span class="notice-item__flag">New</span>
-            </td>
-            <td class="notice-table__file" data-label="Download">
-              <span class="notice-none" aria-hidden="true">&mdash;</span>
-              <span class="sr-only">No document attached</span>
-            </td>
-          </tr>
+      {# ---- notice card ---- #}
+      <article class="notice-card is-important">
+        <div class="notice-card__head">
+          <span class="notice-card__date">23 May 2026</span>
+          <span class="notice-item__flag">New</span>
+        </div>
+        <h2 class="notice-card__title">
+          Notice &mdash; Change in date of holiday on account of Id-Ud-Zoha (Bakrid)
+        </h2>
+        <p class="notice-card__text">
+          The campus will remain closed on the revised date and all classes stand
+          adjusted accordingly.
+        </p>
+      </article>
 
-          {# ---- notice row ---- #}
-          <tr>
-            <td class="notice-table__num" data-label="#">3</td>
-            <td class="notice-table__date" data-label="Date">15 May 2026</td>
-            <td class="notice-table__title" data-label="Notice">
-              Result of University Cafeteria Design Competition
-            </td>
-            <td class="notice-table__file" data-label="Download">
-              <span class="notice-none" aria-hidden="true">&mdash;</span>
-              <span class="sr-only">No document attached</span>
-            </td>
-          </tr>
+      {# ---- notice card ---- #}
+      <article class="notice-card">
+        <div class="notice-card__head">
+          <span class="notice-card__date">15 May 2026</span>
+        </div>
+        <h2 class="notice-card__title">
+          Result of University Cafeteria Design Competition
+        </h2>
+        <p class="notice-card__text">
+          Winners may collect their certificates from the Students Welfare Office.
+        </p>
+      </article>
 
-          {% comment %}
-          A row that carries a document. Copy this one and put the real file
-          name in, replacing the whole last cell of an existing row:
+      {# ---- notice card ---- #}
+      <article class="notice-card">
+        <div class="notice-card__head">
+          <span class="notice-card__date">6 May 2026</span>
+        </div>
+        <h2 class="notice-card__title">
+          Notice for semester registration for the academic session 2026-27
+        </h2>
 
-          <td class="notice-table__file" data-label="Download">
-            <a class="notice-dl" href="{% static 'documents/your-file.pdf' %}"
-               target="_blank" rel="noopener noreferrer" type="application/pdf">
-              <svg aria-hidden="true" focusable="false"><use href="#i-file"></use></svg>
-              Download
-              <span class="sr-only">(PDF, opens in a new tab)</span>
-            </a>
-          </td>
-          {% endcomment %}
+        {% comment %}
+        A card that carries a document. Uncomment this block, put the real file
+        name in, and the button appears at the foot of the card:
 
-        </tbody>
-      </table>
+        <div class="notice-card__foot">
+          <a class="notice-dl" href="{% static 'documents/your-file.pdf' %}"
+             target="_blank" rel="noopener noreferrer" type="application/pdf">
+            <svg aria-hidden="true" focusable="false"><use href="#i-file"></use></svg>
+            Download
+            <span class="sr-only">(PDF, opens in a new tab)</span>
+          </a>
+        </div>
+        {% endcomment %}
+      </article>
+
     </div>
   </div>
 </section>
