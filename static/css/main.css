@@ -2288,9 +2288,12 @@ table { border-collapse: collapse; width: 100%; }
   grid-template-columns: repeat(2, 1fr);
   gap: 28px 18px;
 }
-/* The brand block carries a crest, the university name, a paragraph and the
-   social row, so it takes the full width rather than half of a phone. */
-.footer__brand { grid-column: 1 / -1; }
+/* On a phone only the four link columns pair up. The brand block carries a
+   crest, the name, a paragraph and the social row; Contact Us carries an email
+   address, four numbers and the postal address. Neither reads in half a phone
+   width, so both hold the full row and the link columns do the 2x2. */
+.footer__brand,
+.footer__contact-col { grid-column: 1 / -1; }
 /* A grid child's default minimum is its content, so one long unbroken word -
    an email address, a course title - would widen its column and squeeze the
    one beside it. */
@@ -2661,6 +2664,8 @@ table { border-collapse: collapse; width: 100%; }
   .carousel__item { flex-basis: calc((100% - 18px) / 2); }
   /* Columns and the brand span are the base now; only the gap opens up. */
   .footer__grid { gap: 30px 24px; }
+  /* Past the phone there is width for Contact Us beside a link column. */
+  .footer__contact-col { grid-column: auto; }
   .subfooter__inner { justify-content: space-between; text-align: left; }
   .float-actions { right: 20px; bottom: 22px; }
 }

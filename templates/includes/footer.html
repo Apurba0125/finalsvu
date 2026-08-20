@@ -37,7 +37,9 @@ To add or drop a link column, edit FOOTER_LINKS — nothing here needs changing.
     </div>
 
     {# ----------------------------------------------------- contact ---- #}
-    <div>
+    {# Classed so it can hold the full width on a phone. :nth-child(2) would
+       have done the same job until somebody reorders the columns. #}
+    <div class="footer__contact-col">
       <h2 class="footer__title">Contact Us</h2>
       <ul class="footer__contact">
         <li>
