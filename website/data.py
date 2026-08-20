@@ -1484,9 +1484,10 @@ FACILITIES = [{'slug': 'digital-library',
 # Appreciations  —  the vertical slider on the home page, beside the
 # Chancellor's message, and the full page at /page/appreciations/.
 #
-# The home slider takes the FIRST SIX of these and shows two at a time,
-# sliding one along every few seconds. Reorder the rows to change which six
-# appear; the slice is in views.home, not here.
+# These six are the home slider: two on screen at a time, sliding one along
+# every few seconds. Add or reorder rows to change which appear. The whole
+# folder is static/img/appreciations/ and holds far more than six; the rest
+# belong on the page behind View All, not here.
 #
 # The page behind View All is templates/pages/appreciations.html and is written
 # by hand, so anything beyond these six goes straight into that template rather
@@ -1497,28 +1498,22 @@ FACILITIES = [{'slug': 'digital-library',
 #             description for anyone who cannot see it, so say what is in the
 #             frame rather than repeating the word "appreciation".
 #
-# TODO: the alt text below is generic because the images could not be opened
-# when this was written. Replace each line with what its picture actually says.
+# TODO: every alt_text below is the same generic line, because the images
+# could not be opened here to read them. The file names look like people's
+# names, so each is probably an appreciation from a named person - write
+# that in and the slider becomes describable to anyone who cannot see it.
 APPRECIATIONS = [
- {'image': 'img/achivements/482247234_972659861637453_1522331182250338419_n.jpg.jpeg',
+ {'image': 'img/appreciations/TANMOY.jpeg',
   'alt_text': 'An appreciation received by Swami Vivekananda University'},
- {'image': 'img/achivements/481233106_972665624970210_8860091325710493319_n.jpg.jpeg',
+ {'image': 'img/appreciations/abhay_jere.png',
   'alt_text': 'An appreciation received by Swami Vivekananda University'},
- {'image': 'img/achivements/540903586_1105990141637757_7221139477378257898_n.jpg.jpeg',
+ {'image': 'img/appreciations/abhishek.png',
   'alt_text': 'An appreciation received by Swami Vivekananda University'},
- {'image': 'img/achivements/NPTEL_1.jpeg',
-  'alt_text': 'An NPTEL award presented to a member of the faculty'},
- {'image': 'img/achivements/MPTEL_2.jpeg',
-  'alt_text': 'An NPTEL award presented to a member of the faculty'},
- {'image': 'img/achivements/rbangla.jpeg',
+ {'image': 'img/appreciations/alanriach.png',
   'alt_text': 'An appreciation received by Swami Vivekananda University'},
- {'image': 'img/achivements/MPTEL_3.jpeg',
-  'alt_text': 'An NPTEL award presented to a member of the faculty'},
- {'image': 'img/achivements/MPTEL_4.jpeg',
-  'alt_text': 'An NPTEL award presented to a member of the faculty'},
- {'image': 'img/achivements/481979442_972665414970231_8854528053355663625_n.jpg.jpeg',
+ {'image': 'img/appreciations/amrit-sen.avif',
   'alt_text': 'An appreciation received by Swami Vivekananda University'},
- {'image': 'img/achivements/536270821_1105990098304428_367322835841659546_n.jpg.jpeg',
+ {'image': 'img/appreciations/anirudh.png',
   'alt_text': 'An appreciation received by Swami Vivekananda University'}]
 
 # --------------------------------------------------------------------------
