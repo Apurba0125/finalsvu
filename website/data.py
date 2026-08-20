@@ -234,14 +234,14 @@ FOOTER_LINKS = [
             {'title': 'Scholarships', 'url': '/page/scholarships/', 'is_external': False},
             {'title': 'Fee Structure', 'url': '/page/fee-structure/', 'is_external': False},
             {'title': 'FAQs', 'url': '/faq/', 'is_external': False},
-            {'title': 'NPTEL Courses', 'url': 'https://nptel.ac.in/', 'is_external': True},
-            {'title': 'SWAYAM', 'url': 'https://swayam.gov.in/', 'is_external': True},
+            
+            
             ]},
 
  {'title': 'Our Links',
   'links': [
       
-            
+             {'title': 'NPTEL Courses', 'url': 'https://nptel.ac.in/', 'is_external': True},
             {'title': 'NATS', 'url': 'https://nats.education.gov.in/', 'is_external': True},
             {'title': 'NDLI', 'url': 'https://ndl.iitkgp.ac.in/', 'is_external': True},
             {'title': 'e Sodh Ganga', 'url': 'https://shodhganga.inflibnet.ac.in/', 'is_external': True},
@@ -254,7 +254,7 @@ FOOTER_LINKS = [
             {'title': 'NCC', 'url': 'https://indiancc.nic.in/', 'is_external': True},
             {'title': 'IQAC', 'url': '/page/iqac/', 'is_external': False},
             {'title': 'BLOG', 'url': '/page/blogs/', 'is_external': False},
-            {'title': 'Library', 'url': 'https://svu.knimbus.com/portal/v2/default/home', 'is_external': True},
+           {'title': 'SWAYAM', 'url': 'https://swayam.gov.in/', 'is_external': True},
             ]},
 
  {'title': 'Quick Links',
@@ -263,7 +263,9 @@ FOOTER_LINKS = [
             {'title': 'Placements', 'url': '/page/placements/', 'is_external': False},
             {'title': 'Research & Innovation', 'url': '/page/research-innovation/', 'is_external': False},
             {'title': 'Blogs', 'url': '/page/blogs/', 'is_external': False},
-            {'title': 'Contact Us', 'url': '/contact/', 'is_external': False}]},
+            {'title': 'Library', 'url': 'https://svu.knimbus.com/portal/v2/default/home', 'is_external': True},
+            {'title': 'Contact Us', 'url': '/contact/', 'is_external': False},
+            ]},
 ]
 
 # --------------------------------------------------------------------------
