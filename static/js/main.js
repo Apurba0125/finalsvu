@@ -161,23 +161,40 @@
       var dotsWrap = $(".carousel__dots", carousel);
       if (!track || items.length === 0) { return; }
 
-      function perView() {
-        if (items.length < 2) { return 1; }
-        var itemWidth = items[0].getBoundingClientRect().width;
-        if (!itemWidth) { return 1; }
-        return Math.max(1, Math.round(track.getBoundingClientRect().width / itemWidth));
-      }
-
       /* data-step="1" moves one card at a time: the first screenful shows, then
          each advance slides a single card along. Without it a carousel jumps a
          whole screenful, which is the older behaviour and still the default. */
       var stepOne = carousel.getAttribute("data-step") === "1";
 
-      /* One card plus the 18px gap between them - the distance the track has
-         to travel to bring the next card into the same place. */
-      function stride() {
-        return items[0].getBoundingClientRect().width + 18;
+      /* Everything about position comes from here, measured off the rendered
+         cards rather than worked out from numbers repeated in the stylesheet.
+
+         step   how far the track travels to bring the next card into the place
+                the current one occupies: card plus gap, read as the distance
+                between two card edges so the gap can change in CSS without
+                this going quietly wrong.
+         per    how many fit on screen. The last card in view has no gap after
+                it, so a gap is added back before dividing - four cards of 296
+                inside 1240 measure as 3.94 otherwise, and floor would call
+                that three. */
+      function metrics() {
+        var first = items[0].getBoundingClientRect();
+        var width = first.width;
+        var step = width + 18;
+        if (items.length > 1) {
+          var second = items[1].getBoundingClientRect();
+          if (second.left > first.left) { step = second.left - first.left; }
+        }
+        var gap = Math.max(0, step - width);
+        var view = track.getBoundingClientRect().width;
+        return {
+          step: step,
+          per: (width && step) ? Math.max(1, Math.floor((view + gap + 1) / step)) : 1
+        };
       }
+
+      function perView() { return metrics().per; }
+      function stride() { return metrics().step; }
 
       function pageCount() {
         return Math.max(1, Math.ceil(items.length / perView()));
