@@ -1900,7 +1900,7 @@ table { border-collapse: collapse; width: 100%; }
    longer stretches its cells, so the two columns can differ in height without
    either of them growing empty space inside. */
 .appreciations {
-  --appr-card: 230px;
+  --appr-card: 155px;
   display: flex;
   flex-direction: column;
   padding: 30px 20px;
@@ -1962,7 +1962,7 @@ table { border-collapse: collapse; width: 100%; }
 .appreciations__foot { margin-top: 18px; text-align: center; }
 
 @media (max-width: 575.98px) {
-  .appreciations { --appr-card: 175px; padding: 26px 16px; }
+  .appreciations { --appr-card: 135px; padding: 26px 16px; }
 }
 
 /* --------------------------------------------------------------------------
