@@ -9,38 +9,35 @@ NOTICE BOARD  —  /notices/
 Header and footer come from base.html. Do not add them here.
 
 THIS PAGE IS WRITTEN BY HAND
-  It is not built from NOTICES in data.py. Edit the list below directly.
+  It is not built from NOTICES in data.py. Edit the table below directly.
 
   NOTICES still feeds the small board on the home page, so a notice that
   should appear in both places has to be written in both. That is the trade
-  for being able to lay a notice out however it needs to be here - a table, a
-  paragraph of explanation, a run of attachments - rather than squeezing every
-  one into a single shape.
+  for being able to lay a notice out however it needs to be here.
 
-  There is no page per notice. A notice is short enough to read where it
-  stands, so the title is not a link to anywhere unless it has something to
-  open. Anything still pointing at an old /notices/<slug>/ address redirects
-  here.
+  There is no page per notice. Anything still pointing at an old
+  /notices/<slug>/ address redirects here.
 
 TO ADD A NOTICE
-  Copy one <li> block and edit it. Newest at the top - nothing sorts this list
-  for you.
+  Copy one "notice row" block and edit it. Newest at the top — nothing sorts
+  this table for you, and nothing renumbers it either, so fix the numbers in
+  the first column when you insert a row above an existing one.
 
-  The pieces of a row, all optional except the title:
-    notice-item__date   the date line
-    notice-item__flag   the red NEW badge
-    notice-item__doc    the PDF badge, when the row links to a document
-    <a href="...">      wrap the title only if there is a document to open
+  Every cell carries a data-label. Below 768px the header row is taken off
+  screen and each label is drawn back in front of its own value, which is what
+  turns a four-column row into a readable card on a phone. A cell without one
+  loses its heading there, so keep them when copying.
 
 TO ATTACH A PDF
   1. Put the file in static/documents/
-  2. Point the row at it with {% templatetag openblock %} static 'documents/your-file.pdf' {% templatetag closeblock %}
+  2. Swap the em dash in the last cell for the download link — the commented
+     block at the foot of the table is the shape to copy.
   3. Run:  python manage.py collectstatic --noinput
      Not optional once DEBUG is off. WhiteNoise's manifest storage raises
      ValueError for a path it never collected, so a missing file takes this
-     page down rather than giving one dead link. Unlike the home board, which
-     resolves its paths forgivingly, a bad path written here IS fatal - there
-     is no view in between to catch it.
+     page down rather than giving one dead link. The home board resolves its
+     paths forgivingly through the view; a bad path written HERE is fatal,
+     because there is no view in between to catch it.
 
 NOTE ON COMMENTS: the hash-style Django comment covers a SINGLE line. For a
 multi-line note use a comment/endcomment pair like this one, or the text leaks
@@ -51,60 +48,89 @@ onto the page and any tag inside it actually runs.
 {% block title %}Notice Board — {{ site.site_name }}{% endblock %}
 {% block meta_description %}Examination, registration and administrative notices from Swami Vivekananda University.{% endblock %}
 
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/page-head.css' %}">
+  <link rel="stylesheet" href="{% static 'css/notice.css' %}">
+{% endblock %}
+
 {% block content %}
 {% include "includes/page_hero.html" %}
 
 <section class="section">
   <div class="shell">
-    <div class="panel">
-      <div class="panel__body">
-        <ul class="notice-board__list">
+    <div class="notice-scroll">
+      <table class="notice-table">
+        <caption class="sr-only">
+          Notices from Swami Vivekananda University, newest first
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Date</th>
+            <th scope="col">Notice</th>
+            <th scope="col">Download</th>
+          </tr>
+        </thead>
+        <tbody>
 
-          {# ---- notice ---- #}
-          <li class="notice-item is-important">
-            <span class="notice-item__date">23 May 2026</span>
-            <span class="notice-item__title">
+          {# ---- notice row ---- #}
+          <tr>
+            <td class="notice-table__num" data-label="#">1</td>
+            <td class="notice-table__date" data-label="Date">23 May 2026</td>
+            <td class="notice-table__title" data-label="Notice">
               Notification &mdash; Revision of Date of Examination due to change in
               date of holiday on account of Id-Ud-Zoha (Bakrid)
               <span class="notice-item__flag">New</span>
-            </span>
-          </li>
+            </td>
+            <td class="notice-table__file" data-label="Download">
+              <span class="notice-none" aria-hidden="true">&mdash;</span>
+              <span class="sr-only">No document attached</span>
+            </td>
+          </tr>
 
-          {# ---- notice ---- #}
-          <li class="notice-item is-important">
-            <span class="notice-item__date">23 May 2026</span>
-            <span class="notice-item__title">
+          {# ---- notice row ---- #}
+          <tr>
+            <td class="notice-table__num" data-label="#">2</td>
+            <td class="notice-table__date" data-label="Date">23 May 2026</td>
+            <td class="notice-table__title" data-label="Notice">
               Notice &mdash; Change in date of holiday on account of Id-Ud-Zoha (Bakrid)
               <span class="notice-item__flag">New</span>
-            </span>
-          </li>
+            </td>
+            <td class="notice-table__file" data-label="Download">
+              <span class="notice-none" aria-hidden="true">&mdash;</span>
+              <span class="sr-only">No document attached</span>
+            </td>
+          </tr>
 
-          {# ---- notice ---- #}
-          <li class="notice-item">
-            <span class="notice-item__date">15 May 2026</span>
-            <span class="notice-item__title">
+          {# ---- notice row ---- #}
+          <tr>
+            <td class="notice-table__num" data-label="#">3</td>
+            <td class="notice-table__date" data-label="Date">15 May 2026</td>
+            <td class="notice-table__title" data-label="Notice">
               Result of University Cafeteria Design Competition
-            </span>
-          </li>
+            </td>
+            <td class="notice-table__file" data-label="Download">
+              <span class="notice-none" aria-hidden="true">&mdash;</span>
+              <span class="sr-only">No document attached</span>
+            </td>
+          </tr>
 
           {% comment %}
-          A row that opens a document. Copy this one when the notice has a PDF:
-          the title becomes the link, and the badge tells anyone scanning the
-          list that there is something to open before they click it.
+          A row that carries a document. Copy this one and put the real file
+          name in, replacing the whole last cell of an existing row:
 
-          <li class="notice-item">
-            <span class="notice-item__date">6 May 2026</span>
-            <a class="notice-item__title" href="{% static 'documents/your-file.pdf' %}"
+          <td class="notice-table__file" data-label="Download">
+            <a class="notice-dl" href="{% static 'documents/your-file.pdf' %}"
                target="_blank" rel="noopener noreferrer" type="application/pdf">
-              Notice for semester registration for the academic session 2026-27
-              <span class="notice-item__doc">PDF</span>
+              <svg aria-hidden="true" focusable="false"><use href="#i-file"></use></svg>
+              Download
               <span class="sr-only">(PDF, opens in a new tab)</span>
             </a>
-          </li>
+          </td>
           {% endcomment %}
 
-        </ul>
-      </div>
+        </tbody>
+      </table>
     </div>
   </div>
 </section>

@@ -1,0 +1,151 @@
+/* ==========================================================================
+   Notice board  —  /notices/
+   Loaded ALONGSIDE page-head.css, which supplies the banner. This file is the
+   table.
+
+   Built the same way as .cal-table in calendar.css: a real table on a wide
+   screen, and below 768px every cell becomes a block so a four-column row
+   reads as a small stacked card instead of scrolling sideways. The header row
+   is hidden there, so each cell carries its own label in a data-label
+   attribute and CSS draws it back in front of the value.
+   ========================================================================== */
+.notice-table {
+  width: 100%;
+  /* A floor rather than a width: below this the four columns cannot hold their
+     content, and .notice-scroll takes over until the stacking rule does. */
+  min-width: 720px;
+  border-collapse: collapse;
+  font-size: .9rem;
+}
+.notice-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+.notice-table thead th {
+  padding: 13px 16px;
+  border: 1px solid var(--line);
+  background: var(--brand);
+  color: #fff;
+  font-size: .74rem;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  text-align: left;
+  white-space: nowrap;
+}
+.notice-table td {
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  vertical-align: top;
+  color: var(--ink-soft);
+}
+.notice-table tbody tr:nth-child(even) td { background: var(--page-alt); }
+.notice-table tbody tr:hover td { background: #fffdf5; }
+
+/* Numbers and dates should not wrap or take more room than they need. */
+.notice-table__num {
+  width: 56px;
+  text-align: center;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+}
+.notice-table__date {
+  width: 130px;
+  white-space: nowrap;
+  font-weight: 600;
+  color: var(--ink);
+}
+.notice-table__title { color: var(--ink); line-height: 1.55; }
+.notice-table__file { width: 150px; }
+
+/* Rows carrying a document get the button; the rest get a dash, so the column
+   never looks like it failed to load. */
+.notice-dl {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 13px;
+  border-radius: var(--radius-sm);
+  background: var(--red);
+  color: #fff;
+  font-size: .76rem;
+  font-weight: 700;
+  white-space: nowrap;
+  transition: background var(--transition);
+}
+.notice-dl:hover { background: var(--ink); color: #fff; }
+.notice-dl svg { width: 13px; height: 13px; fill: currentColor; }
+.notice-none { color: var(--line); }
+
+/* ------------------------------------------------------- responsive ----- */
+/* Below 768px the four columns cannot hold the 720px floor, so each row
+   becomes a card: cells stack, and the header row is replaced by the
+   data-label on each cell. */
+@media (max-width: 767.98px) {
+  .notice-scroll { overflow-x: visible; }
+  .notice-table { min-width: 0; font-size: .86rem; }
+  .notice-table, .notice-table tbody, .notice-table tr, .notice-table td { display: block; }
+  /* clip rather than display:none: a hidden header is skipped by some screen
+     readers along with the association between a cell and its column. */
+  .notice-table thead {
+    position: absolute;
+    width: 1px; height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+
+  .notice-table tr {
+    margin-bottom: 14px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: #fff;
+  }
+  .notice-table tbody tr:nth-child(even) td,
+  .notice-table tbody tr:hover td { background: transparent; }
+
+  .notice-table td {
+    width: auto;
+    border: 0;
+    border-bottom: 1px solid var(--line);
+    padding: 10px 14px 10px 108px;
+    position: relative;
+    text-align: left;
+  }
+  .notice-table td:last-child { border-bottom: 0; }
+
+  /* The column heading, drawn back in front of its value. */
+  .notice-table td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 14px;
+    top: 10px;
+    width: 84px;
+    color: var(--accent);
+    font-size: .68rem;
+    font-weight: 800;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+  }
+  /* The row number is the card's own heading rather than a labelled field. */
+  .notice-table__num {
+    padding: 9px 14px;
+    background: var(--page-alt);
+    text-align: left;
+    color: var(--ink);
+  }
+  /* Static, so it sits inline in front of the number: "Notice 1". Using
+     attr(data-label) here would print the column heading, which is "#". */
+  .notice-table__num::before {
+    content: "Notice ";
+    position: static;
+    width: auto;
+    margin-right: 2px;
+  }
+}
+
+@media (max-width: 400px) {
+  .notice-table td { padding-left: 14px; padding-top: 26px; }
+  .notice-table td::before { top: 8px; }
+  .notice-table__num { padding-top: 9px; }
+}
