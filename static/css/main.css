@@ -1891,19 +1891,34 @@ table { border-collapse: collapse; width: 100%; }
 }
 
 /* ---- Appreciations: the vertical slider beside the Chancellor ---------- */
-/* One card's height. The track is two of these plus the gap, so the two
-   numbers cannot drift apart.
-
-   Sized for the picture rather than to match the Chancellor block: tying it to
-   whatever height was left over gave cards of about 126px, and a 1.55:1 image
-   fitted into that is barely 160px wide inside a 536px card. The band no
-   longer stretches its cells, so the two columns can differ in height without
-   either of them growing empty space inside. */
+/* The column: heading, framed slider, View All. Only the middle one is framed,
+   and it is the part that stretches, so the block ends level with the
+   Chancellor beside it without the heading or the button being dragged apart
+   to make up the difference. */
 .appreciations {
-  --appr-card: 230px;
   display: flex;
   flex-direction: column;
+  height: 100%;
+  min-height: 0;
   padding: 30px 20px;
+}
+
+/* Same dark ground and gold border as .chancellor, so the two read as one
+   pair rather than a framed block beside a loose one. */
+.appreciations__frame {
+  display: flex;
+  flex: 1 1 auto;
+  /* A flex child will not shrink below its content without this, and the
+     track inside would push the column past the Chancellor again. */
+  min-height: 0;
+  background: #1b1b1b;
+  border: 12px solid var(--gold);
+  overflow: hidden;
+}
+.appreciations .carousel--vertical {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
 }
 /* Centred over the slider. text-align rather than align-items, so the heading
    still spans the column and only its words move - centring the box itself
@@ -1923,34 +1938,36 @@ table { border-collapse: collapse; width: 100%; }
    controller reads position through accessors that already know which one. */
 .carousel--vertical .carousel__track {
   flex-direction: column;
+  /* No gap: one picture fills the frame at a time, and a gap would show as a
+     band of the dark ground sliding through between them. */
+  gap: 0;
   overflow-x: hidden;
   overflow-y: auto;
   scroll-snap-type: y mandatory;
-  height: calc(2 * var(--appr-card) + 18px);
+  height: 100%;
   padding-bottom: 0;
 }
+/* One at a time, filling the frame, scrolling to the next on its own. Two
+   sharing this height would each get half of it, and half a frame is not
+   enough to read a certificate in. */
 .carousel--vertical .carousel__item {
-  flex: 0 0 var(--appr-card);
+  flex: 0 0 100%;
   scroll-snap-align: start;
 }
 
 /* A frame the image sits inside rather than fills. These are certificates and
    portraits of every shape, and cover would crop a tall one down to a band
    across its middle - which is what made them look stretched. */
-/* A full-width card with the picture fitted inside it and centred. Not cover,
-   which cropped a 1.55:1 image into a letterbox; not a frame shrunk to the
-   picture either, which left a small bordered box adrift in a wide column. */
+/* The frame around it is the border now, so each picture is just a picture:
+   fitted, centred, on the dark ground. */
 .appreciation {
   display: grid;
   place-items: center;
   margin: 0;
   width: 100%;
-  height: var(--appr-card);
-  padding: 10px;
+  height: 100%;
+  padding: 14px;
   overflow: hidden;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: #fff;
 }
 /* auto width AND auto height, capped by the frame: the image keeps its own
    proportions and simply stops growing at whichever edge it meets first. */
@@ -1965,8 +1982,16 @@ table { border-collapse: collapse; width: 100%; }
 
 .appreciations__foot { margin-top: 18px; text-align: center; }
 
+/* Stacked below 992px there is no Chancellor beside this to take a height
+   from, so the frame needs one of its own. */
+@media (max-width: 991.98px) {
+  .appreciations { height: auto; }
+  .appreciations__frame { flex: 0 0 auto; height: 300px; }
+}
+
 @media (max-width: 575.98px) {
-  .appreciations { --appr-card: 175px; padding: 26px 16px; }
+  .appreciations { padding: 26px 16px; }
+  .appreciations__frame { height: 230px; border-width: 8px; }
 }
 
 /* --------------------------------------------------------------------------
@@ -2812,11 +2837,11 @@ table { border-collapse: collapse; width: 100%; }
     position: relative;
   }
 
-  /* start, not stretch. Stretch made both cells as tall as the taller one, so
-     whichever was shorter carried the difference as empty space inside itself -
-     which is what put a gap under the Chancellor's message. Each sizes to its
-     own content now. */
-  .chancellor-grid { grid-template-columns: 52% 48%; align-items: start; }
+  /* stretch is safe again: the Appreciations column no longer has a fixed
+     height of its own. Its frame is the only part that grows, so the two cells
+     end level without the Chancellor being padded out to reach a taller
+     neighbour. */
+  .chancellor-grid { grid-template-columns: 52% 48%; align-items: stretch; }
   .carousel__item { flex-basis: calc((100% - 54px) / 4); }
   .carousel--triple .carousel__item { flex-basis: calc((100% - 36px) / 3); }
   .carousel--double .carousel__item { flex-basis: calc((100% - 18px) / 2); }

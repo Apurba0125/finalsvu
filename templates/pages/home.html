@@ -399,20 +399,25 @@
     <div class="appreciations">
       <h2 class="appreciations__title" id="appreciations-heading">Appreciations</h2>
 
-      <div class="carousel carousel--vertical" data-carousel
-           data-axis="y" data-step="1" data-autoplay="3500"
-           aria-labelledby="appreciations-heading">
-        <div class="carousel__track">
+      {# The frame matches the Chancellor block beside it - same dark ground,  #}
+      {# same gold border - so the two read as a pair. The heading above and    #}
+      {# View All below sit outside it.                                         #}
+      <div class="appreciations__frame">
+        <div class="carousel carousel--vertical" data-carousel
+             data-axis="y" data-step="1" data-autoplay="3500"
+             aria-labelledby="appreciations-heading">
+          <div class="carousel__track">
           {% for item in appreciations %}
-            <figure class="carousel__item appreciation">
-              {# No width/height here on purpose. They are an intrinsic ratio  #}
-              {# hint, and these images are every shape - a single 600x380      #}
-              {# would be a lie about most of them. The card reserves its own   #}
-              {# height, so nothing shifts as they load anyway.                 #}
-              <img src="{% static item.image %}" alt="{{ item.alt_text }}"
-                   loading="lazy" decoding="async">
-            </figure>
-          {% endfor %}
+              <figure class="carousel__item appreciation">
+                {# No width/height here on purpose. They are an intrinsic ratio #}
+                {# hint, and these images are every shape - a single 600x380    #}
+                {# would be a lie about most of them. The frame reserves its    #}
+                {# own height, so nothing shifts as they load anyway.           #}
+                <img src="{% static item.image %}" alt="{{ item.alt_text }}"
+                     loading="lazy" decoding="async">
+              </figure>
+            {% endfor %}
+          </div>
         </div>
       </div>
 
