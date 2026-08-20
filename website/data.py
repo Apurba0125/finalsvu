@@ -240,11 +240,15 @@ FOOTER_LINKS = [
   'links': [{'title': 'Admission Process', 'url': '/admission/', 'is_external': False},
             {'title': 'Scholarships', 'url': '/page/scholarships/', 'is_external': False},
             {'title': 'Fee Structure', 'url': '/page/fee-structure/', 'is_external': False},
-            {'title': 'FAQs', 'url': '/faq/', 'is_external': False}]},
+            {'title': 'FAQs', 'url': '/faq/', 'is_external': False},
+            {'title': 'NPTEL Courses', 'url': 'https://nptel.ac.in/', 'is_external': True},
+            {'title': 'SWAYAM', 'url': 'https://swayam.gov.in/', 'is_external': True},
+            ]},
 
  {'title': 'Our Links',
-  'links': [{'title': 'NPTEL Courses', 'url': 'https://nptel.ac.in/', 'is_external': True},
-            {'title': 'SWAYAM', 'url': 'https://swayam.gov.in/', 'is_external': True},
+  'links': [
+      
+            
             {'title': 'NATS', 'url': 'https://nats.education.gov.in/', 'is_external': True},
             {'title': 'NDLI', 'url': 'https://ndl.iitkgp.ac.in/', 'is_external': True},
             {'title': 'e Sodh Ganga', 'url': 'https://shodhganga.inflibnet.ac.in/', 'is_external': True},
@@ -256,10 +260,12 @@ FOOTER_LINKS = [
             {'title': 'NSS', 'url': 'https://nss.gov.in/', 'is_external': True},
             {'title': 'NCC', 'url': 'https://indiancc.nic.in/', 'is_external': True},
             {'title': 'IQAC', 'url': '/page/iqac/', 'is_external': False},
-            {'title': 'BLOG', 'url': '/page/blogs/', 'is_external': False}]},
+            {'title': 'BLOG', 'url': '/page/blogs/', 'is_external': False},
+            {'title': 'Library', 'url': 'https://svu.knimbus.com/portal/v2/default/home', 'is_external': True},
+            ]},
 
  {'title': 'Quick Links',
-  'links': [{'title': 'Library', 'url': 'https://svu.knimbus.com/portal/v2/default/home', 'is_external': True},
+  'links': [
             {'title': 'Student Services', 'url': '/page/student-services/', 'is_external': False},
             {'title': 'Placements', 'url': '/page/placements/', 'is_external': False},
             {'title': 'Research & Innovation', 'url': '/page/research-innovation/', 'is_external': False},
