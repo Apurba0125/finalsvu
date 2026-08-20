@@ -1229,49 +1229,43 @@ table { border-collapse: collapse; width: 100%; }
   text-align: center;
 }
 
-/* Logo list -------------------------------------------------------------
-   One entry per row, read top to bottom, in a column centred on the page.
-   It used to drift sideways under main.js; the markup no longer carries
-   data-autoscroll, so nothing here has to leave room for a moving track or
-   for the cloned children the loop needed. */
+/* Logo strip ------------------------------------------------------------
+   Same cards as the grid above, laid in a row that drifts sideways under
+   main.js (data-autoscroll-axis="x"). The scrollbar is hidden â€” the motion
+   is the affordance, and dragging still works. */
 .enlist-strip {
   display: flex;
-  flex-direction: column;
-  /* Capped and centred: full-shell rows would strand the name a long way from
-     the logo it belongs to on a wide screen. */
-  max-width: 640px;
-  margin: 0 auto;
-  text-align: left;
+  gap: 24px;
+  overflow-x: auto;
+  text-align: center;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  /* The ticker writes scrollLeft every frame; smooth scrolling would queue an
+     animation per frame and turn the drift into a stutter. */
+  scroll-behavior: auto;
 }
+.enlist-strip::-webkit-scrollbar { display: none; }
+.enlist-strip .enlist-card { flex: 0 0 calc(100% - 12px); }
 
-/* Logo in a fixed column so every name starts at the same place down the
-   list, however wide or narrow the marks themselves are. */
-.enlist-card {
-  display: grid;
-  grid-template-columns: 104px 1fr;
-  align-items: center;
-  gap: 20px;
-  padding: 16px 4px;
-}
-/* A rule between rows rather than around each: the run reads as one list. */
-.enlist-card + .enlist-card { border-top: 1px solid var(--line); }
-
+/* The tinted second card is a grid-position rule; in a looping strip the
+   clones would re-tint at the wrong place, so every card sits on the same
+   neutral panel and the logos themselves carry the colour. */
+.enlist-strip .enlist-card:nth-child(2) .enlist-card__media { background: #eee; }
 .enlist-card__media {
   background: #eee;
   aspect-ratio: 16 / 11;
   display: grid;
   place-items: center;
-  padding: 12px;
+  padding: 22px;
   border-radius: var(--radius-sm);
   overflow: hidden;
 }
 .enlist-card:nth-child(2) .enlist-card__media { background: #fdf3dc; }
 .enlist-card__media img { max-height: 100%; width: auto; object-fit: contain; }
 .enlist-card__title {
-  margin: 0;
+  margin-top: 14px;
   font-size: 1rem;
   font-weight: 700;
-  line-height: 1.35;
   color: var(--ink);
 }
 
@@ -2652,6 +2646,7 @@ table { border-collapse: collapse; width: 100%; }
 
   .quicklinks { grid-template-columns: 1fr 1fr; }
   .enlist-grid { grid-template-columns: repeat(2, 1fr); }
+  .enlist-strip .enlist-card { flex: 0 0 calc((100% - 24px) / 2); }
   .offerings__panel { grid-template-columns: 1fr 1fr; padding: 32px 28px; }
   .video-grid { grid-template-columns: 1fr 1fr; }
   .carousel__item { flex-basis: calc((100% - 18px) / 2); }
@@ -2666,6 +2661,7 @@ table { border-collapse: collapse; width: 100%; }
 @media (min-width: 768px) {
   .section { padding: 52px 0; }
   .enlist-grid { grid-template-columns: repeat(3, 1fr); }
+  .enlist-strip .enlist-card { flex: 0 0 calc((100% - 48px) / 3); }
   /* Three across, matching the grid this replaced. */
   /* Three link columns beside each other; brand still spans the full row. */
   .footer__grid { grid-template-columns: repeat(3, 1fr); }

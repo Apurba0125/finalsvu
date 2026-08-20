@@ -148,10 +148,8 @@
     </h2>
     <p class="section-subtitle">{{ site.site_name|upper }} IS PROUDLY FEATURED ON ALL THESE </p>
 <p class="section-subtitle">Growing Every Year, Excelling Every Way.</p>
-    {# A stacked list, one entry per row. data-autoscroll is deliberately gone: #}
-    {# it drove the sideways drift AND cloned every child to make the loop      #}
-    {# seamless, so leaving it here would silently double the rows.             #}
-    <div class="enlist-strip">
+    {# Drifts sideways for ever, so three logos loop as happily as thirty. #}
+    <div class="enlist-strip" data-autoscroll="34" data-autoscroll-axis="x">
       {% for item in enlistments %}
         <div class="enlist-card">
           <div class="enlist-card__media">
