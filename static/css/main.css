@@ -1891,17 +1891,27 @@ table { border-collapse: collapse; width: 100%; }
 }
 
 /* ---- Appreciations: the vertical slider beside the Chancellor ---------- */
-.appreciations {
-  /* One card's height, named once: the track is two of these plus the gap, so
-     the two numbers cannot drift apart.
+/* Takes its height from the Chancellor block beside it rather than setting its
+   own. A fixed track height made this column the taller of the two, the grid
+   row grew to fit it, and the difference showed as empty space under the
+   Chancellor's message. Now the row is his and the slider fills what is left.
 
-     The frame hugs its picture, so this is really the height of the picture:
-     at 1.55:1 a 230px card is about 356px wide, comfortably inside the ~580px
-     column, and two of them still clear the Chancellor block beside. */
-  --appr-card: 230px;
+   --appr-card is only the fallback for when the two are stacked and there is
+   no sibling to match. */
+.appreciations {
+  --appr-card: 210px;
   display: flex;
   flex-direction: column;
+  height: 100%;
+  min-height: 0;
   padding: 30px 20px;
+}
+/* flex: 1 to take the leftover height, min-height: 0 because a flex child will
+   not shrink below its content without it and the track would push the column
+   tall again. */
+.appreciations .carousel--vertical {
+  flex: 1 1 auto;
+  min-height: 0;
 }
 /* Centred over the slider. text-align rather than align-items, so the heading
    still spans the column and only its words move - centring the box itself
@@ -1924,32 +1934,30 @@ table { border-collapse: collapse; width: 100%; }
   overflow-x: hidden;
   overflow-y: auto;
   scroll-snap-type: y mandatory;
-  height: calc(2 * var(--appr-card) + 18px);
+  height: 100%;
   padding-bottom: 0;
 }
+/* Half the track less half the gap: exactly two on screen whatever height the
+   column ends up with, so the pair scales with the Chancellor rather than
+   being pinned to a number that has to be guessed right. */
 .carousel--vertical .carousel__item {
-  flex: 0 0 var(--appr-card);
+  flex: 0 0 calc((100% - 18px) / 2);
   scroll-snap-align: start;
-  /* Shrink to the picture and centre, rather than stretching the full width of
-     the column. These images are around 1.55:1 and the column is about 580px,
-     so a full-width frame left the picture filling barely half of it with
-     border and empty space either side. */
-  align-self: center;
 }
 
 /* A frame the image sits inside rather than fills. These are certificates and
    portraits of every shape, and cover would crop a tall one down to a band
    across its middle - which is what made them look stretched. */
+/* A full-width card with the picture fitted inside it and centred. Not cover,
+   which cropped a 1.55:1 image into a letterbox; not a frame shrunk to the
+   picture either, which left a small bordered box adrift in a wide column. */
 .appreciation {
   display: grid;
   place-items: center;
   margin: 0;
-  height: var(--appr-card);
-  /* fit-content so the frame is the width of the picture inside it; capped so
-     a wide original cannot push past the column. */
-  width: fit-content;
-  max-width: 100%;
-  padding: 6px;
+  width: 100%;
+  height: 100%;
+  padding: 10px;
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -1967,6 +1975,15 @@ table { border-collapse: collapse; width: 100%; }
 }
 
 .appreciations__foot { margin-top: 18px; text-align: center; }
+
+/* Below 992px the band is one column, so there is nothing beside this to match
+   and the track needs a height of its own again. */
+@media (max-width: 991.98px) {
+  .appreciations { height: auto; }
+  .appreciations .carousel--vertical { flex: 0 0 auto; }
+  .carousel--vertical .carousel__track { height: calc(2 * var(--appr-card) + 18px); }
+  .carousel--vertical .carousel__item { flex: 0 0 var(--appr-card); }
+}
 
 @media (max-width: 575.98px) {
   .appreciations { --appr-card: 175px; padding: 26px 16px; }
