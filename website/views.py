@@ -592,11 +592,9 @@ def notice_list(request):
     ``templates/pages/notice_list.html`` so a notice can be laid out however it
     needs to be rather than squeezed into one shape.
     """
-    return render(request, "pages/notice_list.html", {
-        "hero_title": "Notice Board",
-        "hero_subtitle": "Examination, registration and administrative notices.",
-        "crumbs": [{"label": "Notices"}],
-    })
+    # No context: the banner, its background image and every card are written
+    # into the template, which is the point of the page being hand-held.
+    return render(request, "pages/notice_list.html")
 
 
 def about(request):

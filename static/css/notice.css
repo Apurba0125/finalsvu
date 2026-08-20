@@ -64,21 +64,25 @@
 /* margin-top: auto pins this to the foot of the card. */
 .notice-card__foot { margin-top: auto; padding-top: 16px; }
 
-.notice-dl {
+/* "Read More" rather than a button. It opens the notice itself as a PDF, and
+   the site already uses this shape - label, chevron, arrow nudging on hover -
+   on the recognition cards. */
+.notice-more {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  padding: 8px 14px;
-  border-radius: var(--radius-sm);
-  background: var(--red);
-  color: #fff;
-  font-size: .76rem;
+  gap: 6px;
+  color: var(--red);
+  font-size: .8rem;
   font-weight: 700;
-  white-space: nowrap;
-  transition: background var(--transition);
+  letter-spacing: .02em;
 }
-.notice-dl:hover { background: var(--ink); color: #fff; }
-.notice-dl svg { width: 13px; height: 13px; fill: currentColor; }
+.notice-more:hover { color: var(--ink); }
+.notice-more svg {
+  width: 12px; height: 12px;
+  fill: currentColor;
+  transition: transform var(--transition);
+}
+.notice-more:hover svg { transform: translateX(3px); }
 
 /* ------------------------------------------------------- responsive ----- */
 /* One column below 768px. Two cards on a phone leave about 150px for a title

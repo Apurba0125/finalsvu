@@ -31,19 +31,20 @@ TO ADD A NOTICE
     notice-item__flag            the red NEW badge
     notice-card__text            an optional line under the title; drop the
                                  whole <p> for a card that is title only
-    notice-card__foot            the download button; drop the whole <div>
-                                 when there is nothing to download
+    notice-card__foot            holds the Read More link; it draws itself
+                                 only when the PDF named in the card exists
 
 TO ATTACH A PDF
-  1. Put the file in static/documents/
-  2. Uncomment the notice-card__foot block in that card and put the real file
-     name in
+  Every card already carries a Read More block naming the file it expects.
+  1. Name the PDF to match, or edit the name in the card to match the PDF
+  2. Put it in static/documents/
   3. Run:  python manage.py collectstatic --noinput
-     Not optional once DEBUG is off. WhiteNoise's manifest storage raises
-     ValueError for a path it never collected, so a missing file takes this
-     page down rather than giving one dead link. The home board resolves its
-     paths forgivingly through the view; a bad path written HERE is fatal,
-     because there is no view in between to catch it.
+
+  The link appears by itself once the file is collected; until then the card
+  simply has no Read More on it. That is the doc_url filter doing the work.
+  A bare static tag raises ValueError for a path that was never collected,
+  which would take this whole page down over one missing PDF; doc_url returns
+  an empty string instead so the if can hide the link and the page stands.
 
 NOTE ON COMMENTS: the hash-style Django comment covers a SINGLE line. For a
 multi-line note use a comment/endcomment pair like this one, or the text leaks
@@ -60,7 +61,21 @@ onto the page and any tag inside it actually runs.
 {% endblock %}
 
 {% block content %}
-{% include "includes/page_hero.html" %}
+
+{# ===========================================================  BANNER  === #}
+{# THE BACKGROUND IMAGE IS SET HERE. Change the file name in the url() and  #}
+{# that is the whole edit - the dark gradient in front of it is what keeps  #}
+{# the title readable over a busy photograph, so keep it when swapping the  #}
+{# picture. Any file already in static/img/ works; put a new one there and  #}
+{# run collectstatic. This one IS a plain static tag, unlike the PDFs       #}
+{# below: a banner that fails to load leaves an unreadable page, so it is   #}
+{# better for a wrong path here to fail loudly than to go quietly missing.  #}
+<section class="page-banner"
+         style="background-image: linear-gradient(0deg, rgba(10,10,10,.72), rgba(10,10,10,.55)), url('{% static 'img/about/team.png' %}');">
+  <div class="shell">
+    <h1 class="page-banner__title">Notice Board</h1>
+  </div>
+</section>
 
 <section class="section">
   <div class="shell">
@@ -79,6 +94,24 @@ onto the page and any tag inside it actually runs.
         <p class="notice-card__text">
           The revised schedule is available with the Controller of Examinations.
         </p>
+
+        {# ---- Read More ----------------------------------------------- #}
+        {# Name the PDF below, drop it in static/documents/ and run        #}
+        {# collectstatic. doc_url returns "" until the file is collected,  #}
+        {# so until then the card simply has no link, rather than the page #}
+        {# raising ValueError over one PDF that is not there yet.          #}
+        {% with pdf="documents/notice-exam-date-revision.pdf"|doc_url %}
+          {% if pdf %}
+            <div class="notice-card__foot">
+              <a class="notice-more" href="{{ pdf }}"
+                 target="_blank" rel="noopener noreferrer" type="application/pdf">
+                Read More
+                <svg aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg>
+                <span class="sr-only">(PDF, opens in a new tab)</span>
+              </a>
+            </div>
+          {% endif %}
+        {% endwith %}
       </article>
 
       {# ---- notice card ---- #}
@@ -94,6 +127,24 @@ onto the page and any tag inside it actually runs.
           The campus will remain closed on the revised date and all classes stand
           adjusted accordingly.
         </p>
+
+        {# ---- Read More ----------------------------------------------- #}
+        {# Name the PDF below, drop it in static/documents/ and run        #}
+        {# collectstatic. doc_url returns "" until the file is collected,  #}
+        {# so until then the card simply has no link, rather than the page #}
+        {# raising ValueError over one PDF that is not there yet.          #}
+        {% with pdf="documents/notice-holiday-change.pdf"|doc_url %}
+          {% if pdf %}
+            <div class="notice-card__foot">
+              <a class="notice-more" href="{{ pdf }}"
+                 target="_blank" rel="noopener noreferrer" type="application/pdf">
+                Read More
+                <svg aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg>
+                <span class="sr-only">(PDF, opens in a new tab)</span>
+              </a>
+            </div>
+          {% endif %}
+        {% endwith %}
       </article>
 
       {# ---- notice card ---- #}
@@ -107,6 +158,24 @@ onto the page and any tag inside it actually runs.
         <p class="notice-card__text">
           Winners may collect their certificates from the Students Welfare Office.
         </p>
+
+        {# ---- Read More ----------------------------------------------- #}
+        {# Name the PDF below, drop it in static/documents/ and run        #}
+        {# collectstatic. doc_url returns "" until the file is collected,  #}
+        {# so until then the card simply has no link, rather than the page #}
+        {# raising ValueError over one PDF that is not there yet.          #}
+        {% with pdf="documents/notice-cafeteria-design-result.pdf"|doc_url %}
+          {% if pdf %}
+            <div class="notice-card__foot">
+              <a class="notice-more" href="{{ pdf }}"
+                 target="_blank" rel="noopener noreferrer" type="application/pdf">
+                Read More
+                <svg aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg>
+                <span class="sr-only">(PDF, opens in a new tab)</span>
+              </a>
+            </div>
+          {% endif %}
+        {% endwith %}
       </article>
 
       {# ---- notice card ---- #}
@@ -118,19 +187,24 @@ onto the page and any tag inside it actually runs.
           Notice for semester registration for the academic session 2026-27
         </h2>
 
-        {% comment %}
-        A card that carries a document. Uncomment this block, put the real file
-        name in, and the button appears at the foot of the card:
 
-        <div class="notice-card__foot">
-          <a class="notice-dl" href="{% static 'documents/your-file.pdf' %}"
-             target="_blank" rel="noopener noreferrer" type="application/pdf">
-            <svg aria-hidden="true" focusable="false"><use href="#i-file"></use></svg>
-            Download
-            <span class="sr-only">(PDF, opens in a new tab)</span>
-          </a>
-        </div>
-        {% endcomment %}
+        {# ---- Read More ----------------------------------------------- #}
+        {# Name the PDF below, drop it in static/documents/ and run        #}
+        {# collectstatic. doc_url returns "" until the file is collected,  #}
+        {# so until then the card simply has no link, rather than the page #}
+        {# raising ValueError over one PDF that is not there yet.          #}
+        {% with pdf="documents/notice-semester-registration.pdf"|doc_url %}
+          {% if pdf %}
+            <div class="notice-card__foot">
+              <a class="notice-more" href="{{ pdf }}"
+                 target="_blank" rel="noopener noreferrer" type="application/pdf">
+                Read More
+                <svg aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg>
+                <span class="sr-only">(PDF, opens in a new tab)</span>
+              </a>
+            </div>
+          {% endif %}
+        {% endwith %}
       </article>
 
     </div>
