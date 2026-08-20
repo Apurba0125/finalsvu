@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% comment %}
+===========================================================================
+APPRECIATIONS  —  /page/appreciations/
+                  served by website.views.appreciations
+---------------------------------------------------------------------------
+Header and footer come from base.html. Do not add them here.
+
+Reached from View All under the Appreciations slider on the home page.
+
+THIS PAGE IS WRITTEN BY HAND
+  It is not built from APPRECIATIONS in data.py. That list feeds the six-image
+  slider on the home page only; everything here is in this file, so a
+  certificate can be given whatever caption or grouping it needs.
+
+  The six on the home page are repeated here on purpose — someone arriving
+  from View All expects to find them, not to have them missing because they
+  were already shown elsewhere.
+
+TO ADD AN APPRECIATION
+  1. Put the image in static/img/achivements/
+  2. Copy one "appreciation" block below and change the src and the alt
+  3. Run:  python manage.py collectstatic --noinput
+     Not optional once DEBUG is off. WhiteNoise's manifest storage raises
+     ValueError for a path it never collected, so a missing image takes this
+     page down rather than showing a broken picture.
+
+  Cells are a fixed height and the image is cropped to fill, so tall and wide
+  originals come out the same size in the grid. Clicking one opens it whole.
+
+  Rows are three across on a wide screen, so a count that is a multiple of
+  three never leaves an orphan at the end.
+
+THE VIEWER
+  data-viewer on the grid makes it one gallery; data-viewer-item on a cell
+  makes it a frame. No index numbers to keep in step, so an image can be
+  dropped into the middle without renumbering anything. The viewer itself is
+  initPhotoViewer in main.js, styled at the foot of gallery.css — which is why
+  this page loads that stylesheet. The caption under an enlarged image is that
+  image's own alt text, so writing a good alt does double duty.
+
+NOTE ON COMMENTS: the hash-style Django comment covers a SINGLE line. For a
+multi-line note use a comment/endcomment pair like this one, or the text leaks
+onto the page and any tag inside it actually runs.
+===========================================================================
+{% endcomment %}
+
+{% block title %}Appreciations | {{ site.site_name }}{% endblock %}
+{% block meta_description %}Appreciations, citations and awards received by Swami Vivekananda University and its faculty.{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/page-head.css' %}">
+  <link rel="stylesheet" href="{% static 'css/gallery.css' %}">
+{% endblock %}
+
+{% block content %}
+
+{# ===========================================================  BANNER  === #}
+{# The background image is set here. Change the file name in the url(); keep #}
+{# the dark gradient in front of it or the title stops being readable.       #}
+<section class="page-banner"
+         style="background-image: linear-gradient(0deg, rgba(10,10,10,.72), rgba(10,10,10,.55)), url('{% static 'img/about/team.png' %}');">
+  <div class="shell">
+    <h1 class="page-banner__title">Appreciations</h1>
+  </div>
+</section>
+
+
+{# ====================================================  APPRECIATIONS  === #}
+<section class="section">
+  <div class="shell">
+    <div class="page-head">
+      <h2 class="page-heading">Citations And <span>Awards</span></h2>
+      <span class="page-rule"></span>
+    </div>
+
+    <p class="gallery-lead">
+      The appreciations, citations and awards received by the university and by
+      members of its faculty.
+    </p>
+
+    <div class="gallery-grid-lg gallery-grid-lg--three" data-viewer="appreciations">
+
+      {# ---- appreciation ---- #}
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/achivements/482247234_972659861637453_1522331182250338419_n.jpg.jpeg' %}"
+             alt="An appreciation received by Swami Vivekananda University">
+      </button>
+
+      {# ---- appreciation ---- #}
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/achivements/481233106_972665624970210_8860091325710493319_n.jpg.jpeg' %}"
+             alt="An appreciation received by Swami Vivekananda University"
+             loading="lazy">
+      </button>
+
+      {# ---- appreciation ---- #}
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/achivements/540903586_1105990141637757_7221139477378257898_n.jpg.jpeg' %}"
+             alt="An appreciation received by Swami Vivekananda University"
+             loading="lazy">
+      </button>
+
+      {# ---- appreciation ---- #}
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/achivements/NPTEL_1.jpeg' %}"
+             alt="An NPTEL award presented to a member of the faculty"
+             loading="lazy">
+      </button>
+
+      {# ---- appreciation ---- #}
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/achivements/MPTEL_2.jpeg' %}"
+             alt="An NPTEL award presented to a member of the faculty"
+             loading="lazy">
+      </button>
+
+      {# ---- appreciation ---- #}
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/achivements/rbangla.jpeg' %}"
+             alt="An appreciation received by Swami Vivekananda University"
+             loading="lazy">
+      </button>
+
+      {# ---- appreciation ---- #}
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/achivements/MPTEL_3.jpeg' %}"
+             alt="An NPTEL award presented to a member of the faculty"
+             loading="lazy">
+      </button>
+
+      {# ---- appreciation ---- #}
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/achivements/MPTEL_4.jpeg' %}"
+             alt="An NPTEL award presented to a member of the faculty"
+             loading="lazy">
+      </button>
+
+      {# ---- appreciation ---- #}
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/achivements/481979442_972665414970231_8854528053355663625_n.jpg.jpeg' %}"
+             alt="An appreciation received by Swami Vivekananda University"
+             loading="lazy">
+      </button>
+
+      {# ---- appreciation ---- #}
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{% static 'img/achivements/536270821_1105990098304428_367322835841659546_n.jpg.jpeg' %}"
+             alt="An appreciation received by Swami Vivekananda University"
+             loading="lazy">
+      </button>
+
+    </div>
+  </div>
+</section>
+
+{% endblock %}

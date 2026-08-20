@@ -29,6 +29,13 @@
   gap: 30px;
 }
 
+/* Three across instead of four, for a page whose pictures are certificates
+   rather than photographs of a room: they carry text, and a quarter of the
+   shell is too narrow to make any of it out. The responsive steps below take
+   over from here as the screen narrows. */
+.gallery-grid-lg--three { grid-template-columns: repeat(3, 1fr); }
+.gallery-grid-lg--three .gallery-cell { height: 300px; }
+
 /* Fixed tile height with a cover fit: portrait, landscape and square
    originals all render identically, and one odd photograph cannot set the
    height of its whole row. */

@@ -166,6 +166,22 @@
          whole screenful, which is the older behaviour and still the default. */
       var stepOne = carousel.getAttribute("data-step") === "1";
 
+      /* data-axis="y" turns the same controller on its side: the track scrolls
+         up instead of across. Everything below reads position through these
+         four accessors so the arithmetic is written once, rather than a second
+         near-copy of it living somewhere for vertical carousels. */
+      var vertical = carousel.getAttribute("data-axis") === "y";
+      function scrollPos()      { return vertical ? track.scrollTop : track.scrollLeft; }
+      function viewSize()       { return vertical ? track.clientHeight : track.clientWidth; }
+      function scrollSize()     { return vertical ? track.scrollHeight : track.scrollWidth; }
+      function boxSize(rect)    { return vertical ? rect.height : rect.width; }
+      function boxStart(rect)   { return vertical ? rect.top : rect.left; }
+      function scrollTo(amount) {
+        var opts = { behavior: prefersReducedMotion ? "auto" : "smooth" };
+        opts[vertical ? "top" : "left"] = amount;
+        track.scrollTo(opts);
+      }
+
       /* Everything about position comes from here, measured off the rendered
          cards rather than worked out from numbers repeated in the stylesheet.
 
@@ -179,17 +195,19 @@
                 that three. */
       function metrics() {
         var first = items[0].getBoundingClientRect();
-        var width = first.width;
-        var step = width + 18;
+        var size = boxSize(first);
+        var step = size + 18;
         if (items.length > 1) {
           var second = items[1].getBoundingClientRect();
-          if (second.left > first.left) { step = second.left - first.left; }
+          if (boxStart(second) > boxStart(first)) {
+            step = boxStart(second) - boxStart(first);
+          }
         }
-        var gap = Math.max(0, step - width);
-        var view = track.getBoundingClientRect().width;
+        var gap = Math.max(0, step - size);
+        var view = boxSize(track.getBoundingClientRect());
         return {
           step: step,
-          per: (width && step) ? Math.max(1, Math.floor((view + gap + 1) / step)) : 1
+          per: (size && step) ? Math.max(1, Math.floor((view + gap + 1) / step)) : 1
         };
       }
 
@@ -212,14 +230,11 @@
       function currentStop() {
         var span = stride() * (stepOne ? 1 : perView());
         if (!span) { return 0; }
-        return Math.round(track.scrollLeft / span);
+        return Math.round(scrollPos() / span);
       }
 
       function scrollToStop(stop) {
-        track.scrollTo({
-          left: stop * stride() * (stepOne ? 1 : perView()),
-          behavior: prefersReducedMotion ? "auto" : "smooth"
-        });
+        scrollTo(stop * stride() * (stepOne ? 1 : perView()));
       }
 
       var dots = [];
@@ -246,10 +261,8 @@
       function syncState() {
         var page = currentStop();
         dots.forEach(function (d, i) { d.classList.toggle("is-active", i === page); });
-        if (prev) { prev.disabled = track.scrollLeft <= 4; }
-        if (next) {
-          next.disabled = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
-        }
+        if (prev) { prev.disabled = scrollPos() <= 4; }
+        if (next) { next.disabled = scrollPos() + viewSize() >= scrollSize() - 4; }
       }
 
       if (prev) {
@@ -291,8 +304,8 @@
           // Wrap on the real scroll position, not on the page arithmetic: with
           // 5 items at 4-per-view the last page is a partial one, and page
           // maths alone would park the track at the end and never come back.
-          if (track.scrollLeft + track.clientWidth >= track.scrollWidth - 4) {
-            track.scrollTo({ left: 0, behavior: prefersReducedMotion ? "auto" : "smooth" });
+          if (scrollPos() + viewSize() >= scrollSize() - 4) {
+            scrollTo(0);
             return;
           }
           scrollToStop(currentStop() + 1);

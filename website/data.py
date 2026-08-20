@@ -453,6 +453,10 @@ CHANCELLOR = {'name': 'The Chancellor',
  'background_image': ''}
 
 # --------------------------------------------------------------------------
+# NOT ON THE HOME PAGE ANY MORE. The band beside the Chancellor's message
+# carries the Appreciations slider now. This list is kept because nothing
+# else was decided for it - wire it into a page or delete it.
+#
 # The medallion beside each centre takes a photograph when one is set and falls
 # back to the sprite icon named in 'icon' when it is not, so these can be filled
 # in one at a time without anything breaking in between.
@@ -1475,6 +1479,47 @@ FACILITIES = [{'slug': 'digital-library',
 #   'image': 'img/school-placeholder.svg',
 #   'description': 'Multi-cuisine cafeteria serving hygienic and affordable meals.'}
 ]
+
+# --------------------------------------------------------------------------
+# Appreciations  —  the vertical slider on the home page, beside the
+# Chancellor's message, and the full page at /page/appreciations/.
+#
+# The home slider takes the FIRST SIX of these and shows two at a time,
+# sliding one along every few seconds. Reorder the rows to change which six
+# appear; the slice is in views.home, not here.
+#
+# The page behind View All is templates/pages/appreciations.html and is written
+# by hand, so anything beyond these six goes straight into that template rather
+# than into this list.
+#
+#   image     path under static/
+#   alt_text  what the certificate or photograph shows. It is the only
+#             description for anyone who cannot see it, so say what is in the
+#             frame rather than repeating the word "appreciation".
+#
+# TODO: the alt text below is generic because the images could not be opened
+# when this was written. Replace each line with what its picture actually says.
+APPRECIATIONS = [
+ {'image': 'img/achivements/482247234_972659861637453_1522331182250338419_n.jpg.jpeg',
+  'alt_text': 'An appreciation received by Swami Vivekananda University'},
+ {'image': 'img/achivements/481233106_972665624970210_8860091325710493319_n.jpg.jpeg',
+  'alt_text': 'An appreciation received by Swami Vivekananda University'},
+ {'image': 'img/achivements/540903586_1105990141637757_7221139477378257898_n.jpg.jpeg',
+  'alt_text': 'An appreciation received by Swami Vivekananda University'},
+ {'image': 'img/achivements/NPTEL_1.jpeg',
+  'alt_text': 'An NPTEL award presented to a member of the faculty'},
+ {'image': 'img/achivements/MPTEL_2.jpeg',
+  'alt_text': 'An NPTEL award presented to a member of the faculty'},
+ {'image': 'img/achivements/rbangla.jpeg',
+  'alt_text': 'An appreciation received by Swami Vivekananda University'},
+ {'image': 'img/achivements/MPTEL_3.jpeg',
+  'alt_text': 'An NPTEL award presented to a member of the faculty'},
+ {'image': 'img/achivements/MPTEL_4.jpeg',
+  'alt_text': 'An NPTEL award presented to a member of the faculty'},
+ {'image': 'img/achivements/481979442_972665414970231_8854528053355663625_n.jpg.jpeg',
+  'alt_text': 'An appreciation received by Swami Vivekananda University'},
+ {'image': 'img/achivements/536270821_1105990098304428_367322835841659546_n.jpg.jpeg',
+  'alt_text': 'An appreciation received by Swami Vivekananda University'}]
 
 # --------------------------------------------------------------------------
 # The counting figures under the video carousel.

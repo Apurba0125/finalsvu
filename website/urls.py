@@ -70,6 +70,7 @@ urlpatterns = [
     path("page/chancellors-message/", views.chancellors_message,
          name="chancellors_message"),
     path("life-at-svu/<slug:slug>/", views.life_detail, name="life_detail"),
+    path("page/appreciations/", views.appreciations, name="appreciations"),
     path("page/ugc-compliance/", views.ugc_compliance, name="ugc_compliance"),
     path("page/gallery/", views.gallery, name="gallery"),
     path("page/<slug:slug>/", views.page_detail, name="page_detail"),

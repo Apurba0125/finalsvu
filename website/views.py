@@ -201,7 +201,9 @@ def home(request):
         # CHANCELLOR is commented out in data.py for now — the band hides
         # itself rather than taking the homepage down with it.
         "chancellor": getattr(data, "CHANCELLOR", None),
-        "centres": data.CENTRES,
+        # Six on the home slider; the rest live on the page behind View All,
+        # which is written by hand.
+        "appreciations": data.APPRECIATIONS[:6],
         "testimonials": data.TESTIMONIALS,
     }
     context.update(_enquiry_context())
@@ -663,6 +665,16 @@ def gallery(request):
     claims the URL first and renders an empty editorial placeholder.
     """
     return render(request, "pages/gallery.html")
+
+
+def appreciations(request):
+    """Appreciations — written by hand in its own template.
+
+    Deliberately takes no context. APPRECIATIONS in data.py feeds the six-image
+    slider on the home page; everything on this page is in the template, so a
+    certificate can be given whatever caption or grouping it needs.
+    """
+    return render(request, "pages/appreciations.html")
 
 
 def ugc_compliance(request):
