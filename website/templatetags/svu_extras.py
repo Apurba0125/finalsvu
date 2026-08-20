@@ -109,3 +109,25 @@ def doc_url(path):
     except ValueError:
         logger.warning("doc_url: no static file collected for %r", value)
         return ""
+
+
+@register.filter
+def marquee_duration(items):
+    """Seconds for one pass of the announcement strip.
+
+    A fixed duration would mean the strip reads at a comfortable pace with one
+    announcement on it and races with five, because the same time is spent
+    covering a much longer line. Timing it from the total length instead keeps
+    the reading speed roughly steady: another announcement makes the strip take
+    longer rather than making all of them go faster.
+
+    The ratio is the one the single warning ran at - about 0.18s per character
+    - with a floor so a one-line strip does not whip past.
+    """
+    chars = 0
+    for item in items or []:
+        try:
+            chars += len(str(item.get("text", "")))
+        except AttributeError:      # a bare string in the list
+            chars += len(str(item))
+    return max(32, int(chars * 0.18))

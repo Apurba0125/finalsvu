@@ -25,9 +25,32 @@ SITE = {'site_name': 'Swami Vivekananda University',
  'map_embed_url': 'https://www.google.com/maps?q=Swami+Vivekananda+University,+Telinipara,+Barasat+-+Barrackpore+Rd,+Bara+Kanthalia,+West+Bengal+700121&output=embed',
  'whatsapp_number': '7044086270',
  'whatsapp_url': 'https://wa.me/917044086270',
- 'marquee_text': 'Beware of fake agents/consultants!! SVU does not take admission through any '
-                 'agents/consultants. For any admission related query please refer to SVU '
-                 'website only.',
+ # The scrolling gold strip under the header. Add, remove or reorder rows and
+ # the strip follows; empty the list and the whole strip disappears.
+ #
+ #   'text'         what is read out. Required.
+ #   'url'          where it goes when clicked. Leave '' for a plain
+ #                  announcement that is not a link.
+ #   'is_external'  True opens it in a new tab. Only for another site.
+ #
+ # The strip keeps a steady reading pace however many rows are on it - the
+ # animation is timed from the total length, so adding a row makes the strip
+ # take longer rather than making everything race past.
+ 'marquee_items': [
+     {'text': 'Beware of fake agents/consultants!! SVU does not take admission through any '
+              'agents/consultants. For any admission related query please refer to SVU '
+              'website only.',
+      'url': '',
+      'is_external': False},
+
+     {'text': 'Admissions open for the 2026-27 session - apply online.',
+      'url': '/admission/apply/',
+      'is_external': False},
+
+     {'text': 'Notice: revised examination dates published on the notice board.',
+      'url': '/notices/',
+      'is_external': False},
+ ],
  'admission_banner_text': 'ADMISSION OPEN 2026-27',
  'apply_now_url': '/admission/apply/',
  'pay_fee_url': 'https://www.swamivivekanandauniversity.ac.in/Pay-online/',

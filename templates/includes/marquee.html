@@ -1,5 +1,43 @@
-{% if site.marquee_text %}
-  <div class="marquee" role="complementary" aria-label="Important announcement">
-    <div class="marquee__track">{{ site.marquee_text }}</div>
+{% comment %}
+===========================================================================
+ANNOUNCEMENT STRIP  —  the scrolling gold band under the header
+                       included by base.html, so it is on every page
+---------------------------------------------------------------------------
+WHAT TO EDIT
+  marquee_items in SITE, in website/data.py. Nothing here.
+
+  Each row is one announcement:
+    text         what is read out
+    url          where it goes when clicked; '' for a plain announcement
+    is_external  True opens it in a new tab
+
+  Empty the list and the strip disappears by itself.
+
+WHY THE DURATION IS SET HERE AND NOT IN THE STYLESHEET
+  The animation covers the whole strip in one pass, so a fixed duration would
+  read comfortably with one announcement on it and race with five. The
+  marquee_duration filter times it from the total length instead, so adding an
+  announcement makes the strip take longer rather than making all of them go
+  faster.
+
+SEPARATORS
+  The bullet between announcements is drawn in CSS, not typed here. A screen
+  reader announcing "bullet" between every notice adds nothing, and the ones
+  that do read punctuation would say it for a divider that is decoration.
+===========================================================================
+{% endcomment %}
+{% if site.marquee_items %}
+  <div class="marquee" role="complementary" aria-label="Announcements"
+       style="--marquee-duration: {{ site.marquee_items|marquee_duration }}s">
+    <div class="marquee__track">
+      {% for item in site.marquee_items %}
+        {% if item.url %}
+          <a class="marquee__item marquee__item--link" href="{{ item.url }}"
+             {% if item.is_external %}target="_blank" rel="noopener noreferrer"{% endif %}>{{ item.text }}</a>
+        {% else %}
+          <span class="marquee__item">{{ item.text }}</span>
+        {% endif %}
+      {% endfor %}
+    </div>
   </div>
 {% endif %}

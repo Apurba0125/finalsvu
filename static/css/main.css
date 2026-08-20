@@ -595,11 +595,33 @@ table { border-collapse: collapse; width: 100%; }
   font-weight: 700;
   font-size: .88rem;
   padding-left: 100%;
-  animation: marquee-scroll 32s linear infinite;
+  /* The duration comes in on the element, worked out from how much text is on
+     the strip, so the reading pace stays steady as announcements are added.
+     The 32s here is only the fallback for a strip rendered without it. */
+  animation: marquee-scroll var(--marquee-duration, 32s) linear infinite;
   will-change: transform;
 }
+/* Hovering stops it. The announcements are links, and no one should have to
+   chase a moving target to click one. focus-within does the same for a
+   visitor arriving by keyboard. */
 .marquee:hover .marquee__track,
 .marquee:focus-within .marquee__track { animation-play-state: paused; }
+
+.marquee__item { color: inherit; }
+/* Underlined only on hover: a strip of permanently underlined announcements
+   reads as a link farm, but nothing should be clickable without saying so at
+   the moment of clicking. */
+.marquee__item--link:hover,
+.marquee__item--link:focus-visible { text-decoration: underline; }
+
+/* The divider between announcements, drawn rather than typed, so it is not in
+   the text a screen reader reads out. Only between - never before the first. */
+.marquee__item + .marquee__item::before {
+  content: "\2022";
+  margin: 0 14px;
+  opacity: .55;
+  font-weight: 400;
+}
 
 @keyframes marquee-scroll {
   0%   { transform: translateX(0); }
