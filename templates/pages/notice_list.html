@@ -17,6 +17,7 @@
                 <a class="notice-item__title" href="{{ notice.url }}">
                   {{ notice.title }}
                   {% if notice.is_important %}<span class="notice-item__flag">New</span>{% endif %}
+                  {% if notice.document %}<span class="notice-item__doc">PDF</span>{% endif %}
                 </a>
               </li>
             {% endfor %}

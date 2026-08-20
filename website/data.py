@@ -198,15 +198,8 @@ MAIN_NAV = [{'title': 'About SVU',
                 'href': '/page/sc-st-committee/',
                 'is_external': False}]},
 
-# {'title': 'Payment','href': 'https://www.swamivivekanandauniversity.ac.in/Pay-online/','is_external': True,},
- {'title': 'Notice',
-  'href': '#',
-  'is_external': False,
-  'children': [{'title': 'Notice',
-                'href': '/page/examination/',
-                'is_external': False},
-               {'title': 'Career', 'href': '/page/career/', 'is_external': False},
-               ]},
+{'title': 'Career','href': '/page/career/','is_external': False,},
+
 
  {'title': 'Media',
   'href': '#',
@@ -1694,6 +1687,39 @@ EVENTS = [
 ]
 
 # --------------------------------------------------------------------------
+# Notices  —  /notices/ and /notices/<slug>/
+#
+#   slug          the address. Changing it changes the URL and breaks any link
+#                 already pointing at the notice.
+#   date          'YYYY-MM-DD'. The list is sorted on this, newest first.
+#   title         shown on the board, the list and the notice itself
+#   is_important  puts the red NEW flag beside it and sets the title in bold
+#   body          the text of the notice
+#
+# ATTACHING A PDF  —  both of these are optional; leave them out for a notice
+# that is only text.
+#
+#   document        path under static/, e.g. 'documents/exam-revision.pdf'.
+#                   A full https:// address works too and is passed straight
+#                   through. The notice page turns it into a button and the
+#                   list marks the row PDF.
+#   document_label  the wording on that button. Defaults to
+#                   "Download the notice (PDF)".
+#
+#   Put the file in static/documents/ and run:
+#       python manage.py collectstatic --noinput
+#   A path with no manifest entry would normally take the page down with a
+#   ValueError; here it does not. The view resolves it the forgiving way, so a
+#   mistyped path costs the attachment and logs a warning rather than losing
+#   the notice.
+#
+#   {'slug': 'exam-revision',
+#    'date': '2026-05-23',
+#    'title': 'Revision of the examination schedule',
+#    'is_important': True,
+#    'body': 'The revised schedule is attached.',
+#    'document': 'documents/exam-revision.pdf',
+#    'document_label': 'Revised schedule (PDF)'},
 NOTICES = [{'slug': 'revision-of-examination-date-id-ud-zoha',
   'date': '2026-05-23',
   'title': 'Notification - Revision of Date of Examination due to change in date of holiday on '

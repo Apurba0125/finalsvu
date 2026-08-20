@@ -994,6 +994,22 @@ table { border-collapse: collapse; width: 100%; }
 }
 .notice-item__title:hover { color: var(--accent); }
 .notice-item.is-important .notice-item__title { font-weight: 700; }
+/* Same shape as the NEW flag beside it, in the neutral ink rather than red -
+   an attachment is information, not urgency, and two red badges on one row
+   would compete. */
+.notice-item__doc {
+  display: inline-block;
+  background: var(--ink);
+  color: #fff;
+  font-size: .6rem;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  margin-left: 6px;
+  vertical-align: middle;
+  letter-spacing: .04em;
+}
+
 .notice-item__flag {
   display: inline-block;
   background: var(--red);

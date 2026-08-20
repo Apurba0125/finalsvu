@@ -56,6 +56,12 @@ def _notices():
         item = dict(row)
         item["date"] = _as_date(row.get("date"))
         item["url"] = reverse("website:notice_detail", args=[row["slug"]])
+        # Optional PDF. _asset resolves it through the static manifest and
+        # returns "" when the file was never collected, so a mistyped path
+        # costs the attachment rather than the whole notice.
+        item["document"] = _asset(row.get("document"))
+        item["document_label"] = (row.get("document_label")
+                                  or "Download the notice (PDF)")
         items.append(item)
     items.sort(key=lambda n: n["date"] or datetime.date.min, reverse=True)
     return items
