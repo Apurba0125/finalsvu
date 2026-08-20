@@ -2855,6 +2855,25 @@ table { border-collapse: collapse; width: 100%; }
   .cta-apply__label { font-size: .72rem; margin-bottom: 2px; }
 }
 
+/* Phones: everything in the header runs in one column, read straight down.
+   The two-column tricks above earn their keep on a tablet, where there is
+   width to spend; on a phone they only make a number share a line with the
+   number beside it and a link share one with the next link. */
+@media (max-width: 575.98px) {
+  /* One helpline number per line, in the order they are written in data.py. */
+  .header__info .info-block:first-child .info-block__body {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+  /* PAY FEE ONLINE, then UGC, then ADMISSION OPEN - each on its own row
+     rather than wrapping onto a shared line in whatever order they fit. */
+  .header__cta {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+}
+
 /* Very small phones: the two info blocks no longer fit side by side, so they
    stack — but every value is still on the page. */
 @media (max-width: 479.98px) {
