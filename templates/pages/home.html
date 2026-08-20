@@ -405,8 +405,12 @@
         <div class="carousel__track">
           {% for item in appreciations %}
             <figure class="carousel__item appreciation">
+              {# No width/height here on purpose. They are an intrinsic ratio  #}
+              {# hint, and these images are every shape - a single 600x380      #}
+              {# would be a lie about most of them. The card reserves its own   #}
+              {# height, so nothing shifts as they load anyway.                 #}
               <img src="{% static item.image %}" alt="{{ item.alt_text }}"
-                   width="600" height="380" loading="lazy" decoding="async">
+                   loading="lazy" decoding="async">
             </figure>
           {% endfor %}
         </div>

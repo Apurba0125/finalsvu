@@ -1893,8 +1893,12 @@ table { border-collapse: collapse; width: 100%; }
 /* ---- Appreciations: the vertical slider beside the Chancellor ---------- */
 .appreciations {
   /* One card's height, named once: the track is two of these plus the gap, so
-     the two numbers cannot drift apart. */
-  --appr-card: 172px;
+     the two numbers cannot drift apart.
+
+     The frame hugs its picture, so this is really the height of the picture:
+     at 1.55:1 a 230px card is about 356px wide, comfortably inside the ~580px
+     column, and two of them still clear the Chancellor block beside. */
+  --appr-card: 230px;
   display: flex;
   flex-direction: column;
   padding: 30px 20px;
@@ -1926,27 +1930,46 @@ table { border-collapse: collapse; width: 100%; }
 .carousel--vertical .carousel__item {
   flex: 0 0 var(--appr-card);
   scroll-snap-align: start;
+  /* Shrink to the picture and centre, rather than stretching the full width of
+     the column. These images are around 1.55:1 and the column is about 580px,
+     so a full-width frame left the picture filling barely half of it with
+     border and empty space either side. */
+  align-self: center;
 }
 
+/* A frame the image sits inside rather than fills. These are certificates and
+   portraits of every shape, and cover would crop a tall one down to a band
+   across its middle - which is what made them look stretched. */
 .appreciation {
+  display: grid;
+  place-items: center;
   margin: 0;
   height: var(--appr-card);
+  /* fit-content so the frame is the width of the picture inside it; capped so
+     a wide original cannot push past the column. */
+  width: fit-content;
+  max-width: 100%;
+  padding: 6px;
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  background: var(--page);
+  background: #fff;
 }
+/* auto width AND auto height, capped by the frame: the image keeps its own
+   proportions and simply stops growing at whichever edge it meets first. */
 .appreciation img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
   display: block;
 }
 
 .appreciations__foot { margin-top: 18px; text-align: center; }
 
 @media (max-width: 575.98px) {
-  .appreciations { --appr-card: 148px; padding: 26px 16px; }
+  .appreciations { --appr-card: 175px; padding: 26px 16px; }
 }
 
 /* --------------------------------------------------------------------------
