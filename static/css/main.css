@@ -2774,20 +2774,21 @@ table { border-collapse: collapse; width: 100%; }
      magnifier stranded mid-box with dead white space after it. */
 }
 
-/* ---- Desktop: show the whole video frame, not a crop of it ----
-   The clip is 1280x720, so 16:9. A desktop viewport is usually wider than that
-   - 1920x950 is about 2.0 - and object-fit: cover fills the width and takes the
-   difference off the top and bottom, which is where the logo in the frame sits.
+/* ---- Desktop: full width, and the crop taken off the bottom ----
+   The clip is 1280x720, so 16:9, and a desktop viewport is usually wider than
+   that - 1920x950 is about 2.0. cover fills the width and loses the difference
+   in height: about 130px at 1920x950.
 
-   contain fits the whole frame inside the box instead. The hero stays exactly
-   one screen tall and nothing is cut; the cost is a band of the hero's own #111
-   down each side, where the 16:9 frame does not reach the edge of a wider
-   screen.
+   The default object-position centres that, which halves the loss top and
+   bottom and takes the logo at the top of the frame with it. Anchoring to the
+   top spends the whole crop on the bottom instead, so the logo stays and the
+   video still reaches both edges of the screen.
 
-   Left on cover below 992px: a phone in portrait is far narrower than 16:9, so
-   contain there would letterbox the clip into a thin strip across the middle. */
+   Only from 992px up. Below that the viewport is narrower than 16:9 rather
+   than wider, so cover crops the sides and not the height, and where that crop
+   falls vertically stops mattering. */
 @media (min-width: 992px) {
-  .hero__video { object-fit: contain; }
+  .hero__video { object-position: center top; }
 }
 
 /* ---- Portrait phones and tablets: the hero should not be the whole screen ----
