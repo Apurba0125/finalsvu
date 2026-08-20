@@ -1,59 +1,275 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% comment %}
+===========================================================================
+COURSE PAGE  —  /academics/courses/[slug]/
+                served by website.views.course_detail
+---------------------------------------------------------------------------
+Header, navigation and footer come from base.html. Do not add them here.
+
+Section order: banner, intro, tab panel beside the enquiry form, FAQ beside
+the recruiters, Board of Studies, related courses. Every course gets this
+same page; only the content differs.
+
+WHERE THE CONTENT COMES FROM  —  all of it is in website/data.py:
+  the course itself   COURSES                    name, card_image, description,
+                                                 eligibility, duration, seats
+  the tab panel       COURSE_TABS                keyed by course slug
+  the questions       COURSE_FAQS                keyed by course slug
+  the board           COURSE_BOARD_OF_STUDIES    keyed by course slug
+  the recruiters      PARTNERS                   shared with the rest of site
+
+EVERY SECTION HIDES ITSELF WHEN EMPTY
+A course with no COURSE_TABS entry still gets a panel: the view builds
+Programme Overview and Course Eligibility out of that course's own
+description and eligibility. The FAQ, the board and the related list simply
+do not render until there is something to put in them, so a course added to
+COURSES with nothing else is a finished page rather than a frame of empty
+headings.
+
+THE FORM IS THE SITE'S ENQUIRY FORM
+Not a separate application form: includes/enquiry_form.html with ajax=1, the
+same one the admission page uses, so a submission lands in one place and the
+CAPTCHA and validation are not written twice. The view supplies it through
+_enquiry_context().
+
+NOTE ON COMMENTS: the hash-style Django comment {# … #} covers a SINGLE line.
+For a multi-line note use a comment/endcomment pair like this one, or the
+text leaks onto the page.
+===========================================================================
+{% endcomment %}
+
 {% block title %}{{ course.name }} — {{ site.site_name }}{% endblock %}
+{% block meta_description %}{{ course.name }} at {{ site.site_name }} — {{ course.program_name }}, {{ course.duration }}. Eligibility, syllabus overview and career opportunities.{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/page-head.css' %}">
+  <link rel="stylesheet" href="{% static 'css/department.css' %}">
+  <link rel="stylesheet" href="{% static 'css/course.css' %}">
+{% endblock %}
 
 {% block content %}
 {% include "includes/page_hero.html" %}
 
-<section class="section">
-  <div class="shell home-band__grid" style="align-items:start">
 
-    <div class="prose" style="grid-column:span 2">
-      <h2>About the programme</h2>
-      <p>{{ course.description }}</p>
+{# =============================================================  INTRO  === #}
+{# Picture left, heading and description right — the same band the           #}
+{# department page opens with, so the two read as one family.                #}
+<section class="section section--alt dept-intro course-intro">
+  <div class="shell">
+    <div class="dept-intro__row">
 
-      <h2>Eligibility</h2>
-      <p>{{ course.eligibility }}</p>
+      <figure class="dept-intro__media">
+        <img src="{{ course.card_image }}" alt="{{ course.name }}"
+             width="720" height="540" loading="eager" fetchpriority="high">
+      </figure>
 
-      <h2>At a glance</h2>
-      <ul class="meta-list">
-        <li><span class="k">School</span>
-          <span>{% if course.school_url %}<a href="{{ course.school_url }}">{{ course.school_name }}</a>{% else %}{{ course.school_name }}{% endif %}</span></li>
-        <li><span class="k">Department</span>
-          <span>{% if course.department_url %}<a href="{{ course.department_url }}">{{ course.department_name }}</a>{% else %}{{ course.department_name }}{% endif %}</span></li>
-        <li><span class="k">Programme</span><span>{{ course.program_name }}</span></li>
-        <li><span class="k">Duration</span><span>{{ course.duration }}</span></li>
-        <li><span class="k">Intake</span><span>{{ course.total_seats }} seats</span></li>
-      </ul>
+      <div class="dept-intro__copy">
+        <h1 class="page-heading">{{ course.name|course_heading }}</h1>
+        <span class="page-rule"></span>
+        <p class="dept-intro__text">{{ course.description }}</p>
 
-      <p>
-        <a class="btn btn--gold" href="{% url 'website:apply' %}">Apply Online</a>
-        <a class="btn btn--outline-gold" href="{% url 'website:course_list' %}">All courses</a>
-      </p>
-
-      {% if related %}
-        <h2>Related courses</h2>
-        <ul>
-          {% for item in related %}
-            <li><a href="{{ item.url }}">{{ item.name }}</a>
-              <span style="color:var(--muted)"> — {{ item.department_name }}</span></li>
-          {% endfor %}
+        <ul class="course-facts">
+          <li><span class="k">Programme</span><span class="v">{{ course.program_name }}</span></li>
+          <li><span class="k">Duration</span><span class="v">{{ course.duration }}</span></li>
+          {% if course.total_seats %}
+            <li><span class="k">Intake</span><span class="v">{{ course.total_seats }} seats</span></li>
+          {% endif %}
+          {% if course.department_url %}
+            <li><span class="k">Department</span>
+                <span class="v"><a href="{{ course.department_url }}">{{ course.department_name }}</a></span></li>
+          {% endif %}
         </ul>
-      {% endif %}
-    </div>
+      </div>
 
-    <aside class="enquiry-panel">
-      <div class="panel">
-        <h2 class="panel__head">Enquiry Form</h2>
-        <div class="panel__body">
-          <div class="enquiry-panel__scroll">
+    </div>
+  </div>
+</section>
+
+
+{# ================================================  PANEL  +  ENQUIRY  === #}
+<section class="section course-panel">
+  <div class="shell">
+    <div class="course-panel__row">
+
+      <div class="course-panel__main">
+        {% if tabs %}
+          <div class="dept-tabs" data-tabs>
+
+            {% comment %}
+            Under 768px the pills cost more rows than the panel they open, so
+            they collapse behind this control — the same pattern the About Us
+            and department panels use. Hidden above 768px.
+            {% endcomment %}
+            <button class="dept-tabs__toggle" type="button" data-tabs-toggle
+                    aria-expanded="false" aria-controls="courseTabNav">
+              <span data-tabs-current>{{ tabs.0.title }}</span>
+              {# Sized in the markup as well as the CSS: an <svg> with no      #}
+              {# intrinsic size falls back to 300x150, so a stylesheet that    #}
+              {# has not loaded yet puts a full-width chevron on the page.     #}
+              <svg width="12" height="8" aria-hidden="true" focusable="false"><use href="#i-caret"></use></svg>
+            </button>
+
+            <div class="dept-tabs__nav" id="courseTabNav" role="tablist"
+                 aria-label="About the {{ course.name }} programme">
+              {% for tab in tabs %}
+                <button class="tab-btn{% if forloop.first %} is-active{% endif %}"
+                        type="button" role="tab"
+                        id="ctab-{{ tab.slug }}"
+                        data-tab-target="#cpane-{{ tab.slug }}"
+                        aria-controls="cpane-{{ tab.slug }}"
+                        aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+                        tabindex="{% if forloop.first %}0{% else %}-1{% endif %}">{{ tab.title }}</button>
+              {% endfor %}
+            </div>
+
+            {% for tab in tabs %}
+              <div class="tab-pane{% if forloop.first %} is-active{% endif %}"
+                   id="cpane-{{ tab.slug }}" role="tabpanel"
+                   aria-labelledby="ctab-{{ tab.slug }}" tabindex="0">
+
+                <h2 class="tab-pane__title">{{ tab.heading }}</h2>
+
+                {% if tab.intro %}<p class="tab-pane__intro">{{ tab.intro }}</p>{% endif %}
+
+                {% if tab.points %}
+                  <ul class="tab-points">
+                    {% for point in tab.points %}
+                      <li>
+                        <span class="tab-points__icon" aria-hidden="true">
+                          <svg focusable="false"><use href="#i-{{ tab.icon }}"></use></svg>
+                        </span>
+                        <p class="tab-points__text">
+                          {% if point.label %}<strong>{{ point.label }}:</strong> {% endif %}{{ point.text }}
+                        </p>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+
+                {% if tab.body %}
+                  <div class="tab-pane__body">
+                    {% for paragraph in tab.body %}<p>{{ paragraph }}</p>{% endfor %}
+                  </div>
+                {% endif %}
+
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+
+      {# The site's own enquiry form, not a second application form. #}
+      <aside class="course-panel__aside">
+        <div class="panel">
+          <h2 class="panel__head">Enquiry Form</h2>
+          <div class="panel__body">
             {% include "includes/enquiry_form.html" with ajax=1 %}
           </div>
         </div>
-      </div>
-    </aside>
+      </aside>
 
+    </div>
   </div>
 </section>
+
+
+{# ==============================================  FAQ  +  RECRUITERS  === #}
+{% if faqs or recruiters %}
+  <section class="section section--alt course-extras">
+    <div class="shell">
+      <div class="course-extras__row{% if not faqs or not recruiters %} course-extras__row--single{% endif %}">
+
+        {% if faqs %}
+          <div class="course-extras__faq">
+            <div class="page-head">
+              <h2 class="page-heading">Frequently <span>Asked Questions</span></h2>
+              <span class="page-rule"></span>
+            </div>
+
+            {% for item in faqs %}
+              <div class="faq-item">
+                <button class="faq-item__q" type="button" aria-expanded="false"
+                        aria-controls="course-faq-{{ forloop.counter }}">
+                  {{ forloop.counter }}. {{ item.question }}
+                </button>
+                <div class="faq-item__a" id="course-faq-{{ forloop.counter }}" hidden>
+                  {{ item.answer|linebreaks }}
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        {% if recruiters %}
+          <div class="course-extras__recruiters">
+            <div class="page-head">
+              <h2 class="page-heading">Our <span>Recruiters</span></h2>
+              <span class="page-rule"></span>
+            </div>
+
+            <ul class="recruiter-grid">
+              {% for item in recruiters %}
+                <li class="recruiter-grid__item">
+                  {# Logos come from PARTNERS, where 'logo' is already a       #}
+                  {# resolved path — no {% static %} here.                     #}
+                  <img src="{{ item.logo }}" alt="{{ item.name }}"
+                       loading="lazy" width="180" height="90">
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
+
+      </div>
+    </div>
+  </section>
+{% endif %}
+
+
+{# ==================================================  BOARD OF STUDIES  === #}
+{% if board %}
+  <section class="section course-board">
+    <div class="shell">
+      <div class="page-head">
+        <h2 class="page-heading">Board Of <span>Studies</span></h2>
+        <span class="page-rule"></span>
+      </div>
+
+      <ul class="board-grid">
+        {% for member in board %}
+          <li class="board-card">
+            <p class="board-card__name">{{ member.name }}</p>
+            {% if member.designation %}
+              <p class="board-card__role">{{ member.designation }}</p>
+            {% endif %}
+            {% if member.affiliation %}
+              <p class="board-card__org">{{ member.affiliation }}</p>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </section>
+{% endif %}
+
+
+{# ==========================================================  RELATED  === #}
+{% if related %}
+  <section class="section course-related">
+    <div class="shell">
+      <div class="page-head">
+        <h2 class="page-heading">Related <span>Courses</span></h2>
+        <span class="page-rule"></span>
+      </div>
+
+      <div class="chip-row">
+        {% for item in related %}
+          <a class="chip" href="{{ item.url }}">{{ item.name }}</a>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+{% endif %}
 {% endblock %}

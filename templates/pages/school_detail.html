@@ -28,7 +28,9 @@
               {{ department.course_count }} course{{ department.course_count|pluralize }}
             </span>
           </div>
-          <p class="dept-block__desc">{{ department.short_description }}</p>
+          {% if department.short_description %}
+            <p class="dept-block__desc">{{ department.short_description }}</p>
+          {% endif %}
 
           {% if department.courses %}
             <div class="auto-grid">

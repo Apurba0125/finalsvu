@@ -15,9 +15,14 @@ EACH CARD OPENS A PDF
   The documents live in static/documents/ and each card points at one by
   filename, set in the RECOGNITIONS list in website/data.py.
 
-  Every file there is currently a PLACEHOLDER — open one and it says so. To
-  publish a real certificate, overwrite the file of the same name; nothing in
-  this template or in data.py needs to change.
+  Those four are the real certificates. To replace one, overwrite the file of
+  the same name and nothing in this template changes; to add one under a new
+  name, put the file in static/documents/ and name it in RECOGNITIONS.
+
+  The href below is a bare static tag, not the doc_url filter the notice
+  board uses, so a name with no manifest entry takes this page down rather
+  than breaking one card. Run collectstatic after adding a PDF:
+      python manage.py collectstatic --noinput
 
 TO ADD A BODY
   Add an entry to RECOGNITIONS and drop the matching PDF into
@@ -78,12 +83,6 @@ leaks onto the page.
         </a>
       {% endfor %}
     </div>
-
-    <!-- <p class="recog-note">
-      The linked documents are placeholders while the signed certificates are
-      being collected. For a certified copy in the meantime, please contact the
-      Registrar's office on <a href="mailto:{{ site.email }}">{{ site.email }}</a>.
-    </p> -->
   </div>
 </section>
 

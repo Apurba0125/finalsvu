@@ -116,16 +116,19 @@ MAIN_NAV = [{'title': 'About SVU',
                {'title': "Our Mentors", 'href': '/page/our-mentors/', 'is_external': False},
                {'title': "Recognition & Approvals", 'href': '/page/recognition-approvals/', 'is_external': False},
                 ]},
+ # 'panel' on a child opens a third level. The value names a builder in
+ # website/context_processors.py, which fills the child's 'groups' at render
+ # time - so nothing below is listed by hand and the menu cannot drift from
+ # SCHOOLS and DEPARTMENTS. 'departments' groups every department under its
+ # school; a child with no 'panel' stays an ordinary one-line link.
  {'title': 'Programs',
   'href': '/academics/schools/',
   'is_external': False,
   'children': [{'title': 'SVU Schools', 'href': '/academics/schools/', 'is_external': False},
                {'title': 'Departments',
                 'href': '/academics/departments/',
-                'is_external': False},
-               {'title': 'Schools & Courses',
-                'href': '/academics/courses/',
-                'is_external': False},]},
+                'is_external': False,
+                'panel': 'departments'}]},
                
               
  {'title': 'Academic',
@@ -147,7 +150,7 @@ MAIN_NAV = [{'title': 'About SVU',
   'children': [{'title': 'Academic Patent & IPR', 'href': '/page/academic-patent-ipr/', 'is_external': False},
                {'title': 'Academic Activities', 'href': '/page/academic-activities/', 'is_external': False},
                {'title': 'Appreciations', 'href': '/page/appreciations/', 'is_external': False},
-               {'title': 'Annual Report', 'href': '/page/annual-report/', 'is_external': False},
+               {'title': 'Annual Report', 'href': '/static/img/annual_report/Annual Report Draft 1.pdf', 'is_external': True},
                {'title': 'Book', 'href': '/page/book/', 'is_external': False},
                {'title': 'Brochure', 'href': '/page/brochure/', 'is_external': False},
                {'title': 'Building Plan', 'href': '/page/building-plan/', 'is_external': False},
@@ -494,37 +497,37 @@ CHANCELLOR = {'name': 'The Chancellor',
 #          cannot be left empty - an image carrying the name of a centre is
 #          content, not decoration.
 #   icon   a symbol id from templates/includes/icons.html, minus the "i-".
-CENTRES = [
-    {'title': '',
-  'description': '',
-  'image': 'img/slides/coe.png',            # no photograph yet - the icon shows
-  'alt_text': 'Centre for Innovation & Entrepreneurship',
-  'icon': 'innovation',
-  'url': ''},
+# CENTRES = [
+#     {'title': '',
+#   'description': '',
+#   'image': 'img/slides/coe.png',            # no photograph yet - the icon shows
+#   'alt_text': 'Centre for Innovation & Entrepreneurship',
+#   'icon': 'innovation',
+#   'url': ''},
 
- {'title': '',
-  'description': '',
-  'image': 'img/slides/coex.png',            # no photograph yet - the icon shows
-  'alt_text': 'Industry Collaboration',
-  'icon': 'industry',
-  'url': ''},
-
-
- {'title': '',
-  'description': '',
-  'image': 'img/slides/ic.png',            # no photograph yet - the icon shows
-  'alt_text': 'Centre of Excellence',
-  'icon': 'excellence',
-  'url': ''},
+#  {'title': '',
+#   'description': '',
+#   'image': 'img/slides/coex.png',            # no photograph yet - the icon shows
+#   'alt_text': 'Industry Collaboration',
+#   'icon': 'industry',
+#   'url': ''},
 
 
- {'title': '',
-  'description': "",     
-  'image': 'img/slides/ws.png',            # no photograph yet - the icon shows
-  'alt_text': 'Swami Vivekananda Centre for Women Studies',
-  'icon': 'women',
-  'url': ''}
-  ]
+#  {'title': '',
+#   'description': '',
+#   'image': 'img/slides/ic.png',            # no photograph yet - the icon shows
+#   'alt_text': 'Centre of Excellence',
+#   'icon': 'excellence',
+#   'url': ''},
+
+
+#  {'title': '',
+#   'description': "",     
+#   'image': 'img/slides/ws.png',            # no photograph yet - the icon shows
+#   'alt_text': 'Swami Vivekananda Centre for Women Studies',
+#   'icon': 'women',
+#   'url': ''}
+#   ]
 
 # --------------------------------------------------------------------------
 TESTIMONIALS = [
@@ -687,128 +690,317 @@ SCHOOLS = [
 # The academic tree is School -> Department -> Course.  Every department names
 # its parent school in ``school`` and every course in COURSES below names its
 # parent department in ``department``, so the three levels always line up.
+#
+# EACH DEPARTMENT PAGE IS BUILT FROM THESE FIELDS
+#   name               the heading, and the banner over the page
+#   image              the photograph beside the intro.  Leave it '' and the
+#                      page borrows the school's card image instead, so a
+#                      department with no picture yet still looks finished.
+#   short_description  one line; the card on /academics/departments/ and the
+#                      page's meta description
+#   description        the intro paragraph on the department page.  Leave it
+#                      '' and short_description stands in.
+#
+# The courses, faculty and tab panel further down that page all come from
+# COURSES, DEPARTMENT_FACULTY and DEPARTMENT_TABS - nothing there is written
+# into the template.
 
 DEPARTMENTS = [
  # --- School of Engineering ---
  {'slug': 'department-of-computer-science-engineering',
   'name': 'Department Of Computer Science & Engineering',
   'school': 'school-of-engineering',
-  'short_description': 'Diploma, B.Tech, M.Tech and Ph.D programmes in computing, with '
-                       'laboratories for AI, data science, networking and software engineering.'},
-
-
-
-
- {'slug': 'department-of-electronics-communication-engineering',
-  'name': 'Department Electronics & Communication Engineering',
-  'school': 'school-of-engineering',
-  'short_description': 'Analog and digital electronics, embedded systems, VLSI and '
-                       'communication engineering.'},
-
-
- {'slug': 'department-of-electrical-engineering',
-  'name': 'Department Of Electrical Engineering',
-  'school': 'school-of-engineering',
-  'short_description': 'Analog and digital electronics, embedded systems, VLSI and '
-                       'communication engineering.'},
-
-
-
+  'image': 'img/departments/comp1.png',
+  'short_description': 'Diploma, B.Tech, M.Tech and Ph.D programmes in computing, with laboratories '
+                       'for AI, data science, networking and software engineering.',
+  'description': 'Computer Science serves as the foundation for various technological advancements '
+                 'that the world sees today. The field has grown by leaps and bounds and the future '
+                 'innovations it brings along never seem to slow down. Yet another beauty of '
+                 'computer science is that it finds a place in many interdisciplinary fields as '
+                 'well. With these, there also comes a necessity to keep up to the global demand of '
+                 'finding highly skilled engineers and scientists. Swami Vivekananda University, '
+                 'one of the top-ranked universities in India, drives on the purpose of providing '
+                 'quality education and improving competence among students, thereby living up to '
+                 "its motto, 'Progress Through Knowledge'.",},
  {'slug': 'department-of-civil-engineering',
   'name': 'Department Of Civil Engineering',
   'school': 'school-of-engineering',
-  'short_description': 'Structural, geotechnical, transportation and environmental engineering '
-                       'with a full survey and materials testing laboratory.'},
+  'image': '',
+  'short_description': 'Structural, geotechnical, transportation and environmental engineering with '
+                       'a full survey and materials testing laboratory.',
+  'description': 'Civil engineering shapes the built environment - the buildings people live and '
+                 'work in, the roads and bridges they travel over, and the water and waste systems '
+                 'that let a settlement function. The department teaches structural, geotechnical, '
+                 'transportation and environmental engineering alongside a full survey and '
+                 'materials testing laboratory, so design work is checked against measurement from '
+                 'the first year rather than the last.',},
+ {'slug': 'department-of-electrical-engineering',
+  'name': 'Department Of Electrical Engineering',
+  'school': 'school-of-engineering',
+  'image': '',
+  'short_description': 'Circuits, electrical machines, power systems, control and instrumentation, '
+                       'with laboratory work at every stage of the programme.',
+  'description': 'Electrical engineering covers the generation, transmission and control of '
+                 'electrical power and the machines that run on it. The department teaches '
+                 'circuits, machines, power systems, control and instrumentation, and pairs each '
+                 'subject with laboratory work so that theory is tested on equipment rather than '
+                 'only on paper.',},
+ {'slug': 'department-of-electronics-communication',
+  'name': 'Department Of Electronics & Communication',
+  'school': 'school-of-engineering',
+  'image': '',
+  'short_description': 'Analog and digital electronics, embedded systems, VLSI and communication '
+                       'engineering.',
+  'description': 'Electronics and communication engineering sits behind almost everything that '
+                 'computes or connects - the devices themselves, the circuits inside them and the '
+                 'networks between them. The department teaches analog and digital electronics, '
+                 'embedded systems, VLSI design and communication engineering, with laboratories '
+                 'where students build and measure the circuits they have designed.',},
+ {'slug': 'department-of-mechanical-engineering',
+  'name': 'Department Of Mechanical Engineering',
+  'school': 'school-of-engineering',
+  'image': '',
+  'short_description': 'Advanced mechanical engineering education covering design, thermal, '
+                       'manufacturing and industrial systems with hands-on CAD/CAM, workshop and '
+                       'fluid mechanics laboratory training.',
+  'description': 'Mechanical engineering is the broadest of the engineering disciplines, running '
+                 'from the design of a single component to the operation of a whole plant. The '
+                 'department covers design, thermal and fluid sciences, manufacturing and '
+                 'industrial systems, supported by CAD/CAM, workshop and fluid mechanics '
+                 'laboratories where students make and test what they have drawn.',},
 
-
-
-
-
-  {
-    'slug': 'department-of-mechanical-engineering',
-    'name': 'Department Of Mechanical Engineering',
-    'school': 'school-of-engineering',
-    'short_description': 'Advanced mechanical engineering education covering design, thermal, manufacturing and industrial systems with hands-on CAD/CAM, '
-    'workshop and fluid mechanics laboratory training.',
-},
-
- # --- School of Management & Commerce ---
+ # --- School of Management ---
  {'slug': 'department-of-management-studies',
-  'name': 'Management Studies',
+  'name': 'Department Of Management Studies',
   'school': 'school-of-management',
-  'short_description': 'BBA and MBA programmes covering marketing, finance, human resources '
-                       'and operations, taught through cases and live projects.'},
+  'image': '',
+  'short_description': 'BBA and MBA programmes covering marketing, finance, human resources and '
+                       'operations, taught through cases and live projects.',
+  'description': 'Management is learned by deciding, not only by reading about decisions. The '
+                 'department teaches marketing, finance, human resources and operations through '
+                 'case discussion, live projects and summer internships with partner organisations, '
+                 'so students practise judgement on real situations before they are responsible for '
+                 'the consequences.',},
 
-
- # --- School of Life Sciences & Biotechnology ---
- {'slug': 'biotechnology',
-  'name': 'Biotechnology',
-  'school': 'school-of-life-sciences',
-  'short_description': 'Molecular biology, genetic engineering and bioprocess technology at '
-                       'undergraduate and postgraduate level.'},
- {'slug': 'microbiology',
-  'name': 'Microbiology',
-  'school': 'school-of-life-sciences',
-  'short_description': 'Medical, industrial and food microbiology with a dedicated culture '
-                       'and fermentation laboratory.'},
-
- # --- School of Nursing & Allied Health Sciences ---
- {'slug': 'nursing',
-  'name': 'Nursing',
-  'school': 'school-of-allied-health-services',
-  'short_description': 'B.Sc and Post Basic B.Sc Nursing with simulation laboratories and '
-                       'supervised clinical postings in associated hospitals.'},
- {'slug': 'physiotherapy',
-  'name': 'Physiotherapy',
-  'school': 'school-of-allied-health-services',
-  'short_description': 'Musculoskeletal, neurological and sports physiotherapy, including a '
-                       'compulsory rotating internship.'},
+ # --- School of Computer Science ---
+ {'slug': 'department-of-computer-application',
+  'name': 'Department Of Computer Application',
+  'school': 'school-of-computer-science',
+  'image': '',
+  'short_description': 'BCA and MCA programmes covering programming, databases, web technology and '
+                       'application development.',
+  'description': 'Computer applications is the applied side of computing - building the software '
+                 'that people actually use. The department teaches programming, databases, web '
+                 'technology and application development at both bachelor and master level, with '
+                 'laboratory time and project work running alongside every theory paper.',},
+ {'slug': 'department-of-data-science',
+  'name': 'Department Of Data Science',
+  'school': 'school-of-computer-science',
+  'image': '',
+  'short_description': 'Statistics, machine learning and data engineering, taught with the '
+                       'programming and visualisation skills that make an analysis usable.',
+  'description': 'Data science turns recorded data into decisions, and it needs statistics, '
+                 'programming and domain judgement in equal measure. The department teaches '
+                 'statistical foundations, machine learning and data engineering together with the '
+                 'visualisation and communication skills that decide whether an analysis is ever '
+                 'acted on.',},
+ {'slug': 'department-of-advanced-networking-cyber-security',
+  'name': 'Department Of Advanced Networking & Cyber Security',
+  'school': 'school-of-computer-science',
+  'image': '',
+  'short_description': 'Network architecture, security operations and digital forensics, taught on '
+                       'equipment students configure themselves.',
+  'description': 'Networks are the infrastructure everything else depends on, and securing them is '
+                 'now a discipline of its own. The department teaches network architecture and '
+                 'protocols alongside cryptography, security operations and digital forensics, on '
+                 'laboratory equipment students configure, attack and defend themselves.',},
+ {'slug': 'department-of-multimedia-animation',
+  'name': 'Department Of Multimedia & Animation',
+  'school': 'school-of-computer-science',
+  'image': '',
+  'short_description': 'Design, 2D and 3D animation, visual effects and post-production, taught as '
+                       'studio practice.',
+  'description': 'Animation and multimedia are craft disciplines: they are learned by making work '
+                 'and having it critiqued. The department teaches design fundamentals, 2D and 3D '
+                 'animation, visual effects and post-production as studio practice, so a graduate '
+                 'leaves with a portfolio rather than only a transcript.',},
 
  # --- School of Humanities & Social Sciences ---
- {'slug': 'journalism-mass-communication',
-  'name': 'Journalism & Mass Communication',
+ {'slug': 'department-of-language-literature-cultural-studies',
+  'name': 'Department Of Language, Literature And Cultural Studies',
   'school': 'school-of-humanities-social-science',
-  'short_description': 'Print, broadcast and digital media practice, with an in-house studio '
-                       'and editing suite.'},
- {'slug': 'psychology',
-  'name': 'Psychology',
+  'image': '',
+  'short_description': 'Language, literature and cultural studies, with translation and critical '
+                       'writing running through the programme.',
+  'description': 'Literature is one of the longest records of how people have understood their own '
+                 'societies, and reading it closely is a transferable skill. The department teaches '
+                 'language, literature and cultural studies together, with translation work and '
+                 'critical writing running through the programme rather than confined to one paper.',},
+ {'slug': 'department-of-journalism-mass-communication',
+  'name': 'Department Of Journalism & Mass Communication',
   'school': 'school-of-humanities-social-science',
-  'short_description': 'Cognitive, clinical and counselling psychology supported by a '
-                       'psychological testing laboratory.'},
- {'slug': 'sociology',
-  'name': 'Sociology',
+  'image': '',
+  'short_description': 'Print, broadcast and digital media practice, with an in-house studio and '
+                       'editing suite.',
+  'description': 'Journalism is a practical trade with an ethical spine, and both halves have to be '
+                 'taught. The department covers print, broadcast and digital media practice in an '
+                 'in-house studio and editing suite, alongside media law and ethics, so students '
+                 'learn how to gather and verify a story as well as how to produce it.',},
+ {'slug': 'department-of-education',
+  'name': 'Department Of Education',
   'school': 'school-of-humanities-social-science',
-  'short_description': 'Social theory, research methods and field-based study of rural and '
-                       'urban communities in Bengal.'},
+  'image': '',
+  'short_description': 'Teacher education covering pedagogy, curriculum design, educational '
+                       'psychology and supervised classroom practice.',
+  'description': 'Teaching is a profession that has to be practised under supervision before it is '
+                 'practised alone. The department covers pedagogy, curriculum design, educational '
+                 'psychology and assessment, and places every student in supervised classroom '
+                 'practice so that method is tested against real pupils.',},
 
- # --- School of Basic & Applied Sciences ---
- {'slug': 'computer-applications',
-  'name': 'Computer Applications',
-  'school': 'school-of-basic-sciences',
-  'short_description': 'BCA and MCA programmes covering programming, databases, web '
-                       'technology and application development.'},
- {'slug': 'mathematics',
-  'name': 'Mathematics',
-  'school': 'school-of-basic-sciences',
-  'short_description': 'Pure and applied mathematics, numerical methods and the foundation '
-                       'courses that run across every engineering programme.'},
-
- # --- School of Pharmaceutical Sciences ---
- # Commented out together with its school in SCHOOLS above.  Uncomment this
- # department and the two D.Pharm/B.Pharm courses in COURSES when the school
- # comes back, otherwise they have no school to hang from.
- # {'slug': 'pharmacy',
- #  'name': 'Pharmacy',
- #  'school': 'school-of-pharmacy',
- #  'short_description': 'B.Pharm and D.Pharm programmes with PCI-aligned pharmaceutics, '
- #                       'pharmacology and pharmaceutical chemistry laboratories.'},
+ # --- School of Allied Health Services ---
+ {'slug': 'department-of-physiotherapy',
+  'name': 'Department Of Physiotherapy',
+  'school': 'school-of-allied-health-services',
+  'image': '',
+  'short_description': 'Musculoskeletal, neurological and sports physiotherapy, including a '
+                       'compulsory rotating internship.',
+  'description': 'Physiotherapy restores movement after injury, surgery or illness, and it is '
+                 'learned hands-on. The department teaches musculoskeletal, neurological and sports '
+                 'physiotherapy with electrotherapy and exercise laboratories, and every student '
+                 'completes a compulsory rotating clinical internship before qualifying.',},
+ {'slug': 'department-of-optometry',
+  'name': 'Department Of Optometry',
+  'school': 'school-of-allied-health-services',
+  'image': '',
+  'short_description': 'Clinical optometry, optics and vision science, with dispensing and contact '
+                       'lens practice in a working clinic.',
+  'description': 'Optometry is primary eye care: examining vision, detecting disease and correcting '
+                 'what can be corrected. The department teaches optics and vision science alongside '
+                 'clinical refraction, dispensing and contact lens practice, with clinic hours '
+                 'built into the programme rather than added at the end.',},
+ {'slug': 'department-of-food-nutrition',
+  'name': 'Department Of Food & Nutrition',
+  'school': 'school-of-allied-health-services',
+  'image': '',
+  'short_description': 'Human nutrition, dietetics and food science, with food analysis and diet '
+                       'counselling practice.',
+  'description': 'Nutrition connects laboratory science to daily life more directly than most '
+                 'disciplines. The department teaches human nutrition, dietetics and food science '
+                 'together with food analysis and quality control, and students practise diet '
+                 'planning and counselling on real cases before they graduate.',},
+ {'slug': 'department-of-psychology',
+  'name': 'Department Of Psychology',
+  'school': 'school-of-allied-health-services',
+  'image': '',
+  'short_description': 'Cognitive, clinical and counselling psychology supported by a psychological '
+                       'testing laboratory.',
+  'description': 'Psychology is the systematic study of behaviour and mental process, and its '
+                 'methods matter as much as its findings. The department teaches cognitive, '
+                 'clinical and counselling psychology supported by a psychological testing '
+                 'laboratory, with research method and statistics taught as a working skill rather '
+                 'than a hurdle.',},
+ {'slug': 'department-of-medical-laboratory-technology',
+  'name': 'Department Of Medical Laboratory Technology',
+  'school': 'school-of-allied-health-services',
+  'image': '',
+  'short_description': 'Clinical biochemistry, pathology, haematology and microbiology, taught in '
+                       'working diagnostic laboratories.',
+  'description': 'Most clinical decisions rest on a laboratory result, which makes the accuracy of '
+                 'that result a patient-safety question. The department teaches clinical '
+                 'biochemistry, pathology, haematology and microbiology in working diagnostic '
+                 'laboratories, with quality control and sample handling treated as core subjects.',},
+ {'slug': 'department-of-medical-radiology-imaging-technology',
+  'name': 'Department Of Medical Radiology & Imaging Technology',
+  'school': 'school-of-allied-health-services',
+  'image': '',
+  'short_description': 'Radiography, imaging physics and radiation safety, with supervised practice '
+                       'on diagnostic equipment.',
+  'description': 'Medical imaging is how much of modern diagnosis is done, and operating it well is '
+                 'a technical and a safety discipline at once. The department teaches radiographic '
+                 'technique, imaging physics and radiation protection, with supervised practice on '
+                 'diagnostic equipment throughout the programme.',},
 
  # --- School of Legal Studies ---
- {'slug': 'law',
-  'name': 'Law',
+ {'slug': 'department-of-legal-studies',
+  'name': 'Department Of Legal Studies',
   'school': 'school-of-Legal-Studies',
-  'short_description': 'Integrated and postgraduate law programmes with moot court training, '
-                       'a legal aid clinic and court internships.'}]
+  'image': '',
+  'short_description': 'Integrated and postgraduate law programmes with moot court training, a '
+                       'legal aid clinic and court internships.',
+  'description': 'Law is argued, not recited, so advocacy is taught from the beginning. The '
+                 'department runs integrated and postgraduate law programmes with moot court '
+                 'training, a legal aid clinic and court internships, so students appear, draft and '
+                 'advise under supervision long before they are admitted to practice.',},
+
+ # --- School of Life Sciences ---
+ {'slug': 'department-of-biotechnology',
+  'name': 'Department Of Biotechnology',
+  'school': 'school-of-life-sciences',
+  'image': '',
+  'short_description': 'Molecular biology, genetic engineering and bioprocess technology at '
+                       'undergraduate and postgraduate level.',
+  'description': 'Biotechnology puts living systems to work, and it is a laboratory subject before '
+                 'it is anything else. The department teaches molecular biology, genetic '
+                 'engineering and bioprocess technology at undergraduate and postgraduate level, '
+                 'with bench work and project research running through both.',},
+ {'slug': 'department-of-microbiology',
+  'name': 'Department Of Microbiology',
+  'school': 'school-of-life-sciences',
+  'image': '',
+  'short_description': 'Medical, industrial and food microbiology with a dedicated culture and '
+                       'fermentation laboratory.',
+  'description': 'Microbiology underpins medicine, food safety and much of industry, and all three '
+                 'are taught here. The department covers medical, industrial and food microbiology '
+                 'with a dedicated culture and fermentation laboratory, where students handle, '
+                 'identify and cultivate organisms themselves.',},
+
+ # --- School of Basic Sciences ---
+ {'slug': 'department-of-mathematics',
+  'name': 'Department Of Mathematics',
+  'school': 'school-of-basic-sciences',
+  'image': '',
+  'short_description': 'Pure and applied mathematics, numerical methods and the foundation courses '
+                       'that run across every engineering programme.',
+  'description': 'Mathematics is both a subject in its own right and the language the other '
+                 'sciences are written in. The department teaches pure and applied mathematics, '
+                 'numerical methods and statistics, and also runs the foundation courses that sit '
+                 'under every engineering and science programme in the university.',},
+ {'slug': 'department-of-chemistry',
+  'name': 'Department Of Chemistry',
+  'school': 'school-of-basic-sciences',
+  'image': '',
+  'short_description': 'Organic, inorganic, physical and analytical chemistry, with instrumentation '
+                       'and synthesis laboratories.',
+  'description': 'Chemistry explains what materials are made of and how they can be changed, which '
+                 'puts it under medicine, materials and energy alike. The department teaches '
+                 'organic, inorganic, physical and analytical chemistry, with synthesis and '
+                 'instrumentation laboratories where students run and interpret their own analyses.',},
+ {'slug': 'department-of-physics',
+  'name': 'Department Of Physics',
+  'school': 'school-of-basic-sciences',
+  'image': '',
+  'short_description': 'Classical and modern physics, electronics and computational methods, with '
+                       'optics and condensed matter laboratories.',
+  'description': 'Physics is the foundation the engineering disciplines are built on, and it is '
+                 'taught here as an experimental subject. The department covers classical and '
+                 'modern physics, electronics and computational methods, with optics, electronics '
+                 'and condensed matter laboratories where students measure the effects they have '
+                 'just derived.',},
+
+ # --- School of Agriculture ---
+ {'slug': 'department-of-agriculture',
+  'name': 'Department Of Agriculture',
+  'school': 'school-of-agriculture',
+  'image': '',
+  'short_description': 'Agronomy, soil science, horticulture and agricultural extension, taught on '
+                       "the university's own plots.",
+  'description': 'Agriculture is a field science, and it cannot be learned entirely indoors. The '
+                 'department teaches agronomy, soil science, horticulture, plant protection and '
+                 "agricultural extension, with practical work on the university's own plots and "
+                 'attachments with farms and extension agencies in the surrounding districts.',}]
+
+
+
 
 # --------------------------------------------------------------------------
 # Faculty shown in the auto-sliding carousel on a department page.
@@ -980,6 +1172,9 @@ DEPARTMENT_TABS = {
 
   {'title': 'Message Desk',
    'icon': 'users',
+   # Sits to the left of the message. Swap in the head of department's
+   # photograph; drop the key and the text simply runs full width.
+   'image': 'img/about/campus.jpg',
    'body': [
     'Welcome to the Department of Computer Science and Engineering. Computing changes faster '
     'than any syllabus can be revised, so our work here is less about teaching you a fixed '
@@ -996,7 +1191,10 @@ DEPARTMENT_TABS = {
 }
 
 # Used for any department that has no entry in DEPARTMENT_TABS above.
-# "{department}" is swapped for the department name when the page renders.
+# "{department}" is swapped for the SUBJECT when the page renders - the
+# department name with its "Department Of" prefix taken off, so that
+# "the Department of {department}" reads "the Department of Physics"
+# rather than doubling the words.
 DEFAULT_DEPARTMENT_TABS = [
 
  {'title': 'Mission & Vision',
@@ -1066,6 +1264,30 @@ DEFAULT_DEPARTMENT_TABS = [
    {'label': 'Certifications',
     'text': 'Value-added certification courses run alongside the degree.'},
   ]},
+
+ # Every department page carries this fifth tab, so they all read the same
+ # way. "{department}" is swapped for the subject - see the note above -
+ # and that applies inside the signature too. Give a department its own
+ # block in DEPARTMENT_TABS above to replace this with a message actually
+ # written by its head.
+ {'title': 'Message Desk',
+  'icon': 'users',
+  'image': 'img/about/campus.jpg',
+  'body': [
+   'Welcome to the Department of {department}. Our work here is less about '
+   'teaching a fixed set of tools than about building the foundation that lets '
+   'a graduate pick up the next one on their own, because every discipline '
+   'changes faster than a syllabus can be revised.',
+   'Our faculty combine teaching with active research, and our laboratories '
+   'stay open to students who want to build something beyond the prescribed '
+   'practicals. Alongside the syllabus we run projects, industry visits and '
+   'certification courses, so a student leaves with a record of work as well '
+   'as a transcript.',
+   'If you are considering this department, come and see the campus - talk to '
+   'the students and the teachers, not just the prospectus.',
+  ],
+  'signature': {'name': 'Head of the Department',
+                'role': 'Department of {department}'}},
 ]
 
 # --------------------------------------------------------------------------
@@ -1075,6 +1297,20 @@ COURSES = [
  {
     'slug': 'diploma-in-computer-science-technology',
     'name': 'Diploma in Computer Science & Technology',
+    'badge': 'Diploma',
+    'card_image': '',
+    'careers': [
+        'Software Engineer',
+        'Hardware Engineer',
+        'Networking Engineer',
+        'Software Tester',
+        'Web Designer',
+        'App Developer',
+        'Project Engineer',
+        'IT Engineer',
+        'Technical Support Engineer',
+        'Voice Process Support Engineer',
+    ],
     'school': 'school-of-engineering',
     'department': 'department-of-computer-science-engineering',
     'program': 'under-graduate',
@@ -1088,6 +1324,16 @@ COURSES = [
 {
     'slug': 'b-tech-in-computer-science-engineering',
     'name': 'B.Tech in Computer Science & Engineering',
+    'badge': 'B.Tech',
+    'card_image': '',
+    'careers': [
+        'Software Engineer',
+        'Systems Analyst',
+        'Full Stack Developer',
+        'Data Engineer',
+        'Cloud Engineer',
+        'Cybersecurity Analyst',
+    ],
     'school': 'school-of-engineering',
     'department': 'department-of-computer-science-engineering',
     'program': 'under-graduate',
@@ -1102,6 +1348,15 @@ COURSES = [
 {
     'slug': 'm-tech-in-computer-science-engineering',
     'name': 'M.Tech in Computer Science & Engineering',
+    'badge': 'M.Tech',
+    'card_image': '',
+    'careers': [
+        'Senior Software Engineer',
+        'Machine Learning Engineer',
+        'Solution Architect',
+        'Research Engineer',
+        'Academic Faculty',
+    ],
     'school': 'school-of-engineering',
     'department': 'department-of-computer-science-engineering',
     'program': 'post-graduate',
@@ -1115,6 +1370,14 @@ COURSES = [
 {
     'slug': 'phd-in-computer-science-engineering',
     'name': 'Ph.D. in Computer Science & Engineering',
+    'badge': 'Ph.D.',
+    'card_image': '',
+    'careers': [
+        'Research Scientist',
+        'Assistant Professor',
+        'Principal Investigator',
+        'Research and Development Lead',
+    ],
     'school': 'school-of-engineering',
     'department': 'department-of-computer-science-engineering',
     'program': 'phd',
@@ -1131,8 +1394,16 @@ COURSES = [
 
  {'slug': 'b-tech-in-electronics-communication-engineering',
   'name': 'B.Tech in Electronics & Communication Engineering',
+  'badge': 'B.Tech',
+  'card_image': '',
+  'careers': [
+      'Research Scientist',
+      'Assistant Professor',
+      'Principal Investigator',
+      'Research and Development Lead',
+  ],
   'school': 'school-of-engineering',
-  'department': 'electronics-communication-engineering',
+  'department': 'department-of-electronics-communication',
   'program': 'under-graduate',
   'duration': '4 Years',
   'total_seats': 60,
@@ -1146,8 +1417,16 @@ COURSES = [
 
  {'slug': 'b-tech-in-civil-engineering',
   'name': 'B.Tech in Civil Engineering',
+  'badge': 'B.Tech',
+  'card_image': '',
+  'careers': [
+      'Research Scientist',
+      'Assistant Professor',
+      'Principal Investigator',
+      'Research and Development Lead',
+  ],
   'school': 'school-of-engineering',
-  'department': 'civil-engineering',
+  'department': 'department-of-civil-engineering',
   'program': 'under-graduate',
   'duration': '4 Years',
   'total_seats': 60,
@@ -1162,8 +1441,16 @@ COURSES = [
 
  {'slug': 'b-tech-in-mechanical-engineering',
   'name': 'B.Tech in Mechanical Engineering',
+  'badge': 'B.Tech',
+  'card_image': '',
+  'careers': [
+      'Research Scientist',
+      'Assistant Professor',
+      'Principal Investigator',
+      'Research and Development Lead',
+  ],
   'school': 'school-of-engineering',
-  'department': 'mechanical-engineering',
+  'department': 'department-of-mechanical-engineering',
   'program': 'under-graduate',
   'duration': '4 Years',
   'total_seats': 60,
@@ -1177,49 +1464,21 @@ COURSES = [
 
 
                  
- {'slug': 'm-tech-in-computer-science-engineering',
-  'name': 'M.Tech in Computer Science & Engineering',
-  'school': 'school-of-engineering',
-  'department': 'computer-science-engineering',
-  'program': 'post-graduate',
-  'duration': '2 Years',
-  'total_seats': 18,
-  'is_featured': True,
-  'eligibility': 'B.Tech / B.E. in Computer Science, IT, Electronics & Communication or '
-                 'Electronics & Instrumentation Engineering with a minimum of 50% aggregate.',
-  'description': 'The programme blends classroom instruction, laboratory or field practice and '
-                 'continuous internal assessment. Students are mentored throughout the course '
-                 'and prepared for placement through the training and placement cell.'},
- {'slug': 'diploma-in-computer-science-technology',
-  'name': 'Diploma in Computer Science & Technology',
-  'school': 'school-of-engineering',
-  'department': 'computer-science-engineering',
-  'program': 'diploma',
-  'duration': '3 Years',
-  'total_seats': 60,
-  'is_featured': True,
-  'eligibility': 'Passed the secondary or equivalent examination with a minimum of 35% from a '
-                 'recognised board, including English and Physical Science / Mathematics.',
-  'description': 'The programme blends classroom instruction, laboratory or field practice and '
-                 'continuous internal assessment. Students are mentored throughout the course '
-                 'and prepared for placement through the training and placement cell.'},
- {'slug': 'ph-d-in-computer-science-engineering',
-  'name': 'Ph.D in Computer Science & Engineering',
-  'school': 'school-of-engineering',
-  'department': 'computer-science-engineering',
-  'program': 'phd',
-  'duration': '3-5 Years',
-  'total_seats': 10,
-  'is_featured': False,
-  'eligibility': "Master's degree or equivalent from a recognised university with a minimum of "
-                 '55% marks, followed by the university research entrance test and interview.',
-  'description': 'The programme blends classroom instruction, laboratory or field practice and '
-                 'continuous internal assessment. Students are mentored throughout the course '
-                 'and prepared for placement through the training and placement cell.'},
+ 
+ 
+ 
  {'slug': 'bachelor-of-business-administration-bba',
   'name': 'Bachelor of Business Administration (BBA)',
+  'badge': 'BBA',
+  'card_image': '',
+  'careers': [
+      'Research Scientist',
+      'Assistant Professor',
+      'Principal Investigator',
+      'Research and Development Lead',
+  ],
   'school': 'school-of-management',
-  'department': 'management-studies',
+  'department': 'department-of-management-studies',
   'program': 'under-graduate',
   'duration': '3 Years',
   'total_seats': 120,
@@ -1231,8 +1490,16 @@ COURSES = [
                  'and prepared for placement through the training and placement cell.'},
  {'slug': 'b-com-honours',
   'name': 'B.Com (Honours)',
+  'badge': 'B.Com',
+  'card_image': '',
+  'careers': [
+      'Research Scientist',
+      'Assistant Professor',
+      'Principal Investigator',
+      'Research and Development Lead',
+  ],
   'school': 'school-of-management',
-  'department': 'commerce',
+  'department': 'department-of-management-studies',
   'program': 'under-graduate',
   'duration': '3 Years',
   'total_seats': 120,
@@ -1244,8 +1511,16 @@ COURSES = [
                  'and prepared for placement through the training and placement cell.'},
  {'slug': 'master-of-business-administration-mba',
   'name': 'Master of Business Administration (MBA)',
+  'badge': 'MBA',
+  'card_image': '',
+  'careers': [
+      'Research Scientist',
+      'Assistant Professor',
+      'Principal Investigator',
+      'Research and Development Lead',
+  ],
   'school': 'school-of-management',
-  'department': 'management-studies',
+  'department': 'department-of-management-studies',
   'program': 'post-graduate',
   'duration': '2 Years',
   'total_seats': 60,
@@ -1257,8 +1532,16 @@ COURSES = [
                  'and prepared for placement through the training and placement cell.'},
  {'slug': 'b-sc-in-biotechnology',
   'name': 'B.Sc in Biotechnology',
+  'badge': 'B.Sc',
+  'card_image': '',
+  'careers': [
+      'Research Scientist',
+      'Assistant Professor',
+      'Principal Investigator',
+      'Research and Development Lead',
+  ],
   'school': 'school-of-life-sciences',
-  'department': 'biotechnology',
+  'department': 'department-of-biotechnology',
   'program': 'under-graduate',
   'duration': '3 Years',
   'total_seats': 60,
@@ -1270,8 +1553,16 @@ COURSES = [
                  'and prepared for placement through the training and placement cell.'},
  {'slug': 'b-sc-in-microbiology',
   'name': 'B.Sc in Microbiology',
+  'badge': 'B.Sc',
+  'card_image': '',
+  'careers': [
+      'Research Scientist',
+      'Assistant Professor',
+      'Principal Investigator',
+      'Research and Development Lead',
+  ],
   'school': 'school-of-life-sciences',
-  'department': 'microbiology',
+  'department': 'department-of-microbiology',
   'program': 'under-graduate',
   'duration': '3 Years',
   'total_seats': 60,
@@ -1283,8 +1574,16 @@ COURSES = [
                  'and prepared for placement through the training and placement cell.'},
  {'slug': 'm-sc-in-biotechnology',
   'name': 'M.Sc in Biotechnology',
+  'badge': 'M.Sc',
+  'card_image': '',
+  'careers': [
+      'Research Scientist',
+      'Assistant Professor',
+      'Principal Investigator',
+      'Research and Development Lead',
+  ],
   'school': 'school-of-life-sciences',
-  'department': 'biotechnology',
+  'department': 'department-of-biotechnology',
   'program': 'post-graduate',
   'duration': '2 Years',
   'total_seats': 30,
@@ -1294,36 +1593,20 @@ COURSES = [
   'description': 'The programme blends classroom instruction, laboratory or field practice and '
                  'continuous internal assessment. Students are mentored throughout the course '
                  'and prepared for placement through the training and placement cell.'},
- {'slug': 'b-sc-nursing',
-  'name': 'B.Sc Nursing',
-  'school': 'school-of-allied-health-services',
-  'department': 'nursing',
-  'program': 'under-graduate',
-  'duration': '4 Years',
-  'total_seats': 60,
-  'is_featured': True,
-  'eligibility': 'Passed 10+2 with Physics, Chemistry, Biology and English, securing a minimum '
-                 'of 45% aggregate. Candidate must be at least 17 years of age.',
-  'description': 'The programme blends classroom instruction, laboratory or field practice and '
-                 'continuous internal assessment. Students are mentored throughout the course '
-                 'and prepared for placement through the training and placement cell.'},
- {'slug': 'post-basic-b-sc-nursing',
-  'name': 'Post Basic B.Sc Nursing',
-  'school': 'school-of-allied-health-services',
-  'department': 'nursing',
-  'program': 'under-graduate',
-  'duration': '2 Years',
-  'total_seats': 30,
-  'is_featured': False,
-  'eligibility': 'GNM qualified with registration as a Registered Nurse and Registered Midwife '
-                 'with the state nursing council.',
-  'description': 'The programme blends classroom instruction, laboratory or field practice and '
-                 'continuous internal assessment. Students are mentored throughout the course '
-                 'and prepared for placement through the training and placement cell.'},
+ 
+ 
  {'slug': 'bachelor-of-physiotherapy-bpt',
   'name': 'Bachelor of Physiotherapy (BPT)',
+  'badge': 'BPT',
+  'card_image': '',
+  'careers': [
+      'Research Scientist',
+      'Assistant Professor',
+      'Principal Investigator',
+      'Research and Development Lead',
+  ],
   'school': 'school-of-allied-health-services',
-  'department': 'physiotherapy',
+  'department': 'department-of-physiotherapy',
   'program': 'under-graduate',
   'duration': '4.5 Years',
   'total_seats': 40,
@@ -1335,8 +1618,16 @@ COURSES = [
                  'and prepared for placement through the training and placement cell.'},
  {'slug': 'ba-honours-in-journalism-mass-communication',
   'name': 'BA (Honours) in Journalism & Mass Communication',
+  'badge': 'BA',
+  'card_image': '',
+  'careers': [
+      'Research Scientist',
+      'Assistant Professor',
+      'Principal Investigator',
+      'Research and Development Lead',
+  ],
   'school': 'school-of-humanities-social-science',
-  'department': 'journalism-mass-communication',
+  'department': 'department-of-journalism-mass-communication',
   'program': 'under-graduate',
   'duration': '3 Years',
   'total_seats': 60,
@@ -1348,8 +1639,16 @@ COURSES = [
                  'and prepared for placement through the training and placement cell.'},
  {'slug': 'ba-honours-in-psychology',
   'name': 'BA (Honours) in Psychology',
-  'school': 'school-of-humanities-social-science',
-  'department': 'psychology',
+  'badge': 'BA',
+  'card_image': '',
+  'careers': [
+      'Research Scientist',
+      'Assistant Professor',
+      'Principal Investigator',
+      'Research and Development Lead',
+  ],
+  'school': 'school-of-allied-health-services',
+  'department': 'department-of-psychology',
   'program': 'under-graduate',
   'duration': '3 Years',
   'total_seats': 60,
@@ -1359,23 +1658,19 @@ COURSES = [
   'description': 'The programme blends classroom instruction, laboratory or field practice and '
                  'continuous internal assessment. Students are mentored throughout the course '
                  'and prepared for placement through the training and placement cell.'},
- {'slug': 'ba-honours-in-sociology',
-  'name': 'BA (Honours) in Sociology',
-  'school': 'school-of-humanities-social-science',
-  'department': 'sociology',
-  'program': 'under-graduate',
-  'duration': '3 Years',
-  'total_seats': 60,
-  'is_featured': False,
-  'eligibility': 'Passed 10+2 in any stream with a minimum of 45% aggregate from a recognised '
-                 'board.',
-  'description': 'The programme blends classroom instruction, laboratory or field practice and '
-                 'continuous internal assessment. Students are mentored throughout the course '
-                 'and prepared for placement through the training and placement cell.'},
+ 
  {'slug': 'ma-in-journalism-mass-communication',
   'name': 'MA in Journalism & Mass Communication',
+  'badge': 'MA',
+  'card_image': '',
+  'careers': [
+      'Research Scientist',
+      'Assistant Professor',
+      'Principal Investigator',
+      'Research and Development Lead',
+  ],
   'school': 'school-of-humanities-social-science',
-  'department': 'journalism-mass-communication',
+  'department': 'department-of-journalism-mass-communication',
   'program': 'post-graduate',
   'duration': '2 Years',
   'total_seats': 30,
@@ -1386,8 +1681,16 @@ COURSES = [
                  'and prepared for placement through the training and placement cell.'},
  {'slug': 'bachelor-of-computer-applications-bca',
   'name': 'Bachelor of Computer Applications (BCA)',
-  'school': 'school-of-basic-sciences',
-  'department': 'computer-applications',
+  'badge': 'BCA',
+  'card_image': '',
+  'careers': [
+      'Research Scientist',
+      'Assistant Professor',
+      'Principal Investigator',
+      'Research and Development Lead',
+  ],
+  'school': 'school-of-computer-science',
+  'department': 'department-of-computer-application',
   'program': 'under-graduate',
   'duration': '3 Years',
   'total_seats': 120,
@@ -1399,8 +1702,16 @@ COURSES = [
                  'and prepared for placement through the training and placement cell.'},
  {'slug': 'master-of-computer-applications-mca',
   'name': 'Master of Computer Applications (MCA)',
-  'school': 'school-of-basic-sciences',
-  'department': 'computer-applications',
+  'badge': 'MCA',
+  'card_image': '',
+  'careers': [
+      'Research Scientist',
+      'Assistant Professor',
+      'Principal Investigator',
+      'Research and Development Lead',
+  ],
+  'school': 'school-of-computer-science',
+  'department': 'department-of-computer-application',
   'program': 'post-graduate',
   'duration': '2 Years',
   'total_seats': 60,
@@ -1412,8 +1723,16 @@ COURSES = [
                  'and prepared for placement through the training and placement cell.'},
  {'slug': 'm-sc-in-mathematics',
   'name': 'M.Sc in Mathematics',
+  'badge': 'M.Sc',
+  'card_image': '',
+  'careers': [
+      'Research Scientist',
+      'Assistant Professor',
+      'Principal Investigator',
+      'Research and Development Lead',
+  ],
   'school': 'school-of-basic-sciences',
-  'department': 'mathematics',
+  'department': 'department-of-mathematics',
   'program': 'post-graduate',
   'duration': '2 Years',
   'total_seats': 30,
@@ -1453,8 +1772,16 @@ COURSES = [
  #                 'and prepared for placement through the training and placement cell.'},
  {'slug': 'ba-ll-b-honours',
   'name': 'BA LL.B (Honours)',
+  'badge': 'BA LL.B',
+  'card_image': '',
+  'careers': [
+      'Research Scientist',
+      'Assistant Professor',
+      'Principal Investigator',
+      'Research and Development Lead',
+  ],
   'school': 'school-of-Legal-Studies',
-  'department': 'law',
+  'department': 'department-of-legal-studies',
   'program': 'under-graduate',
   'duration': '5 Years',
   'total_seats': 60,
@@ -1466,8 +1793,16 @@ COURSES = [
                  'and prepared for placement through the training and placement cell.'},
  {'slug': 'll-m',
   'name': 'LL.M',
+  'badge': 'LL.M',
+  'card_image': '',
+  'careers': [
+      'Research Scientist',
+      'Assistant Professor',
+      'Principal Investigator',
+      'Research and Development Lead',
+  ],
   'school': 'school-of-Legal-Studies',
-  'department': 'law',
+  'department': 'department-of-legal-studies',
   'program': 'post-graduate',
   'duration': '1 Year',
   'total_seats': 30,
@@ -1475,7 +1810,159 @@ COURSES = [
   'eligibility': 'LL.B or an equivalent law degree with a minimum of 50% aggregate.',
   'description': 'The programme blends classroom instruction, laboratory or field practice and '
                  'continuous internal assessment. Students are mentored throughout the course '
-                 'and prepared for placement through the training and placement cell.'}]
+                 'and prepared for placement through the training and placement cell.'},
+
+ # Nursing and Sociology courses, parked with their school and department.
+ # The department list was rebuilt to match the university's published
+ # structure, which has no Nursing and no Sociology department, so these three
+ # lost their parent. Nothing is thrown away: give each one a department that
+ # exists in DEPARTMENTS and uncomment it, and it is back on the site.
+ # {'slug': 'b-sc-nursing',
+ #  'name': 'B.Sc Nursing',
+ #  'school': 'school-of-allied-health-services',
+ #  'department': 'nursing',
+ #  'program': 'under-graduate',
+ #  'duration': '4 Years',
+ #  'total_seats': 60,
+ #  'is_featured': True,
+ #  'eligibility': 'Passed 10+2 with Physics, Chemistry, Biology and English, securing a minimum '
+ #                 'of 45% aggregate. Candidate must be at least 17 years of age.',
+ #  'description': 'The programme blends classroom instruction, laboratory or field practice and '
+ #                 'continuous internal assessment. Students are mentored throughout the course '
+ #                 'and prepared for placement through the training and placement cell.'},
+ # {'slug': 'post-basic-b-sc-nursing',
+ #  'name': 'Post Basic B.Sc Nursing',
+ #  'school': 'school-of-allied-health-services',
+ #  'department': 'nursing',
+ #  'program': 'under-graduate',
+ #  'duration': '2 Years',
+ #  'total_seats': 30,
+ #  'is_featured': False,
+ #  'eligibility': 'GNM qualified with registration as a Registered Nurse and Registered Midwife '
+ #                 'with the state nursing council.',
+ #  'description': 'The programme blends classroom instruction, laboratory or field practice and '
+ #                 'continuous internal assessment. Students are mentored throughout the course '
+ #                 'and prepared for placement through the training and placement cell.'},
+ # {'slug': 'ba-honours-in-sociology',
+ #  'name': 'BA (Honours) in Sociology',
+ #  'school': 'school-of-humanities-social-science',
+ #  'department': 'sociology',
+ #  'program': 'under-graduate',
+ #  'duration': '3 Years',
+ #  'total_seats': 60,
+ #  'is_featured': False,
+ #  'eligibility': 'Passed 10+2 in any stream with a minimum of 45% aggregate from a recognised '
+ #                 'board.',
+ #  'description': 'The programme blends classroom instruction, laboratory or field practice and '
+ #                 'continuous internal assessment. Students are mentored throughout the course '
+ #                 'and prepared for placement through the training and placement cell.'},
+]
+
+# --------------------------------------------------------------------------
+# The tab panel on a course page  —  /academics/courses/<slug>/
+#
+#   KEY   = the course ``slug`` from COURSES above.
+#   VALUE = the tabs, left to right. Same shape as DEPARTMENT_TABS:
+#
+#     title   the pill, and the heading above the panel unless 'heading' says
+#             otherwise
+#     icon    one of the symbols in templates/includes/icons.html, without the
+#             "i-" prefix
+#     intro   a paragraph above the list
+#     points  [{'label': ..., 'text': ...}] — 'label' is optional, and a point
+#             with only 'text' renders as a plain bullet
+#     body    [paragraph, ...] for a tab that is prose rather than a list
+#
+# A course with NO entry here still gets a working panel: the view builds
+# Programme Overview and Course Eligibility out of that course's own
+# 'description' and 'eligibility'. Add a key here to say more than that.
+COURSE_TABS = {
+ 'diploma-in-computer-science-technology': [
+  {'title': 'Programme Overview',
+   'icon': 'book',
+   'intro': 'Upon completion of the diploma in computer science syllabus, graduates will be '
+            'well-prepared to pursue higher studies in computer science or embark on a '
+            'rewarding career in software development, systems analysis, web development or '
+            'database administration.',
+   'points': [
+    {'text': 'Covers fundamental concepts and principles of computer science, including '
+             'computer organization, data representation and digital logic.'},
+    {'text': 'Students study multiple programming languages to develop a strong foundation in '
+             'coding and software development.'},
+    {'text': 'Focuses on the study and implementation of efficient data structure designs and '
+             'algorithmic problem-solving techniques.'},
+    {'text': 'Explores the fundamentals of network architecture, protocols and security, '
+             'enabling students to understand the principles behind internet connectivity.'},
+    {'text': 'Covers the complete software development life cycle, from requirements gathering '
+             'to deployment, fostering skills in software design and project management.'},
+    {'text': 'Introduces students to handling large sets of data efficiently and teaches them '
+             'how to design and query databases effectively.'},
+    {'text': 'Provides hands-on experience in web development, including HTML, CSS, JavaScript '
+             'and server-side programming languages.'},
+    {'text': 'Allows students to specialize in areas such as artificial intelligence, machine '
+             'learning, cybersecurity or mobile application development.'},
+   ]},
+
+  {'title': 'Course Eligibility',
+   'icon': 'scales',
+   'body': ['Candidates must have completed the secondary or equivalent examination with a '
+            'minimum of 35% from a recognised board. English, Physical Science / Science and '
+            'Mathematics must have been subjects at that examination.']},
+
+  {'title': 'Career Opportunities',
+   'icon': 'industry',
+   'intro': 'Roles this diploma leads into:',
+   'points': [
+    {'text': 'Software Engineer'},
+    {'text': 'Hardware Engineer'},
+    {'text': 'Networking Engineer'},
+    {'text': 'Software Tester'},
+    {'text': 'Web Designer'},
+    {'text': 'App Developer'},
+    {'text': 'Project Engineer'},
+    {'text': 'IT Engineer'},
+    {'text': 'Technical Support Engineer'},
+    {'text': 'Voice Process Support Engineer'},
+   ]},
+ ],
+}
+
+# --------------------------------------------------------------------------
+# Frequently asked questions on a course page.
+#
+#   KEY   = the course ``slug``.  A course with no key here simply shows no
+#           FAQ section, and the recruiter panel beside it widens to fill the
+#           row - so a half-written page never looks broken.
+COURSE_FAQS = {
+ 'diploma-in-computer-science-technology': [
+  {'question': 'What subjects do Diploma in Computer Science and Technology students study '
+               'during the course?',
+   'answer': 'Students complete six semesters to earn the Computer Science and Technology '
+             'diploma. The course categories are basic science, humanities and social science, '
+             'engineering science and environmental science. Students also complete a summer '
+             'internship in the third semester, and study computer programming, data '
+             'structures and algorithms. The complete syllabus is on the website to download.'},
+  {'question': 'What is the eligibility criterion to apply for a Diploma in Computer Science '
+               'and Technology course at Swami Vivekananda University?',
+   'answer': 'The candidate must have completed their secondary examination with a minimum of '
+             '35% from a recognised board. The core subjects at that examination must be '
+             'English, science and mathematics.'},
+  {'question': 'What job roles can a Diploma in Computer Science and Technology graduate go '
+               'for after college?',
+   'answer': 'Roles to apply for after the diploma include hardware engineer, app developer, '
+             'project engineer, IT engineer, technical support engineer and software engineer.'},
+ ],
+}
+
+# --------------------------------------------------------------------------
+# Board of Studies for a course page.
+#
+#   KEY   = the course ``slug``.  Each row is {'name', 'designation',
+#           'affiliation'} - designation and affiliation are both optional.
+#
+# Empty on purpose: the section hides itself entirely until a course has a
+# board listed, rather than printing a heading with nothing under it.
+COURSE_BOARD_OF_STUDIES = {}
 
 # --------------------------------------------------------------------------
 FACILITIES = [{'slug': 'digital-library',
@@ -1790,7 +2277,6 @@ NOTICES = [{'slug': 'revision-of-examination-date-id-ud-zoha',
   'title': 'Notification - Revision of Date of Examination due to change in date of holiday on '
            'account of Id-Ud-Zoha (Bakrid)',
   'is_important': True,
-  'document': 'documents/bar-council-of-india.pdf',
   'body': 'All students are informed that the date of the end-semester examination has been '
           'revised following the change in the date of the holiday on account of Id-Ud-Zoha '
           '(Bakrid). The revised schedule is available with the Controller of Examinations.'},
@@ -2414,88 +2900,80 @@ TEAM = [{'name': 'Dr. Nandan Gupta',
 MENTORS = [{'name': 'Prof. (Dr.) Suranjan Das',
   'role': 'Vice-Chancellor, Adamas University',
   'photo': 'img/our_mentors/suranjan-das.jpg',
-  'messages': ["The Vice Chancellor's office sets the academic direction of the university — curriculum design, research priorities, faculty development and accreditation. Students meet that work in the form of syllabi that keep pace with the field, laboratories that are actually used, and teachers who are still learning themselves."]},
+  'messages': []},
  {'name': 'Prof. (Dr.) Dhrubajyoti Chattopadhyay',
   'role': 'Vice Chancellor, Sister Nivedita University Kolkata',
   'photo': 'img/our_mentors/dhrubajyoti-chattopadhyay.jpg',
-  'messages': ["The Vice Chancellor's office is where a student's record lives: admission, enrolment, examinations, results and the certificates that follow them into their career. Its work is to make sure the administrative side of a degree is never the thing that slows a student down."]},
+  'messages': []},
  {'name': 'Prof. (Dr.) Shorosimohan Dan',
   'role': 'Former Vice Chancellor , The University of Burdwan',
   'photo': 'img/our_mentors/shorosimohan-dan.png',
-  'messages': ["The Vice Chancellor's office is where a student's record lives: admission, enrolment, examinations, results and the certificates that follow them into their career. Its work is to make sure the administrative side of a degree is never the thing that slows a student down."]},
+  'messages': []},
  {'name': 'Prof. (Dr.)Deb Narayan Bandyopadhyay',
   'role': 'Founder Vice Chancellor,Bankura University',
   'photo': 'img/our_mentors/deb-narayan-bandyopadhyay.png',
-  'messages': ["The Vice Chancellor's office is where a student's record lives: admission, enrolment, examinations, results and the certificates that follow them into their career. Its work is to make sure the administrative side of a degree is never the thing that slows a student down."]},
+  'messages': []},
  {'name': 'Prof. (Dr.) Ranjan Chakrabarti',
   'role': 'Former Vice-Chancellor Vidyasar University',
   'photo': 'img/our_mentors/ranjan-chakrabarti.jpg',
-  'messages': ["The Vice Chancellor's office is where a student's record lives: admission, enrolment, examinations, results and the certificates that follow them into their career. Its work is to make sure the administrative side of a degree is never the thing that slows a student down."]},
+  'messages': []},
  {'name': 'Prof.(Dr.) Malayendu Saha',
   'role': 'Former Vice-Chancellor , Kalyani University',
   'photo': 'img/our_mentors/malayendu-saha.jpg',
-  'messages': ["The Vice Chancellor's office is where a student's record lives: admission, enrolment, examinations, results and the certificates that follow them into their career. Its work is to make sure the administrative side of a degree is never the thing that slows a student down."]},
+  'messages': []},
  {'name': 'Prof.(Dr.) Mita Banerjee',
   'role': "Former Vice-Chancellor of The West Bengal University of Teachers' Training "
           'Education Planning and Administration',
   'photo': 'img/our_mentors/mita-banerjee.jpg',
-  'messages': ["The Vice Chancellor's office is where a student's record lives: admission, enrolment, examinations, results and the certificates that follow them into their career. Its work is to make sure the administrative side of a degree is never the thing that slows a student down."]},
+  'messages': []},
  {'name': 'Prof.(Dr.) Swapan Kumar Datta',
   'role': 'Former Vice-Chancellor Visva-Bharati & Biswa Bangla Biswabidyalay',
   'photo': 'img/our_mentors/swapan-kumar-datta.jpg',
-  'messages': ["The Vice Chancellor's office is where a student's record lives: admission, enrolment, examinations, results and the certificates that follow them into their career. Its work is to make sure the administrative side of a degree is never the thing that slows a student down."]},
+  'messages': []},
  {'name': 'Prof.(Dr.) Ashutosh Ghosh',
   'role': 'Former Vice-Chancellor Rani Rashmoni Green University , Former Pro Vice-Chancellor '
           ', (Academic Affairs) University of Calcutta',
   'photo': 'img/our_mentors/ashutosh-ghosh.jpg',
-  'messages': ["The Vice Chancellor's office is where a student's record lives: admission, enrolment, examinations, results and the certificates that follow them into their career. Its work is to make sure the administrative side of a degree is never the thing that slows a student down."]},
+  'messages': []},
  {'name': 'Prof. (Dr.) Nemai Saha',
   'role': 'Former Vice-Chancellor , The University of Burdwan',
   'photo': 'img/our_mentors/nemai-saha.jpg',
-  'messages': ["The Vice Chancellor's office is where a student's record lives: admission, enrolment, examinations, results and the certificates that follow them into their career. Its work is to make sure the administrative side of a degree is never the thing that slows a student down."]},
+  'messages': []},
  {'name': 'Dr. Baidyanath Chakrabarty',
   'role': 'Renowned Gynecologist and IVF Specialist',
   'photo': 'img/our_mentors/baidyanath-chakrabarty.jpg',
-  'messages': ["The Vice Chancellor's office is where a student's record lives: admission, enrolment, examinations, results and the certificates that follow them into their career. Its work is to make sure the administrative side of a degree is never the thing that slows a student down."]},
+  'messages': []},
  {'name': 'Padmashri Bikash Sinha',
   'role': 'Former Director of the Saha Institute of Nuclear Physics and Variable Energy '
           'Cyclotron Centre and the chairman of the Board of Governors of the National '
           'Institute of Technology, Durgapur',
   'photo': 'img/our_mentors/bikash-sinha.jpg',
-  'messages': ["The Vice Chancellor's office is where a student's record lives: admission, enrolment, examinations, results and the certificates that follow them into their career. Its work is to make sure the administrative side of a degree is never the thing that slows a student down."]},
+  'messages': []},
  {'name': 'Prof.(Dr.) Bashabi Fraser',
   'role': 'Professor Emerita of English and Creative Writing Director, Scottish Centre of '
           'Tagore Studies (ScoTs) School of Arts & Creative Industries Edinburgh Napier '
           'University Honorary Fellow, Centre for South Asian Studies, University of Edinburgh',
   'photo': 'img/our_mentors/bashabi-fraser.jpg',
-  'messages': ["The Vice Chancellor's office is where a student's record lives: admission, enrolment, examinations, results and the certificates that follow them into their career. Its work is to make sure the administrative side of a degree is never the thing that slows a student down."]},
+  'messages': []},
  {'name': 'Prof. (Dr.) Neil Fraser',
   'role': 'Professor, School of Social and Political Studies, University of Edinburgh',
   'photo': 'img/our_mentors/neil-fraser.jpg',
-  'messages': ["The Vice Chancellor's office is where a student's record lives: admission, enrolment, examinations, results and the certificates that follow them into their career. Its work is to make sure the administrative side of a degree is never the thing that slows a student down."]},
+  'messages': []},
  {'name': 'Prof.(Dr.) Arun Bandyopadhyay',
   'role': 'Director, Gujarat Biotechnology University, Gandhinagar. Former Director, '
           'CSIR-Indian Institute of Chemical Biology, Kolkata',
   'photo': 'img/our_mentors/arun-bandyopadhyay.jpg',
-  'messages': ["The Vice Chancellor's office is where a student's record lives: admission, enrolment, examinations, results and the certificates that follow them into their career. Its work is to make sure the administrative side of a degree is never the thing that slows a student down."]},
+  'messages': []},
  {'name': 'Prof. (Dr.) Amlan Chakrabarti',
   'role': 'Head IT & Tech. Innovation Cell, Dept. of Higher Education, Govt. of West Bengal, '
           'Professor and Director, A.K. Choudhury School of IT, University of Calcutta',
   'photo': 'img/our_mentors/amlan-chakrabarti.png',
-  'messages': ["The Vice Chancellor's office is where a student's record lives: admission, enrolment, examinations, results and the certificates that follow them into their career. Its work is to make sure the administrative side of a degree is never the thing that slows a student down."]},
+  'messages': []},
  {'name': 'Prof. (Dr.) Debprasad Chattopadhyay',
   'role': 'Founder Director & Scientist G at ICMR-National Institute of Traditional Medicine',
   'photo': 'img/our_mentors/debprasad-chattopadhyay.jpg',
-  'messages': ["The Vice Chancellor's office is where a student's record lives: admission, enrolment, examinations, results and the certificates that follow them into their career. Its work is to make sure the administrative side of a degree is never the thing that slows a student down."]}]
+  'messages': []}]
 
-# --------------------------------------------------------------------------
-# Statutory approvals shown on /page/recognition-approvals/. Each card links a
-# PDF in static/documents/.
-#
-# Every file there is a PLACEHOLDER - open one and it says so in the document
-# itself. To publish a real certificate, overwrite the file of the same name;
-# nothing here changes. Give an entry a 'url' key instead of 'file' to point a
-# card at an external site.
 # --------------------------------------------------------------------------
 # UGC Compliance Documents  —  /page/ugc-compliance/
 #
@@ -2516,13 +2994,72 @@ MENTORS = [{'name': 'Prof. (Dr.) Suranjan Das',
 # cards that lead nowhere; add rows and they appear, with no template to edit.
 UGC_DOCUMENTS = []
 
+# --------------------------------------------------------------------------
+# Statutory approvals shown on /page/recognition-approvals/. Each card links a
+# PDF in static/documents/.
+#
+# These four are the REAL certificates, uploaded under the names they came
+# with - hence the mixed casing below. The names are load-bearing: they are
+# what recognition_approvals.html asks {% static %} for. Replacing a document
+# means overwriting the file of that name, or editing the name here to match
+# the new one; the template never changes either way.
+#
+# That template uses a bare {% static %}, not the forgiving doc_url filter the
+# notice board uses, so a name here with no manifest entry is a 500 on the
+# page rather than one dead card. After adding or renaming a PDF, run:
+#     python manage.py collectstatic --noinput
+#
+# Give an entry a 'url' key instead of 'file' to point a card at an external
+# site.
+# --------------------------------------------------------------------------
+# Brochures  —  /page/brochure/
+#
+# One row per download, in the order they should appear. The grid reads ACROSS
+# then down, two to a row on a desktop and one to a row on a phone, so keep
+# "Main Brochure" first.
+#
+#   title  the wording on the row
+#   file   the PDF, under static/documents/
+#   url    use INSTEAD of 'file' to point a row at a document hosted elsewhere
+#
+# THE PDFs DO NOT HAVE TO EXIST YET
+# Every row below is written before its file. The view resolves each path the
+# forgiving way, so a row whose PDF has not been uploaded still appears - it
+# just reads "Coming soon" instead of offering a download, rather than
+# breaking the page. Drop the file into static/documents/ under the name
+# written here, run
+#     python manage.py collectstatic --noinput
+# and that row turns into a download on its own, with nothing to edit.
+BROCHURES = [
+    {'title': 'Main Brochure',
+     'file': 'documents/brochure-main.pdf'},
+    {'title': 'School of Engineering',
+     'file': 'img/brochure/Engg Brochure_compressed.pdf'},
+    {'title': 'School of Management',
+     'file': 'img/brochure/ManagementBrochure.pdf'},
+    {'title': 'School of Computer Science',
+     'file': 'documents/brochure-school-of-computer-science.pdf'},
+    {'title': 'School of Humanities & Social Sciences',
+     'file': 'img/brochure/Eng Journa Brochure_compressed.pdf'},
+    {'title': 'School of Allied Health Services',
+     'file': 'img/brochure/Allied Brochure_compressed.pdf'},
+    {'title': 'School of Legal Studies',
+     'file': 'documents/brochure-school-of-legal-studies.pdf'},
+    {'title': 'School of Life Sciences',
+     'file': 'documents/brochure-school-of-life-sciences.pdf'},
+    {'title': 'School of Basic Sciences',
+     'file': 'documents/brochure-school-of-basic-sciences.pdf'},
+    {'title': 'School of Agriculture',
+     'file': 'documents/brochure-school-of-agriculture.pdf'},
+]
+
 RECOGNITIONS = [
     {'name': 'Department Of Higher Education',
-     'file': 'documents/department-of-higher-education.pdf'},
+     'file': 'documents/kolkata.pdf'},
     {'name': 'Government Of West Bengal',
-     'file': 'documents/government-of-west-bengal.pdf'},
+     'file': 'documents/ACT.pdf'},
     {'name': 'University Grants Commission',
-     'file': 'documents/university-grants-commission.pdf'},
+     'file': 'documents/UGC.pdf'},
     {'name': 'Bar Council of India',
-     'file': 'documents/bar-council-of-india.pdf'},
+     'file': 'documents/Bar_Council_of_India.pdf'},
 ]

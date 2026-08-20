@@ -7,6 +7,7 @@ stay exactly as they are and only the lookups in this file change.
 """
 import datetime
 import logging
+import re
 
 from django.core.paginator import Paginator
 from django.http import Http404, JsonResponse
@@ -14,12 +15,12 @@ from django.shortcuts import redirect, render
 from django.template import TemplateDoesNotExist
 from django.templatetags.static import static as static_url
 from django.urls import reverse
-from django.utils.html import escape, strip_tags
+from django.utils.html import strip_tags
 from django.utils.text import slugify
-from django.utils.safestring import mark_safe
 from django.views.decorators.http import require_GET, require_POST
 
 from . import captcha, data
+from .templatetags.svu_extras import doc_url
 from .forms import ContactForm, EnquiryForm
 
 logger = logging.getLogger(__name__)
@@ -84,6 +85,7 @@ def _departments(school=None):
     page needs when it lists its own departments.
     """
     school_names = {s["slug"]: s["name"] for s in data.SCHOOLS}
+    school_images = {s["slug"]: s.get("card_image", "") for s in data.SCHOOLS}
     items = []
     for row in data.DEPARTMENTS:
         if school and row["school"] != school:
@@ -91,6 +93,13 @@ def _departments(school=None):
         item = dict(row)
         item["url"] = reverse("website:department_detail", args=[row["slug"]])
         item["school_name"] = school_names.get(row["school"], "")
+        # The photograph beside the intro. A department that has not been given
+        # one of its own borrows its school's card image, and the generic
+        # placeholder only appears if that is missing too - so the layout never
+        # collapses around a hole while the real photographs are collected.
+        item["image"] = (_asset(row.get("image"))
+                         or _asset(school_images.get(row["school"], ""))
+                         or _asset("img/school-placeholder.svg"))
         item["school_url"] = (
             reverse("website:school_detail", args=[row["school"]])
             if row["school"] in school_names else ""
@@ -103,13 +112,21 @@ def _departments(school=None):
 
 def _courses():
     school_names = {s["slug"]: s["name"] for s in data.SCHOOLS}
+    school_images = {s["slug"]: s.get("card_image", "") for s in data.SCHOOLS}
     department_names = {d["slug"]: d["name"] for d in data.DEPARTMENTS}
+    department_images = {d["slug"]: d.get("image", "") for d in data.DEPARTMENTS}
     program_names = {p["slug"]: p["name"] for p in data.PROGRAMS}
     items = []
     for row in data.COURSES:
         item = dict(row)
         item["url"] = reverse("website:course_detail", args=[row["slug"]])
         item["school_name"] = school_names.get(row["school"], "")
+        # Same fallback ladder as a department: the course's own picture, then
+        # its department's, then its school's, then the placeholder.
+        item["card_image"] = (_asset(row.get("card_image"))
+                              or _asset(department_images.get(row["department"], ""))
+                              or _asset(school_images.get(row["school"], ""))
+                              or _asset("img/school-placeholder.svg"))
         item["department_name"] = department_names.get(row["department"], "")
         item["program_name"] = program_names.get(row["program"], "")
         item["school_url"] = (
@@ -230,6 +247,10 @@ def school_list(request):
         "hero_subtitle": "%s schools covering engineering, management, sciences, agriculture, "
                          "computer science, health, humanities and law."
                          % _count_word(len(schools)),
+        # The banner photograph. page_hero.html lays it over the dark ground at
+        # low opacity, which is what keeps the white title readable — swap the
+        # file name here and that is the whole edit.
+        "hero_image": "img/about/team.png",
         "crumbs": [{"label": "Academics"}, {"label": "SVU Schools"}],
     })
 
@@ -315,8 +336,17 @@ def _department_tabs(department):
     if tabs is None:
         tabs = data.DEFAULT_DEPARTMENT_TABS
 
+    # Every default string reads "the Department of {department}", and every
+    # name in DEPARTMENTS begins with "Department Of", so substituting the
+    # whole name gives "the Department of Department Of Physics". The
+    # placeholder takes the SUBJECT instead - "Physics" - which is what those
+    # sentences are written around. A name that does not carry the prefix is
+    # used as it stands.
+    subject = re.sub(r"^\s*department\s+(of\s+)?", "", department["name"],
+                     flags=re.IGNORECASE).strip() or department["name"]
+
     def fill(value):
-        return value.replace("{department}", department["name"]) if value else value
+        return value.replace("{department}", subject) if value else value
 
     panels = []
     for index, row in enumerate(tabs):
@@ -328,8 +358,129 @@ def _department_tabs(department):
         tab["points"] = [{"label": fill(p.get("label", "")), "text": fill(p.get("text", ""))}
                          for p in row.get("points", [])]
         tab["icon"] = row.get("icon") or "book"
+        # Message Desk sets 'image' in data.py and the panel lays the text out
+        # beside it; a tab without one keeps the full width.
+        tab["image"] = _asset(row.get("image", ""))
+        # The signature carries {department} as well, so the shared default
+        # block signs off as this department rather than as a placeholder.
+        signature = row.get("signature")
+        if signature:
+            tab["signature"] = {k: fill(v) for k, v in signature.items()}
         panels.append(tab)
     return panels
+
+
+def _course_tabs(course):
+    """Tab panels for a course page.
+
+    Every course page carries the SAME three tabs, so they all read alike:
+    Programme Overview, Course Eligibility, Career Opportunities. COURSE_TABS
+    in data.py overrides the lot for a course that has been written up
+    properly; without an entry there the three are built from the fields every
+    course already has - description, eligibility and careers - so a course is
+    a finished page the moment it is added to COURSES.
+
+    A tab whose source field is empty is dropped rather than rendered as an
+    empty panel, which is the one case where a page can still come up short.
+    """
+    rows = data.COURSE_TABS.get(course["slug"])
+    if rows is None:
+        rows = []
+        if course.get("description"):
+            rows.append({"title": "Programme Overview", "icon": "book",
+                         "body": [course["description"]]})
+        if course.get("eligibility"):
+            rows.append({"title": "Course Eligibility", "icon": "scales",
+                         "body": [course["eligibility"]]})
+        if course.get("careers"):
+            rows.append({"title": "Career Opportunities", "icon": "industry",
+                         "intro": "Roles this programme leads into:",
+                         "points": [{"text": role} for role in course["careers"]]})
+
+    panels = []
+    for index, row in enumerate(rows):
+        tab = dict(row)
+        tab["slug"] = row.get("slug") or slugify(row["title"]) or "tab-%d" % (index + 1)
+        tab["heading"] = row.get("heading") or row["title"]
+        tab["intro"] = row.get("intro", "")
+        tab["body"] = list(row.get("body", []))
+        tab["points"] = [{"label": p.get("label", ""), "text": p.get("text", "")}
+                         for p in row.get("points", [])]
+        tab["icon"] = row.get("icon") or "book"
+        panels.append(tab)
+    return panels
+
+
+def _course_faqs(course):
+    """Questions for a course page.
+
+    COURSE_FAQS in data.py holds the written-out ones. Without an entry the
+    answers are assembled from that course's own record - eligibility,
+    duration, intake, department, careers - so every course page carries the
+    section and nothing in it is invented: each answer restates a field that
+    is already on the page or in COURSES.
+    """
+    rows = data.COURSE_FAQS.get(course["slug"])
+    if rows is not None:
+        return rows
+
+    name = course["name"]
+    faqs = []
+
+    if course.get("eligibility"):
+        faqs.append({
+            "question": "Who is eligible to apply for %s?" % name,
+            "answer": course["eligibility"],
+        })
+
+    if course.get("duration"):
+        answer = "%s runs for %s." % (name, course["duration"])
+        if course.get("total_seats"):
+            answer += (" The approved intake is %s seats for each admission "
+                       "cycle." % course["total_seats"])
+        faqs.append({
+            "question": "How long is %s, and how many seats are there?" % name,
+            "answer": answer,
+        })
+
+    if course.get("department_name"):
+        answer = "%s is taught by the %s" % (name, course["department_name"])
+        answer += (", part of the %s." % course["school_name"]
+                   if course.get("school_name") else ".")
+        faqs.append({
+            "question": "Which department runs %s?" % name,
+            "answer": answer,
+        })
+
+    if course.get("careers"):
+        faqs.append({
+            "question": "What roles can a %s graduate apply for?" % name,
+            "answer": "Graduates go into roles such as %s."
+                      % _readable_list(course["careers"]),
+        })
+
+    return faqs
+
+
+def _readable_list(items):
+    """'a, b and c' — for an answer sentence built out of a list field."""
+    items = [str(i) for i in items if i]
+    if not items:
+        return ""
+    if len(items) == 1:
+        return items[0]
+    return "%s and %s" % (", ".join(items[:-1]), items[-1])
+
+
+def _recruiters():
+    """Logos for the recruiter panel, with their image paths resolved."""
+    items = []
+    for row in data.PARTNERS:
+        item = dict(row)
+        item["logo"] = _asset(row.get("logo"))
+        if item["logo"]:
+            items.append(item)
+    return items
 
 
 def department_list(request):
@@ -344,6 +495,10 @@ def department_list(request):
         "groups": groups,
         "hero_title": "Departments",
         "hero_subtitle": "Every department of the university, listed under its school.",
+        # The banner photograph, laid over the dark ground at low opacity by
+        # page_hero.html so the white title stays readable. Swap the file name
+        # here and that is the whole edit.
+        "hero_image": "img/about/team.png",
         "crumbs": [{"label": "Academics"}, {"label": "Departments"}],
     })
 
@@ -433,6 +588,10 @@ def course_detail(request, slug):
     context = {
         "course": course,
         "related": related[:6],
+        "tabs": _course_tabs(course),
+        "faqs": _course_faqs(course),
+        "board": data.COURSE_BOARD_OF_STUDIES.get(slug, []),
+        "recruiters": _recruiters(),
         "hero_title": course["name"],
         "hero_subtitle": "%s  |  %s" % (course["program_name"], course["duration"]),
         "crumbs": [
@@ -608,24 +767,21 @@ def about(request):
 
 def our_team(request):
     """Leadership and administration, one scroll-stacked panel per person."""
+    # No stack_title/stack_lead here on purpose: the page's photo banner
+    # carries that heading, so the include skips its own intro band.
     return render(request, "pages/our_team.html", {
         "team": data.TEAM,
         "stack_label": "The people behind %s" % data.SITE["site_name"],
-        "stack_title": mark_safe(
-            "The People Behind <strong>%s</strong>" % escape(data.SITE["site_name"])),
-        "stack_lead": "The leadership, academic direction and administration guiding "
-                      "the university.",
     })
 
 
 def our_mentors(request):
     """Mentors and advisors, using the same stacked panels as the team page."""
+    # As on Our Team, no stack_title/stack_lead: the page's photo banner
+    # carries that heading, so the include skips its own intro band.
     return render(request, "pages/our_mentors.html", {
         "mentors": data.MENTORS,
         "stack_label": "Mentors and advisors",
-        "stack_title": mark_safe("Meet the Minds <strong>Shaping Our University</strong>"),
-        "stack_lead": "Vice-chancellors, scientists and academics from institutions "
-                      "across India and abroad, guiding the university's growth.",
     })
 
 
@@ -712,6 +868,32 @@ def life_detail(request, slug):
         logger.warning("LIFE_AT_SVU lists %r but pages/life/%s.html is missing",
                        slug, slug)
         raise Http404("Life at SVU page %r has no template yet" % slug)
+
+
+def brochure(request):
+    """The brochure downloads.
+
+    Each row is resolved through doc_url rather than a bare static tag. That
+    filter hands back an empty string for a PDF that is not there instead of
+    raising, which is what lets the page list a brochure before its file has
+    been uploaded: the row renders, marked "Coming soon", and becomes a real
+    download the moment the file is collected. A bare static tag would take
+    the whole page down over one missing PDF.
+    """
+    items = []
+    for row in data.BROCHURES:
+        item = dict(row)
+        item["href"] = row.get("url") or doc_url(row.get("file", ""))
+        item["is_external"] = bool(row.get("url"))
+        items.append(item)
+
+    return render(request, "pages/brochure.html", {
+        "brochures": items,
+        "hero_title": "Brochure",
+        "hero_subtitle": "Download the university prospectus and the brochure "
+                         "for any school.",
+        "crumbs": [{"label": "At a Glance"}, {"label": "Brochure"}],
+    })
 
 
 def page_detail(request, slug):

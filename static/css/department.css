@@ -236,3 +236,164 @@
   .faculty-card { padding: 22px 18px 18px; }
   .faculty-card__avatar { width: 116px; height: 116px; }
 }
+
+/* ==========================================================================
+   Department page — intro band and course cards
+   Loaded only by pages/department_detail.html.
+   ========================================================================== */
+
+/* split_heading emits .h-dark / .h-accent, but '.page-heading span' colours
+   every span in the heading red, which would swallow the dark half. Two
+   classes outrank one class plus an element, so these win without !important. */
+.page-heading .h-dark   { color: var(--ink); }
+.page-heading .h-accent { color: var(--red); font-weight: inherit; }
+
+/* ------------------------------------------------------------- intro ---- */
+/* Vertical rhythm is .section's own padding — no override here, so these
+   bands line up with every other section on the site. */
+.dept-intro__row {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: clamp(24px, 3vw, 46px);
+  align-items: center;
+}
+
+.dept-intro__media { margin: 0; }
+.dept-intro__media img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.dept-intro__copy .page-heading { margin-top: 0; }
+
+.dept-intro__text {
+  margin: 18px 0 0;
+  color: var(--ink-soft);
+  line-height: 1.85;
+  text-align: justify;
+}
+
+.dept-intro__school { margin: 14px 0 0; font-size: .86rem; color: var(--muted); }
+.dept-intro__school a { color: var(--accent); font-weight: 600; }
+.dept-intro__school a:hover { text-decoration: underline; }
+
+/* ----------------------------------------------------------- courses ---- */
+/* The tint comes from .section--alt in the template, which is the site's
+   existing band modifier — not a background declared again here. */
+.course-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(288px, 1fr));
+  gap: clamp(18px, 2vw, 28px);
+}
+
+.course-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--paper);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: box-shadow var(--transition), transform var(--transition);
+}
+.course-card:hover { box-shadow: var(--shadow); transform: translateY(-3px); }
+
+.course-card__media {
+  position: relative;
+  display: block;
+  background: var(--page);
+}
+.course-card__media img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+}
+
+/* The programme badge — 'Diploma', 'B.Tech' — set in COURSES in data.py. */
+.course-card__badge {
+  position: absolute;
+  left: 14px;
+  bottom: 14px;
+  padding: 5px 14px;
+  background: var(--red);
+  color: #fff;
+  font-size: .74rem;
+  font-weight: 700;
+  letter-spacing: .02em;
+  border-radius: var(--radius-sm);
+}
+
+.course-card__body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 18px 20px 20px;
+}
+
+.course-card__title { margin: 0; font-size: .98rem; line-height: 1.4; }
+.course-card__title a { color: var(--ink); }
+.course-card__title a:hover { color: var(--accent); }
+
+.course-card__desc {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: .86rem;
+  line-height: 1.7;
+  text-align: justify;
+}
+
+/* Pushed to the foot so the link sits on the same line across a row of cards
+   whose titles run to different depths. */
+.course-card__more {
+  margin-top: auto;
+  padding-top: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--red);
+  font-size: .84rem;
+  font-weight: 700;
+}
+.course-card__more:hover { color: var(--accent); }
+.course-card__more svg { width: 12px; height: 12px; fill: currentColor; }
+
+/* ------------------------------------------------- message desk split --- */
+/* Only when the tab carries an 'image'; otherwise .tab-pane__body is
+   untouched and the text keeps the full width. */
+.tab-pane__body--split {
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+  gap: clamp(20px, 2.6vw, 38px);
+  align-items: start;
+}
+.tab-pane__media { margin: 0; }
+.tab-pane__media img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 5 / 4;
+  object-fit: cover;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+.tab-pane__prose > p:first-child { margin-top: 0; }
+
+@media (max-width: 991.98px) {
+  .dept-intro__row { grid-template-columns: 1fr; }
+  .tab-pane__body--split { grid-template-columns: 1fr; }
+  /* Picture under the message on a narrow screen: the words are what the
+     visitor came for, and a portrait pushed above them buries the text. */
+  .tab-pane__media { order: 2; max-width: 420px; }
+}
+
+@media (max-width: 575.98px) {
+  .course-card-grid { grid-template-columns: 1fr; }
+  .dept-intro__text { text-align: left; }
+  .course-card__desc { text-align: left; }
+}

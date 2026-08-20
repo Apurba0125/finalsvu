@@ -1,0 +1,144 @@
+/* ==========================================================================
+   Course page  —  /academics/courses/<slug>/
+   Loaded only by pages/course_detail.html, on top of department.css, which
+   supplies the intro band (.dept-intro) and the tab panel (.dept-tabs) that
+   this page shares with the department page.
+   ========================================================================== */
+
+/* ------------------------------------------------------------- intro ---- */
+/* Facts under the description: programme, duration, intake, department. */
+.course-facts {
+  list-style: none;
+  margin: 22px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px 22px;
+}
+.course-facts li {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 10px 0 0;
+  border-top: 2px solid var(--line);
+}
+.course-facts .k {
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.course-facts .v { font-size: .9rem; font-weight: 600; color: var(--ink); }
+.course-facts .v a { color: var(--accent); }
+.course-facts .v a:hover { text-decoration: underline; }
+
+/* --------------------------------------------- tab panel + enquiry ------ */
+/* This band stays white between the two tinted ones either side of it, so
+   the tabs read as the middle of the page rather than another stripe. */
+.course-panel__row {
+  display: grid;
+  grid-template-columns: minmax(0, 8fr) minmax(0, 4fr);
+  gap: clamp(22px, 2.6vw, 40px);
+  align-items: start;
+}
+.course-panel__main { min-width: 0; }
+.course-panel__main .dept-tabs { margin-top: 0; }
+
+/* The form follows the tabs down instead of scrolling away, which is the
+   point of putting it beside them rather than at the foot of the page.
+
+   The offset clears the navigation bar, which turns sticky at top:0 once the
+   page scrolls (.nav.is-stuck in main.css). That bar is about 44px tall -
+   13px padding either side of an uppercase .78rem line plus its 3px active
+   border - so 60px leaves it clear with a small gap. It is written here once
+   rather than repeated down the file. */
+.course-panel__aside {
+  --sticky-top: 60px;
+  position: sticky;
+  top: var(--sticky-top);
+  min-width: 0;
+}
+
+/* A viewport too short to hold the form would strand its lower fields off
+   screen with no way to reach them, so below that height it stops sticking. */
+@media (max-height: 720px) {
+  .course-panel__aside { position: static; }
+}
+
+/* ------------------------------------------------- FAQ + recruiters ----- */
+.course-extras__row {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  gap: clamp(24px, 3vw, 48px);
+  align-items: start;
+}
+/* With no questions yet the recruiters take the full width instead of
+   sitting in a half-empty row. */
+.course-extras__row--single { grid-template-columns: 1fr; }
+
+.recruiter-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 14px;
+}
+.recruiter-grid__item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 92px;
+  padding: 14px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  transition: box-shadow var(--transition), border-color var(--transition);
+}
+.recruiter-grid__item:hover { box-shadow: var(--shadow-sm); border-color: #cfcfcf; }
+.recruiter-grid__item img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 56px;
+  object-fit: contain;
+}
+
+/* --------------------------------------------------- board of studies --- */
+.board-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+}
+.board-card {
+  padding: 16px 18px;
+  background: var(--paper);
+  border-left: 3px solid var(--gold);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-xs);
+}
+.board-card__name { margin: 0; font-weight: 800; color: var(--ink); }
+.board-card__role { margin: 4px 0 0; font-size: .84rem; color: var(--accent); }
+.board-card__org  { margin: 3px 0 0; font-size: .82rem; color: var(--muted); }
+
+/* ---------------------------------------------------------- responsive -- */
+@media (max-width: 991.98px) {
+  /* The form drops under the tabs rather than being squeezed into a column
+     too narrow for its fields, and stops sticking once there is nothing
+     beside it to stick against. */
+  .course-panel__row,
+  .course-extras__row { grid-template-columns: 1fr; }
+  .course-panel__aside { position: static; }
+  /* Full width would stretch a 12-field form across the page; this keeps it
+     the width it was designed at and centred under the tabs. */
+  .course-panel__aside .panel { max-width: 520px; margin-inline: auto; }
+}
+
+@media (max-width: 575.98px) {
+  .recruiter-grid { grid-template-columns: repeat(2, 1fr); }
+  .course-facts { grid-template-columns: 1fr; }
+}

@@ -1,0 +1,118 @@
+/* ==========================================================================
+   Brochure page  —  /page/brochure/
+   Loaded only by pages/brochure.html. The banner and the heading with its
+   rule come from page-head.css.
+   ========================================================================== */
+
+/* Two rows to a line on a desktop, reading across then down, and one to a
+   line once there is no longer width for two. auto-fit with a minimum rather
+   than a fixed "repeat(2, 1fr)" means the collapse happens when the content
+   actually runs out of room instead of at a breakpoint guessed in advance —
+   a long school name is what decides it, not the device. */
+.brochure-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 18px 26px;
+}
+
+/* The whole row is the target, not just the icon: a 24px icon is well under
+   the 44px a finger needs, and the title is the thing people aim at. */
+.brochure-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  /* Tall enough to clear the 44px touch minimum even when the title is one
+     short line. */
+  min-height: 62px;
+  padding: 16px 20px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-left: 3px solid transparent;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-xs);
+  transition: box-shadow var(--transition), border-left-color var(--transition),
+              transform var(--transition);
+}
+
+a.brochure-row:hover,
+a.brochure-row:focus-visible {
+  border-left-color: var(--red);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-2px);
+}
+a.brochure-row:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+
+.brochure-row__title {
+  color: var(--ink);
+  font-size: .95rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.brochure-row__icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  color: var(--ink);
+  transition: color var(--transition), transform var(--transition);
+}
+/* Sized here because the sprite's symbols carry a viewBox and no dimensions:
+   an <svg> left unsized stretches to fill the flex row. */
+.brochure-row__icon svg {
+  width: 22px;
+  height: 22px;
+  fill: currentColor;
+}
+a.brochure-row:hover .brochure-row__icon,
+a.brochure-row:focus-visible .brochure-row__icon {
+  color: var(--red);
+  transform: translateY(2px);
+}
+
+/* A brochure listed before its PDF was uploaded. Deliberately flat — no
+   hover, no shadow lift — so it does not read as something to click. */
+.brochure-row--pending {
+  background: var(--page-alt);
+  box-shadow: none;
+}
+.brochure-row--pending .brochure-row__title { color: var(--muted); font-weight: 600; }
+.brochure-row__soon {
+  flex: none;
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------- responsive -- */
+@media (max-width: 575.98px) {
+  /* Below this a two-line title in a padded row starts to feel cramped, and
+     the gap between rows matters more than the padding inside them. */
+  .brochure-list { gap: 12px; }
+  .brochure-row { padding: 14px 16px; min-height: 58px; gap: 12px; }
+  .brochure-row__title { font-size: .89rem; }
+}
+
+/* A very narrow phone: let the title use the full width and drop the pending
+   label beneath it rather than squeezing both onto one line. */
+@media (max-width: 359.98px) {
+  .brochure-row--pending {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+}
+
+@media print {
+  /* The icon means nothing on paper, and the rows should not carry shadows. */
+  .brochure-row { box-shadow: none; border-left-color: var(--line); }
+  .brochure-row__icon { display: none; }
+}

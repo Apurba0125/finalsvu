@@ -807,6 +807,138 @@ table { border-collapse: collapse; width: 100%; }
   .nav__submenu--mega { column-count: 2; width: min(760px, calc(100vw - 32px)); }
 }
 
+/* Third level: the Departments board ------------------------------------
+   A dropdown child carrying 'panel' in data.py flies its own board out to the
+   side - school headings, each with its departments beneath, read down in
+   columns.  The contents come from context_processors.py, so the board lists
+   whatever DEPARTMENTS holds and never needs editing here.
+
+   The row is the positioning context and the board hangs off its right edge.
+   That only fits because Programs sits near the left of the bar; a panel on a
+   menu further along would run off the screen and would need the mega menu's
+   centring instead.  The width subtracts the whole distance already spent -
+   the item's offset plus the 250px dropdown - so the board cannot reach past
+   the right edge on a narrow laptop. */
+.nav__subitem--has-panel { position: relative; }
+.nav__subitem--has-panel > a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+/* The shared caret points down; on a sideways flyout it points the way the
+   board opens.
+
+   It needs its own size: the rule that sizes every other caret is scoped to
+   '.nav__link .nav__caret', and this one hangs off an ordinary dropdown
+   anchor instead. Left unsized, an <svg> with a viewBox and no dimensions
+   stretches to fill the flex row - which is exactly what it did, blowing the
+   Departments row up to the height of the arrow. */
+.nav__submenu .nav__caret--side {
+  width: 9px;
+  height: 9px;
+  flex: none;
+  opacity: .8;
+  transform: rotate(-90deg);
+  transition: transform .22s ease, opacity .18s ease;
+}
+.nav__subitem--has-panel:hover > a .nav__caret--side,
+.nav__subitem--has-panel:focus-within > a .nav__caret--side { opacity: 1; }
+
+.nav__panel {
+  position: absolute;
+  top: -6px;
+  left: 100%;
+  width: min(920px, calc(100vw - 470px));
+  padding: 22px 26px 4px;
+  background: #fff;
+  box-shadow: var(--shadow-lg);
+  border-top: 3px solid var(--gold);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  column-count: 3;
+  column-gap: 34px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(6px);
+  /* Same closing delay as the dropdown above it: the pointer has to cross
+     from the label into the board without it vanishing on the way. */
+  transition:
+    opacity .2s ease .14s,
+    transform .2s ease .14s,
+    visibility 0s linear .34s;
+  z-index: 80;
+}
+.nav__subitem--has-panel:hover > .nav__panel,
+.nav__subitem--has-panel:focus-within > .nav__panel,
+.nav__subitem--has-panel.is-open > .nav__panel {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0);
+  transition:
+    opacity .22s cubic-bezier(.22, .61, .36, 1) .06s,
+    transform .22s cubic-bezier(.22, .61, .36, 1) .06s,
+    visibility 0s linear .06s;
+}
+
+/* A school and the departments under it must never be split by a column
+   break, or a heading ends up stranded at the foot of one column. */
+.nav__panel-group {
+  break-inside: avoid;
+  page-break-inside: avoid;
+  margin-bottom: 20px;
+}
+
+/* Scoped past '.nav__submenu a', which otherwise lands its own padding and
+   left border on both of these - it matches every anchor in the dropdown,
+   and this board sits inside one. */
+.nav__panel a.nav__panel-heading {
+  display: block;
+  padding: 0;
+  color: var(--ink);
+  font-size: .8rem;
+  font-weight: 600;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+  line-height: 1.3;
+  border-left: 0;
+  background: none;
+}
+.nav__panel a.nav__panel-heading::after {
+  content: "";
+  display: block;
+  width: 108px;
+  height: 3px;
+  margin-top: 9px;
+  background: var(--red);
+}
+.nav__panel a.nav__panel-heading:hover,
+.nav__panel a.nav__panel-heading:focus { color: var(--accent); background: none; }
+
+.nav__panel-list { list-style: none; margin: 4px 0 0; padding: 0; }
+.nav__panel-list li + li { border-top: 1px solid var(--line); }
+.nav__panel .nav__panel-list a {
+  display: block;
+  padding: 10px 0;
+  color: var(--ink-soft);
+  font-size: .8rem;
+  font-weight: 500;
+  line-height: 1.45;
+  border-left: 0;
+  background: none;
+}
+.nav__panel .nav__panel-list a:hover,
+.nav__panel .nav__panel-list a:focus { color: var(--accent); background: none; }
+
+@media (max-width: 1399.98px) {
+  /* Two columns rather than three squeezed ones, same as the mega menu. */
+  .nav__panel { column-count: 2; }
+}
+@media (max-width: 1149.98px) {
+  /* Below this the board is too narrow to column at all, so it becomes one
+     list and scrolls inside itself rather than running off the screen. */
+  .nav__panel { column-count: 1; max-height: 72vh; overflow-y: auto; }
+}
+
 .nav__close, .nav__mobile-head { display: none; }
 .nav-scrim { display: none; }
 
@@ -2256,7 +2388,10 @@ table { border-collapse: collapse; width: 100%; }
   object-fit: cover;
   opacity: .32;
 }
-.page-hero__inner { position: relative; z-index: 2; }
+/* Centred, which is how .page-banner in page-head.css already sets its own
+   title — the two are the site's inner-page banners and reading one centred
+   and the other ranged left made them look like different components. */
+.page-hero__inner { position: relative; z-index: 2; text-align: center; }
 .page-hero__title {
   color: #fff;
   margin: 0 0 6px;
@@ -2270,6 +2405,7 @@ table { border-collapse: collapse; width: 100%; }
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
+  justify-content: center;
   margin: 8px 0 0;
   padding: 0;
   font-size: .78rem;
@@ -2693,6 +2829,42 @@ table { border-collapse: collapse; width: 100%; }
     font-size: .82rem;
   }
 
+  /* Third level in the drawer is one more accordion step, indented a notch
+     further - a board flying out of a 320px panel has nowhere to go. */
+  .nav__submenu .nav__caret--side { transform: none; }
+  .nav__subitem--has-panel.is-open > a .nav__caret--side { transform: rotate(180deg); }
+  .nav__submenu .nav__subitem--has-panel > a .nav__caret--side {
+    width: 10px; height: 10px;
+    box-sizing: content-box;
+    padding: 12px;
+    margin: -12px -12px -12px 0;
+  }
+  .nav__subitem--has-panel > a { min-height: 44px; }
+
+  .nav__panel {
+    position: static;
+    display: none;
+    width: auto;
+    max-height: none;
+    overflow: visible;
+    column-count: 1;
+    padding: 0;
+    background: #f4f4f4;
+    box-shadow: none;
+    border-top: 0;
+    border-radius: 0;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition: none;
+  }
+  .nav__subitem--has-panel.is-open > .nav__panel { display: block; }
+
+  .nav__panel-group { margin: 0; padding: 2px 16px 8px 30px; }
+  .nav__panel a.nav__panel-heading { padding: 12px 0 0; font-size: .74rem; }
+  .nav__panel a.nav__panel-heading::after { width: 84px; margin-top: 7px; }
+  .nav__panel .nav__panel-list a { padding: 11px 0; min-height: 44px; }
+
 
   .nav-scrim {
     display: block;
@@ -3095,7 +3267,8 @@ table { border-collapse: collapse; width: 100%; }
    -------------------------------------------------------------------------- */
 @media print {
   .topbar, .nav, .marquee, .hero, .float-actions, .header__cta,
-  .carousel__nav, .carousel__dots, .footer, .subfooter, .enquiry-panel { display: none !important; }
+  .carousel__nav, .carousel__dots, .footer, .subfooter,
+  .enquiry-panel, .course-panel__aside { display: none !important; }
   body { background: #fff; font-size: 11pt; color: #000; }
   .shell { max-width: none; padding: 0; }
   a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 9pt; color: #555; }

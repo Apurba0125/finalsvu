@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% comment %}
+===========================================================================
+BROCHURE  —  served at /page/brochure/ by website.views.brochure
+---------------------------------------------------------------------------
+Header, navigation and footer come from base.html. Do not add them here.
+
+Styling: page-head.css gives the banner and the heading with its rule (shared
+with About Us and Recognition); brochure.css is only the rows below.
+
+TO ADD, REMOVE OR REORDER A BROCHURE
+Edit the BROCHURES list in website/data.py — nothing in this file changes.
+The grid reads ACROSS then down, two rows to a line on a desktop, one on a
+phone, so keep "Main Brochure" first.
+
+THE PDF DOES NOT HAVE TO EXIST YET
+A row whose file has not been uploaded still appears; it reads "Coming soon"
+instead of offering a download. Drop the PDF into static/documents/ under the
+name written in BROCHURES, run
+
+    python manage.py collectstatic --noinput
+
+and that row turns into a download by itself. That is the doc_url filter in
+the view doing the work — a bare {% templatetag openblock %} static {% templatetag closeblock %} tag would raise for a
+path that was never collected and take the whole page down over one missing
+PDF.
+
+WHY THE ROW IS A LINK AND NOT A BUTTON
+It navigates to a file, so it is an anchor: middle-click, "save link as" and
+the browser's own download handling all keep working. The whole row is the
+target rather than just the icon, which is what makes it comfortable on a
+phone — a 24px icon is below the 44px minimum for a touch target.
+
+NOTE ON COMMENTS: the hash-style Django comment {# … #} covers a SINGLE line.
+For a multi-line note use a comment/endcomment pair like this one, or the
+text leaks onto the page.
+===========================================================================
+{% endcomment %}
+
+{% block title %}Brochure | {{ site.site_name }}{% endblock %}
+{% block meta_description %}Download the Swami Vivekananda University prospectus and the individual brochures for each school.{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/page-head.css' %}">
+  <link rel="stylesheet" href="{% static 'css/brochure.css' %}">
+{% endblock %}
+
+{% block content %}
+
+{# ===========================================================  BANNER  === #}
+{# THE BACKGROUND IMAGE IS SET HERE. Change the file name in the url() and  #}
+{# that is the whole edit — keep the dark gradient in front of it or the    #}
+{# white title stops being readable over a busy photograph.                 #}
+<section class="page-banner"
+         style="background-image: linear-gradient(0deg, rgba(10,10,10,.72), rgba(10,10,10,.55)), url('{% static 'img/about/campus.jpg' %}');">
+  <div class="shell">
+    <h1 class="page-banner__title">Brochure</h1>
+  </div>
+</section>
+
+
+{# ========================================================  DOWNLOADS  === #}
+<section class="section">
+  <div class="shell">
+    <div class="page-head">
+      <h2 class="page-heading">Brochure</h2>
+      <span class="page-rule"></span>
+    </div>
+
+    {% if brochures %}
+      <ul class="brochure-list">
+        {% for item in brochures %}
+          <li class="brochure-list__item">
+
+            {% if item.href %}
+              <a class="brochure-row"
+                 href="{{ item.href }}"
+                 {% if item.is_external %}
+                   target="_blank" rel="noopener noreferrer"
+                 {% else %}
+                   download type="application/pdf"
+                 {% endif %}>
+                <span class="brochure-row__title">{{ item.title }}</span>
+                <span class="brochure-row__icon" aria-hidden="true">
+                  <svg focusable="false"><use href="#i-download"></use></svg>
+                </span>
+                <span class="sr-only">
+                  {% if item.is_external %}(opens in a new tab){% else %}(PDF download){% endif %}
+                </span>
+              </a>
+
+            {% else %}
+              {# No file collected yet. Still shown, so the list is complete  #}
+              {# and the row starts working the moment the PDF is uploaded.  #}
+              <div class="brochure-row brochure-row--pending">
+                <span class="brochure-row__title">{{ item.title }}</span>
+                <span class="brochure-row__soon">Coming soon</span>
+              </div>
+            {% endif %}
+
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <div class="empty-state">
+        <svg aria-hidden="true"><use href="#i-file"></use></svg>
+        <p>The brochures are being prepared and will be published shortly.</p>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% endblock %}

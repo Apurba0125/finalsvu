@@ -33,9 +33,40 @@
           {# the multi-column panel; without it the menu stays one column.     #}
           <ul class="nav__submenu{% if entry.columns %} nav__submenu--mega{% endif %}">
             {% for child in entry.children %}
-              <li>
+              {% comment %}
+              A child with 'groups' opens a third level: the panel below, laid
+              out in columns of school headings with their departments under
+              them. The groups are built in website/context_processors.py from
+              SCHOOLS and DEPARTMENTS, never written out in data.py.
+
+              The label stays a real link — Departments has its own page — and
+              the caret beside it is what expands the panel in the mobile
+              drawer, the same split the top-level items use.
+              {% endcomment %}
+              <li{% if child.groups %} class="nav__subitem nav__subitem--has-panel"{% endif %}>
                 <a href="{{ child.href }}"
-                   {% if child.is_external %}target="_blank" rel="noopener noreferrer"{% endif %}>{{ child.title }}</a>
+                   {% if child.is_external %}target="_blank" rel="noopener noreferrer"{% endif %}
+                   {% if child.groups %}aria-expanded="false" aria-haspopup="true"{% endif %}>
+                  {{ child.title }}
+                  {% if child.groups %}
+                    <svg class="nav__caret nav__caret--side" aria-hidden="true" focusable="false"><use href="#i-caret"></use></svg>
+                  {% endif %}
+                </a>
+
+                {% if child.groups %}
+                  <div class="nav__panel">
+                    {% for group in child.groups %}
+                      <div class="nav__panel-group">
+                        <a class="nav__panel-heading" href="{{ group.href }}">{{ group.title }}</a>
+                        <ul class="nav__panel-list">
+                          {% for item in group.items %}
+                            <li><a href="{{ item.href }}">{{ item.title }}</a></li>
+                          {% endfor %}
+                        </ul>
+                      </div>
+                    {% endfor %}
+                  </div>
+                {% endif %}
               </li>
             {% endfor %}
           </ul>

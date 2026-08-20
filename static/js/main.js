@@ -54,26 +54,29 @@
       }
     });
 
+    function isDrawer() {
+      return window.matchMedia("(max-width: 991.98px)").matches;
+    }
+
+    /* Did the tap land on the caret rather than the label? Walking up beats
+       closest() here because the target is usually the <use> inside the
+       <svg>, and closest() on an SVG element is not safe everywhere. */
+    function onCaret(link, node) {
+      while (node && node !== link) {
+        if (node.classList && node.classList.contains("nav__caret")) { return true; }
+        node = node.parentNode;
+      }
+      return false;
+    }
+
     // Submenu behaviour: click-to-expand on touch/small screens,
     // pure CSS hover on desktop.
     $$(".nav__item--has-children", nav).forEach(function (item) {
       var link = $(".nav__link", item);
       if (!link) { return; }
 
-      /* Did the tap land on the caret rather than the label? Walking up beats
-         closest() here because the target is usually the <use> inside the
-         <svg>, and closest() on an SVG element is not safe everywhere. */
-      function onCaret(node) {
-        while (node && node !== link) {
-          if (node.classList && node.classList.contains("nav__caret")) { return true; }
-          node = node.parentNode;
-        }
-        return false;
-      }
-
       link.addEventListener("click", function (e) {
-        var isMobile = window.matchMedia("(max-width: 991.98px)").matches;
-        if (!isMobile) { return; }
+        if (!isDrawer()) { return; }
 
         var submenu = $(".nav__submenu", item);
         if (!submenu) { return; }
@@ -87,7 +90,7 @@
            their children repeats — collapsing the whole row into a toggle
            would leave those three unreachable from the drawer. */
         if (item.classList.contains("is-open")) {
-          if (onCaret(e.target) || goesNowhere) {
+          if (onCaret(link, e.target) || goesNowhere) {
             e.preventDefault();
             item.classList.remove("is-open");
             link.setAttribute("aria-expanded", "false");
@@ -109,6 +112,33 @@
       });
     });
 
+    /* Third level — Programs > Departments. On desktop the board opens on
+       hover from CSS alone; in the drawer it is one more accordion step, and
+       the caret/label split works exactly as it does a level up: the caret
+       expands the board, the label still goes to the Departments page. */
+    $$(".nav__subitem--has-panel", nav).forEach(function (item) {
+      var link = $("a", item);
+      if (!link || !$(".nav__panel", item)) { return; }
+
+      link.addEventListener("click", function (e) {
+        if (!isDrawer()) { return; }
+
+        if (item.classList.contains("is-open")) {
+          if (onCaret(link, e.target)) {
+            e.preventDefault();
+            item.classList.remove("is-open");
+            link.setAttribute("aria-expanded", "false");
+          }
+          return;
+        }
+
+        // First tap expands, whether it landed on the caret or the label.
+        e.preventDefault();
+        item.classList.add("is-open");
+        link.setAttribute("aria-expanded", "true");
+      });
+    });
+
     // Reset drawer state when resizing up to desktop.
     var resizeTimer;
     window.addEventListener("resize", function () {
@@ -116,9 +146,14 @@
       resizeTimer = setTimeout(function () {
         if (window.innerWidth >= 992) {
           closeNav();
-          $$(".nav__item.is-open", nav).forEach(function (i) {
-            i.classList.remove("is-open");
-          });
+          $$(".nav__item.is-open, .nav__subitem--has-panel.is-open", nav)
+            .forEach(function (i) {
+              i.classList.remove("is-open");
+              var l = $("a", i);
+              if (l && l.hasAttribute("aria-expanded")) {
+                l.setAttribute("aria-expanded", "false");
+              }
+            });
         }
       }, 150);
     });

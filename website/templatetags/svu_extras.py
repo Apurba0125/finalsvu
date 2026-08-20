@@ -7,6 +7,8 @@ import logging
 import re
 
 from django import template
+from django.conf import settings
+from django.contrib.staticfiles import finders
 from django.templatetags.static import static as static_url
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
@@ -72,6 +74,38 @@ def is_current(context, href):
 
 
 @register.filter
+def course_heading(value):
+    """A course name with the subject half in the accent colour.
+
+    ``split_heading`` counts words from the front, which works for a fixed
+    opening like "Department Of". Course names have no fixed opening and no
+    fixed length - "LL.M", "Diploma in Computer Science & Technology",
+    "Master of Computer Applications (MCA)" - so counting words there gives
+    "& Technology" as often as it gives anything readable.
+
+    This splits at the connector instead, keeping it with the dark half:
+
+        "Diploma in Computer Science & Technology"
+            -> "Diploma in" + "Computer Science & Technology"
+        "Master of Computer Applications (MCA)"
+            -> "Master of" + "Computer Applications (MCA)"
+
+    A name with no connector ("LL.M") stays entirely dark rather than being
+    cut at an arbitrary word.
+    """
+    if not value:
+        return ""
+    text = str(value)
+    match = re.search(r"\s+(in|of)\s+", text, re.IGNORECASE)
+    if not match:
+        return mark_safe('<span class="h-dark">%s</span>' % escape(text))
+    head = text[:match.end()].rstrip()
+    tail = text[match.end():].strip()
+    return mark_safe('<span class="h-dark">%s</span> <span class="h-accent">%s</span>'
+                     % (escape(head), escape(tail)))
+
+
+@register.filter
 def field_type(field):
     """Widget class name, so the template can style selects differently."""
     return field.field.widget.__class__.__name__
@@ -96,6 +130,12 @@ def doc_url(path):
     Which also means the path can be written before the file exists: the link
     appears by itself once the PDF is uploaded and collectstatic has run.
 
+    Under DEBUG there is no manifest to miss, so nothing raises and the check
+    is a look through the staticfiles finders instead. Without that, a card
+    naming a PDF nobody has uploaded yet would show a Read More in development
+    that 404s, and hide itself in production - the one place the difference
+    would go unnoticed until it shipped.
+
     A full URL or a rooted path is handed straight back, so a document hosted
     somewhere else works the same way.
     """
@@ -104,6 +144,9 @@ def doc_url(path):
     value = str(path)
     if value.startswith(("http://", "https://", "//", "/")):
         return value
+    if settings.DEBUG and finders.find(value) is None:
+        logger.warning("doc_url: no static file found for %r", value)
+        return ""
     try:
         return static_url(value)
     except ValueError:

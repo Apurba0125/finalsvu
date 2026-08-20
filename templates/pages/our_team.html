@@ -7,9 +7,23 @@ OUR TEAM  —  served at /page/our-team/ by website.views.our_team
 ---------------------------------------------------------------------------
 Header, navigation and footer come from base.html. Do not add them here.
 
-The panels themselves are in includes/people_stack.html, shared with Our
-Mentors, and styled by static/css/team.css (linked below). Each panel is
-sticky at top:0 so the next rides up and covers the one before it.
+TWO PARTS
+  1. the photo banner below, the same .page-banner every inner page carries
+     (styled by static/css/page-head.css)
+  2. the scroll-stacked person panels, from includes/people_stack.html and
+     shared with Our Mentors, styled by static/css/team.css
+
+The banner carries the heading and the lead sentence, so this page does NOT
+pass stack_title to the include and the dark intro band inside it is skipped —
+otherwise the same words would appear twice, one screen apart. Our Mentors is
+built the same way, for the same reason.
+
+TO CHANGE THE BANNER
+The wording is right here. The photograph is the url() in the style attribute;
+keep the dark gradient in front of it or the white text stops being readable.
+The --intro modifier is what gives it the tall, light-over-bold heading the
+dark band used to have; drop that one class and it falls back to the plain
+one-line banner every other inner page carries.
 
 TO ADD, REMOVE OR REORDER A PERSON
 Edit the TEAM list in website/data.py — nothing in this file changes. The
@@ -31,9 +45,28 @@ leaks onto the page.
 {% block meta_description %}Meet the leadership and administration of Swami Vivekananda University — the Chancellor, Vice Chancellor, Registrar, Directors and senior academic staff.{% endblock %}
 
 {% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/page-head.css' %}">
   <link rel="stylesheet" href="{% static 'css/team.css' %}">
 {% endblock %}
 
 {% block content %}
-  {% include "includes/people_stack.html" with people=team %}
+
+{# ===========================================================  BANNER  === #}
+<section class="page-banner page-banner--intro"
+         style="background-image: linear-gradient(0deg, rgba(10,10,10,.82), rgba(10,10,10,.66)), url('{% static 'img/about/team.png' %}');">
+  <div class="shell">
+    <h1 class="page-banner__title">
+      The People Behind <strong>{{ site.site_name }}</strong>
+    </h1>
+    <span class="page-banner__rule"></span>
+    <p class="page-banner__lead">
+      The leadership, academic direction and administration guiding the university.
+    </p>
+  </div>
+</section>
+
+
+{# ============================================================  PANELS  === #}
+{% include "includes/people_stack.html" with people=team %}
+
 {% endblock %}

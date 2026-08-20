@@ -6,17 +6,29 @@
 DEPARTMENT PAGE  —  /academics/departments/[slug]/
                     served by website.views.department_detail
 ---------------------------------------------------------------------------
-Section order: intro, courses, faculty, tab panel, sibling departments.
+Section order: banner, intro, courses, faculty, tab panel, sibling
+departments. Every department gets this same page; only the content differs.
 
 WHERE THE CONTENT COMES FROM  —  all of it is in website/data.py:
-  the department itself   DEPARTMENTS          (name, school, description)
-  its courses             COURSES              (each row names its department)
+  the department itself   DEPARTMENTS          name, image, description
+  its courses             COURSES              each row names its department
+                                               and carries badge + card_image
   the faculty slider      DEPARTMENT_FACULTY   keyed by department slug
   the tab panel           DEPARTMENT_TABS      keyed by department slug,
                           falling back to DEFAULT_DEPARTMENT_TABS
 
-Nothing on this page needs editing to add a teacher or change a tab — add
+Nothing on this page needs editing to add a teacher, a course or a tab — add
 the row in data.py and it appears here.
+
+PICTURES NEVER LEAVE A HOLE
+A department with no 'image' borrows its school's card image, and a course
+with no 'card_image' borrows its department's; the view works that ladder out,
+so the page looks finished before the photographs have been collected.
+
+MESSAGE DESK
+That tab lays its text beside a picture whenever the tab carries an 'image' in
+data.py, and runs full width when it does not — nothing here changes to switch
+between the two.
 
 The slider is the site carousel from main.js; data-autoplay="6000" is what
 makes it advance on its own. It pauses on hover, on focus and while the
@@ -25,7 +37,7 @@ visitor drags, and stays still for prefers-reduced-motion.
 {% endcomment %}
 
 {% block title %}{{ department.name }} — {{ site.site_name }}{% endblock %}
-{% block meta_description %}{{ department.short_description }}{% endblock %}
+{% block meta_description %}{% if department.short_description %}{{ department.short_description }}{% else %}{{ department.name }} at {{ site.site_name }}, part of the {{ department.school_name }}.{% endif %}{% endblock %}
 
 {% block extra_head %}
   <link rel="stylesheet" href="{% static 'css/page-head.css' %}">
@@ -35,38 +47,76 @@ visitor drags, and stays still for prefers-reduced-motion.
 {% block content %}
 {% include "includes/page_hero.html" %}
 
-<section class="section">
+
+{# =============================================================  INTRO  === #}
+{# Photograph left, heading and paragraph right. split_heading:2 keeps       #}
+{# "Department Of" dark and colours whatever follows, which suits every name #}
+{# in DEPARTMENTS because they all open with those two words.                #}
+<section class="section dept-intro">
   <div class="shell">
-    <div class="prose prose--full">
-      {# Just the name — several departments are already named "Department of …", #}
-      {# so prefixing another "The Department of" doubles the word.               #}
-      <p>
-        {{ department.name }} is part of the
+    <div class="dept-intro__row">
+
+      <figure class="dept-intro__media">
+        <img src="{{ department.image }}" alt="{{ department.name }}"
+             width="720" height="540" loading="eager" fetchpriority="high">
+      </figure>
+
+      <div class="dept-intro__copy">
+        <h1 class="page-heading">{{ department.name|split_heading:2 }}</h1>
+        <span class="page-rule"></span>
+        <p class="dept-intro__text">
+          {% if department.description %}{{ department.description }}
+          {% else %}{{ department.short_description }}{% endif %}
+        </p>
         {% if department.school_url %}
-          <a href="{{ department.school_url }}">{{ department.school_name }}</a>.
-        {% else %}
-          {{ department.school_name }}.
+          <p class="dept-intro__school">
+            Part of the <a href="{{ department.school_url }}">{{ department.school_name }}</a>.
+          </p>
         {% endif %}
-        {{ department.short_description }}
-      </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+{# ===========================================================  COURSES  === #}
+<section class="section section--alt dept-courses">
+  <div class="shell">
+    <div class="page-head">
+      <h2 class="page-heading">Our <span>Courses</span></h2>
+      <span class="page-rule"></span>
     </div>
 
     {% if courses %}
-      <h2 class="section-title section-title--underline">
-        <span class="h-dark">COURSES</span> <span class="h-accent">OFFERED</span>
-      </h2>
-
-      <div class="auto-grid">
+      <div class="course-card-grid">
         {% for course in courses %}
-          <div class="card">
-            <h3 style="font-size:1.02rem">{{ course.name }}</h3>
-            <ul class="meta-list">
-              <li><span class="k">Programme</span><span>{{ course.program_name }}</span></li>
-              <li><span class="k">Duration</span><span>{{ course.duration }}</span></li>
-              <li><span class="k">Intake</span><span>{{ course.total_seats }} seats</span></li>
-            </ul>
-            <p><a class="btn btn--outline-gold btn--sm" href="{{ course.url }}">View Details</a></p>
-          </div>
+          <article class="course-card">
+            {# The picture repeats the title link, so it is hidden from       #}
+            {# assistive tech and skipped by the keyboard rather than read    #}
+            {# out twice.                                                     #}
+            <a class="course-card__media" href="{{ course.url }}"
+               tabindex="-1" aria-hidden="true">
+              <img src="{{ course.card_image }}" alt="" loading="lazy"
+                   width="560" height="360">
+              {% if course.badge %}
+                <span class="course-card__badge">{{ course.badge }}</span>
+              {% endif %}
+            </a>
+
+            <div class="course-card__body">
+              <h3 class="course-card__title">
+                <a href="{{ course.url }}">{{ course.name }}</a>
+              </h3>
+              <p class="course-card__desc">{{ course.description|truncatechars:120 }}</p>
+
+              <a class="course-card__more" href="{{ course.url }}">
+                Read More
+                <svg aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg>
+                <span class="sr-only">about {{ course.name }}</span>
+              </a>
+            </div>
+          </article>
         {% endfor %}
       </div>
     {% else %}
@@ -75,11 +125,17 @@ visitor drags, and stays still for prefers-reduced-motion.
         <p>Course details for this department will be published shortly.</p>
       </div>
     {% endif %}
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="shell">
 
     {# ================================================== OUR FACULTY === #}
     {# Hidden entirely until DEPARTMENT_FACULTY in data.py has this slug. #}
     {% if faculty %}
-      <div class="page-head" style="margin-top:44px">
+      <div class="page-head">
         <h2 class="page-heading">Our <span>Faculty</span></h2>
         <span class="page-rule"></span>
       </div>
@@ -207,12 +263,27 @@ visitor drags, and stays still for prefers-reduced-motion.
             {% endif %}
 
             {% if tab.body %}
-              <div class="tab-pane__body">
-                {% for paragraph in tab.body %}<p>{{ paragraph }}</p>{% endfor %}
-              </div>
-            {% endif %}
+              {# With a picture the two sit side by side; without one the text #}
+              {# keeps the full width and the wrapper costs nothing.           #}
+              <div class="tab-pane__body{% if tab.image %} tab-pane__body--split{% endif %}">
+                {% if tab.image %}
+                  <figure class="tab-pane__media">
+                    <img src="{{ tab.image }}" alt="" loading="lazy"
+                         width="520" height="420">
+                  </figure>
+                {% endif %}
+                <div class="tab-pane__prose">
+                  {% for paragraph in tab.body %}<p>{{ paragraph }}</p>{% endfor %}
 
-            {% if tab.signature %}
+                  {% if tab.signature %}
+                    <div class="tab-sign">
+                      <p class="tab-sign__name">{{ tab.signature.name }}</p>
+                      <p class="tab-sign__role">{{ tab.signature.role }}</p>
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+            {% elif tab.signature %}
               <div class="tab-sign">
                 <p class="tab-sign__name">{{ tab.signature.name }}</p>
                 <p class="tab-sign__role">{{ tab.signature.role }}</p>

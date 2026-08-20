@@ -73,6 +73,7 @@ urlpatterns = [
     path("page/appreciations/", views.appreciations, name="appreciations"),
     path("page/ugc-compliance/", views.ugc_compliance, name="ugc_compliance"),
     path("page/gallery/", views.gallery, name="gallery"),
+    path("page/brochure/", views.brochure, name="brochure"),
     path("page/<slug:slug>/", views.page_detail, name="page_detail"),
     path("contact/", views.contact, name="contact"),
     path("faq/", views.faq, name="faq"),

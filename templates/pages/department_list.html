@@ -19,7 +19,9 @@
           <div class="dept-card">
             <span class="dept-card__school">{{ group.school.name }}</span>
             <h3 class="dept-card__title">{{ department.name }}</h3>
-            <p class="dept-card__desc">{{ department.short_description }}</p>
+            {% if department.short_description %}
+              <p class="dept-card__desc">{{ department.short_description }}</p>
+            {% endif %}
             <div class="dept-card__footer">
               <a class="btn btn--outline-gold btn--sm" href="{{ department.url }}">
                 {{ department.course_count }} course{{ department.course_count|pluralize }}

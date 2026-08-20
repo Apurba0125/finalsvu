@@ -28,6 +28,53 @@
   line-height: 1.25;
   text-shadow: 0 2px 18px rgba(0, 0, 0, .55);
 }
+/* A two-part banner title: the second half drops to its own line and carries
+   the weight, e.g. "The People Behind <strong>Swami Vivekananda
+   University</strong>". A title without <strong> is unaffected. */
+.page-banner__title strong { display: block; }
+
+/* Short rule between the title and the lead. */
+.page-banner__rule {
+  display: block;
+  width: 54px;
+  height: 2px;
+  margin: 26px auto 0;
+  background: rgba(255, 255, 255, .65);
+}
+
+/* Optional sentence under the title. Kept narrow so it breaks into a couple of
+   short lines instead of one wide one straight across the photo. */
+.page-banner__lead {
+  max-width: 60ch;
+  margin: 16px auto 0;
+  color: rgba(255, 255, 255, .88);
+  font-size: .95rem;
+  line-height: 1.7;
+  text-shadow: 0 1px 14px rgba(0, 0, 0, .6);
+}
+
+/* --- .page-banner--intro: the editorial variant -------------------------- */
+/* For a banner that opens a page rather than just naming it. The first line
+   stays light and the emphasised half beneath it carries all the weight, at
+   roughly twice the type size of a plain banner title — these are the
+   proportions of the dark intro band Our Team used before it had a photo. */
+.page-banner--intro {
+  min-height: 330px;
+  padding: clamp(44px, 6vw, 68px) 0;
+}
+.page-banner--intro .page-banner__title {
+  font-size: clamp(27px, 4vw, 50px);
+  font-weight: 300;
+  line-height: 1.14;
+  letter-spacing: -.01em;
+}
+.page-banner--intro .page-banner__title strong { font-weight: 800; }
+.page-banner--intro .page-banner__lead {
+  margin-top: 22px;
+  color: #dcdcdc;
+  font-size: .92rem;
+  line-height: 1.75;
+}
 
 /* --------------------------------------------------- heading + rule ------ */
 .page-head { margin-bottom: 18px; }
@@ -51,8 +98,12 @@
 /* ------------------------------------------------------- responsive ----- */
 @media (max-width: 991.98px) {
   .page-banner { min-height: 200px; }
+  .page-banner--intro { min-height: 280px; }
 }
 
 @media (max-width: 767.98px) {
   .page-banner { min-height: 170px; padding: 30px 0; }
+  .page-banner__lead { font-size: .88rem; margin-top: 12px; }
+  .page-banner--intro { min-height: 235px; padding: 38px 0; }
+  .page-banner__rule { margin-top: 18px; }
 }
