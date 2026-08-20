@@ -2283,9 +2283,18 @@ table { border-collapse: collapse; width: 100%; }
 }
 .footer__grid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 30px;
+  /* Two across from the narrowest screen up. One column made the footer a very
+     long scroll on a phone: six blocks, each the full width, one under another. */
+  grid-template-columns: repeat(2, 1fr);
+  gap: 28px 18px;
 }
+/* The brand block carries a crest, the university name, a paragraph and the
+   social row, so it takes the full width rather than half of a phone. */
+.footer__brand { grid-column: 1 / -1; }
+/* A grid child's default minimum is its content, so one long unbroken word -
+   an email address, a course title - would widen its column and squeeze the
+   one beside it. */
+.footer__grid > * { min-width: 0; }
 
 /* Brand column ---------------------------------------------------------- */
 .footer__brand-head {
@@ -2650,9 +2659,8 @@ table { border-collapse: collapse; width: 100%; }
   .offerings__panel { grid-template-columns: 1fr 1fr; padding: 32px 28px; }
   .video-grid { grid-template-columns: 1fr 1fr; }
   .carousel__item { flex-basis: calc((100% - 18px) / 2); }
-  .footer__grid { grid-template-columns: 1fr 1fr; }
-  /* Brand blurb spans both columns rather than sitting in a narrow half. */
-  .footer__brand { grid-column: 1 / -1; }
+  /* Columns and the brand span are the base now; only the gap opens up. */
+  .footer__grid { gap: 30px 24px; }
   .subfooter__inner { justify-content: space-between; text-align: left; }
   .float-actions { right: 20px; bottom: 22px; }
 }
