@@ -571,7 +571,7 @@ def notice_list(request):
         "page_obj": _paginate(request, _notices()),
         "hero_title": "Notice Board",
         "hero_subtitle": "Examination, registration and administrative notices.",
-        "crumbs": [{"label": "Events"}, {"label": "Notices"}],
+        "crumbs": [{"label": "Notices"}],
     })
 
 

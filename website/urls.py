@@ -31,11 +31,28 @@ urlpatterns = [
     path("admission/apply/", views.apply_online, name="apply"),
     path("admission/enquiry/", views.enquiry_submit, name="enquiry_submit"),
 
-    # --- Events & notices (notices first: they must win over the event slug) ---
+    # --- Events ---
     path("events/", views.event_list, name="event_list"),
-    path("events/notices/", views.notice_list, name="notice_list"),
-    path("events/notices/<slug:slug>/", views.notice_detail, name="notice_detail"),
+
+    # The old notice addresses, kept so anything already linking to them still
+    # lands. They MUST come before events/<slug>/ for the same reason the
+    # notices themselves used to: that pattern matches "notices" as an event
+    # slug and 404s on it. RedirectView carries the captured slug through to
+    # the named route, so the detail case needs no view of its own, and
+    # permanent=True because this is a move rather than a detour.
+    path("events/notices/",
+         RedirectView.as_view(pattern_name="website:notice_list", permanent=True)),
+    path("events/notices/<slug:slug>/",
+         RedirectView.as_view(pattern_name="website:notice_detail", permanent=True)),
+
     path("events/<slug:slug>/", views.event_detail, name="event_detail"),
+
+    # --- Notices ---
+    # Their own path rather than under events/. A notice is not an event, and
+    # sitting beneath that prefix put the word in every notice URL and in the
+    # breadcrumb above every notice.
+    path("notices/", views.notice_list, name="notice_list"),
+    path("notices/<slug:slug>/", views.notice_detail, name="notice_detail"),
 
     # --- Editorial pages & help ---
     # About Us has its own template, so it is matched before the generic

@@ -303,7 +303,7 @@ HERO_VIDEO['embed_url'] = (
 
 # --------------------------------------------------------------------------
 # Arrow links beside the welcome text
-QUICK_LINKS = [{'title': 'Notice', 'description': 'Click to check all Notice', 'url': '/events/notices/'},
+QUICK_LINKS = [{'title': 'Notice', 'description': 'Click to check all Notice', 'url': '/notices/'},
  {'title': 'Apply Online',
   'description': 'Join SVU by applying online and pursue your desired course.',
   'url': '/admission/apply/'},
