@@ -1899,6 +1899,10 @@ table { border-collapse: collapse; width: 100%; }
   flex-direction: column;
   padding: 30px 20px;
 }
+/* Centred over the slider. text-align rather than align-items, so the heading
+   still spans the column and only its words move - centring the box itself
+   would shrink-wrap it and leave the underline, if one is ever added, the
+   width of the word instead of the slider. */
 .appreciations__title {
   margin: 0 0 16px;
   color: var(--ink);
@@ -1906,6 +1910,7 @@ table { border-collapse: collapse; width: 100%; }
   font-weight: 800;
   letter-spacing: 1px;
   text-transform: uppercase;
+  text-align: center;
 }
 
 /* The shared carousel turned on its side. Only the track changes axis - the
@@ -1938,7 +1943,7 @@ table { border-collapse: collapse; width: 100%; }
   display: block;
 }
 
-.appreciations__foot { margin-top: 18px; }
+.appreciations__foot { margin-top: 18px; text-align: center; }
 
 @media (max-width: 575.98px) {
   .appreciations { --appr-card: 148px; padding: 26px 16px; }
