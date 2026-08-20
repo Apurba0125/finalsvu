@@ -168,20 +168,39 @@
         return Math.max(1, Math.round(track.getBoundingClientRect().width / itemWidth));
       }
 
+      /* data-step="1" moves one card at a time: the first screenful shows, then
+         each advance slides a single card along. Without it a carousel jumps a
+         whole screenful, which is the older behaviour and still the default. */
+      var stepOne = carousel.getAttribute("data-step") === "1";
+
+      /* One card plus the 18px gap between them - the distance the track has
+         to travel to bring the next card into the same place. */
+      function stride() {
+        return items[0].getBoundingClientRect().width + 18;
+      }
+
       function pageCount() {
         return Math.max(1, Math.ceil(items.length / perView()));
       }
 
-      function currentPage() {
-        var itemWidth = items[0].getBoundingClientRect().width + 18;
-        if (!itemWidth) { return 0; }
-        return Math.round(track.scrollLeft / (itemWidth * perView()));
+      /* The number of resting positions. Stepping a screenful at a time that
+         is one per page; stepping a card at a time it is one per card until
+         the last screenful is filled - not items.length, or the final stops
+         would scroll past the end into empty track. */
+      function stopCount() {
+        if (stepOne) { return Math.max(1, items.length - perView() + 1); }
+        return pageCount();
       }
 
-      function scrollToPage(page) {
-        var itemWidth = items[0].getBoundingClientRect().width + 18;
+      function currentStop() {
+        var span = stride() * (stepOne ? 1 : perView());
+        if (!span) { return 0; }
+        return Math.round(track.scrollLeft / span);
+      }
+
+      function scrollToStop(stop) {
         track.scrollTo({
-          left: page * itemWidth * perView(),
+          left: stop * stride() * (stepOne ? 1 : perView()),
           behavior: prefersReducedMotion ? "auto" : "smooth"
         });
       }
@@ -191,15 +210,16 @@
         if (!dotsWrap) { return; }
         dotsWrap.innerHTML = "";
         dots = [];
-        var total = pageCount();
+        var total = stopCount();
         if (total < 2) { dotsWrap.hidden = true; return; }
         dotsWrap.hidden = false;
         for (var i = 0; i < total; i++) {
           (function (page) {
             var b = document.createElement("button");
             b.type = "button";
-            b.setAttribute("aria-label", "Go to slide group " + (page + 1));
-            b.addEventListener("click", function () { scrollToPage(page); });
+            b.setAttribute("aria-label",
+                           (stepOne ? "Go to slide " : "Go to slide group ") + (page + 1));
+            b.addEventListener("click", function () { scrollToStop(page); });
             dotsWrap.appendChild(b);
             dots.push(b);
           })(i);
@@ -207,7 +227,7 @@
       }
 
       function syncState() {
-        var page = currentPage();
+        var page = currentStop();
         dots.forEach(function (d, i) { d.classList.toggle("is-active", i === page); });
         if (prev) { prev.disabled = track.scrollLeft <= 4; }
         if (next) {
@@ -216,11 +236,11 @@
       }
 
       if (prev) {
-        prev.addEventListener("click", function () { scrollToPage(Math.max(0, currentPage() - 1)); });
+        prev.addEventListener("click", function () { scrollToStop(Math.max(0, currentStop() - 1)); });
       }
       if (next) {
         next.addEventListener("click", function () {
-          scrollToPage(Math.min(pageCount() - 1, currentPage() + 1));
+          scrollToStop(Math.min(stopCount() - 1, currentStop() + 1));
         });
       }
 
@@ -250,7 +270,7 @@
              track out from under someone mid-video would be maddening — so
              the first play ends the autoplay for good. */
           if (carousel.querySelector("iframe")) { stop(); return; }
-          if (paused || document.hidden || pageCount() < 2) { return; }
+          if (paused || document.hidden || stopCount() < 2) { return; }
           // Wrap on the real scroll position, not on the page arithmetic: with
           // 5 items at 4-per-view the last page is a partial one, and page
           // maths alone would park the track at the end and never come back.
@@ -258,7 +278,7 @@
             track.scrollTo({ left: 0, behavior: prefersReducedMotion ? "auto" : "smooth" });
             return;
           }
-          scrollToPage(currentPage() + 1);
+          scrollToStop(currentStop() + 1);
         }
         function start() { stop(); timer = setInterval(tick, delay); }
         function stop() { if (timer) { clearInterval(timer); timer = null; } }

@@ -99,7 +99,7 @@
       <h1 class="welcome__title section-title">{{ site.welcome_heading|split_heading:2 }}</h1>
       <p class="welcome__text">{{ site.welcome_text|linebreaksbr }}</p>
 
-      <div class="quicklinks">
+      <!-- <div class="quicklinks">
         {% for link in quick_links %}
           <a class="quicklink" href="{{ link.url|default:'#' }}">
             <span class="quicklink__badge" aria-hidden="true">
@@ -111,7 +111,7 @@
             </span>
           </a>
         {% endfor %}
-      </div>
+      </div> -->
     </div>
 
     <aside class="enquiry-panel" aria-labelledby="enquiry-heading">
@@ -230,7 +230,7 @@
       <span class="h-dark">SVU</span> <span class="h-accent">SCHOOLS</span>
     </h2>
 
-    <div class="carousel" data-carousel data-autoplay="5000">
+    <div class="carousel" data-carousel data-step="1" data-autoplay="5000">
       <button class="carousel__nav carousel__nav--prev" type="button" aria-label="Previous schools">
         <svg aria-hidden="true" focusable="false"><use href="#i-chevron-left"></use></svg>
       </button>
@@ -270,7 +270,11 @@
 {% if videos %}
 <section class="section section--tight section--white" aria-label="Featured videos">
   <div class="shell">
-    <div class="carousel video-carousel" data-carousel data-autoplay="7000">
+<h2 class="section-title section-title--underline" id="events-heading">
+  <span class="h-dark">LATEST</span> <span class="h-accent">V</span>
+</h2>
+
+    <div class="carousel video-carousel" data-carousel data-step="1" data-autoplay="7000">
       <button class="carousel__nav carousel__nav--prev" type="button" aria-label="Previous videos">
         <svg aria-hidden="true" focusable="false"><use href="#i-chevron-left"></use></svg>
       </button>
@@ -320,7 +324,7 @@
       <span class="h-dark">LATEST</span> <span class="h-accent">EVENTS</span>
     </h2>
 
-    <div class="carousel carousel--triple" data-carousel data-autoplay="6000">
+    <div class="carousel carousel--triple" data-carousel data-step="1" data-autoplay="6000">
       <button class="carousel__nav carousel__nav--prev" type="button" aria-label="Previous events">
         <svg aria-hidden="true" focusable="false"><use href="#i-chevron-left"></use></svg>
       </button>
