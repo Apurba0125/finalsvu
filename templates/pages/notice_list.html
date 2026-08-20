@@ -1,37 +1,111 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% comment %}
+===========================================================================
+NOTICE BOARD  —  /notices/
+                 served by website.views.notice_list
+---------------------------------------------------------------------------
+Header and footer come from base.html. Do not add them here.
+
+THIS PAGE IS WRITTEN BY HAND
+  It is not built from NOTICES in data.py. Edit the list below directly.
+
+  NOTICES still feeds the small board on the home page, so a notice that
+  should appear in both places has to be written in both. That is the trade
+  for being able to lay a notice out however it needs to be here - a table, a
+  paragraph of explanation, a run of attachments - rather than squeezing every
+  one into a single shape.
+
+  There is no page per notice. A notice is short enough to read where it
+  stands, so the title is not a link to anywhere unless it has something to
+  open. Anything still pointing at an old /notices/<slug>/ address redirects
+  here.
+
+TO ADD A NOTICE
+  Copy one <li> block and edit it. Newest at the top - nothing sorts this list
+  for you.
+
+  The pieces of a row, all optional except the title:
+    notice-item__date   the date line
+    notice-item__flag   the red NEW badge
+    notice-item__doc    the PDF badge, when the row links to a document
+    <a href="...">      wrap the title only if there is a document to open
+
+TO ATTACH A PDF
+  1. Put the file in static/documents/
+  2. Point the row at it with {% templatetag openblock %} static 'documents/your-file.pdf' {% templatetag closeblock %}
+  3. Run:  python manage.py collectstatic --noinput
+     Not optional once DEBUG is off. WhiteNoise's manifest storage raises
+     ValueError for a path it never collected, so a missing file takes this
+     page down rather than giving one dead link. Unlike the home board, which
+     resolves its paths forgivingly, a bad path written here IS fatal - there
+     is no view in between to catch it.
+
+NOTE ON COMMENTS: the hash-style Django comment covers a SINGLE line. For a
+multi-line note use a comment/endcomment pair like this one, or the text leaks
+onto the page and any tag inside it actually runs.
+===========================================================================
+{% endcomment %}
 
 {% block title %}Notice Board — {{ site.site_name }}{% endblock %}
+{% block meta_description %}Examination, registration and administrative notices from Swami Vivekananda University.{% endblock %}
 
 {% block content %}
 {% include "includes/page_hero.html" %}
 
 <section class="section">
   <div class="shell">
-    {% if page_obj %}
-      <div class="panel">
-        <div class="panel__body">
-          <ul class="notice-board__list">
-            {% for notice in page_obj %}
-              <li class="notice-item {% if notice.is_important %}is-important{% endif %}">
-                <span class="notice-item__date">{{ notice.date|date:"d M Y" }}</span>
-                <a class="notice-item__title" href="{{ notice.url }}">
-                  {{ notice.title }}
-                  {% if notice.is_important %}<span class="notice-item__flag">New</span>{% endif %}
-                  {% if notice.document %}<span class="notice-item__doc">PDF</span>{% endif %}
-                </a>
-              </li>
-            {% endfor %}
-          </ul>
-        </div>
-      </div>
+    <div class="panel">
+      <div class="panel__body">
+        <ul class="notice-board__list">
 
-      {% include "includes/pagination.html" %}
-    {% else %}
-      <div class="empty-state">
-        <svg aria-hidden="true"><use href="#i-inbox"></use></svg>
-        <p>There are no notices at the moment.</p>
+          {# ---- notice ---- #}
+          <li class="notice-item is-important">
+            <span class="notice-item__date">23 May 2026</span>
+            <span class="notice-item__title">
+              Notification &mdash; Revision of Date of Examination due to change in
+              date of holiday on account of Id-Ud-Zoha (Bakrid)
+              <span class="notice-item__flag">New</span>
+            </span>
+          </li>
+
+          {# ---- notice ---- #}
+          <li class="notice-item is-important">
+            <span class="notice-item__date">23 May 2026</span>
+            <span class="notice-item__title">
+              Notice &mdash; Change in date of holiday on account of Id-Ud-Zoha (Bakrid)
+              <span class="notice-item__flag">New</span>
+            </span>
+          </li>
+
+          {# ---- notice ---- #}
+          <li class="notice-item">
+            <span class="notice-item__date">15 May 2026</span>
+            <span class="notice-item__title">
+              Result of University Cafeteria Design Competition
+            </span>
+          </li>
+
+          {% comment %}
+          A row that opens a document. Copy this one when the notice has a PDF:
+          the title becomes the link, and the badge tells anyone scanning the
+          list that there is something to open before they click it.
+
+          <li class="notice-item">
+            <span class="notice-item__date">6 May 2026</span>
+            <a class="notice-item__title" href="{% static 'documents/your-file.pdf' %}"
+               target="_blank" rel="noopener noreferrer" type="application/pdf">
+              Notice for semester registration for the academic session 2026-27
+              <span class="notice-item__doc">PDF</span>
+              <span class="sr-only">(PDF, opens in a new tab)</span>
+            </a>
+          </li>
+          {% endcomment %}
+
+        </ul>
       </div>
-    {% endif %}
+    </div>
   </div>
 </section>
 {% endblock %}

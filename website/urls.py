@@ -42,8 +42,7 @@ urlpatterns = [
     # permanent=True because this is a move rather than a detour.
     path("events/notices/",
          RedirectView.as_view(pattern_name="website:notice_list", permanent=True)),
-    path("events/notices/<slug:slug>/",
-         RedirectView.as_view(pattern_name="website:notice_detail", permanent=True)),
+    path("events/notices/<slug:slug>/", views.notice_redirect),
 
     path("events/<slug:slug>/", views.event_detail, name="event_detail"),
 
@@ -52,7 +51,11 @@ urlpatterns = [
     # sitting beneath that prefix put the word in every notice URL and in the
     # breadcrumb above every notice.
     path("notices/", views.notice_list, name="notice_list"),
-    path("notices/<slug:slug>/", views.notice_detail, name="notice_detail"),
+    # There is no page per notice any more. The slug pattern is kept only so
+    # links already pointing at one land on the board instead of a 404. It goes
+    # through views.notice_redirect rather than RedirectView, which would hand
+    # the captured slug to a route that takes none and raise NoReverseMatch.
+    path("notices/<slug:slug>/", views.notice_redirect),
 
     # --- Editorial pages & help ---
     # About Us has its own template, so it is matched before the generic

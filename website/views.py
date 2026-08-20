@@ -55,7 +55,8 @@ def _notices():
     for row in data.NOTICES:
         item = dict(row)
         item["date"] = _as_date(row.get("date"))
-        item["url"] = reverse("website:notice_detail", args=[row["slug"]])
+        # No page per notice: the board is where they all live.
+        item["url"] = reverse("website:notice_list")
         # Optional PDF. _asset resolves it through the static manifest and
         # returns "" when the file was never collected, so a mistyped path
         # costs the attachment rather than the whole notice.
@@ -572,33 +573,32 @@ def event_detail(request, slug):
     })
 
 
+def notice_redirect(request, slug=None):
+    """Old per-notice addresses land on the board.
+
+    RedirectView cannot cover this one. It forwards whatever the pattern
+    captured to reverse(), and notice_list takes no arguments, so the slug
+    makes it raise NoReverseMatch and the redirect 500s instead of redirecting.
+    Swallowing the slug here is the whole job.
+    """
+    return redirect("website:notice_list", permanent=True)
+
+
 def notice_list(request):
+    """The notice board page, written by hand in its template.
+
+    Deliberately not built from NOTICES. That list still feeds the board on the
+    home page; this page is maintained directly in
+    ``templates/pages/notice_list.html`` so a notice can be laid out however it
+    needs to be rather than squeezed into one shape.
+    """
     return render(request, "pages/notice_list.html", {
-        "page_obj": _paginate(request, _notices()),
         "hero_title": "Notice Board",
         "hero_subtitle": "Examination, registration and administrative notices.",
         "crumbs": [{"label": "Notices"}],
     })
 
 
-def notice_detail(request, slug):
-    notices = _notices()
-    notice = _find(notices, slug)
-    if not notice:
-        return error_404(request, None)
-
-    return render(request, "pages/notice_detail.html", {
-        "notice": notice,
-        "related": [n for n in notices if n["slug"] != slug][:5],
-        "hero_title": "Notice",
-        "crumbs": [
-            {"label": "Notices", "url": reverse("website:notice_list")},
-            {"label": notice["title"][:60]},
-        ],
-    })
-
-
-# ---------------------------------------------------------------- static pages
 def about(request):
     """About Us — a bespoke page, so it gets its own template rather than the
     generic editorial one. The markup lives in ``templates/pages/about.html``.

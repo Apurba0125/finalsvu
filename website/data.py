@@ -1725,9 +1725,14 @@ NOTICES = [{'slug': 'revision-of-examination-date-id-ud-zoha',
   'title': 'Notification - Revision of Date of Examination due to change in date of holiday on '
            'account of Id-Ud-Zoha (Bakrid)',
   'is_important': True,
+  'document': 'documents/bar-council-of-india.pdf',
   'body': 'All students are informed that the date of the end-semester examination has been '
           'revised following the change in the date of the holiday on account of Id-Ud-Zoha '
           '(Bakrid). The revised schedule is available with the Controller of Examinations.'},
+
+
+
+
  {'slug': 'change-in-date-of-holiday-id-ud-zoha',
   'date': '2026-05-23',
   'title': 'Notice - Change in date of holiday on account of Id-Ud-Zoha (Bakrid)',
