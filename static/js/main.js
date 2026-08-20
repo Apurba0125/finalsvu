@@ -171,6 +171,30 @@
          four accessors so the arithmetic is written once, rather than a second
          near-copy of it living somewhere for vertical carousels. */
       var vertical = carousel.getAttribute("data-axis") === "y";
+
+      /* data-loop="1" runs on for ever instead of rewinding at the end.
+
+         A second copy of the slides is what makes the wrap invisible: by the
+         time the last original has gone by, the copy of the first is sitting
+         where it would be, so the track can be moved back by exactly one
+         copy's worth with no animation and nothing appears to move. Rewinding
+         without it means scrolling the whole way back in view of the visitor.
+
+         The copies are hidden from assistive software and taken out of the tab
+         order - they are the same slides twice. */
+      var loop = carousel.getAttribute("data-loop") === "1";
+      var originals = items.length;
+      if (loop && originals > 1) {
+        items.forEach(function (item) {
+          var copy = item.cloneNode(true);
+          copy.setAttribute("aria-hidden", "true");
+          $$("a, button, input, [tabindex]", copy).forEach(function (el) {
+            el.setAttribute("tabindex", "-1");
+          });
+          track.appendChild(copy);
+        });
+        items = $$(".carousel__item", track);
+      }
       function scrollPos()      { return vertical ? track.scrollTop : track.scrollLeft; }
       function viewSize()       { return vertical ? track.clientHeight : track.clientWidth; }
       function scrollSize()     { return vertical ? track.scrollHeight : track.scrollWidth; }
@@ -223,6 +247,9 @@
          the last screenful is filled - not items.length, or the final stops
          would scroll past the end into empty track. */
       function stopCount() {
+        /* The clones are not stops of their own - they exist so the wrap can
+           happen out of sight. Counting them would double the dots. */
+        if (loop) { return Math.max(1, originals); }
         if (stepOne) { return Math.max(1, items.length - perView() + 1); }
         return pageCount();
       }
@@ -304,6 +331,20 @@
           // Wrap on the real scroll position, not on the page arithmetic: with
           // 5 items at 4-per-view the last page is a partial one, and page
           // maths alone would park the track at the end and never come back.
+          if (loop) {
+            var span = originals * stride();
+            if (scrollPos() >= span - 1) {
+              /* Back by exactly one copy, with no animation. What is under the
+                 viewport before and after is the same slide, so the jump is
+                 not visible - only the endless forward motion is. */
+              var jump = { behavior: "auto" };
+              jump[vertical ? "top" : "left"] = scrollPos() - span;
+              track.scrollTo(jump);
+            }
+            scrollToStop(currentStop() + 1);
+            return;
+          }
+
           if (scrollPos() + viewSize() >= scrollSize() - 4) {
             scrollTo(0);
             return;
