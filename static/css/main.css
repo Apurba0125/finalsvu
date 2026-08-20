@@ -1891,27 +1891,19 @@ table { border-collapse: collapse; width: 100%; }
 }
 
 /* ---- Appreciations: the vertical slider beside the Chancellor ---------- */
-/* Takes its height from the Chancellor block beside it rather than setting its
-   own. A fixed track height made this column the taller of the two, the grid
-   row grew to fit it, and the difference showed as empty space under the
-   Chancellor's message. Now the row is his and the slider fills what is left.
+/* One card's height. The track is two of these plus the gap, so the two
+   numbers cannot drift apart.
 
-   --appr-card is only the fallback for when the two are stacked and there is
-   no sibling to match. */
+   Sized for the picture rather than to match the Chancellor block: tying it to
+   whatever height was left over gave cards of about 126px, and a 1.55:1 image
+   fitted into that is barely 160px wide inside a 536px card. The band no
+   longer stretches its cells, so the two columns can differ in height without
+   either of them growing empty space inside. */
 .appreciations {
-  --appr-card: 210px;
+  --appr-card: 230px;
   display: flex;
   flex-direction: column;
-  height: 100%;
-  min-height: 0;
   padding: 30px 20px;
-}
-/* flex: 1 to take the leftover height, min-height: 0 because a flex child will
-   not shrink below its content without it and the track would push the column
-   tall again. */
-.appreciations .carousel--vertical {
-  flex: 1 1 auto;
-  min-height: 0;
 }
 /* Centred over the slider. text-align rather than align-items, so the heading
    still spans the column and only its words move - centring the box itself
@@ -1934,14 +1926,11 @@ table { border-collapse: collapse; width: 100%; }
   overflow-x: hidden;
   overflow-y: auto;
   scroll-snap-type: y mandatory;
-  height: 100%;
+  height: calc(2 * var(--appr-card) + 18px);
   padding-bottom: 0;
 }
-/* Half the track less half the gap: exactly two on screen whatever height the
-   column ends up with, so the pair scales with the Chancellor rather than
-   being pinned to a number that has to be guessed right. */
 .carousel--vertical .carousel__item {
-  flex: 0 0 calc((100% - 18px) / 2);
+  flex: 0 0 var(--appr-card);
   scroll-snap-align: start;
 }
 
@@ -1956,7 +1945,7 @@ table { border-collapse: collapse; width: 100%; }
   place-items: center;
   margin: 0;
   width: 100%;
-  height: 100%;
+  height: var(--appr-card);
   padding: 10px;
   overflow: hidden;
   border: 1px solid var(--line);
@@ -1975,15 +1964,6 @@ table { border-collapse: collapse; width: 100%; }
 }
 
 .appreciations__foot { margin-top: 18px; text-align: center; }
-
-/* Below 992px the band is one column, so there is nothing beside this to match
-   and the track needs a height of its own again. */
-@media (max-width: 991.98px) {
-  .appreciations { height: auto; }
-  .appreciations .carousel--vertical { flex: 0 0 auto; }
-  .carousel--vertical .carousel__track { height: calc(2 * var(--appr-card) + 18px); }
-  .carousel--vertical .carousel__item { flex: 0 0 var(--appr-card); }
-}
 
 @media (max-width: 575.98px) {
   .appreciations { --appr-card: 175px; padding: 26px 16px; }
@@ -2832,7 +2812,11 @@ table { border-collapse: collapse; width: 100%; }
     position: relative;
   }
 
-  .chancellor-grid { grid-template-columns: 52% 48%; align-items: stretch; }
+  /* start, not stretch. Stretch made both cells as tall as the taller one, so
+     whichever was shorter carried the difference as empty space inside itself -
+     which is what put a gap under the Chancellor's message. Each sizes to its
+     own content now. */
+  .chancellor-grid { grid-template-columns: 52% 48%; align-items: start; }
   .carousel__item { flex-basis: calc((100% - 54px) / 4); }
   .carousel--triple .carousel__item { flex-basis: calc((100% - 36px) / 3); }
   .carousel--double .carousel__item { flex-basis: calc((100% - 18px) / 2); }
