@@ -426,11 +426,8 @@ table { border-collapse: collapse; width: 100%; }
   text-transform: uppercase;
   margin-top: 2px;
 }
-/* On small phones the strapline is longer than the name and would widen the
-   lockup past the screen; the crest plus the name carry the brand there. */
-@media (max-width: 575.98px) {
-  .brand-lockup small { display: none; }
-}
+/* The strapline used to be dropped on phones for width. It is kept now and
+   sized to fit instead - see the phone block near the foot of this file. */
 
 .header__info {
   display: flex;
@@ -2747,8 +2744,9 @@ table { border-collapse: collapse; width: 100%; }
 @media (max-width: 380px) {
   .header__brand img { max-height: 44px; }
   .header__crest { width: 42px; height: 42px; }
-  .brand-lockup__name { font-size: .78rem; max-width: 12ch; }
-  .brand-lockup small { display: none; }
+  /* No max-width and no font-size here: both are set in the phone block below,
+     which comes later in the file and would win anyway. A 12ch cap on a
+     28-character name only ever cut it off. */
   .btn { padding: 9px 16px; font-size: .76rem; }
   .panel__head { font-size: 1.05rem; }
   .topbar__inner { gap: 8px 12px; }
@@ -2790,11 +2788,22 @@ table { border-collapse: collapse; width: 100%; }
 @media (max-width: 767.98px) {
   .header__brand { min-width: 0; }
   .brand-lockup { min-width: 0; }
+  /* One line each, name and strapline both. The size is what gives, not the
+     wrapping: 2.6vw carries the name from about 10px at 320px up to its cap,
+     and the letter-spacing goes because 27 gaps at .3px is most of a
+     character's worth of width on the narrowest screen. */
   .brand-lockup__name {
-    white-space: normal;
-    font-size: .72rem;
+    white-space: nowrap;
+    font-size: clamp(.58rem, .10rem + 2.6vw, .95rem);
     line-height: 1.2;
-    letter-spacing: .2px;
+    letter-spacing: 0;
+  }
+  .brand-lockup small {
+    display: block;
+    white-space: nowrap;
+    font-size: clamp(.46rem, .04rem + 2.15vw, .70rem);
+    letter-spacing: .1px;
+    margin-top: 1px;
   }
 
 }
