@@ -2590,10 +2590,20 @@ table { border-collapse: collapse; width: 100%; }
     padding-block: 16px;
   }
 
-  /* Capped so the centred brand can never run under the menu button */
+  /* The menu button is out of the flow at the right, so the brand reserves its
+     footprint as padding and centres in whatever is left - which sits the
+     lockup a little left of the page centre, clear of the button.
+
+     A max-width cap was doing this before and could not: a cap is symmetric
+     and the button is on one side only, so a centred lockup at the cap still
+     reached about 16px under it. Padding is one-sided, like the problem. */
   .header__brand {
     justify-content: center;
-    max-width: calc(100% - 60px);
+    width: 100%;
+    max-width: none;
+    /* gutter + the button: 22px icon inside 12px of side padding, plus a
+       little air so the descender of the name never touches it. */
+    padding-right: calc(var(--gutter) + 54px);
   }
 
   .header__info {
@@ -2794,7 +2804,7 @@ table { border-collapse: collapse; width: 100%; }
      character's worth of width on the narrowest screen. */
   .brand-lockup__name {
     white-space: nowrap;
-    font-size: clamp(.58rem, .10rem + 2.6vw, .95rem);
+    font-size: clamp(.55rem, .10rem + 2.35vw, .95rem);
     line-height: 1.2;
     letter-spacing: 0;
   }
