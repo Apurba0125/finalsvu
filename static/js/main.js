@@ -286,19 +286,51 @@
       }
 
       function syncState() {
+        /* A slide and its copy are the same slide to anyone looking at it, so
+           the dot belonging to the original lights while the copy is the one
+           on screen. Without the wrap the dots simply go out while the track
+           is crossing the copies. */
         var page = currentStop();
+        if (loop && originals) { page = ((page % originals) + originals) % originals; }
         dots.forEach(function (d, i) { d.classList.toggle("is-active", i === page); });
-        if (prev) { prev.disabled = scrollPos() <= 4; }
-        if (next) { next.disabled = scrollPos() + viewSize() >= scrollSize() - 4; }
+        /* Nothing to grey out on a carousel that never reaches an end. */
+        if (prev) { prev.disabled = !loop && scrollPos() <= 4; }
+        if (next) { next.disabled = !loop && scrollPos() + viewSize() >= scrollSize() - 4; }
+      }
+
+      /* Slides the track between the two copies with no animation, so a step
+         off either end has somewhere to land. The copies are identical, so
+         nothing appears to happen here - the visible move is the step that
+         follows. Direction matters: a step forward only needs rebasing at the
+         end, a step back only at the front. */
+      function rebase(dir) {
+        if (!loop || originals < 2) { return; }
+        var span = originals * stride();
+        if (!span) { return; }
+        var pos = scrollPos();
+        var shift = 0;
+        if (dir > 0 && pos >= span - 1) { shift = -span; }
+        else if (dir < 0 && pos <= 1) { shift = span; }
+        if (!shift) { return; }
+        var jump = { behavior: "auto" };
+        jump[vertical ? "top" : "left"] = pos + shift;
+        track.scrollTo(jump);
+      }
+
+      /* One step either way. The arrows and the autoplay both come through
+         here, so a looping carousel wraps the same however it was driven. */
+      function advance(dir) {
+        rebase(dir);
+        var stop = currentStop() + dir;
+        if (!loop) { stop = Math.min(stopCount() - 1, Math.max(0, stop)); }
+        scrollToStop(stop);
       }
 
       if (prev) {
-        prev.addEventListener("click", function () { scrollToStop(Math.max(0, currentStop() - 1)); });
+        prev.addEventListener("click", function () { advance(-1); });
       }
       if (next) {
-        next.addEventListener("click", function () {
-          scrollToStop(Math.min(stopCount() - 1, currentStop() + 1));
-        });
+        next.addEventListener("click", function () { advance(1); });
       }
 
       var scrollTimer;
@@ -331,25 +363,12 @@
           // Wrap on the real scroll position, not on the page arithmetic: with
           // 5 items at 4-per-view the last page is a partial one, and page
           // maths alone would park the track at the end and never come back.
-          if (loop) {
-            var span = originals * stride();
-            if (scrollPos() >= span - 1) {
-              /* Back by exactly one copy, with no animation. What is under the
-                 viewport before and after is the same slide, so the jump is
-                 not visible - only the endless forward motion is. */
-              var jump = { behavior: "auto" };
-              jump[vertical ? "top" : "left"] = scrollPos() - span;
-              track.scrollTo(jump);
-            }
-            scrollToStop(currentStop() + 1);
-            return;
-          }
-
-          if (scrollPos() + viewSize() >= scrollSize() - 4) {
+          // A looping carousel has no end to reach: advance() handles it.
+          if (!loop && scrollPos() + viewSize() >= scrollSize() - 4) {
             scrollTo(0);
             return;
           }
-          scrollToStop(currentStop() + 1);
+          advance(1);
         }
         function start() { stop(); timer = setInterval(tick, delay); }
         function stop() { if (timer) { clearInterval(timer); timer = null; } }

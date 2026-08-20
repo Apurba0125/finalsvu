@@ -435,8 +435,12 @@
       <span class="h-dark">THE</span> <span class="h-accent">SVUTIANS</span>
     </h2>
 
-    {# Slower than the others: a testimonial has to be read, not glanced at. #}
-    <div class="carousel carousel--double" data-carousel data-autoplay="8000">
+    {# Slower than the others: a testimonial has to be read, not glanced at.  #}
+    {# data-step="1" slides one along rather than swapping both at once, and   #}
+    {# data-loop="1" carries on past the last one instead of winding back, so  #}
+    {# the order runs 0, 1, 2, 0, 1, 2 with nothing ever scrolling backwards.  #}
+    <div class="carousel carousel--double" data-carousel
+         data-step="1" data-loop="1" data-autoplay="8000">
       <button class="carousel__nav carousel__nav--prev" type="button" aria-label="Previous testimonials">
         <svg aria-hidden="true" focusable="false"><use href="#i-chevron-left"></use></svg>
       </button>
