@@ -665,7 +665,10 @@ table { border-collapse: collapse; width: 100%; }
   border-bottom-color: var(--ink);
 }
 .nav__link svg { width: 16px; height: 16px; fill: currentColor; flex-shrink: 0; }
-.nav__caret {
+/* Scoped, not a bare .nav__caret: the rule above is a class plus an element
+   and so outranks a lone class, which quietly held every caret at the 16px
+   meant for the home icon and left the sizes below doing nothing. */
+.nav__link .nav__caret {
   width: 9px; height: 9px;
   fill: currentColor;
   opacity: .8;
@@ -2618,10 +2621,14 @@ table { border-collapse: collapse; width: 100%; }
   .nav__caret { transition: transform var(--transition); }
   .nav__item.is-open > .nav__link .nav__caret { transform: rotate(180deg); }
   /* The caret opens and closes the submenu, so it needs a finger-sized target
-     of its own rather than the 16px the glyph occupies. The padding grows the
-     hit area and the negative margin takes that growth back out of the layout,
-     so the arrow does not move. */
+     of its own rather than the few pixels the glyph occupies. The padding
+     grows the hit area and the negative margin takes that growth back out of
+     the layout, so the arrow does not move. Shrinking the glyph therefore
+     costs nothing in tappability - the target stays 38px either way.
+     Slightly larger than the desktop caret because here it sits alone at the
+     end of a 48px row rather than tucked against a label. */
   .nav__link .nav__caret {
+    width: 10px; height: 10px;
     box-sizing: content-box;
     padding: 14px;
     margin: -14px -14px -14px 0;
@@ -2847,7 +2854,7 @@ table { border-collapse: collapse; width: 100%; }
     font-size: clamp(.58rem, .40rem + .33vw, .74rem);
     letter-spacing: 0;
   }
-  .nav__caret { width: 8px; height: 8px; }
+  .nav__link .nav__caret { width: 8px; height: 8px; }
 }
 
 /* Twelve top-level labels on one line is a tight fit just above the drawer
