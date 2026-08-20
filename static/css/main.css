@@ -1900,7 +1900,6 @@ table { border-collapse: collapse; width: 100%; }
    longer stretches its cells, so the two columns can differ in height without
    either of them growing empty space inside. */
 .appreciations {
-  --appr-card: 155px;
   display: flex;
   flex-direction: column;
   padding: 30px 20px;
@@ -1921,16 +1920,25 @@ table { border-collapse: collapse; width: 100%; }
 
 /* The shared carousel turned on its side. Only the track changes axis - the
    controller reads position through accessors that already know which one. */
+/* The height comes from the shape of the pictures, not from a number. They run
+   between 1.55:1 and 1.68:1, so 8/5 sits in the middle of them, and the track
+   is then as tall as one picture needs to be at whatever width the column
+   happens to have - no breakpoint has to be told again. */
 .carousel--vertical .carousel__track {
   flex-direction: column;
+  /* No gap: one picture fills the slot, and a gap would only show as a strip
+     of page sliding through between them. */
+  gap: 0;
   overflow-x: hidden;
   overflow-y: auto;
   scroll-snap-type: y mandatory;
-  height: calc(2 * var(--appr-card) + 18px);
+  height: auto;
+  aspect-ratio: 8 / 5;
   padding-bottom: 0;
 }
+/* One at a time, filling the slot. */
 .carousel--vertical .carousel__item {
-  flex: 0 0 var(--appr-card);
+  flex: 0 0 100%;
   scroll-snap-align: start;
 }
 
@@ -1945,7 +1953,7 @@ table { border-collapse: collapse; width: 100%; }
   place-items: center;
   margin: 0;
   width: 100%;
-  height: var(--appr-card);
+  height: 100%;
   overflow: hidden;
 }
 /* auto width AND auto height, capped by the frame: the image keeps its own
@@ -1962,7 +1970,7 @@ table { border-collapse: collapse; width: 100%; }
 .appreciations__foot { margin-top: 18px; text-align: center; }
 
 @media (max-width: 575.98px) {
-  .appreciations { --appr-card: 135px; padding: 26px 16px; }
+  .appreciations { padding: 26px 16px; }
 }
 
 /* --------------------------------------------------------------------------
