@@ -661,6 +661,18 @@ def gallery(request):
     return render(request, "pages/gallery.html")
 
 
+def ugc_compliance(request):
+    """UGC Compliance Documents — the cards come from UGC_DOCUMENTS in data.py.
+
+    It has its own template rather than the generic editorial one, so its route
+    has to sit above ``page/<slug>/`` in urls.py. The PAGES row of the same slug
+    is left in place: the site search walks PAGES, and removing the row would
+    make the page unsearchable.
+    """
+    return render(request, "pages/ugc_compliance.html",
+                  {"ugc_documents": data.UGC_DOCUMENTS})
+
+
 def life_detail(request, slug):
     """One Life at SVU page — Library, Laboratory, Classroom and the rest.
 

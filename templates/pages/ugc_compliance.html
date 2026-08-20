@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% comment %}
+===========================================================================
+UGC COMPLIANCE DOCUMENTS  —  /page/ugc-compliance/
+                             served by website.views.ugc_compliance
+---------------------------------------------------------------------------
+Header and footer come from base.html. Do not add them here.
+
+Reached from UGC · Compliance Documents in the site header, which reads
+site.ugc_documents_url in data.py, and from the site search.
+
+WHAT TO EDIT, AND WHERE
+  The words on this page   right here, in this file
+  The list of documents    UGC_DOCUMENTS in website/data.py
+
+  Those are deliberately apart. Re-wording the introduction should not mean
+  going near the document list, and adding a document should not mean opening
+  a template.
+
+  The route is declared in urls.py ABOVE the generic page/<slug>/ line. A page
+  with its own template has to be matched before the catch-all, or page_detail
+  claims the URL and renders the editorial placeholder instead. The PAGES row
+  for this slug is still in data.py on purpose: the site search walks PAGES,
+  and deleting the row would take the page out of the search results.
+
+TO ADD A DOCUMENT
+  1. Put the PDF in static/documents/
+  2. Add a row to UGC_DOCUMENTS in data.py:
+       {'name': 'Public Self-Disclosure',
+        'file': 'documents/public-self-disclosure.pdf'},
+     or, for something hosted elsewhere, 'url' instead of 'file'.
+  3. Run:  python manage.py collectstatic --noinput
+     Not optional once DEBUG is off. WhiteNoise's manifest storage raises
+     ValueError for a path it never collected, so a missing PDF takes the whole
+     page down rather than giving one dead link.
+
+  While the list is empty the page says so in plain words. That is better than
+  a grid of cards that lead nowhere, and it disappears by itself the moment the
+  first row is added.
+
+NOTE ON COMMENTS: the hash-style Django comment covers a SINGLE line. For a
+multi-line note use a comment/endcomment pair like this one, or the text leaks
+onto the page and any tag inside it actually runs.
+===========================================================================
+{% endcomment %}
+
+{% block title %}UGC Compliance Documents | {{ site.site_name }}{% endblock %}
+{% block meta_description %}Statutory documents and disclosures published by Swami Vivekananda University under the requirements of the University Grants Commission.{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/page-head.css' %}">
+  <link rel="stylesheet" href="{% static 'css/recognition.css' %}">
+{% endblock %}
+
+{% block content %}
+
+{# ===========================================================  BANNER  === #}
+<section class="page-banner"
+         style="background-image: linear-gradient(0deg, rgba(10,10,10,.72), rgba(10,10,10,.55)), url('{% static 'img/about/team.png' %}');">
+  <div class="shell">
+    <h1 class="page-banner__title">UGC Compliance Documents</h1>
+  </div>
+</section>
+
+
+{# ========================================================  DOCUMENTS  === #}
+<section class="section recog-section">
+  <div class="shell">
+    <div class="page-head">
+      <h2 class="page-heading">Statutory <span>Disclosures</span></h2>
+      <span class="page-rule"></span>
+    </div>
+
+    {# ---- the introduction. Edit these words freely. ---- #}
+    <div class="prose prose--full">
+      <p>
+        Swami Vivekananda University publishes the statutory documents and
+        disclosures required by the University Grants Commission. Each entry
+        below opens the document in a new tab.
+      </p>
+    </div>
+
+    {% if ugc_documents %}
+      <div class="recog-grid">
+        {% for item in ugc_documents %}
+          <a class="recog-card"
+             href="{% if item.url %}{{ item.url }}{% else %}{% static item.file %}{% endif %}"
+             target="_blank" rel="noopener noreferrer"
+             {% if not item.url %}type="application/pdf"{% endif %}>
+            <span class="recog-card__name">{{ item.name }}</span>
+            <span class="recog-card__more">
+              View More
+              <svg aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg>
+              {# Says out loud what the chevron only implies, and warns that the #}
+              {# tab is about to change under anyone who cannot see it happen.   #}
+              <span class="sr-only">
+                {% if item.url %}(opens in a new tab){% else %}(PDF, opens in a new tab){% endif %}
+              </span>
+            </span>
+          </a>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <svg aria-hidden="true" focusable="false"><use href="#i-file"></use></svg>
+        <p>The compliance documents are being prepared for publication and will
+          appear here shortly.</p>
+        <p style="margin-top:14px">
+          <a class="btn btn--outline-gold btn--sm" href="{% url 'website:contact' %}">Contact the help desk</a>
+        </p>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% endblock %}

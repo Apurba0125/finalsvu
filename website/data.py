@@ -1506,6 +1506,8 @@ STATS = [
  {'value': 500, 'suffix': '+', 'label': 'Patents Filed'},
  {'value': 60, 'suffix': '+', 'label': 'Programs Offered'},
  {'value': 3000, 'suffix': '+', 'label': 'Alumni Network'},
+ {'value': 15000, 'suffix': '+', 'label': 'Current Student'},
+
  ]
 
 # --------------------------------------------------------------------------
@@ -1828,26 +1830,26 @@ CITIES = {'Assam': ['Dibrugarh', 'Guwahati', 'Jorhat', 'Silchar'],
 # --------------------------------------------------------------------------
 # Static pages
 FAQS = [{'question': 'When do admissions for 2026-27 open?',
-  'answer': '<p>Admissions for the 2026-27 session are open now. Apply online or call our '
-            'admission helpline.</p>',
+  'answer': 'Admissions for the 2026-27 session are open now. Apply online or call our '
+            'admission helpline.',
   'category': 'Admission'},
  {'question': 'Does SVU take admission through agents or consultants?',
-  'answer': '<p>No. SVU does not take admission through any agents or consultants. Please '
-            'refer to the SVU website only for any admission-related query.</p>',
+  'answer': 'No. SVU does not take admission through any agents or consultants. Please '
+            'refer to the SVU website only for any admission-related query.',
   'category': 'Admission'},
  {'question': 'What entrance exams does SVU accept?',
-  'answer': '<p>NET for MBA, WEBJEE and JEE Main for B.TECH, CLAT for law programmes.</p>',
+  'answer': 'NET for MBA, WEBJEE and JEE Main for B.TECH, CLAT for law programmes.',
   'category': 'Admission'},
  {'question': 'Are scholarships available?',
-  'answer': '<p>Yes — merit scholarships of up to 100% are offered, along with '
-            'special-category scholarships from the University Scholarship Foundation.</p>',
+  'answer': 'Yes — merit scholarships of up to 100% are offered, along with '
+            'special-category scholarships from the University Scholarship Foundation.',
   'category': 'Fees & Scholarships'},
  {'question': 'Is hostel accommodation available?',
-  'answer': '<p>Yes, separate hostel accommodation is available for male and female students '
-            'with 24x7 security and dining facilities.</p>',
+  'answer': 'Yes, separate hostel accommodation is available for male and female students '
+            'with 24x7 security and dining facilities.',
   'category': 'Campus'},
  {'question': 'What is the highest placement package?',
-  'answer': '<p>The highest placement package recorded is 25 LPA.</p>',
+  'answer': 'The highest placement package recorded is 25 LPA.',
   'category': 'Placements'}]
 
 # --------------------------------------------------------------------------
@@ -1887,6 +1889,9 @@ PAGES = {'privacy-policy': {'title': 'Privacy Policy',
                        'content': '<p>Fee refunds are processed in line with the UGC refund '
                                   'policy notification. Applications for refund must be '
                                   'submitted in writing to the Accounts Department.</p>'},
+ # Kept for the site search, which walks PAGES. The page itself is served by
+ # views.ugc_compliance from templates/pages/ugc_compliance.html now, so this
+ # 'content' is the search excerpt rather than what anybody reads on the page.
  'ugc-compliance': {'title': 'UGC Compliance Documents',
                     'subtitle': '',
                     'content': '<p>Statutory documents and disclosures mandated by the '
@@ -2395,6 +2400,26 @@ MENTORS = [{'name': 'Prof. (Dr.) Suranjan Das',
 # itself. To publish a real certificate, overwrite the file of the same name;
 # nothing here changes. Give an entry a 'url' key instead of 'file' to point a
 # card at an external site.
+# --------------------------------------------------------------------------
+# UGC Compliance Documents  —  /page/ugc-compliance/
+#
+# Each row becomes one card on the page, in the order written here. Give a row
+# EITHER a file or a url, not both:
+#
+#   {'name': 'Public Self-Disclosure',
+#    'file': 'documents/public-self-disclosure.pdf'},   # sits in static/
+#
+#   {'name': 'UGC Website',
+#    'url': 'https://www.ugc.gov.in/'},                 # somewhere else
+#
+# A file path is resolved through {% static %}, so the PDF has to be in
+# static/documents/ and collectstatic has to have run - a path with no manifest
+# entry is a 500 in production, not a broken link.
+#
+# The list is empty on purpose. The page says so plainly rather than showing
+# cards that lead nowhere; add rows and they appear, with no template to edit.
+UGC_DOCUMENTS = []
+
 RECOGNITIONS = [
     {'name': 'Department Of Higher Education',
      'file': 'documents/department-of-higher-education.pdf'},
