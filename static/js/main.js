@@ -466,6 +466,15 @@
         if (label) { label.textContent = button.textContent.trim(); }
         closeNav();
 
+        /* A carousel inside a pane measures as zero while that pane is
+           display:none, so its step, its dots and its autoplay all come out
+           wrong if it was set up while hidden. Carousels already re-measure on
+           resize, so nudging that listener the moment a pane is shown is
+           enough - no second code path, and nothing to keep in step. */
+        if (target.querySelector(".carousel")) {
+          window.dispatchEvent(new Event("resize"));
+        }
+
         if (focus) { button.focus(); }
       }
 

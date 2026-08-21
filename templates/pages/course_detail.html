@@ -133,7 +133,54 @@ text leaks onto the page.
 
                 {% if tab.intro %}<p class="tab-pane__intro">{{ tab.intro }}</p>{% endif %}
 
-                {% if tab.points %}
+                {% if tab.layout == 'slider' %}
+                  {% comment %}
+                  Career Opportunities: the roles ride past as small cards
+                  rather than sitting in a list. Same carousel as the Board of
+                  Studies below - data-loop makes it endless, data-step moves
+                  one card at a time, data-autoplay sets the pace.
+
+                  A picture comes from CAREER_IMAGES in data.py, keyed by the
+                  role's own wording; a role with none shows the tab's icon
+                  instead, so the row is never a line of broken images.
+                  {% endcomment %}
+                  <div class="carousel career-slider" data-carousel data-loop="1"
+                       data-step="1" data-autoplay="2600">
+                    <button class="carousel__nav carousel__nav--prev" type="button"
+                            aria-label="Previous roles">
+                      <svg aria-hidden="true" focusable="false"><use href="#i-chevron-left"></use></svg>
+                    </button>
+
+                    <div class="carousel__track">
+                      {% for slide in tab.slides %}
+                        <div class="carousel__item">
+                          <figure class="career-card">
+                            <span class="career-card__media">
+                              {% if slide.image %}
+                                <img src="{{ slide.image }}" alt="" loading="lazy"
+                                     width="120" height="120">
+                              {% else %}
+                                {# Sized in the markup too: an <svg> with a #}
+                                {# viewBox and no dimensions fills its box.  #}
+                                <svg width="34" height="34" aria-hidden="true"
+                                     focusable="false"><use href="#i-{{ tab.icon }}"></use></svg>
+                              {% endif %}
+                            </span>
+                            <figcaption class="career-card__name">{{ slide.name }}</figcaption>
+                          </figure>
+                        </div>
+                      {% endfor %}
+                    </div>
+
+                    <button class="carousel__nav carousel__nav--next" type="button"
+                            aria-label="Next roles">
+                      <svg aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg>
+                    </button>
+
+                    <div class="carousel__dots dots dots--dark"></div>
+                  </div>
+
+                {% elif tab.points %}
                   <ul class="tab-points">
                     {% for point in tab.points %}
                       <li>
@@ -229,27 +276,79 @@ text leaks onto the page.
 
 
 {# ==================================================  BOARD OF STUDIES  === #}
+{% comment %}
+Sits before Related Courses on purpose: it belongs to this course, and the
+related list is where a visitor leaves the page.
+
+The slider is the site carousel from main.js, driven entirely by the data
+attributes on .carousel:
+  data-loop="1"      runs on for ever instead of rewinding at the end. It
+                     works by cloning the slides once, so keep at least four
+                     members in the board or the repeat becomes obvious.
+  data-step="1"      advances one card at a time rather than a whole screenful
+  data-autoplay      milliseconds between advances. It pauses on hover, on
+                     focus and while the visitor drags, and holds still for
+                     prefers-reduced-motion.
+The members come from COURSE_BOARD_OF_STUDIES in website/data.py, falling back
+to DEFAULT_COURSE_BOARD; there is nothing to edit here to add one.
+{% endcomment %}
 {% if board %}
-  <section class="section course-board">
+  <section class="section section--alt course-board">
     <div class="shell">
       <div class="page-head">
         <h2 class="page-heading">Board Of <span>Studies</span></h2>
         <span class="page-rule"></span>
       </div>
 
-      <ul class="board-grid">
-        {% for member in board %}
-          <li class="board-card">
-            <p class="board-card__name">{{ member.name }}</p>
-            {% if member.designation %}
-              <p class="board-card__role">{{ member.designation }}</p>
-            {% endif %}
-            {% if member.affiliation %}
-              <p class="board-card__org">{{ member.affiliation }}</p>
-            {% endif %}
-          </li>
-        {% endfor %}
-      </ul>
+      <div class="carousel" data-carousel data-loop="1" data-step="1"
+           data-autoplay="4000">
+        <button class="carousel__nav carousel__nav--prev" type="button"
+                aria-label="Previous board members">
+          <svg aria-hidden="true" focusable="false"><use href="#i-chevron-left"></use></svg>
+        </button>
+
+        <div class="carousel__track">
+          {% for member in board %}
+            <article class="carousel__item">
+              <div class="board-card">
+
+                <div class="board-card__photo">
+                  {% if member.photo %}
+                    {# Already resolved in the view, so no {% templatetag openblock %} static {% templatetag closeblock %} here. #}
+                    <img src="{{ member.photo }}" alt="{{ member.name }}"
+                         loading="lazy" width="96" height="96">
+                  {% else %}
+                    {# Sized in the markup as well as the CSS: an <svg> with #}
+                    {# a viewBox and no dimensions expands to fill its parent, #}
+                    {# so a stylesheet that has not loaded yet - or a cached   #}
+                    {# older one - would put a full-width avatar on the card.  #}
+                    <svg width="38" height="38" aria-hidden="true"
+                         focusable="false"><use href="#i-experts"></use></svg>
+                  {% endif %}
+                </div>
+
+                <div class="board-card__body">
+                  <h3 class="board-card__name">{{ member.name }}</h3>
+                  {% if member.designation %}
+                    <p class="board-card__role">{{ member.designation }}</p>
+                  {% endif %}
+                  {% if member.affiliation %}
+                    <p class="board-card__org">{{ member.affiliation }}</p>
+                  {% endif %}
+                </div>
+
+              </div>
+            </article>
+          {% endfor %}
+        </div>
+
+        <button class="carousel__nav carousel__nav--next" type="button"
+                aria-label="Next board members">
+          <svg aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg>
+        </button>
+
+        <div class="carousel__dots dots dots--dark"></div>
+      </div>
     </div>
   </section>
 {% endif %}

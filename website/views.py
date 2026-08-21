@@ -390,10 +390,14 @@ def _course_tabs(course):
             rows.append({"title": "Programme Overview", "icon": "book",
                          "body": [course["description"]]})
         if course.get("eligibility"):
+            # intro + points rather than a paragraph, so this tab is laid out
+            # the same way as Programme Overview beside it.
             rows.append({"title": "Course Eligibility", "icon": "scales",
-                         "body": [course["eligibility"]]})
+                         "intro": "Who can apply for %s:" % course["name"],
+                         "points": [{"text": course["eligibility"]}]})
         if course.get("careers"):
             rows.append({"title": "Career Opportunities", "icon": "industry",
+                         "layout": "slider",
                          "intro": "Roles this programme leads into:",
                          "points": [{"text": role} for role in course["careers"]]})
 
@@ -407,6 +411,19 @@ def _course_tabs(course):
         tab["points"] = [{"label": p.get("label", ""), "text": p.get("text", "")}
                          for p in row.get("points", [])]
         tab["icon"] = row.get("icon") or "book"
+
+        # A tab marked 'slider' shows its points as a looping row of cards
+        # rather than a list, each with a picture from CAREER_IMAGES. The
+        # lookup is by the role's own wording, so one picture serves every
+        # course that lists that role.
+        tab["layout"] = row.get("layout", "")
+        if tab["layout"] == "slider":
+            tab["slides"] = [
+                {"name": point["text"],
+                 "image": _asset(data.CAREER_IMAGES.get(point["text"], ""))}
+                for point in tab["points"] if point.get("text")
+            ]
+
         panels.append(tab)
     return panels
 
@@ -470,6 +487,36 @@ def _readable_list(items):
     if len(items) == 1:
         return items[0]
     return "%s and %s" % (", ".join(items[:-1]), items[-1])
+
+
+def _course_board(course):
+    """Board of Studies for a course page.
+
+    COURSE_BOARD_OF_STUDIES names a board for one course; anything without an
+    entry there falls back to the shared DEFAULT_COURSE_BOARD, so every course
+    page carries the section rather than only the ones written up by hand.
+
+    "{department}" is swapped for the course's own department, which is what
+    lets a single shared board read correctly on all of them.
+    """
+    rows = data.COURSE_BOARD_OF_STUDIES.get(course["slug"])
+    if rows is None:
+        rows = data.DEFAULT_COURSE_BOARD
+
+    department = course.get("department_name") or "the department"
+
+    def fill(value):
+        return value.replace("{department}", department) if value else value
+
+    members = []
+    for row in rows:
+        member = dict(row)
+        member["name"] = fill(row.get("name", ""))
+        member["designation"] = fill(row.get("designation", ""))
+        member["affiliation"] = fill(row.get("affiliation", ""))
+        member["photo"] = _asset(row.get("photo"))
+        members.append(member)
+    return members
 
 
 def _recruiters():
@@ -590,7 +637,7 @@ def course_detail(request, slug):
         "related": related[:6],
         "tabs": _course_tabs(course),
         "faqs": _course_faqs(course),
-        "board": data.COURSE_BOARD_OF_STUDIES.get(slug, []),
+        "board": _course_board(course),
         "recruiters": _recruiters(),
         "hero_title": course["name"],
         "hero_subtitle": "%s  |  %s" % (course["program_name"], course["duration"]),
@@ -797,6 +844,83 @@ def chancellors_message(request):
 
     return render(request, "pages/chancellors_message.html",
                   {"chancellor": chancellor})
+
+
+def training_placements(request):
+    """The Training & Placement Cell.
+
+    The page itself is written by hand in the template; only the recruiter
+    logos come from data.py, through the same helper the course pages use, so
+    that list is kept in one place.
+    """
+    return render(request, "pages/training_placements.html", {
+        "recruiters": _recruiters(),
+        "hero_title": "Training & Placements",
+        "hero_subtitle": "Preparing students for the interview, and employers "
+                         "for our graduates.",
+        "hero_image": "img/about/campus.jpg",
+        "crumbs": [{"label": "Training & Placements"}],
+    })
+
+
+def infrastructure(request):
+    """The campus. Written by hand in the template; no data.py list behind it."""
+    return render(request, "pages/infrastructure.html", {
+        "hero_title": "Infrastructure",
+        "hero_subtitle": "The rooms, laboratories and grounds a student "
+                         "actually finds on arrival.",
+        "hero_image": "img/facilities/garden.jpg",
+        "crumbs": [{"label": "Infrastructure"}],
+    })
+
+
+def list_of_holidays(request):
+    """The holiday list, sorted, with the weekday worked out from the date.
+
+    The weekday is derived rather than stored so the two can never disagree:
+    change a date in HOLIDAYS and the day beside it changes with it. A date
+    that has already passed is flagged rather than dropped, so the list still
+    reads as a full year.
+    """
+    today = datetime.date.today()
+    rows = []
+    for row in data.HOLIDAYS:
+        try:
+            day = datetime.datetime.strptime(row["date"], "%Y-%m-%d").date()
+        except (KeyError, ValueError):
+            # A malformed date costs that one row, not the page.
+            logger.warning("HOLIDAYS: unreadable date %r", row.get("date"))
+            continue
+        rows.append({
+            "date": day,
+            "weekday": day.strftime("%A"),
+            "occasion": row.get("occasion", ""),
+            "note": row.get("note", ""),
+            "is_past": day < today,
+        })
+    rows.sort(key=lambda r: r["date"])
+
+    return render(request, "pages/list_of_holidays.html", {
+        "holidays": rows,
+        "upcoming": [r for r in rows if not r["is_past"]],
+        "year": rows[0]["date"].year if rows else today.year,
+        "hero_title": "List of Holidays",
+        "hero_subtitle": "Days the university is closed.",
+        "hero_image": "img/about/team.png",
+        "crumbs": [{"label": "Academic"}, {"label": "List of Holidays"}],
+    })
+
+
+def academic_activities(request):
+    """What the university runs alongside the syllabus, one card per row."""
+    return render(request, "pages/academic_activities.html", {
+        "activities": data.ACADEMIC_ACTIVITIES,
+        "hero_title": "Academic Activities",
+        "hero_subtitle": "Seminars, workshops, projects and collaborations that "
+                         "run alongside the syllabus.",
+        "hero_image": "img/about/campus.jpg",
+        "crumbs": [{"label": "Academic"}, {"label": "Academic Activities"}],
+    })
 
 
 def academic_calendar(request):

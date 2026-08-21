@@ -1,0 +1,238 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% comment %}
+===========================================================================
+INFRASTRUCTURE  —  served at /page/infrastructure/
+                   by website.views.infrastructure
+---------------------------------------------------------------------------
+Header, navigation and footer come from base.html. Do not add them here.
+
+THIS PAGE IS WRITTEN BY HAND. Every word and every picture on it is in this
+file — there is nothing to change in data.py to edit it.
+
+HOW TO EDIT
+  Change any wording   Edit the text directly. It is ordinary HTML.
+  Change a picture     Edit the file name inside {% templatetag openblock %} static '…' {% templatetag closeblock %} on that
+                       card. Anything already in static/img/ works; put a new
+                       photograph there and run
+                           python manage.py collectstatic --noinput
+  Add a block          Copy a whole <article class="infra-item"> … </article>
+                       and edit it. They alternate sides automatically — the
+                       even-numbered one puts its picture on the right — so
+                       do not add classes to control that.
+  Add a small card     Copy an <li class="infra-chip"> in the last section.
+  Remove a block       Delete it. Nothing else refers to it.
+
+A NOTE ON THE PICTURES
+The photographs used here are the ones already in static/img/facilities/.
+Several blocks below reuse the same file because the university has not
+supplied a photograph for every space yet. Swap them as real ones arrive —
+each is named once, on its own card.
+
+Styling is static/css/placements.css, shared with Training & Placements, plus
+main.css for the banner that includes/page_hero.html draws.
+
+NOTE ON COMMENTS: the hash-style Django comment {# … #} covers a SINGLE line.
+For a multi-line note use a comment/endcomment pair like this one, or the text
+leaks onto the page and any tag inside it actually runs.
+===========================================================================
+{% endcomment %}
+
+{% block title %}Infrastructure | {{ site.site_name }}{% endblock %}
+{% block meta_description %}The campus of Swami Vivekananda University — smart classrooms, laboratories, the digital library, sports facilities, cafeteria and the green campus at Barrackpore.{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/placements.css' %}">
+{% endblock %}
+
+{% block content %}
+{% include "includes/page_hero.html" %}
+
+
+{# ============================================================  INTRO  === #}
+<section class="section">
+  <div class="shell">
+    <div class="page-head">
+      <h2 class="page-heading">The <span>Campus</span></h2>
+      <span class="page-rule"></span>
+    </div>
+
+    <div class="prose prose--full">
+      <p>
+        The university sits at Barrackpore, north of Kolkata, on a green
+        campus built around water bodies and open ground. What follows is what
+        a student actually finds on arrival — the rooms they are taught in,
+        the laboratories they work in, and the places they spend the hours
+        between.
+      </p>
+    </div>
+  </div>
+</section>
+
+
+{# ========================================================  THE BLOCKS  === #}
+{# Copy one <article class="infra-item"> to add a block. Sides alternate on #}
+{# their own; do not add a class to flip one.                               #}
+<section class="section section--alt">
+  <div class="shell infra-list">
+
+    <article class="infra-item">
+      <figure class="infra-item__media">
+        <img src="{% static 'img/facilities/classroom.jpg' %}"
+             alt="A smart classroom in use" loading="lazy"
+             width="720" height="480">
+      </figure>
+      <div class="infra-item__body">
+        <h3 class="infra-item__title">Smart Classrooms</h3>
+        <p>
+          Fully air-conditioned lecture rooms with digital boards and
+          projection, wired for the hybrid mode the university teaches in, so
+          a session can be followed in the room or from outside it.
+        </p>
+      </div>
+    </article>
+
+    <article class="infra-item">
+      <figure class="infra-item__media">
+        <img src="{% static 'img/facilities/lab.png' %}"
+             alt="Students working in a university laboratory" loading="lazy"
+             width="720" height="480">
+      </figure>
+      <div class="infra-item__body">
+        <h3 class="infra-item__title">Laboratories</h3>
+        <p>
+          Engineering, science and allied-health laboratories mapped to the
+          syllabus rather than to a minimum requirement, and kept open beyond
+          scheduled hours for students working on projects of their own.
+        </p>
+      </div>
+    </article>
+
+    <article class="infra-item">
+      <figure class="infra-item__media">
+        <img src="{% static 'img/facilities/12.jpg' %}"
+             alt="The university library" loading="lazy"
+             width="720" height="480">
+      </figure>
+      <div class="infra-item__body">
+        <h3 class="infra-item__title">Library &amp; Digital Resources</h3>
+        <p>
+          A reference and lending library alongside a digital collection of
+          journals, e-books and theses, reachable on campus and off it.
+        </p>
+        <p>
+          <a class="btn btn--outline-gold btn--sm"
+             href="https://svu.knimbus.com/portal/v2/default/home"
+             target="_blank" rel="noopener noreferrer">
+            Open the digital library
+            <span class="sr-only">(opens in a new tab)</span>
+          </a>
+        </p>
+      </div>
+    </article>
+
+    <article class="infra-item">
+      <figure class="infra-item__media">
+        <img src="{% static 'img/facilities/groupstudy.jpg' %}"
+             alt="Students working together in a study area" loading="lazy"
+             width="720" height="480">
+      </figure>
+      <div class="infra-item__body">
+        <h3 class="infra-item__title">Study &amp; Project Spaces</h3>
+        <p>
+          Rooms set aside for group work, seminar practice and project
+          building, because a good deal of what a degree teaches happens
+          between students rather than at the front of a room.
+        </p>
+      </div>
+    </article>
+
+    <article class="infra-item">
+      <figure class="infra-item__media">
+        <img src="{% static 'img/facilities/sports.jpg' %}"
+             alt="The campus sports ground" loading="lazy"
+             width="720" height="480">
+      </figure>
+      <div class="infra-item__body">
+        <h3 class="infra-item__title">Sports &amp; Gymnasium</h3>
+        <p>
+          Indoor and outdoor sport with a gymnasium on campus, and ground for
+          the inter-departmental and inter-university fixtures the university
+          takes part in.
+        </p>
+      </div>
+    </article>
+
+    <article class="infra-item">
+      <figure class="infra-item__media">
+        <img src="{% static 'img/facilities/garden.jpg' %}"
+             alt="Green space on the university campus" loading="lazy"
+             width="720" height="480">
+      </figure>
+      <div class="infra-item__body">
+        <h3 class="infra-item__title">A Green Campus</h3>
+        <p>
+          Planted grounds and water bodies, an open-air theatre and an
+          auditorium for the cultural calendar — the part of the campus that
+          does not appear on a syllabus and is remembered anyway.
+        </p>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+
+{# ====================================================  ON CAMPUS TOO  === #}
+{# Small cards for everything that does not need a photograph of its own.  #}
+<section class="section">
+  <div class="shell">
+    <div class="page-head">
+      <h2 class="page-heading">Also On <span>Campus</span></h2>
+      <span class="page-rule"></span>
+    </div>
+
+    <ul class="infra-chips">
+      <li class="infra-chip">
+        <svg width="22" height="22" aria-hidden="true" focusable="false"><use href="#i-globe"></use></svg>
+        <span>Campus-wide Wi-Fi</span>
+      </li>
+      <li class="infra-chip">
+        <svg width="22" height="22" aria-hidden="true" focusable="false"><use href="#i-users"></use></svg>
+        <span>Cafeteria</span>
+      </li>
+      <li class="infra-chip">
+        <svg width="22" height="22" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+        <span>Auditorium &amp; Open-Air Theatre</span>
+      </li>
+      <li class="infra-chip">
+        <svg width="22" height="22" aria-hidden="true" focusable="false"><use href="#i-innovation"></use></svg>
+        <span>Incubation Centre</span>
+      </li>
+      <li class="infra-chip">
+        <svg width="22" height="22" aria-hidden="true" focusable="false"><use href="#i-research"></use></svg>
+        <span>Central Instrumentation Facility</span>
+      </li>
+      <li class="infra-chip">
+        <svg width="22" height="22" aria-hidden="true" focusable="false"><use href="#i-women"></use></svg>
+        <span>Separate Common Rooms</span>
+      </li>
+      <li class="infra-chip">
+        <svg width="22" height="22" aria-hidden="true" focusable="false"><use href="#i-clock"></use></svg>
+        <span>Reading Room</span>
+      </li>
+      <li class="infra-chip">
+        <svg width="22" height="22" aria-hidden="true" focusable="false"><use href="#i-pin"></use></svg>
+        <span>Accessible Ground Floor Access</span>
+      </li>
+    </ul>
+
+    <p class="infra-note">
+      Planning a visit? The campus is open to prospective students and their
+      families — <a href="{% url 'website:contact' %}">write to the help desk</a>
+      to arrange one.
+    </p>
+  </div>
+</section>
+{% endblock %}

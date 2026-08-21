@@ -134,11 +134,24 @@ MAIN_NAV = [{'title': 'About SVU',
  {'title': 'Academic',
   'href': '/admission/',
   'is_external': False,
-  'children': [{'title': 'Academics Overview', 'href': '#', 'is_external': False},
-               {'title': 'List of Holidays', 'href': '#', 'is_external': False},
+  'children': [{'title': 'Academics Activity', 'href': '/page/academic-activities/', 'is_external': False},
+               {'title': 'List of Holidays', 'href': '/page/list-of-holidays/', 'is_external': False},
                {'title': 'Library', 'href': 'https://svu.knimbus.com/portal/v2/default/home', 'is_external': True},
                {'title': 'Academic Calendar','href': '/page/academic-calendar/', 'is_external': False},
                 ]},
+
+ # Both pages are written by hand in their own templates rather than built
+ # from a list here, so there are no children to add: the wording lives in
+ # templates/pages/training_placements.html and .../infrastructure.html.
+ {'title': 'Training & Placements',
+  'href': '/page/training-placements/',
+  'is_external': False,
+  'children': []},
+
+ {'title': 'Infrastructure',
+  'href': '/page/infrastructure/',
+  'is_external': False,
+  'children': []},
  # 'columns': 3 turns this dropdown into the wide three-column panel.  Any
  # nav entry can use it; without the key the menu stays a single column.
  # Items fill the first column top to bottom, then the second, then the third,
@@ -1293,7 +1306,104 @@ DEFAULT_DEPARTMENT_TABS = [
 # --------------------------------------------------------------------------
 COURSES = [
 
+#civil start
+ {
+    'slug': 'diploma-in-civil-engineering',
+    'name': 'Diploma in Civil Engineering',
+    'badge': 'Diploma',
+    'card_image': '',
+    'careers': [
+        'Software Engineer',
+        'Hardware Engineer',
+        'Networking Engineer',
+        'Software Tester',
+        'Web Designer',
+        'App Developer',
+        'Project Engineer',
+        'IT Engineer',
+        'Technical Support Engineer',
+        'Voice Process Support Engineer',
+    ],
+    'school': 'school-of-engineering',
+    'department': 'department-of-civil-engineering',
+    'program': 'under-graduate',
+    'duration': '3 Years',
+    'total_seats': 120,
+    'is_featured': True,
+    'eligibility': 'Passed 10th standard or equivalent examination from a recognised board with a minimum of 50% marks.',
+    'description': 'The programme blends classroom instruction, laboratory or field practice and continuous internal assessment. Students are mentored throughout the course and prepared for placement through the training and placement cell.'
+},
 
+{
+    'slug': 'b-tech-in-civil-engineering',
+    'name': 'B.Tech in Civil Engineering',
+    'badge': 'B.Tech',
+    'card_image': '',
+    'careers': [
+        'Software Engineer',
+        'Systems Analyst',
+        'Full Stack Developer',
+        'Data Engineer',
+        'Cloud Engineer',
+        'Cybersecurity Analyst',
+    ],
+    'school': 'school-of-engineering',
+    'department': 'department-of-civil-engineering',
+    'program': 'under-graduate',
+    'duration': '4 Years',
+    'total_seats': 120,
+    'is_featured': True,
+    'eligibility': 'Passed 10+2 with Physics, Chemistry and Mathematics as main subjects and a minimum of 50% aggregate from a recognised board.',
+    'description': 'The programme blends classroom instruction, laboratory or field practice and continuous internal assessment. Students are mentored throughout the course and prepared for placement through the training and placement cell.'
+},
+
+
+{
+    'slug': 'm-tech-in-civil-engineering',
+    'name': 'M.Tech in Civil Engineering',
+    'badge': 'M.Tech',
+    'card_image': '',
+    'careers': [
+        'Senior Software Engineer',
+        'Machine Learning Engineer',
+        'Solution Architect',
+        'Research Engineer',
+        'Academic Faculty',
+    ],
+    'school': 'school-of-engineering',
+    'department': 'department-of-civil-engineering',
+    'program': 'post-graduate',
+    'duration': '2 Years',
+    'total_seats': 60,
+    'is_featured': True,
+    'eligibility': 'Passed B.Tech or B.E. in Civil Engineering from a recognised university with a minimum of 50% aggregate marks.',
+    'description': 'The programme provides advanced knowledge in civil engineering through specialised coursework, practical laboratory training, research-oriented learning and project work. Students are mentored throughout the course and prepared for advanced technical careers, research and higher studies.'
+},
+
+{
+    'slug': 'phd-in-civil-engineering',
+    'name': 'Ph.D. in Civil Engineering',
+    'badge': 'Ph.D.',
+    'card_image': '',
+    'careers': [
+        'Research Scientist',
+        'Assistant Professor',
+        'Principal Investigator',
+        'Research and Development Lead',
+    ],
+    'school': 'school-of-engineering',
+    'department': 'department-of-civil-engineering',
+    'program': 'phd',
+    'duration': '5 Years',
+    'total_seats': 20,
+    'is_featured': True,
+    'eligibility': 'Master’s degree in Civil Engineering from a recognised university with a minimum of 55% aggregate marks. Candidates may be required to qualify through the university admission process, including an entrance examination and/or interview.',
+    'description': 'The Ph.D. programme in Civil Engineering focuses on advanced research, innovation and specialised study in emerging areas of civil engineering. Scholars undertake research under expert faculty guidance, complete required coursework and develop an original research thesis contributing to the field.'
+},
+
+#civil end
+
+#cse start
  {
     'slug': 'diploma-in-computer-science-technology',
     'name': 'Diploma in Computer Science & Technology',
@@ -1388,10 +1498,86 @@ COURSES = [
     'description': 'The Ph.D. programme in Computer Science & Engineering focuses on advanced research, innovation and specialised study in emerging areas of computing. Scholars undertake research under expert faculty guidance, complete required coursework and develop an original research thesis contributing to the field.'
 },
 
+#cse end
+
+#ee start
+ {
+    'slug': 'diploma-in-electrical-engineering',
+    'name': 'Diploma in Electrical Engineering',
+    'badge': 'Diploma',
+    'card_image': '',
+    'careers': [
+        'Software Engineer',
+        'Hardware Engineer',
+        'Networking Engineer',
+        'Software Tester',
+        'Web Designer',
+        'App Developer',
+        'Project Engineer',
+        'IT Engineer',
+        'Technical Support Engineer',
+        'Voice Process Support Engineer',
+    ],
+    'school': 'school-of-engineering',
+    'department': 'department-of-electrical-engineering',
+    'program': 'under-graduate',
+    'duration': '3 Years',
+    'total_seats': 120,
+    'is_featured': True,
+    'eligibility': 'Passed 10th standard or equivalent examination from a recognised board with a minimum of 50% marks.',
+    'description': 'The programme blends classroom instruction, laboratory or field practice and continuous internal assessment. Students are mentored throughout the course and prepared for placement through the training and placement cell.'
+},
+
+{
+    'slug': 'b-tech-in-electrical-engineering',
+    'name': 'B.Tech in Electrical Engineering',
+    'badge': 'B.Tech',
+    'card_image': '',
+    'careers': [
+        'Software Engineer',
+        'Systems Analyst',
+        'Full Stack Developer',
+        'Data Engineer',
+        'Cloud Engineer',
+        'Cybersecurity Analyst',
+    ],
+    'school': 'school-of-engineering',
+    'department': 'department-of-electrical-engineering',
+    'program': 'under-graduate',
+    'duration': '4 Years',
+    'total_seats': 120,
+    'is_featured': True,
+    'eligibility': 'Passed 10+2 with Physics, Chemistry and Mathematics as main subjects and a minimum of 50% aggregate from a recognised board.',
+    'description': 'The programme blends classroom instruction, laboratory or field practice and continuous internal assessment. Students are mentored throughout the course and prepared for placement through the training and placement cell.'
+},
+
+
+{
+    'slug': 'm-tech-in-electrical-engineering',
+    'name': 'M.Tech in Electrical Engineering',
+    'badge': 'M.Tech',
+    'card_image': '',
+    'careers': [
+        'Senior Software Engineer',
+        'Machine Learning Engineer',
+        'Solution Architect',
+        'Research Engineer',
+        'Academic Faculty',
+    ],
+    'school': 'school-of-engineering',
+    'department': 'department-of-electrical-engineering',
+    'program': 'post-graduate',
+    'duration': '2 Years',
+    'total_seats': 60,
+    'is_featured': True,
+    'eligibility': 'Passed B.Tech or B.E. in Electrical Engineering from a recognised university with a minimum of 50% aggregate marks.',
+    'description': 'The programme provides advanced knowledge in electrical engineering through specialised coursework, practical laboratory training, research-oriented learning and project work. Students are mentored throughout the course and prepared for advanced technical careers, research and higher studies.'
+},
+# ee end
 
 
 
-
+# ece start
  {'slug': 'b-tech-in-electronics-communication-engineering',
   'name': 'B.Tech in Electronics & Communication Engineering',
   'badge': 'B.Tech',
@@ -1415,9 +1601,9 @@ COURSES = [
                  'and prepared for placement through the training and placement cell.'},
 
 
- {'slug': 'b-tech-in-civil-engineering',
-  'name': 'B.Tech in Civil Engineering',
-  'badge': 'B.Tech',
+ {'slug': 'm-tech-in-electronics-communication-engineering',
+  'name': 'M.Tech in Electronics & Communication Engineering',
+  'badge': 'M.Tech',
   'card_image': '',
   'careers': [
       'Research Scientist',
@@ -1426,7 +1612,30 @@ COURSES = [
       'Research and Development Lead',
   ],
   'school': 'school-of-engineering',
-  'department': 'department-of-civil-engineering',
+  'department': 'department-of-electronics-communication',
+  'program': 'post-graduate',
+  'duration': '2 Years',
+  'total_seats': 60,
+  'is_featured': False,
+  'eligibility': 'Passed B.Tech or B.E. in Electronics & Communication Engineering from a recognised university with a minimum of 50% aggregate marks.',
+  'description': 'The programme provides advanced knowledge in electronics and communication engineering through specialised coursework, practical laboratory training, research-oriented learning and project work. Students are mentored throughout the course and prepared for advanced technical careers, research and higher studies.'},
+
+# ece end
+
+
+#me start
+{'slug': 'diploma-in-mechanical-engineering',
+  'name': 'Diploma in Mechanical Engineering',
+  'badge': 'Diploma',
+  'card_image': '',
+  'careers': [
+      'Research Scientist',
+      'Assistant Professor',
+      'Principal Investigator',
+      'Research and Development Lead',
+  ],
+  'school': 'school-of-engineering',
+  'department': 'department-of-mechanical-engineering',
   'program': 'under-graduate',
   'duration': '4 Years',
   'total_seats': 60,
@@ -1461,12 +1670,55 @@ COURSES = [
                  'continuous internal assessment. Students are mentored throughout the course '
                  'and prepared for placement through the training and placement cell.'},
 
+ {'slug': 'm-tech-in-mechanical-engineering',
+  'name': 'M.Tech in Mechanical Engineering',
+  'badge': 'M.Tech',
+  'card_image': '',
+  'careers': [
+      'Research Scientist',
+      'Assistant Professor',
+      'Principal Investigator',
+      'Research and Development Lead',
+  ],
+  'school': 'school-of-engineering',
+  'department': 'department-of-mechanical-engineering',
+  'program': 'under-graduate',
+  'duration': '4 Years',
+  'total_seats': 60,
+  'is_featured': False,
+  'eligibility': 'Passed 10+2 with Physics, Chemistry and Mathematics as main subjects and a '
+                 'minimum of 50% aggregate from a recognised board.',
+  'description': 'The programme blends classroom instruction, laboratory or field practice and '
+                 'continuous internal assessment. Students are mentored throughout the course '
+                 'and prepared for placement through the training and placement cell.'},
+
+ {'slug': 'phd-in-mechanical-engineering',
+  'name': 'PhD in Mechanical Engineering',
+  'badge': 'PhD',
+  'card_image': '',
+  'careers': [
+      'Research Scientist',
+      'Assistant Professor',
+      'Principal Investigator',
+      'Research and Development Lead',
+  ],
+  'school': 'school-of-engineering',
+  'department': 'department-of-mechanical-engineering',
+  'program': 'under-graduate',
+  'duration': '4 Years',
+  'total_seats': 60,
+  'is_featured': False,
+  'eligibility': 'Passed 10+2 with Physics, Chemistry and Mathematics as main subjects and a '
+                 'minimum of 50% aggregate from a recognised board.',
+  'description': 'The programme blends classroom instruction, laboratory or field practice and '
+                 'continuous internal assessment. Students are mentored throughout the course '
+                 'and prepared for placement through the training and placement cell.'},
 
 
-                 
+
+  #me end 
  
- 
- 
+#  management start
  {'slug': 'bachelor-of-business-administration-bba',
   'name': 'Bachelor of Business Administration (BBA)',
   'badge': 'BBA',
@@ -1488,9 +1740,11 @@ COURSES = [
   'description': 'The programme blends classroom instruction, laboratory or field practice and '
                  'continuous internal assessment. Students are mentored throughout the course '
                  'and prepared for placement through the training and placement cell.'},
- {'slug': 'b-com-honours',
-  'name': 'B.Com (Honours)',
-  'badge': 'B.Com',
+
+
+ {'slug': 'bachelor-of-business-administration-digital-marketing',
+  'name': 'Bachelor of Business Administration (Digital Marketing)',
+  'badge': 'BBA',
   'card_image': '',
   'careers': [
       'Research Scientist',
@@ -1509,8 +1763,10 @@ COURSES = [
   'description': 'The programme blends classroom instruction, laboratory or field practice and '
                  'continuous internal assessment. Students are mentored throughout the course '
                  'and prepared for placement through the training and placement cell.'},
- {'slug': 'master-of-business-administration-mba',
-  'name': 'Master of Business Administration (MBA)',
+
+
+ {'slug': 'bachelor-of-business-administration-hospital-management',
+  'name': 'Bachelor of Business Administration (Hodpital Management)',
   'badge': 'MBA',
   'card_image': '',
   'careers': [
@@ -1530,8 +1786,60 @@ COURSES = [
   'description': 'The programme blends classroom instruction, laboratory or field practice and '
                  'continuous internal assessment. Students are mentored throughout the course '
                  'and prepared for placement through the training and placement cell.'},
+
+
+
+ {'slug': 'bachelor-of-business-administration-hotel-hospital-management',
+  'name': 'Bachelor of Business Administration (Hotel Hodpital Management)',
+  'badge': 'MBA',
+  'card_image': '',
+  'careers': [
+      'Research Scientist',
+      'Assistant Professor',
+      'Principal Investigator',
+      'Research and Development Lead',
+  ],
+  'school': 'school-of-management',
+  'department': 'department-of-management-studies',
+  'program': 'post-graduate',
+  'duration': '2 Years',
+  'total_seats': 60,
+  'is_featured': True,
+  'eligibility': "Bachelor's degree in any discipline with a minimum of 50% aggregate. Valid "
+                 'MAT / CAT / CMAT score is preferred.',
+  'description': 'The programme blends classroom instruction, laboratory or field practice and '
+                 'continuous internal assessment. Students are mentored throughout the course '
+                 'and prepared for placement through the training and placement cell.'},
+
+ {'slug': 'master-of-business-administration',
+  'name': 'Master of Business Administration',
+  'badge': 'MBA',
+  'card_image': '',
+  'careers': [
+      'Research Scientist',
+      'Assistant Professor',
+      'Principal Investigator',
+      'Research and Development Lead',
+  ],
+  'school': 'school-of-management',
+  'department': 'department-of-management-studies',
+  'program': 'post-graduate',
+  'duration': '2 Years',
+  'total_seats': 60,
+  'is_featured': True,
+  'eligibility': "Bachelor's degree in any discipline with a minimum of 50% aggregate. Valid "
+                 'MAT / CAT / CMAT score is preferred.',
+  'description': 'The programme blends classroom instruction, laboratory or field practice and '
+                 'continuous internal assessment. Students are mentored throughout the course '
+                 'and prepared for placement through the training and placement cell.'},
+
+#  management end
+
+
+#biotechnology start
+
  {'slug': 'b-sc-in-biotechnology',
-  'name': 'B.Sc in Biotechnology',
+  'name': 'Bachelor of Science (Hons.) in Biotechnology',
   'badge': 'B.Sc',
   'card_image': '',
   'careers': [
@@ -1551,8 +1859,35 @@ COURSES = [
   'description': 'The programme blends classroom instruction, laboratory or field practice and '
                  'continuous internal assessment. Students are mentored throughout the course '
                  'and prepared for placement through the training and placement cell.'},
+
+
+ {'slug': 'm-sc-in-biotechnology',
+  'name': 'Master of Science in Biotechnology',
+  'badge': 'M.Sc',
+  'card_image': '',
+  'careers': [
+      'Research Scientist',
+      'Assistant Professor',
+      'Principal Investigator',
+      'Research and Development Lead',
+  ],
+  'school': 'school-of-life-sciences',
+  'department': 'department-of-biotechnology',
+  'program': 'under-graduate',
+  'duration': '3 Years',
+  'total_seats': 60,
+  'is_featured': True,
+  'eligibility': 'Passed 10+2 in the science stream with Biology / Biotechnology and a minimum '
+                 'of 45% aggregate.',
+  'description': 'The programme blends classroom instruction, laboratory or field practice and '
+                 'continuous internal assessment. Students are mentored throughout the course '
+                 'and prepared for placement through the training and placement cell.'},
+
+#biotechnology end
+
+#microbiology start
  {'slug': 'b-sc-in-microbiology',
-  'name': 'B.Sc in Microbiology',
+  'name': 'Bachelor of Science (Hons.) in Microbiology',
   'badge': 'B.Sc',
   'card_image': '',
   'careers': [
@@ -1572,8 +1907,10 @@ COURSES = [
   'description': 'The programme blends classroom instruction, laboratory or field practice and '
                  'continuous internal assessment. Students are mentored throughout the course '
                  'and prepared for placement through the training and placement cell.'},
- {'slug': 'm-sc-in-biotechnology',
-  'name': 'M.Sc in Biotechnology',
+
+
+ {'slug': 'm-sc-in-microbiology',
+  'name': 'Master of Science in Microbiology',
   'badge': 'M.Sc',
   'card_image': '',
   'careers': [
@@ -1583,7 +1920,7 @@ COURSES = [
       'Research and Development Lead',
   ],
   'school': 'school-of-life-sciences',
-  'department': 'department-of-biotechnology',
+  'department': 'department-of-microbiology',
   'program': 'post-graduate',
   'duration': '2 Years',
   'total_seats': 30,
@@ -1594,7 +1931,7 @@ COURSES = [
                  'continuous internal assessment. Students are mentored throughout the course '
                  'and prepared for placement through the training and placement cell.'},
  
- 
+ #microbiology end
  {'slug': 'bachelor-of-physiotherapy-bpt',
   'name': 'Bachelor of Physiotherapy (BPT)',
   'badge': 'BPT',
@@ -1905,12 +2242,20 @@ COURSE_TABS = {
 
   {'title': 'Course Eligibility',
    'icon': 'scales',
-   'body': ['Candidates must have completed the secondary or equivalent examination with a '
-            'minimum of 35% from a recognised board. English, Physical Science / Science and '
-            'Mathematics must have been subjects at that examination.']},
+   'intro': 'A candidate applying for this programme must meet all of the following:',
+   'points': [
+    {'text': 'Passed the secondary examination, or an equivalent, from a recognised board.'},
+    {'text': 'A minimum of 35% marks in aggregate at that examination.'},
+    {'text': 'English, Physical Science / Science and Mathematics must have been subjects '
+             'at that examination.'},
+   ]},
 
   {'title': 'Career Opportunities',
    'icon': 'industry',
+   # 'slider' renders the points as a looping row of small cards - a picture
+   # with the role under it - instead of a bulleted list. Drop this key and
+   # the same points render as the list every other tab uses.
+   'layout': 'slider',
    'intro': 'Roles this diploma leads into:',
    'points': [
     {'text': 'Software Engineer'},
@@ -1926,6 +2271,19 @@ COURSE_TABS = {
    ]},
  ],
 }
+
+# --------------------------------------------------------------------------
+# Pictures for the Career Opportunities slider.
+#
+#   KEY   = the role exactly as it is written in 'careers' in COURSES, or in
+#           the points of a Career Opportunities tab in COURSE_TABS.
+#   VALUE = an image under static/, e.g. 'img/careers/software-engineer.jpg'.
+#
+# Keyed by role rather than by course because the roles repeat - "Software
+# Engineer" appears under several programmes - so one picture here serves all
+# of them. A role with no entry shows a plain icon instead of a broken image,
+# which is why this can stay empty until the photographs are ready.
+CAREER_IMAGES = {}
 
 # --------------------------------------------------------------------------
 # Frequently asked questions on a course page.
@@ -1955,14 +2313,63 @@ COURSE_FAQS = {
 }
 
 # --------------------------------------------------------------------------
-# Board of Studies for a course page.
+# Board of Studies  —  the slider near the foot of a course page.
 #
-#   KEY   = the course ``slug``.  Each row is {'name', 'designation',
-#           'affiliation'} - designation and affiliation are both optional.
+#   KEY   = the course ``slug``.  A course with no key here falls back to
+#           DEFAULT_COURSE_BOARD below, so every course page carries the
+#           section.  Add a key to give one course its own board.
 #
-# Empty on purpose: the section hides itself entirely until a course has a
-# board listed, rather than printing a heading with nothing under it.
+#   Each row:
+#     name         the line in bold. Put the member's name here once it is
+#                  published; until then the seat is named instead, which is
+#                  how a board is listed before it is filled.
+#     designation  the role on the board, under the name
+#     affiliation  the university, college or company, under that
+#     photo        'img/board/somebody.jpg'. Leave it '' and the card shows a
+#                  grey avatar rather than a broken image.
+#
+#   "{department}" in any of these is swapped for the course's own department
+#   when the page renders, so one shared board reads correctly on every page.
 COURSE_BOARD_OF_STUDIES = {}
+
+# The board every course page shows unless COURSE_BOARD_OF_STUDIES names one
+# for it. These are the SEATS on a Board of Studies, not people: a university
+# publishes the composition first and the names as they are appointed. Replace
+# 'name' with the member's name and add a 'photo' as each is confirmed -
+# nothing in the template changes.
+#
+# The slider loops, so keep at least four here or the copies used to make the
+# wrap seamless become obvious.
+DEFAULT_COURSE_BOARD = [
+    {'name': 'Head of the Department',
+     'designation': 'Chairperson',
+     'affiliation': '{department}, Swami Vivekananda University',
+     'photo': ''},
+    {'name': 'Dean of the School',
+     'designation': 'Member',
+     'affiliation': 'Swami Vivekananda University',
+     'photo': ''},
+    {'name': 'Senior Faculty Member',
+     'designation': 'Member',
+     'affiliation': '{department}, Swami Vivekananda University',
+     'photo': ''},
+    {'name': 'External Subject Expert',
+     'designation': 'Member, nominated by the Academic Council',
+     'affiliation': 'Invited from another university',
+     'photo': ''},
+    {'name': 'Industry Representative',
+     'designation': 'Member, industry expert',
+     'affiliation': 'From a partner organisation',
+     'photo': ''},
+    {'name': 'Alumni Representative',
+     'designation': 'Member',
+     'affiliation': 'Postgraduate alumnus of the department',
+     'photo': ''},
+    {'name': "Vice-Chancellor's Nominee",
+     'designation': 'Member',
+     'affiliation': 'Swami Vivekananda University',
+     'photo': ''},
+]
 
 # --------------------------------------------------------------------------
 FACILITIES = [{'slug': 'digital-library',
@@ -3011,6 +3418,98 @@ UGC_DOCUMENTS = []
 #
 # Give an entry a 'url' key instead of 'file' to point a card at an external
 # site.
+# --------------------------------------------------------------------------
+# List of Holidays  —  /page/list-of-holidays/
+#
+#   date      'YYYY-MM-DD'. The page sorts on this and works the weekday out
+#             itself, so there is no day column to keep in step - change a
+#             date and "Monday" changes with it. A date that has passed is
+#             greyed on the page rather than removed.
+#   occasion  the wording in the last column
+#   note      optional, shown in smaller type under the occasion
+#
+# ONLY FIXED-DATE HOLIDAYS ARE LISTED HERE.
+# Everything below falls on the same Gregorian date every year, so it can be
+# published without checking. The festival holidays - Saraswati Puja, Doljatra,
+# Good Friday, the two Eids, Durga Puja, Lakshmi Puja, Kali Puja, Bhai Phonta,
+# Guru Nanak Jayanti - move with the lunar calendar and are NOT here, because
+# guessing them on a page students plan around would be worse than leaving
+# them out. Add them from the university's own holiday circular:
+#
+#     {'date': '2026-10-19', 'occasion': 'Durga Puja - Saptami'},
+#
+# Poila Boishakh and Rabindra Jayanti are listed at the dates West Bengal
+# usually observes; confirm both against the circular, as each can shift a day.
+HOLIDAYS = [
+    {'date': '2026-01-01', 'occasion': "New Year's Day", 'note': ''},
+    {'date': '2026-01-23', 'occasion': 'Netaji Subhas Chandra Bose Jayanti', 'note': ''},
+    {'date': '2026-01-26', 'occasion': 'Republic Day', 'note': ''},
+    {'date': '2026-04-14', 'occasion': 'Dr. B. R. Ambedkar Jayanti', 'note': ''},
+    {'date': '2026-04-15', 'occasion': 'Poila Boishakh',
+     'note': 'Bengali New Year'},
+    {'date': '2026-05-01', 'occasion': 'May Day', 'note': ''},
+    {'date': '2026-05-09', 'occasion': 'Rabindra Jayanti',
+     'note': '25th Boishakh'},
+    {'date': '2026-08-15', 'occasion': 'Independence Day', 'note': ''},
+    {'date': '2026-10-02', 'occasion': 'Gandhi Jayanti', 'note': ''},
+    {'date': '2026-12-25', 'occasion': 'Christmas Day', 'note': ''},
+]
+
+# --------------------------------------------------------------------------
+# Academic Activities  —  /page/academic-activities/
+#
+# What the university runs alongside the syllabus. Each row is one card:
+#
+#   title        the heading on the card
+#   description  a sentence or two under it
+#   icon         a symbol from templates/includes/icons.html, without the
+#                "i-" prefix. Anything there works: book, lab, research,
+#                experts, industry, graduation, users, handshake, innovation.
+#
+# Add, remove or reorder rows and the grid follows - there is no template to
+# edit. These describe standing activity rather than dated events; individual
+# events belong in EVENTS, which drives /events/.
+ACADEMIC_ACTIVITIES = [
+    {'title': 'Seminars & Conferences',
+     'icon': 'experts',
+     'description': 'Departments host subject seminars and national conferences through the '
+                    'year, with papers presented by faculty, research scholars and final-year '
+                    'students alongside invited speakers.'},
+    {'title': 'Workshops & Hands-On Training',
+     'icon': 'lab',
+     'description': 'Short practical workshops run beside the syllabus - laboratory technique, '
+                    'software tools, instrumentation and design - so students practise skills '
+                    'the timetable alone cannot cover.'},
+    {'title': 'Faculty Development Programmes',
+     'icon': 'book',
+     'description': 'Teachers attend and run FDPs on curriculum design, assessment and new '
+                    'developments in their disciplines, which is how the syllabus keeps pace '
+                    'with the field.'},
+    {'title': 'Guest Lectures',
+     'icon': 'users',
+     'description': 'Academics and practitioners from other institutions and from industry are '
+                    'invited to teach a session, giving students a view of the subject from '
+                    'outside their own department.'},
+    {'title': 'Industrial Visits & Internships',
+     'icon': 'industry',
+     'description': 'Structured visits to working plants, laboratories and offices, and summer '
+                    'internships arranged through the Training & Placement Cell, so classroom '
+                    'work is tested against practice.'},
+    {'title': 'Student Projects & Research',
+     'icon': 'research',
+     'description': 'Every programme carries project work, and undergraduates are attached to '
+                    'departmental research groups and encouraged to publish, present and file '
+                    'patents.'},
+    {'title': 'Certification Courses',
+     'icon': 'graduation',
+     'description': 'Value-added certification courses run alongside the degree, letting a '
+                    'student leave with credentials the syllabus does not itself award.'},
+    {'title': 'Academic Collaborations',
+     'icon': 'handshake',
+     'description': 'Memoranda with other universities, research institutes and companies '
+                    'support joint teaching, shared laboratories and collaborative research.'},
+]
+
 # --------------------------------------------------------------------------
 # Brochures  —  /page/brochure/
 #

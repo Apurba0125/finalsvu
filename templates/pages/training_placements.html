@@ -1,0 +1,271 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% comment %}
+===========================================================================
+TRAINING & PLACEMENTS  —  served at /page/training-placements/
+                          by website.views.training_placements
+---------------------------------------------------------------------------
+Header, navigation and footer come from base.html. Do not add them here.
+
+THIS PAGE IS WRITTEN BY HAND. Everything you read on it is in this file —
+there is nothing to change in data.py to edit the wording. The one exception
+is the recruiter logos at the bottom, which come from PARTNERS in data.py so
+that the same list is not maintained in two places.
+
+HOW TO EDIT
+  Change any wording   Edit the text directly. It is ordinary HTML.
+  Add a service card   Copy a whole <li class="tp-card"> … </li> block and
+                       change its icon, title and text. The grid works out its
+                       own column count, so an odd number never leaves a gap.
+  Change an icon       Swap the name after "#i-" for any symbol in
+                       templates/includes/icons.html — book, lab, experts,
+                       industry, handshake, graduation, users, research …
+  Add a step           Copy an <li> inside .tp-steps. They number themselves,
+                       so inserting one in the middle renumbers the rest.
+  Add the numbers      There is a commented-out .tp-stats block below. Fill in
+                       real figures and uncomment it. It is left commented on
+                       purpose: placement percentages and salary figures are
+                       claims a university has to be able to stand behind, and
+                       inventing them here would be worse than leaving the
+                       block out.
+
+Styling is static/css/placements.css (this page and Infrastructure) plus
+main.css for the banner that includes/page_hero.html draws.
+
+NOTE ON COMMENTS: the hash-style Django comment {# … #} covers a SINGLE line.
+For a multi-line note use a comment/endcomment pair like this one, or the text
+leaks onto the page and any tag inside it actually runs.
+===========================================================================
+{% endcomment %}
+
+{% block title %}Training &amp; Placements | {{ site.site_name }}{% endblock %}
+{% block meta_description %}The Training &amp; Placement Cell at Swami Vivekananda University — aptitude and soft-skills training, mock interviews, internships, industry interface and the campus recruitment process.{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/placements.css' %}">
+{% endblock %}
+
+{% block content %}
+{% include "includes/page_hero.html" %}
+
+
+{# ============================================================  INTRO  === #}
+<section class="section">
+  <div class="shell">
+    <div class="page-head">
+      <h2 class="page-heading">The Training &amp; <span>Placement Cell</span></h2>
+      <span class="page-rule"></span>
+    </div>
+
+    <div class="prose prose--full">
+      <p>
+        A degree earns an interview; it does not by itself win the job. The
+        Training &amp; Placement Cell exists to close that gap. It works with
+        students from the pre-final year onward — on aptitude, on
+        communication, on how an interview is actually conducted — and with
+        employers, so that the companies arriving on campus are ones our
+        graduates are prepared for.
+      </p>
+      <p>
+        The Cell is open to every student of the university, across all
+        schools and programmes, and its training runs alongside the timetable
+        rather than after it.
+      </p>
+    </div>
+  </div>
+</section>
+
+
+{# =========================================================  SERVICES  === #}
+{# Copy one <li class="tp-card"> block to add a service. #}
+<section class="section section--alt">
+  <div class="shell">
+    <div class="page-head">
+      <h2 class="page-heading">What the <span>Cell Does</span></h2>
+      <span class="page-rule"></span>
+    </div>
+
+    <ul class="tp-grid">
+
+      <li class="tp-card">
+        <span class="tp-card__icon" aria-hidden="true">
+          {# Sized in the markup as well as the CSS: an <svg> with a viewBox #}
+          {# and no dimensions expands to fill its box, so a stylesheet that #}
+          {# has not loaded yet would put a full-width icon on every card.   #}
+          <svg width="26" height="26" focusable="false"><use href="#i-book"></use></svg>
+        </span>
+        <h3 class="tp-card__title">Aptitude &amp; Reasoning</h3>
+        <p class="tp-card__text">
+          Regular classes in quantitative aptitude, logical reasoning and
+          verbal ability — the three papers almost every campus test opens
+          with — from the pre-final year onward.
+        </p>
+      </li>
+
+      <li class="tp-card">
+        <span class="tp-card__icon" aria-hidden="true">
+          <svg width="26" height="26" focusable="false"><use href="#i-users"></use></svg>
+        </span>
+        <h3 class="tp-card__title">Communication &amp; Soft Skills</h3>
+        <p class="tp-card__text">
+          Group discussion, presentation and business communication practice,
+          run in small groups so every student speaks rather than watches.
+        </p>
+      </li>
+
+      <li class="tp-card">
+        <span class="tp-card__icon" aria-hidden="true">
+          <svg width="26" height="26" focusable="false"><use href="#i-experts"></use></svg>
+        </span>
+        <h3 class="tp-card__title">Mock Interviews</h3>
+        <p class="tp-card__text">
+          Technical and HR interviews conducted by faculty and by visiting
+          professionals, with feedback given individually afterwards.
+        </p>
+      </li>
+
+      <li class="tp-card">
+        <span class="tp-card__icon" aria-hidden="true">
+          <svg width="26" height="26" focusable="false"><use href="#i-file"></use></svg>
+        </span>
+        <h3 class="tp-card__title">Résumé &amp; Profile</h3>
+        <p class="tp-card__text">
+          Workshops on writing a résumé that survives a screening filter, and
+          on keeping a professional profile that a recruiter can find.
+        </p>
+      </li>
+
+      <li class="tp-card">
+        <span class="tp-card__icon" aria-hidden="true">
+          <svg width="26" height="26" focusable="false"><use href="#i-industry"></use></svg>
+        </span>
+        <h3 class="tp-card__title">Internships</h3>
+        <p class="tp-card__text">
+          Summer and semester internships arranged with partner organisations,
+          so a student has real work on the record before final placement.
+        </p>
+      </li>
+
+      <li class="tp-card">
+        <span class="tp-card__icon" aria-hidden="true">
+          <svg width="26" height="26" focusable="false"><use href="#i-handshake"></use></svg>
+        </span>
+        <h3 class="tp-card__title">Industry Interface</h3>
+        <p class="tp-card__text">
+          Guest sessions, industry-led certification courses and Board of
+          Studies input, which is how the syllabus stays answerable to what
+          employers actually ask for.
+        </p>
+      </li>
+
+    </ul>
+  </div>
+</section>
+
+
+{# ============================================================  STEPS  === #}
+<section class="section">
+  <div class="shell">
+    <div class="page-head">
+      <h2 class="page-heading">How Campus <span>Recruitment Runs</span></h2>
+      <span class="page-rule"></span>
+    </div>
+
+    {# The steps number themselves — insert an <li> anywhere and the rest #}
+    {# renumber. Do not type the numbers into the text.                   #}
+    <ol class="tp-steps">
+      <li>
+        <h3>Registration</h3>
+        <p>Eligible students register with the Cell at the start of the
+        placement season and share an up-to-date résumé.</p>
+      </li>
+      <li>
+        <h3>Pre-placement talk</h3>
+        <p>The visiting company presents its role, its selection process and
+        its terms, and takes questions from students.</p>
+      </li>
+      <li>
+        <h3>Written test</h3>
+        <p>An aptitude or technical test, usually online, sat on campus under
+        the company's own supervision.</p>
+      </li>
+      <li>
+        <h3>Group discussion</h3>
+        <p>Held where the recruiter includes one, and used to shortlist for
+        the interviews that follow.</p>
+      </li>
+      <li>
+        <h3>Technical &amp; HR interviews</h3>
+        <p>One or more rounds, conducted by the company on campus or online,
+        co-ordinated by the Cell.</p>
+      </li>
+      <li>
+        <h3>Offer</h3>
+        <p>Selected students receive their offer through the Cell, which keeps
+        the record and follows up on joining.</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+
+{% comment %}
+THE NUMBERS. Fill in real figures and delete the comment tags around the block
+below to publish it. Left out on purpose rather than filled with plausible
+placeholders — a placement percentage is a claim, and a wrong one on a
+university website is worse than none.
+
+<section class="section section--alt">
+  <div class="shell">
+    <ul class="tp-stats">
+      <li><strong>000</strong><span>Students placed</span></li>
+      <li><strong>00</strong><span>Recruiters on campus</span></li>
+      <li><strong>0.0 LPA</strong><span>Highest package</span></li>
+      <li><strong>0.0 LPA</strong><span>Average package</span></li>
+    </ul>
+  </div>
+</section>
+{% endcomment %}
+
+
+{# ========================================================  RECRUITERS  === #}
+{% if recruiters %}
+  <section class="section section--alt">
+    <div class="shell">
+      <div class="page-head">
+        <h2 class="page-heading">Our <span>Recruiters</span></h2>
+        <span class="page-rule"></span>
+      </div>
+
+      {# These come from PARTNERS in website/data.py, shared with the course #}
+      {# pages, so the list is maintained in one place. Add a company there. #}
+      <ul class="recruiter-grid">
+        {% for item in recruiters %}
+          <li class="recruiter-grid__item">
+            <img src="{{ item.logo }}" alt="{{ item.name }}"
+                 loading="lazy" width="180" height="90">
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </section>
+{% endif %}
+
+
+{# ==========================================================  CONTACT  === #}
+<section class="section">
+  <div class="shell">
+    <div class="tp-contact">
+      <div>
+        <h2 class="tp-contact__title">Recruiting from {{ site.short_name }}?</h2>
+        <p class="tp-contact__text">
+          Employers are welcome to write to the Training &amp; Placement Cell
+          to arrange a campus drive, an internship intake or a guest session.
+        </p>
+      </div>
+      <a class="btn btn--gold" href="{% url 'website:contact' %}">Contact the Cell</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

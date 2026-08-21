@@ -108,24 +108,61 @@
 }
 
 /* --------------------------------------------------- board of studies --- */
-.board-grid {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 16px;
-}
+/* One slide of the looping slider: portrait on the left, name and the two
+   lines under it on the right. Full height so a row of cards squares off
+   whatever the affiliation wraps to. */
 .board-card {
-  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  height: 100%;
+  padding: 18px;
   background: var(--paper);
   border-left: 3px solid var(--gold);
   border-radius: var(--radius-sm);
   box-shadow: var(--shadow-xs);
+  transition: box-shadow var(--transition), transform var(--transition);
 }
-.board-card__name { margin: 0; font-weight: 800; color: var(--ink); }
-.board-card__role { margin: 4px 0 0; font-size: .84rem; color: var(--accent); }
-.board-card__org  { margin: 3px 0 0; font-size: .82rem; color: var(--muted); }
+.board-card:hover { box-shadow: var(--shadow-sm); transform: translateY(-2px); }
+
+/* Fixed square, so a missing photograph leaves the same shape as a real one
+   and the text beside it starts on the same line across every card. */
+.board-card__photo {
+  flex: none;
+  width: 84px;
+  height: 84px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 50%;
+  background: var(--page);
+}
+.board-card__photo img { width: 100%; height: 100%; object-fit: cover; }
+.board-card__photo svg { width: 38px; height: 38px; fill: #b9b9b9; }
+
+/* min-width:0 or a long affiliation would push the card wider than its slide
+   instead of wrapping inside it. */
+.board-card__body { min-width: 0; }
+.board-card__name {
+  margin: 0;
+  font-size: .96rem;
+  font-weight: 800;
+  line-height: 1.3;
+  color: var(--ink);
+}
+.board-card__role { margin: 5px 0 0; font-size: .82rem; color: var(--accent); font-weight: 600; }
+.board-card__org  { margin: 3px 0 0; font-size: .8rem; color: var(--muted); line-height: 1.5; }
+
+/* Two slides across from the tablet up, three on a wide screen. The carousel
+   works its step out by measuring the rendered cards, so these widths are the
+   only place the count is set. */
+.course-board .carousel__item { flex: 0 0 100%; }
+@media (min-width: 768px) {
+  .course-board .carousel__item { flex-basis: calc((100% - 18px) / 2); }
+}
+@media (min-width: 1200px) {
+  .course-board .carousel__item { flex-basis: calc((100% - 36px) / 3); }
+}
 
 /* ---------------------------------------------------------- responsive -- */
 @media (max-width: 991.98px) {
@@ -143,4 +180,67 @@
 @media (max-width: 575.98px) {
   .recruiter-grid { grid-template-columns: repeat(2, 1fr); }
   .course-facts { grid-template-columns: 1fr; }
+}
+
+
+/* --------------------------------------------------- career slider ------ */
+/* Small cards riding past inside the Career Opportunities tab: picture on
+   top, the role underneath. */
+.career-slider { margin-top: 6px; }
+
+.career-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  height: 100%;
+  margin: 0;
+  padding: 18px 12px;
+  text-align: center;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  transition: box-shadow var(--transition), transform var(--transition),
+              border-color var(--transition);
+}
+.career-card:hover {
+  box-shadow: var(--shadow-sm);
+  border-color: var(--gold);
+  transform: translateY(-3px);
+}
+
+/* Fixed circle so a role with a photograph and one with the fallback icon
+   line up in the same row. */
+.career-card__media {
+  flex: none;
+  width: 76px;
+  height: 76px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 50%;
+  background: var(--page-alt);
+}
+.career-card__media img { width: 100%; height: 100%; object-fit: cover; }
+.career-card__media svg { width: 34px; height: 34px; fill: var(--accent); }
+
+.career-card__name {
+  font-size: .84rem;
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--ink);
+}
+
+/* Narrow cards, so several roles are on screen at once - the point of the row
+   is that it keeps moving. The carousel measures the rendered cards to work
+   out its step, so these widths are the only place the count is set. */
+.career-slider .carousel__item { flex: 0 0 calc((100% - 18px) / 2); }
+@media (min-width: 480px) {
+  .career-slider .carousel__item { flex-basis: calc((100% - 36px) / 3); }
+}
+@media (min-width: 768px) {
+  .career-slider .carousel__item { flex-basis: calc((100% - 54px) / 4); }
+}
+@media (min-width: 1200px) {
+  .career-slider .carousel__item { flex-basis: calc((100% - 72px) / 5); }
 }

@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% comment %}
+===========================================================================
+ACADEMIC ACTIVITIES  —  served at /page/academic-activities/
+                        by website.views.academic_activities
+---------------------------------------------------------------------------
+Header, navigation and footer come from base.html. Do not add them here.
+
+TO ADD, REMOVE OR REORDER AN ACTIVITY
+Edit the ACADEMIC_ACTIVITIES list in website/data.py — nothing in this file
+changes. The grid works out its own column count, so an odd number of cards
+never leaves a gap beside the last one.
+
+The icon on each card is named in that list, without its "i-" prefix, and
+comes from the shared sprite in includes/icons.html. Any symbol there works.
+
+THIS PAGE IS STANDING ACTIVITY, NOT DATED EVENTS
+Individual events with a date belong in EVENTS, which drives /events/. Keep
+the two apart or the same thing gets written twice and drifts.
+
+Styling is static/css/academics.css, shared with List of Holidays.
+
+NOTE ON COMMENTS: the hash-style Django comment {# … #} covers a SINGLE line.
+For a multi-line note use a comment/endcomment pair like this one, or the text
+leaks onto the page.
+===========================================================================
+{% endcomment %}
+
+{% block title %}Academic Activities | {{ site.site_name }}{% endblock %}
+{% block meta_description %}Seminars, workshops, faculty development programmes, guest lectures, industrial visits, student research and certification courses at Swami Vivekananda University.{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/academics.css' %}">
+{% endblock %}
+
+{% block content %}
+{% include "includes/page_hero.html" %}
+
+<section class="section">
+  <div class="shell">
+
+    <div class="page-head">
+      <h2 class="page-heading">What Runs <span>Alongside the Syllabus</span></h2>
+      <span class="page-rule"></span>
+    </div>
+
+    <div class="prose prose--full">
+      <p>
+        A degree is more than the papers it examines. These are the activities
+        the university runs beside the timetable, through which students meet
+        the subject as it is practised rather than only as it is taught.
+      </p>
+    </div>
+
+    {% if activities %}
+      <ul class="activity-grid">
+        {% for item in activities %}
+          <li class="activity-card">
+            <span class="activity-card__icon" aria-hidden="true">
+              {# Sized in the markup as well as the CSS: an <svg> with a       #}
+              {# viewBox and no dimensions expands to fill its box, so a       #}
+              {# stylesheet that has not loaded yet would put a full-width     #}
+              {# icon on every card.                                          #}
+              <svg width="26" height="26" focusable="false"><use href="#i-{{ item.icon }}"></use></svg>
+            </span>
+            <h3 class="activity-card__title">{{ item.title }}</h3>
+            <p class="activity-card__text">{{ item.description }}</p>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <div class="empty-state">
+        <svg aria-hidden="true"><use href="#i-book"></use></svg>
+        <p>Details of academic activities will be published shortly.</p>
+      </div>
+    {% endif %}
+
+  </div>
+</section>
+{% endblock %}

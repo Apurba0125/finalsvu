@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% comment %}
+===========================================================================
+LIST OF HOLIDAYS  —  served at /page/list-of-holidays/
+                     by website.views.list_of_holidays
+---------------------------------------------------------------------------
+Header, navigation and footer come from base.html. Do not add them here.
+
+TO ADD, REMOVE OR CHANGE A HOLIDAY
+Edit the HOLIDAYS list in website/data.py — nothing in this file changes.
+Rows sort themselves by date, and the DAY COLUMN IS WORKED OUT FROM THE DATE,
+so it can never disagree with it: change a date and the weekday follows.
+
+A date that has already passed is greyed rather than dropped, so the page
+still reads as a full year. That is the .is-past class below, set by the view.
+
+ONLY FIXED-DATE HOLIDAYS ARE PUBLISHED HERE. The festival holidays move with
+the lunar calendar and are deliberately absent until they are copied from the
+university's own holiday circular — the note at the foot of the page says so,
+and the reason is written above HOLIDAYS in data.py. Delete that note once the
+full circular has been entered.
+
+Styling is static/css/academics.css (this page and Academic Activities) plus
+main.css for the banner that includes/page_hero.html draws.
+
+NOTE ON COMMENTS: the hash-style Django comment {# … #} covers a SINGLE line.
+For a multi-line note use a comment/endcomment pair like this one, or the text
+leaks onto the page.
+===========================================================================
+{% endcomment %}
+
+{% block title %}List of Holidays {{ year }} | {{ site.site_name }}{% endblock %}
+{% block meta_description %}The days Swami Vivekananda University is closed — the list of holidays for {{ year }}.{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/academics.css' %}">
+{% endblock %}
+
+{% block content %}
+{% include "includes/page_hero.html" %}
+
+<section class="section">
+  <div class="shell">
+
+    <div class="page-head">
+      <h2 class="page-heading">Holidays <span>{{ year }}</span></h2>
+      <span class="page-rule"></span>
+    </div>
+
+    {% if holidays %}
+      {# A table, because this is tabular. scope="col" on the header row is  #}
+      {# what lets a screen reader name the column each cell belongs to; the #}
+      {# body cells are plain <td>, since none of the three is the row's     #}
+      {# label any more than the others are.                                 #}
+      <div class="table-scroll">
+        <table class="holiday-table">
+          <caption class="sr-only">
+            Holidays observed by {{ site.site_name }} in {{ year }}
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col" class="holiday-table__sl">Sl No</th>
+              <th scope="col">Date</th>
+              <th scope="col">Day</th>
+              <th scope="col">Occasion</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in holidays %}
+              <tr{% if item.is_past %} class="is-past"{% endif %}>
+                {# Numbered by the loop, not stored: insert or remove a row in #}
+                {# HOLIDAYS and the numbering closes up on its own.            #}
+                <td class="holiday-table__sl">{{ forloop.counter }}</td>
+                <td class="holiday-table__date">
+                  <time datetime="{{ item.date|date:'Y-m-d' }}">{{ item.date|date:"j F Y" }}</time>
+                </td>
+                <td class="holiday-table__day">{{ item.weekday }}</td>
+                <td class="holiday-table__name">
+                  {{ item.occasion }}
+                  {% if item.note %}<span class="holiday-table__note">{{ item.note }}</span>{% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <p class="holiday-foot">
+        {{ upcoming|length }} of {{ holidays|length }} still to come this year.
+        Festival holidays, whose dates follow the lunar calendar, are published
+        separately in the university's holiday circular. Dates here are subject
+        to change; the circular is the authority.
+      </p>
+
+    {% else %}
+      <div class="empty-state">
+        <svg aria-hidden="true"><use href="#i-calendar"></use></svg>
+        <p>The holiday list is being prepared and will be published shortly.</p>
+      </div>
+    {% endif %}
+
+  </div>
+</section>
+{% endblock %}

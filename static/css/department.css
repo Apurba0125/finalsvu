@@ -285,25 +285,30 @@
 /* ----------------------------------------------------------- courses ---- */
 /* The tint comes from .section--alt in the template, which is the site's
    existing band modifier — not a background declared again here. */
-/* auto-FIT, not auto-fill: auto-fill keeps making empty tracks once the row
-   runs out of cards, so a department with a single course left its card
-   beside 300-700px of nothing. auto-fit collapses those empty tracks.
+/* The courses are a carousel now, not a grid. One card on a phone, two from
+   the tablet up, three on a wide screen — the controller measures the
+   rendered cards to work out its step, so these widths are the only place the
+   count is set.
 
-   The track stays 1fr. A definite maximum here (minmax(288px, 400px)) would
-   look like the tidier fix but is a trap: auto-fit counts how many tracks fit
-   using the MAXIMUM when that is a definite length, so a 400px cap drops a
-   768px screen from two columns to one. The cap belongs on the card instead,
-   with the cards centred, so a lone card is a sensible width and the space
-   left over falls evenly either side of it. */
-.course-card-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(288px, 1fr));
-  justify-items: center;
-  gap: clamp(18px, 2vw, 28px);
+   A department with one or two courses still uses the same markup: the track
+   simply does not overflow, and the template withholds data-loop so nothing
+   scrolls for the sake of it. */
+.course-slider .carousel__item { flex: 0 0 100%; }
+@media (min-width: 620px) {
+  .course-slider .carousel__item { flex-basis: calc((100% - 18px) / 2); }
 }
-/* Fills its track at every column count the grid actually produces; the cap
-   only bites when auto-fit has collapsed to one very wide track. */
-.course-card { width: 100%; max-width: 480px; }
+@media (min-width: 992px) {
+  .course-slider .carousel__item { flex-basis: calc((100% - 36px) / 3); }
+}
+
+/* The card is the slide itself, so it should fill the height the tallest one
+   in the row sets — otherwise a short description leaves a stubby card beside
+   a tall one. That equalising is what the track's default align-items:stretch
+   already does; an explicit height:100% here BROKE it, because a set height
+   overrides stretch and the percentage resolves against a track whose own
+   height is auto. Stated rather than left implicit, since it reads like a
+   missing rule otherwise. */
+.course-slider .carousel__item { align-self: stretch; }
 
 .course-card {
   display: flex;
@@ -411,7 +416,6 @@
 }
 
 @media (max-width: 575.98px) {
-  .course-card-grid { grid-template-columns: 1fr; }
   .dept-intro__text { text-align: left; }
   .course-card__desc { text-align: left; }
 }

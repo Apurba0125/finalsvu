@@ -89,9 +89,29 @@ visitor drags, and stays still for prefers-reduced-motion.
     </div>
 
     {% if courses %}
-      <div class="course-card-grid">
+      {% comment %}
+      The courses ride past in the site carousel rather than stacking down the
+      page — some departments carry enough of them that a grid ran taller than
+      the rest of the section put together.
+
+      data-loop and data-autoplay are set only when there are more courses
+      than a wide screen shows at once (three). Below that everything is
+      already on screen, and a slider that loops and advances while showing
+      you what you can already see is just movement for its own sake. The
+      carousel controller handles both cases from these attributes alone:
+      with one course it makes no copies and never advances.
+      {% endcomment %}
+      <div class="carousel course-slider" data-carousel
+           {% if courses|length > 3 %}data-loop="1" data-step="1" data-autoplay="3800"{% endif %}>
+
+        <button class="carousel__nav carousel__nav--prev" type="button"
+                aria-label="Previous courses">
+          <svg aria-hidden="true" focusable="false"><use href="#i-chevron-left"></use></svg>
+        </button>
+
+        <div class="carousel__track">
         {% for course in courses %}
-          <article class="course-card">
+          <article class="carousel__item course-card">
             {# The picture repeats the title link, so it is hidden from       #}
             {# assistive tech and skipped by the keyboard rather than read    #}
             {# out twice.                                                     #}
@@ -118,6 +138,14 @@ visitor drags, and stays still for prefers-reduced-motion.
             </div>
           </article>
         {% endfor %}
+        </div>
+
+        <button class="carousel__nav carousel__nav--next" type="button"
+                aria-label="Next courses">
+          <svg aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg>
+        </button>
+
+        <div class="carousel__dots dots dots--dark"></div>
       </div>
     {% else %}
       <div class="empty-state">

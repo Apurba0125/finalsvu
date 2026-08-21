@@ -657,7 +657,15 @@ table { border-collapse: collapse; width: 100%; }
   align-items: center;
   justify-content: center;
   list-style: none;
-  margin: 0; padding: 0;
+  /* margin:0 and padding:0 used to be set here, which cancelled the .shell
+     class this same element carries. The bar then sat hard against the left
+     edge of the window while every other row on the page was centred - and
+     because a centred flex row that overruns its box overflows BOTH sides
+     equally, the Home icon was pushed off the left edge and clipped. Only the
+     block axis is zeroed now, so .shell keeps centring it and keeps its
+     gutters. */
+  margin-block: 0;
+  padding-block: 0;
   gap: 0;
 }
 .nav__item { position: relative; }
@@ -1605,9 +1613,12 @@ table { border-collapse: collapse; width: 100%; }
 .carousel {
   position: relative;
   overflow-x: clip;
-  /* The nav arrows sit 18px outside the box, so the clip edge is pushed out
-     past them. Still nowhere near the ~1300px the slides were adding. */
-  overflow-clip-margin: 24px;
+  /* Nothing bleeds out by default. The arrows only sit outside the box on a
+     window wide enough to have room for them, and the margin is opened up
+     there and only there - see the rule further down. Left open at every
+     width it let ~11px of slide through at 1280px, which is a scrollbar the
+     page does not need. */
+  overflow-clip-margin: 0;
 }
 
 .carousel__track {
@@ -2782,7 +2793,16 @@ table { border-collapse: collapse; width: 100%; }
   }
   .nav__close svg { width: 20px; height: 20px; fill: currentColor; }
 
-  .nav__list { flex-direction: column; align-items: stretch; }
+  /* The list keeps the .shell class, which is wanted on the bar but not in
+     the drawer: its 16px inline padding would indent every row a second time
+     on top of the padding .nav__link already carries, and narrow the tap
+     target by the same amount on the right. */
+  .nav__list {
+    flex-direction: column;
+    align-items: stretch;
+    padding-inline: 0;
+    max-width: none;
+  }
   .nav__item { border-bottom: 1px solid var(--line); }
 
   .nav__link {
@@ -3055,18 +3075,59 @@ table { border-collapse: collapse; width: 100%; }
 
   .content-grid { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 34px; }
 
-  /* Main navigation stays on a single line — padding and type scale with the
-     viewport so all top-level items fit without wrapping to a second row.
-     Sized for roughly 110-115 characters of top-level labels; adding many more
-     menu items in the admin will push it wider than the shell. */
-  .nav__list { flex-wrap: nowrap; }
+  /* Main navigation aims to sit on a single line — padding and type scale
+     with the viewport so the top-level items fit across the shell.
+
+     It used to be pinned there with flex-wrap: nowrap, sized for roughly
+     110-115 characters of labels. That held until the labels grew past it,
+     and then it failed in the worst way available: a centred flex row that
+     overruns its box overflows BOTH edges, so the Home icon was clipped off
+     the left of the window rather than anything wrapping. Wrapping is allowed
+     again, so a bar that no longer fits takes a second row instead of hiding
+     its first item. Tighter padding below keeps it to one row at the widths
+     where it can still manage one. */
+  /* The upper bounds matter as much as the lower ones. Both values grow with
+     the VIEWPORT while the bar itself stops growing at the shell's 1320px, so
+     an uncapped clamp made the labels widest exactly where there was no more
+     room for them - one item wrapped at 1920px while 1366px fitted fine. The
+     maxima are set to what still fits 1320px. */
   .nav__link {
-    padding: 13px clamp(3px, .45vw, 9px);
-    font-size: clamp(.58rem, .40rem + .33vw, .74rem);
+    padding: 13px clamp(2px, .26vw, 4px);
+    font-size: clamp(.56rem, .38rem + .31vw, .64rem);
     letter-spacing: 0;
   }
   .nav__link .nav__caret { width: 8px; height: 8px; }
 }
+
+/* --- Carousel arrows: outside the cards only when there is room ---------
+   From 992px up the rule above hangs the arrows 18px outside the carousel.
+   That assumes space beside the shell, and there is none until the window is
+   wider than the shell itself: at 1024px the left arrow landed 6px from the
+   edge of the screen, half of it over the first card. Below that point they
+   sit just inside instead, which is where a carousel arrow usually lives.
+
+   1340px is where the 1240px shell, its gutters and an arrow either side stop
+   competing for the same pixels. */
+@media (max-width: 1339.98px) {
+  .carousel__nav--prev { left: 6px; }
+  .carousel__nav--next { right: 6px; }
+}
+/* Wide enough for the arrows to stand outside the cards, so let them out of
+   the clip. 24px clears the 18px offset with room to spare, and the shell is
+   nowhere near the window edge at this width. */
+@media (min-width: 1340px) {
+  .carousel { overflow-clip-margin: 24px; }
+}
+
+/* The arrows read as controls rather than smudges: a hairline so they hold
+   their shape against a white card behind them, and the icon in the ink
+   colour instead of inheriting whatever the surrounding text is. */
+.carousel__nav {
+  border: 1px solid var(--line);
+  color: var(--ink);
+}
+.carousel__nav:hover { border-color: var(--gold); color: var(--ink); }
+
 
 /* Twelve top-level labels on one line is a tight fit just above the drawer
    breakpoint: at 992px the last item ("Examination") spilled ~10px past the

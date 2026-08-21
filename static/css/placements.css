@@ -1,0 +1,224 @@
+/* ==========================================================================
+   Training & Placements  and  Infrastructure
+   Loaded by pages/training_placements.html and pages/infrastructure.html.
+   The banner comes from includes/page_hero.html (main.css); the heading with
+   its rule from page-head.css. The recruiter grid is defined in course.css
+   and reused here, so it is not repeated below.
+   ========================================================================== */
+
+/* ================================================ Training & Placements == */
+
+/* auto-fit, not auto-fill: with an odd number of cards the last row stretches
+   to fill instead of leaving an empty track beside it. */
+.tp-grid {
+  list-style: none;
+  margin: 26px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: clamp(16px, 2vw, 24px);
+}
+
+.tp-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 24px 22px;
+  background: var(--paper);
+  border-bottom: 3px solid var(--gold);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-xs);
+  transition: box-shadow var(--transition), transform var(--transition);
+}
+.tp-card:hover { box-shadow: var(--shadow); transform: translateY(-3px); }
+
+.tp-card__icon {
+  flex: none;
+  width: 50px;
+  height: 50px;
+  margin-bottom: 16px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-sm);
+  background: var(--blue);
+}
+.tp-card__icon svg { width: 26px; height: 26px; fill: #fff; }
+
+.tp-card__title {
+  margin: 0 0 8px;
+  font-size: 1rem;
+  font-weight: 800;
+  line-height: 1.35;
+  color: var(--ink);
+}
+.tp-card__text { margin: 0; color: var(--ink-soft); font-size: .88rem; line-height: 1.75; }
+
+/* ------------------------------------------------------------- steps ---- */
+/* Numbered by a counter rather than by list-item markers, so the number can
+   be styled as a disc without a second element in the markup — and inserting
+   a step in the middle renumbers the rest for free. */
+.tp-steps {
+  counter-reset: tp-step;
+  list-style: none;
+  margin: 26px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: clamp(18px, 2vw, 28px);
+}
+.tp-steps li {
+  counter-increment: tp-step;
+  position: relative;
+  padding: 4px 0 0 60px;
+}
+.tp-steps li::before {
+  content: counter(tp-step, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--gold);
+  color: var(--ink);
+  font-weight: 800;
+  font-size: .9rem;
+}
+.tp-steps h3 { margin: 0 0 4px; font-size: .98rem; font-weight: 800; color: var(--ink); }
+.tp-steps p  { margin: 0; color: var(--ink-soft); font-size: .87rem; line-height: 1.7; }
+
+/* ------------------------------------------------------------- stats ---- */
+/* Only paints if the commented-out block in the template is uncommented. */
+.tp-stats {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 18px;
+  text-align: center;
+}
+.tp-stats li {
+  padding: 24px 16px;
+  background: var(--paper);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-xs);
+}
+.tp-stats strong {
+  display: block;
+  font-size: clamp(1.6rem, 1.2rem + 1.4vw, 2.3rem);
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1.1;
+}
+.tp-stats span {
+  display: block;
+  margin-top: 6px;
+  font-size: .8rem;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ----------------------------------------------------------- contact ---- */
+.tp-contact {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px 26px;
+  padding: clamp(22px, 3vw, 34px);
+  background: var(--paper);
+  border-left: 4px solid var(--gold);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-xs);
+}
+.tp-contact__title { margin: 0 0 6px; font-size: 1.1rem; font-weight: 800; color: var(--ink); }
+.tp-contact__text  { margin: 0; color: var(--ink-soft); font-size: .9rem; line-height: 1.7; max-width: 62ch; }
+
+
+/* ========================================================= Infrastructure = */
+
+.infra-list { display: grid; gap: clamp(28px, 4vw, 52px); }
+
+.infra-item {
+  display: grid;
+  grid-template-columns: minmax(0, 6fr) minmax(0, 6fr);
+  gap: clamp(20px, 3vw, 44px);
+  align-items: center;
+}
+/* Every second block puts its picture on the right. Done with the grid rather
+   than a class in the markup, so a block inserted in the middle re-alternates
+   the ones after it without anything being edited. */
+.infra-item:nth-child(even) .infra-item__media { order: 2; }
+
+.infra-item__media { margin: 0; }
+.infra-item__media img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.infra-item__title {
+  margin: 0 0 10px;
+  font-size: clamp(1.05rem, .95rem + .5vw, 1.35rem);
+  font-weight: 800;
+  color: var(--ink);
+}
+.infra-item__body p { margin: 0 0 12px; color: var(--ink-soft); line-height: 1.85; }
+.infra-item__body p:last-child { margin-bottom: 0; }
+
+/* ------------------------------------------------------------- chips ---- */
+.infra-chips {
+  list-style: none;
+  margin: 26px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+.infra-chip {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 58px;
+  padding: 14px 18px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  font-size: .88rem;
+  font-weight: 600;
+  color: var(--ink);
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+.infra-chip:hover { border-color: var(--gold); box-shadow: var(--shadow-xs); }
+.infra-chip svg { flex: none; width: 22px; height: 22px; fill: var(--accent); }
+
+.infra-note {
+  margin: 22px 0 0;
+  color: var(--muted);
+  font-size: .88rem;
+  line-height: 1.7;
+}
+.infra-note a { color: var(--accent); font-weight: 600; }
+.infra-note a:hover { text-decoration: underline; }
+
+/* ---------------------------------------------------------- responsive -- */
+@media (max-width: 767.98px) {
+  .infra-item { grid-template-columns: 1fr; }
+  /* Picture first on a narrow screen whichever side it takes on a wide one —
+     the alternating order only makes sense while there are two columns. */
+  .infra-item:nth-child(even) .infra-item__media { order: 0; }
+  .tp-steps li { padding-left: 54px; }
+}
+
+@media (max-width: 575.98px) {
+  .tp-card { padding: 20px 18px; }
+  .tp-contact { flex-direction: column; align-items: flex-start; }
+}

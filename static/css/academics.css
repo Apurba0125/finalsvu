@@ -1,0 +1,150 @@
+/* ==========================================================================
+   Academic pages  —  List of Holidays and Academic Activities
+   Loaded by pages/list_of_holidays.html and pages/academic_activities.html.
+   The banner comes from includes/page_hero.html, styled in main.css; the
+   heading with its rule comes from page-head.css.
+   ========================================================================== */
+
+/* ------------------------------------------------------ holiday table --- */
+/* The table keeps its own scroller rather than letting the page scroll
+   sideways: three columns and a long occasion name will not fit a narrow
+   phone, and a page that pans horizontally is worse than a table that does. */
+.table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.holiday-table {
+  width: 100%;
+  min-width: 460px;
+  border-collapse: collapse;
+  background: var(--paper);
+  box-shadow: var(--shadow-xs);
+}
+
+.holiday-table thead th {
+  padding: 13px 18px;
+  background: var(--dark);
+  color: #fff;
+  text-align: left;
+  font-size: .74rem;
+  font-weight: 700;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.holiday-table tbody tr + tr { border-top: 1px solid var(--line); }
+.holiday-table tbody tr:hover { background: #faf6e4; }
+
+.holiday-table td {
+  padding: 13px 18px;
+  text-align: left;
+  font-weight: 400;
+  vertical-align: top;
+}
+
+/* Narrow, centred and quiet — a serial number is a reference, not content. */
+.holiday-table__sl {
+  width: 1%;
+  white-space: nowrap;
+  text-align: center;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.holiday-table thead th.holiday-table__sl { text-align: center; }
+
+.holiday-table__date {
+  white-space: nowrap;
+  font-weight: 700;
+  color: var(--ink);
+}
+.holiday-table__day {
+  white-space: nowrap;
+  color: var(--muted);
+  font-size: .88rem;
+}
+.holiday-table__name { color: var(--ink-soft); font-weight: 600; }
+
+/* The parenthetical half — "Bengali New Year" — on its own line and quieter. */
+.holiday-table__note {
+  display: block;
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: .78rem;
+  font-weight: 400;
+}
+
+/* A date that has gone by. Faded rather than removed, so the page still reads
+   as a whole year; the gold spine marks it without shouting. */
+.holiday-table tbody tr.is-past { background: var(--page-alt); }
+.holiday-table tbody tr.is-past .holiday-table__date,
+.holiday-table tbody tr.is-past .holiday-table__name { color: var(--muted); }
+.holiday-table tbody tr.is-past:hover { background: #f1eddc; }
+
+.holiday-foot {
+  margin: 18px 0 0;
+  color: var(--muted);
+  font-size: .84rem;
+  line-height: 1.7;
+}
+
+/* ------------------------------------------------------ activity cards -- */
+/* auto-fit, not auto-fill: an odd number of cards should stretch to fill the
+   last row rather than leaving an empty track beside it. */
+.activity-grid {
+  list-style: none;
+  margin: 26px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: clamp(16px, 2vw, 24px);
+}
+
+.activity-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 24px 22px;
+  background: var(--paper);
+  border-bottom: 3px solid var(--gold);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-xs);
+  transition: box-shadow var(--transition), transform var(--transition);
+}
+.activity-card:hover { box-shadow: var(--shadow); transform: translateY(-3px); }
+
+.activity-card__icon {
+  flex: none;
+  width: 50px;
+  height: 50px;
+  margin-bottom: 16px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-sm);
+  background: var(--blue);
+}
+.activity-card__icon svg { width: 26px; height: 26px; fill: #fff; }
+
+.activity-card__title {
+  margin: 0 0 8px;
+  font-size: 1rem;
+  font-weight: 800;
+  line-height: 1.35;
+  color: var(--ink);
+}
+
+.activity-card__text {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: .88rem;
+  line-height: 1.75;
+}
+
+/* ---------------------------------------------------------- responsive -- */
+@media (max-width: 575.98px) {
+  .holiday-table thead th,
+  .holiday-table td { padding: 11px 14px; }
+  .activity-card { padding: 20px 18px; }
+  .activity-card__text { font-size: .85rem; }
+}
