@@ -1932,6 +1932,9 @@ COURSES = [
                  'and prepared for placement through the training and placement cell.'},
  
  #microbiology end
+
+
+ 
  {'slug': 'bachelor-of-physiotherapy-bpt',
   'name': 'Bachelor of Physiotherapy (BPT)',
   'badge': 'BPT',
