@@ -1591,7 +1591,24 @@ table { border-collapse: collapse; width: 100%; }
 /* --------------------------------------------------------------------------
    15. Carousels (schools / events / testimonials)
    -------------------------------------------------------------------------- */
-.carousel { position: relative; }
+/* The track below is its own scroll container, so its slides ought to be its
+   own business - but the browser still counts them in the scrollable overflow
+   of everything above, and the page ended up 1700px wide inside a 390px phone.
+   body{overflow-x:hidden} hid the scrollbar, which made it look fine on
+   desktop while a phone could still pan sideways onto blank background. Worse,
+   panning moves the layout viewport, and position:fixed is anchored to THAT -
+   so the WhatsApp button went off-screen with it.
+
+   'clip' rather than 'hidden' on purpose: hidden would make this a scroll
+   container too, and the clip-margin keeps the nav arrows visible where they
+   sit 8px outside the box. */
+.carousel {
+  position: relative;
+  overflow-x: clip;
+  /* The nav arrows sit 18px outside the box, so the clip edge is pushed out
+     past them. Still nowhere near the ~1300px the slides were adding. */
+  overflow-clip-margin: 24px;
+}
 
 .carousel__track {
   display: flex;

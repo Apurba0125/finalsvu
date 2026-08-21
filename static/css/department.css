@@ -285,11 +285,25 @@
 /* ----------------------------------------------------------- courses ---- */
 /* The tint comes from .section--alt in the template, which is the site's
    existing band modifier — not a background declared again here. */
+/* auto-FIT, not auto-fill: auto-fill keeps making empty tracks once the row
+   runs out of cards, so a department with a single course left its card
+   beside 300-700px of nothing. auto-fit collapses those empty tracks.
+
+   The track stays 1fr. A definite maximum here (minmax(288px, 400px)) would
+   look like the tidier fix but is a trap: auto-fit counts how many tracks fit
+   using the MAXIMUM when that is a definite length, so a 400px cap drops a
+   768px screen from two columns to one. The cap belongs on the card instead,
+   with the cards centred, so a lone card is a sensible width and the space
+   left over falls evenly either side of it. */
 .course-card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(288px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(288px, 1fr));
+  justify-items: center;
   gap: clamp(18px, 2vw, 28px);
 }
+/* Fills its track at every column count the grid actually produces; the cap
+   only bites when auto-fit has collapsed to one very wide track. */
+.course-card { width: 100%; max-width: 480px; }
 
 .course-card {
   display: flex;
@@ -388,8 +402,12 @@
   .dept-intro__row { grid-template-columns: 1fr; }
   .tab-pane__body--split { grid-template-columns: 1fr; }
   /* Picture under the message on a narrow screen: the words are what the
-     visitor came for, and a portrait pushed above them buries the text. */
-  .tab-pane__media { order: 2; max-width: 420px; }
+     visitor came for, and a portrait pushed above them buries the text.
+
+     Centred, because the cap is narrower than the single column it now sits
+     in - left where it was, it hugged the left edge with up to 440px of dead
+     space beside it on a tablet. */
+  .tab-pane__media { order: 2; max-width: 420px; margin-inline: auto; }
 }
 
 @media (max-width: 575.98px) {
