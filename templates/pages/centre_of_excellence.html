@@ -1,0 +1,703 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% comment %}
+===========================================================================
+CENTRE FOR EXCELLENCE  —  served at /page/centre-of-excellence/
+                          by website.views.centre_of_excellence
+---------------------------------------------------------------------------
+Header, navigation and footer come from base.html. Do not add them here.
+
+Styling: page-head.css gives the photo banner and the heading with its rule
+(shared with About Us and Recognition & Approvals); coe.css is the cards, the
+panels and the buttons.
+
+EVERYTHING IS IN THIS ONE FILE
+  Every centre and every word of its write-up is below — no data.py, no
+  per-centre template to open. One card is one block of markup, and the whole
+  page is those blocks stacked in the order they should read.
+
+TO ADD A CENTRE
+  Copy a whole <li class="coe-card"> block, paste it where it belongs in the
+  list, and change three things:
+
+    1. the <h3> — the name of the centre
+    2. the two ids — aria-controls="coe-9" on the button and id="coe-9" on the
+       panel. THEY MUST MATCH EACH OTHER AND BE UNIQUE ON THE PAGE. That pair
+       is the whole wiring; nothing counts the cards or renumbers them, so a
+       card can be dropped into the middle without touching any other.
+    3. the contents of the panel — the write-up
+
+  Nothing else in the block changes, ever.
+
+WHAT CAN GO IN A PANEL
+  The first card carries one of each, so the quickest way to write a new panel
+  is to copy the pieces out of it. All of them are plain markup:
+
+    <p class="coe-tag">NOTICE:</p>              the pale blue label chip
+    <p>…</p>                                     a paragraph
+    <h4 class="coe-subhead">…</h4>               a heading inside the panel
+    <p class="coe-week">Week 1: …</p>            a red run-in heading
+    <ul class="coe-points"><li>…                 bullets
+    <ol class="coe-steps"><li><strong>…          a numbered run, each item a
+                                                 bold heading over its copy
+    <a class="coe-btn" …>Apply Online</a>        the black button
+
+  Spacing between blocks is automatic — coe.css sets it — so there is no need
+  to add <br> or empty paragraphs anywhere.
+
+  Put <strong> around a lead-in inside a bullet, e.g.
+  <li><strong>Duration:</strong> 24 weeks</li>, and it comes out dark against
+  the grey of the copy.
+
+  WRITE AN AMPERSAND AS &amp; — a bare & is not valid HTML and misparses next
+  to a word, e.g. "&copy" would be read as the © symbol.
+
+HOW READ MORE WORKS
+  It is a real <button> driving the site's shared accordion — initAccordions
+  in main.js, the same one behind the FAQ page. The contract is the two
+  attributes on the button: aria-expanded holds the state, aria-controls names
+  the panel. The panel carries the hidden attribute, so it is shut in the
+  markup and stays shut if the script never runs.
+
+  The caret turning, and "Read More" becoming "Read Less", are both CSS keyed
+  off aria-expanded. Nothing else has to be kept in step, and both labels stay
+  here in the markup where they can be reworded.
+
+THE SCHEDULE BUTTON
+  The black button under the list opens ONE PDF for the whole page. Its
+  filename is set in the {% with %} tag just above the button and nowhere
+  else. While that file is missing the button is replaced by a line of type
+  rather than being left on the page as something that looks pressable and is
+  not. Upload the PDF, run
+
+      python manage.py collectstatic --noinput
+
+  and the button appears.
+
+NOTE ON COMMENTS: the hash-style Django comment {# … #} covers a SINGLE line.
+For a multi-line note use a comment/endcomment pair like this one, or the text
+leaks onto the page and any tag inside it actually runs.
+===========================================================================
+{% endcomment %}
+
+{% block title %}Centre For Excellence | {{ site.site_name }}{% endblock %}
+{% block meta_description %}The centres of excellence at Swami Vivekananda University — artificial intelligence, automation, cyber security, data analytics, Tagore studies and more, with industry partners including IBM and Bosch Rexroth.{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/page-head.css' %}">
+  <link rel="stylesheet" href="{% static 'css/coe.css' %}">
+{% endblock %}
+
+{% block content %}
+
+{# ===========================================================  BANNER  === #}
+{# THE BACKGROUND IMAGE IS SET HERE. Change the file name in the url() and  #}
+{# that is the whole edit — keep the dark gradient in front of it or the    #}
+{# white title stops being readable over a busy photograph.                 #}
+<section class="page-banner"
+         style="background-image: linear-gradient(0deg, rgba(10,10,10,.72), rgba(10,10,10,.55)), url('{% static 'img/about/campus.jpg' %}');">
+  <div class="shell">
+    <h1 class="page-banner__title">Centre For Excellence</h1>
+  </div>
+</section>
+
+
+{# ==========================================================  CENTRES  === #}
+<section class="section coe-section">
+  <div class="shell">
+
+    {# The half inside <span> is the red half — page-head.css colours it. #}
+    <div class="page-head">
+      <h2 class="page-heading">Centre <span>For Excellence</span></h2>
+      <span class="page-rule"></span>
+    </div>
+
+    <ul class="coe-list">
+
+      {# ============================================================== 1 = #}
+      {# THIS CARD IS THE WORKED EXAMPLE. It carries one of every block the #}
+      {# panels can use, so copy the pieces out of it when writing a new    #}
+      {# panel rather than starting from a blank one.                       #}
+      <li class="coe-card">
+        <h3 class="coe-card__title">AARFIVE Designs Pvt. Ltd</h3>
+        <button class="coe-card__toggle" type="button" data-disclosure
+                aria-expanded="false" aria-controls="coe-1">
+          {# Sized in the markup as well as the CSS: an <svg> with a viewBox #}
+          {# and no dimensions expands to fill its box, so a stylesheet that #}
+          {# has not loaded yet would put a full-width triangle on the page. #}
+          <svg class="coe-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+          <span class="coe-card__more">Read More</span>
+          <span class="coe-card__less">Read Less</span>
+          <span class="sr-only"> about AARFIVE Designs Pvt. Ltd</span>
+        </button>
+
+        <div class="coe-body" id="coe-1" hidden>
+
+          <p class="coe-tag">NOTICE:</p>
+          <p>Applications are invited for the six months&rsquo; Certificate Course
+            on Introduction to IBM Business Cognos Analytics under the Centre for
+            Artificial Intelligence, Swami Vivekananda University. The course
+            highlights are as follows:</p>
+
+          <ul class="coe-points">
+            <li><strong>Eligibility:</strong> Open to students pursuing Graduation 5th Semester and above</li>
+            <li><strong>Duration:</strong> 24 weeks (6 months)</li>
+            <li><strong>Hours / week:</strong> 01 Hours per day</li>
+            <li><strong>Mode of Delivery:</strong> Hybrid (i.e. both online and on campus)</li>
+            <li><strong>Assessment:</strong> Written Examination and Viva-Voce to be held at the end of the course.</li>
+            <li><strong>Certification:</strong> Participants who successfully complete the course requirements will duly receive a Certificate on Artificial Intelligence from Swami Vivekananda University.</li>
+            <li><strong>Course Fees:</strong> Free</li>
+          </ul>
+
+          <p>
+            <a class="coe-btn" href="{% url 'website:apply' %}">
+              <svg width="15" height="15" aria-hidden="true" focusable="false"><use href="#i-graduation"></use></svg>
+              Apply Online
+            </a>
+          </p>
+
+          <p class="coe-tag">COURSE:</p>
+          <p>Certificate Course on IBM Cognos Analytics</p>
+
+          <p class="coe-tag">CONTENT:</p>
+          <p>This course will cover the foundational aspects of Artificial
+            Intelligence, including theoretical concepts and practical
+            applications. The content is structured to provide a step-by-step
+            understanding of AI, from basic principles to more advanced topics.</p>
+
+          <h4 class="coe-subhead">Overview of RISC-V</h4>
+
+          <p class="coe-week">Week 1: Introduction to RISC-V</p>
+          <ul class="coe-points">
+            <li>Overview of RISC-V architecture and its history</li>
+            <li>Comparison with other ISAs (e.g. x86, ARM)</li>
+            <li>RISC-V design goals and benefits</li>
+            <li>Basic components of RISC-V architecture: registers, ALU, and memory</li>
+          </ul>
+
+          <p class="coe-week">Week 2: RISC-V Instruction Set</p>
+          <ul class="coe-points">
+            <li>RISC-V base integer instructions (RV32I, RV64I)</li>
+            <li>Formats and encoding of RISC-V instructions</li>
+            <li>Addressing modes and immediate values</li>
+            <li>Control and status registers</li>
+          </ul>
+
+          <p class="coe-week">Week 3: RISC-V Extensions</p>
+          <ul class="coe-points">
+            <li>Overview of standard extensions (e.g. M, A, F, D, Q)</li>
+            <li>Implementing and utilizing extension instructions</li>
+            <li>Custom extensions and their applications</li>
+            <li>Practical exercises with RISC-V extensions</li>
+          </ul>
+
+          <p class="coe-week">Week 4: RISC-V Assembly Language Programming</p>
+          <ul class="coe-points">
+            <li>Writing and understanding RISC-V assembly code</li>
+            <li>Using simulators and emulators for assembly code testing</li>
+            <li>Debugging techniques for RISC-V assembly programs</li>
+            <li>Hands-on assembly language programming exercises</li>
+          </ul>
+
+          <p class="coe-week">Week 5: RISC-V Microarchitecture and Design</p>
+          <ul class="coe-points">
+            <li>Overview of RISC-V core microarchitecture</li>
+            <li>Pipeline design and hazards</li>
+            <li>Branch prediction and cache design</li>
+            <li>Implementation of RISC-V cores: single-cycle, multi-cycle, and pipelined designs</li>
+          </ul>
+
+          <p class="coe-week">Week 6: RISC-V Toolchain and Development Environment</p>
+          <ul class="coe-points">
+            <li>Introduction to RISC-V development tools (e.g. GCC, LLVM)</li>
+            <li>Setting up a RISC-V development environment</li>
+            <li>Cross-compilation and linking for RISC-V</li>
+            <li>Using RISC-V simulators and debuggers (e.g. Spike, QEMU)</li>
+          </ul>
+
+          <p class="coe-week">Week 7: Advanced Topics and Applications</p>
+          <ul class="coe-points">
+            <li>RISC-V in embedded systems and IoT devices</li>
+            <li>Performance optimization techniques for RISC-V</li>
+            <li>Security features and considerations in RISC-V design</li>
+            <li>Case studies of RISC-V in industry applications</li>
+          </ul>
+
+          <p class="coe-week">Week 8: Final Project and Review</p>
+          <ul class="coe-points">
+            <li>Project work: designing and implementing a RISC-V based system or application</li>
+            <li>Presentation of final projects and peer review</li>
+            <li>Course review and summary</li>
+            <li>Certification examination and feedback</li>
+          </ul>
+
+          <p class="coe-tag">MISSION:</p>
+          <p>To equip participants with a thorough understanding of the RISC-V
+            instruction set architecture, enabling them to design, implement, and
+            optimize RISC-V-based systems. The course aims to bridge the gap
+            between theoretical knowledge and practical application, fostering
+            innovation in computer architecture and embedded systems.</p>
+
+          <p class="coe-tag">VISION:</p>
+          <p>To be a leading educational program in RISC-V architecture,
+            recognized for its excellence in teaching, hands-on training, and
+            contribution to advancing the field of computer engineering. We
+            aspire to create a community of skilled professionals who drive the
+            future of open-source hardware and processor design.</p>
+
+          <p class="coe-tag">OBJECTIVES:</p>
+          <ol class="coe-steps">
+            <li>
+              <strong>Comprehensive Understanding:</strong>
+              <ul class="coe-points">
+                <li>Provide a deep understanding of the RISC-V ISA, including its core principles, instruction formats, and architectural features.</li>
+                <li>Explore the design goals and benefits of RISC-V compared to other ISAs.</li>
+              </ul>
+            </li>
+            <li>
+              <strong>Hands-On Experience:</strong>
+              <ul class="coe-points">
+                <li>Offer practical training in designing, implementing, and debugging RISC-V processors.</li>
+                <li>Develop proficiency with RISC-V tools, simulators, and development environments.</li>
+              </ul>
+            </li>
+            <li>
+              <strong>Skill Development:</strong>
+              <ul class="coe-points">
+                <li>Teach participants to write and optimize RISC-V assembly language programs.</li>
+                <li>Enable students to apply RISC-V architecture principles in real-world scenarios and embedded systems.</li>
+              </ul>
+            </li>
+            <li>
+              <strong>Innovation and Application:</strong>
+              <ul class="coe-points">
+                <li>Encourage innovative use of RISC-V in various applications, from embedded systems to advanced computing systems.</li>
+                <li>Provide opportunities to work on projects that demonstrate the practical applications of RISC-V.</li>
+              </ul>
+            </li>
+            <li>
+              <strong>Professional Growth:</strong>
+              <ul class="coe-points">
+                <li>Prepare participants for careers in computer architecture, embedded systems, and related fields.</li>
+                <li>Support professional development through a strong focus on industry-relevant skills and knowledge.</li>
+              </ul>
+            </li>
+            <li>
+              <strong>Collaboration and Community:</strong>
+              <ul class="coe-points">
+                <li>Foster a collaborative learning environment where students can engage with peers, instructors, and industry professionals.</li>
+                <li>Build a network of RISC-V enthusiasts and experts who contribute to the advancement of open-source hardware.</li>
+              </ul>
+            </li>
+          </ol>
+
+          <p class="coe-tag">DURATION:</p>
+          <p>The entire course shall be of 03 (Three) months&rsquo; duration.</p>
+
+          <p class="coe-tag">ELIGIBILITY CRITERIA:</p>
+          <p>Any B.Tech Students who are currently pursuing their final year or
+            pre-final year (are also eligible to apply).</p>
+
+        </div>
+      </li>
+
+      {# ============================================================== 2 = #}
+      {# From here down the panels hold a holding line. Replace the <p>     #}
+      {# inside a panel with that centre's write-up — the blocks are all in #}
+      {# card 1 above. Nothing else in a card needs touching.               #}
+      <li class="coe-card">
+        <h3 class="coe-card__title">IBM</h3>
+        <button class="coe-card__toggle" type="button" data-disclosure
+                aria-expanded="false" aria-controls="coe-2">
+          <svg class="coe-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+          <span class="coe-card__more">Read More</span>
+          <span class="coe-card__less">Read Less</span>
+          <span class="sr-only"> about IBM</span>
+        </button>
+        <div class="coe-body" id="coe-2" hidden>
+          <p>Details of this centre will be published shortly.</p>
+        </div>
+      </li>
+
+      {# ============================================================== 3 = #}
+      <li class="coe-card">
+        <h3 class="coe-card__title">Certificate Course CAD (Computer Aided Design)</h3>
+        <button class="coe-card__toggle" type="button" data-disclosure
+                aria-expanded="false" aria-controls="coe-3">
+          <svg class="coe-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+          <span class="coe-card__more">Read More</span>
+          <span class="coe-card__less">Read Less</span>
+          <span class="sr-only"> about Certificate Course CAD</span>
+        </button>
+        <div class="coe-body" id="coe-3" hidden>
+          <p>Details of this centre will be published shortly.</p>
+        </div>
+      </li>
+
+      {# ============================================================== 4 = #}
+      <li class="coe-card">
+        <h3 class="coe-card__title">Certificate Course on Robotics</h3>
+        <button class="coe-card__toggle" type="button" data-disclosure
+                aria-expanded="false" aria-controls="coe-4">
+          <svg class="coe-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+          <span class="coe-card__more">Read More</span>
+          <span class="coe-card__less">Read Less</span>
+          <span class="sr-only"> about Certificate Course on Robotics</span>
+        </button>
+        <div class="coe-body" id="coe-4" hidden>
+          <p>Details of this centre will be published shortly.</p>
+        </div>
+      </li>
+
+      {# ============================================================== 5 = #}
+      <li class="coe-card">
+        <h3 class="coe-card__title">Centre For Quantam Computing</h3>
+        <button class="coe-card__toggle" type="button" data-disclosure
+                aria-expanded="false" aria-controls="coe-5">
+          <svg class="coe-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+          <span class="coe-card__more">Read More</span>
+          <span class="coe-card__less">Read Less</span>
+          <span class="sr-only"> about the Centre For Quantam Computing</span>
+        </button>
+        <div class="coe-body" id="coe-5" hidden>
+          <p>Details of this centre will be published shortly.</p>
+        </div>
+      </li>
+
+      {# ============================================================== 6 = #}
+      <li class="coe-card">
+        <h3 class="coe-card__title">Centre for Performing Arts</h3>
+        <button class="coe-card__toggle" type="button" data-disclosure
+                aria-expanded="false" aria-controls="coe-6">
+          <svg class="coe-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+          <span class="coe-card__more">Read More</span>
+          <span class="coe-card__less">Read Less</span>
+          <span class="sr-only"> about the Centre for Performing Arts</span>
+        </button>
+        <div class="coe-body" id="coe-6" hidden>
+          <p>Details of this centre will be published shortly.</p>
+        </div>
+      </li>
+
+      {# ============================================================== 7 = #}
+      <li class="coe-card">
+        <h3 class="coe-card__title">Centre for Geo Informatics</h3>
+        <button class="coe-card__toggle" type="button" data-disclosure
+                aria-expanded="false" aria-controls="coe-7">
+          <svg class="coe-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+          <span class="coe-card__more">Read More</span>
+          <span class="coe-card__less">Read Less</span>
+          <span class="sr-only"> about the Centre for Geo Informatics</span>
+        </button>
+        <div class="coe-body" id="coe-7" hidden>
+          <p>Details of this centre will be published shortly.</p>
+        </div>
+      </li>
+
+      {# ============================================================== 8 = #}
+      <li class="coe-card">
+        <h3 class="coe-card__title">Centre for Data Analytics</h3>
+        <button class="coe-card__toggle" type="button" data-disclosure
+                aria-expanded="false" aria-controls="coe-8">
+          <svg class="coe-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+          <span class="coe-card__more">Read More</span>
+          <span class="coe-card__less">Read Less</span>
+          <span class="sr-only"> about the Centre for Data Analytics</span>
+        </button>
+        <div class="coe-body" id="coe-8" hidden>
+          <p>Details of this centre will be published shortly.</p>
+        </div>
+      </li>
+
+      {# ============================================================== 9 = #}
+      <li class="coe-card">
+        <h3 class="coe-card__title">Centre for Cyber Security</h3>
+        <button class="coe-card__toggle" type="button" data-disclosure
+                aria-expanded="false" aria-controls="coe-9">
+          <svg class="coe-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+          <span class="coe-card__more">Read More</span>
+          <span class="coe-card__less">Read Less</span>
+          <span class="sr-only"> about the Centre for Cyber Security</span>
+        </button>
+        <div class="coe-body" id="coe-9" hidden>
+          <p>Details of this centre will be published shortly.</p>
+        </div>
+      </li>
+
+      {# ============================================================= 10 = #}
+      <li class="coe-card">
+        <h3 class="coe-card__title">Centre for Communication Studies</h3>
+        <button class="coe-card__toggle" type="button" data-disclosure
+                aria-expanded="false" aria-controls="coe-10">
+          <svg class="coe-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+          <span class="coe-card__more">Read More</span>
+          <span class="coe-card__less">Read Less</span>
+          <span class="sr-only"> about the Centre for Communication Studies</span>
+        </button>
+        <div class="coe-body" id="coe-10" hidden>
+          <p>Details of this centre will be published shortly.</p>
+        </div>
+      </li>
+
+      {# ============================================================= 11 = #}
+      <li class="coe-card">
+        <h3 class="coe-card__title">CENTRE FOR CLOUD COMPUTING</h3>
+        <button class="coe-card__toggle" type="button" data-disclosure
+                aria-expanded="false" aria-controls="coe-11">
+          <svg class="coe-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+          <span class="coe-card__more">Read More</span>
+          <span class="coe-card__less">Read Less</span>
+          <span class="sr-only"> about the Centre for Cloud Computing</span>
+        </button>
+        <div class="coe-body" id="coe-11" hidden>
+          <p>Details of this centre will be published shortly.</p>
+        </div>
+      </li>
+
+      {# ============================================================= 12 = #}
+      <li class="coe-card">
+        <h3 class="coe-card__title">Centre for Business Communication</h3>
+        <button class="coe-card__toggle" type="button" data-disclosure
+                aria-expanded="false" aria-controls="coe-12">
+          <svg class="coe-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+          <span class="coe-card__more">Read More</span>
+          <span class="coe-card__less">Read Less</span>
+          <span class="sr-only"> about the Centre for Business Communication</span>
+        </button>
+        <div class="coe-body" id="coe-12" hidden>
+          <p>Details of this centre will be published shortly.</p>
+        </div>
+      </li>
+
+      {# ============================================================= 13 = #}
+      <li class="coe-card">
+        <h3 class="coe-card__title">Centre for Behavioural Communication</h3>
+        <button class="coe-card__toggle" type="button" data-disclosure
+                aria-expanded="false" aria-controls="coe-13">
+          <svg class="coe-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+          <span class="coe-card__more">Read More</span>
+          <span class="coe-card__less">Read Less</span>
+          <span class="sr-only"> about the Centre for Behavioural Communication</span>
+        </button>
+        <div class="coe-body" id="coe-13" hidden>
+          <p>Details of this centre will be published shortly.</p>
+        </div>
+      </li>
+
+      {# ============================================================= 14 = #}
+      <li class="coe-card">
+        <h3 class="coe-card__title">Centre for Automation</h3>
+        <button class="coe-card__toggle" type="button" data-disclosure
+                aria-expanded="false" aria-controls="coe-14">
+          <svg class="coe-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+          <span class="coe-card__more">Read More</span>
+          <span class="coe-card__less">Read Less</span>
+          <span class="sr-only"> about the Centre for Automation</span>
+        </button>
+        <div class="coe-body" id="coe-14" hidden>
+          <p>Details of this centre will be published shortly.</p>
+        </div>
+      </li>
+
+      {# ============================================================= 15 = #}
+      <li class="coe-card">
+        <h3 class="coe-card__title">Centre for Artificial Intelligence</h3>
+        <button class="coe-card__toggle" type="button" data-disclosure
+                aria-expanded="false" aria-controls="coe-15">
+          <svg class="coe-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+          <span class="coe-card__more">Read More</span>
+          <span class="coe-card__less">Read Less</span>
+          <span class="sr-only"> about the Centre for Artificial Intelligence</span>
+        </button>
+        <div class="coe-body" id="coe-15" hidden>
+          <p>Details of this centre will be published shortly.</p>
+        </div>
+      </li>
+
+      {# ============================================================= 16 = #}
+      <li class="coe-card">
+        <h3 class="coe-card__title">Centre for Bio-informatics</h3>
+        <button class="coe-card__toggle" type="button" data-disclosure
+                aria-expanded="false" aria-controls="coe-16">
+          <svg class="coe-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+          <span class="coe-card__more">Read More</span>
+          <span class="coe-card__less">Read Less</span>
+          <span class="sr-only"> about the Centre for Bio-informatics</span>
+        </button>
+        <div class="coe-body" id="coe-16" hidden>
+          <p>Details of this centre will be published shortly.</p>
+        </div>
+      </li>
+
+      {# ============================================================= 17 = #}
+      <li class="coe-card">
+        <h3 class="coe-card__title">Centre for Australian Studies</h3>
+        <button class="coe-card__toggle" type="button" data-disclosure
+                aria-expanded="false" aria-controls="coe-17">
+          <svg class="coe-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+          <span class="coe-card__more">Read More</span>
+          <span class="coe-card__less">Read Less</span>
+          <span class="sr-only"> about the Centre for Australian Studies</span>
+        </button>
+        <div class="coe-body" id="coe-17" hidden>
+          <p>Details of this centre will be published shortly.</p>
+        </div>
+      </li>
+
+      {# ============================================================= 18 = #}
+      <li class="coe-card">
+        <h3 class="coe-card__title">Centre for Tagore Studies</h3>
+        <button class="coe-card__toggle" type="button" data-disclosure
+                aria-expanded="false" aria-controls="coe-18">
+          <svg class="coe-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+          <span class="coe-card__more">Read More</span>
+          <span class="coe-card__less">Read Less</span>
+          <span class="sr-only"> about the Centre for Tagore Studies</span>
+        </button>
+        <div class="coe-body" id="coe-18" hidden>
+          <p>Details of this centre will be published shortly.</p>
+        </div>
+      </li>
+
+      {# ============================================================= 19 = #}
+      <li class="coe-card">
+        <h3 class="coe-card__title">Centre for Women&rsquo;s Studies</h3>
+        <button class="coe-card__toggle" type="button" data-disclosure
+                aria-expanded="false" aria-controls="coe-19">
+          <svg class="coe-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+          <span class="coe-card__more">Read More</span>
+          <span class="coe-card__less">Read Less</span>
+          <span class="sr-only"> about the Centre for Women&rsquo;s Studies</span>
+        </button>
+        <div class="coe-body" id="coe-19" hidden>
+          <p>Details of this centre will be published shortly.</p>
+        </div>
+      </li>
+
+      {# ============================================================= 20 = #}
+      <li class="coe-card">
+        <h3 class="coe-card__title">Centre for Gender Studies</h3>
+        <button class="coe-card__toggle" type="button" data-disclosure
+                aria-expanded="false" aria-controls="coe-20">
+          <svg class="coe-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+          <span class="coe-card__more">Read More</span>
+          <span class="coe-card__less">Read Less</span>
+          <span class="sr-only"> about the Centre for Gender Studies</span>
+        </button>
+        <div class="coe-body" id="coe-20" hidden>
+          <p>Details of this centre will be published shortly.</p>
+        </div>
+      </li>
+
+      {# ============================================================= 21 = #}
+      <li class="coe-card">
+        <h3 class="coe-card__title">SVU Bosch-Rexroth Centre of Excellence</h3>
+        <button class="coe-card__toggle" type="button" data-disclosure
+                aria-expanded="false" aria-controls="coe-21">
+          <svg class="coe-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+          <span class="coe-card__more">Read More</span>
+          <span class="coe-card__less">Read Less</span>
+          <span class="sr-only"> about the SVU Bosch-Rexroth Centre of Excellence</span>
+        </button>
+        <div class="coe-body" id="coe-21" hidden>
+          <p>Details of this centre will be published shortly.</p>
+        </div>
+      </li>
+
+      {# ============================================================= 22 = #}
+      {# The second written panel — a plain numbered run with no chips, so  #}
+      {# it shows what a shorter write-up looks like beside card 1.         #}
+      <li class="coe-card">
+        <h3 class="coe-card__title">Centre for Excellence by Esillor Luxottica</h3>
+        <button class="coe-card__toggle" type="button" data-disclosure
+                aria-expanded="false" aria-controls="coe-22">
+          <svg class="coe-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+          <span class="coe-card__more">Read More</span>
+          <span class="coe-card__less">Read Less</span>
+          <span class="sr-only"> about the Centre for Excellence by Esillor Luxottica</span>
+        </button>
+
+        <div class="coe-body" id="coe-22" hidden>
+          <p>Blue filter lenses are designed to improve visual comfort and protect
+            the eyes by filtering out certain high-energy wavelengths of blue
+            light. The primary objectives of blue filter lenses for enhanced
+            vision would aim to:</p>
+
+          <ol class="coe-steps">
+            <li>
+              <strong>Reducing Digital Eye Strain:</strong>
+              <p>Blue filter lenses help minimize eye strain caused by prolonged
+                exposure to screens, such as computers, tablets, and smartphones,
+                by reducing blue light intensity.</p>
+            </li>
+            <li>
+              <strong>Improving Visual Contrast:</strong>
+              <p>By selectively filtering blue light, these lenses enhance contrast
+                and visual sharpness, making it easier to perceive finer details in
+                low-light or high-glare environments.</p>
+            </li>
+            <li>
+              <strong>Minimizing Glare:</strong>
+              <p>Blue light contributes significantly to glare, especially in bright
+                outdoor or artificial lighting conditions. Blue filter lenses reduce
+                this glare, improving comfort in various lighting scenarios.</p>
+            </li>
+            <li>
+              <strong>Improving Sleep Patterns:</strong>
+              <p>Excessive exposure to blue light, particularly in the evening,
+                disrupts circadian rhythms by suppressing melatonin production. Blue
+                filter lenses can help mitigate this disruption, promoting better
+                sleep.</p>
+            </li>
+            <li>
+              <strong>Enhancing Visual Comfort in Indoor Lighting:</strong>
+              <p>LED and fluorescent lighting emit significant blue light. Blue
+                filter lenses reduce the strain and discomfort caused by these light
+                sources.</p>
+            </li>
+            <li>
+              <strong>Protecting Against Long-Term Eye Damage:</strong>
+              <p>Prolonged exposure to blue light may contribute to the development
+                of macular degeneration and other eye health issues. Blue filter
+                lenses help protect the eyes from potential long-term damage.</p>
+            </li>
+            <li>
+              <strong>Enhancing Nighttime Vision:</strong>
+              <p>By reducing glare and filtering out blue light, these lenses can
+                enhance visual clarity during nighttime driving or in low-light
+                conditions, leading to improved safety.</p>
+            </li>
+          </ol>
+
+          <p>
+            <a class="coe-btn" href="{% url 'website:apply' %}">
+              <svg width="15" height="15" aria-hidden="true" focusable="false"><use href="#i-graduation"></use></svg>
+              Apply Online
+            </a>
+          </p>
+        </div>
+      </li>
+
+    </ul>
+
+    {# ------------------------------------------------------ SCHEDULE --- #}
+    {# ONE PDF for the whole page. Change the filename here and nowhere    #}
+    {# else; the button below reads whatever this resolves to.             #}
+    <div class="coe-foot">
+      {% with schedule="documents/Batch.pdf"|doc_url %}
+        {% if schedule %}
+          <a class="coe-btn" href="{{ schedule }}"
+             target="_blank" rel="noopener noreferrer">
+            <svg width="15" height="15" aria-hidden="true" focusable="false"><use href="#i-calendar"></use></svg>
+            View Schedule<span class="sr-only"> (PDF, opens in a new tab)</span>
+          </a>
+        {% else %}
+          <p class="coe-foot__pending">The schedule will be published shortly.</p>
+        {% endif %}
+      {% endwith %}
+    </div>
+
+  </div>
+</section>
+{% endblock %}

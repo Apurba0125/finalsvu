@@ -8,75 +8,299 @@ ACADEMIC ACTIVITIES  —  served at /page/academic-activities/
 ---------------------------------------------------------------------------
 Header, navigation and footer come from base.html. Do not add them here.
 
-TO ADD, REMOVE OR REORDER AN ACTIVITY
-Edit the ACADEMIC_ACTIVITIES list in website/data.py — nothing in this file
-changes. The grid works out its own column count, so an odd number of cards
-never leaves a gap beside the last one.
+Styling, three shared files and one of its own: tabs.css is the five pills and
+the show/hide of the panels, shared with the department, course and Patent &
+IPR pages; page-head.css is the department headings inside the Workshop panel;
+gallery.css is the photograph cell and the full-size viewer in the Industry
+Academia Interface panel, shared with Life at SVU; activities.css is everything
+else on this page.
 
-The icon on each card is named in that list, without its "i-" prefix, and
-comes from the shared sprite in includes/icons.html. Any symbol there works.
+WHERE THE CONTENT IS WRITTEN
+  In this file, one line per item — not in data.py. That is the point of the
+  page having its own template: a conference, a workshop or a photograph can
+  be added, reworded or moved between panels by editing the line, with no
+  Python to touch and nothing to keep in step anywhere else.
 
-THIS PAGE IS STANDING ACTIVITY, NOT DATED EVENTS
-Individual events with a date belong in EVENTS, which drives /events/. Keep
-the two apart or the same thing gets written twice and drifts.
+  (ACADEMIC_ACTIVITIES in data.py fed the card grid this page used to be. It
+  is no longer read from here; the sentences from it now open the panels they
+  belong to.)
 
-Styling is static/css/academics.css, shared with List of Holidays.
+THE THREE ARRANGEMENTS
+  Any panel can use any of them, and a panel can use more than one. Copy a
+  line, change it, and the grid absorbs it — nothing counts the items.
+
+  1. CONFERENCE ROW — photograph beside the name, two rows across a desktop,
+     with a View Details button opening the conference report.
+     Inside a <ul class="conf-grid">:
+
+     {% include "includes/activity_conference.html" with title="Name of the conference" code="ABC-2025" photo="img/events/event-1.jpg" doc="documents/conferences/name.pdf" %}
+
+     doc is the report the button opens: put the PDF in
+     static/documents/conferences/ and name it here. Use url= instead of doc=
+     to send the button to a page on this site rather than to a document.
+
+     code, doc and url are all optional. With neither doc nor url the button
+     is left off rather than pointing nowhere, and the row still reads as a
+     record of the conference.
+
+     THE TWO ROWS BELOW NAME REPORTS THAT ARE NOT UPLOADED YET, so they show
+     no button so far. Drop the PDFs into static/documents/conferences/ under
+     those names, run collectstatic, and both buttons appear by themselves.
+
+  2. DATED CARD — photograph on top, four across a desktop.
+     Inside a <ul class="act-cards">:
+
+     {% include "includes/activity_card.html" with title="Workshop: Fashion Photography" date="January 29, 2025" photo="img/events/event-3.jpg" %}
+
+     date is a plain string, so it can read "18-20 March 2025" just as well.
+
+  3. PHOTOGRAPH — nothing written under it, four across a desktop, and
+     clicking one opens it full size.
+     Inside a <ul class="act-photos" data-viewer="a-name">:
+
+     {% include "includes/activity_photo.html" with photo="img/achivements/NPTEL_1.jpeg" alt="Say what is in the frame" %}
+
+     data-viewer on the <ul> is what turns those cells into one gallery — see
+     the note above the grid itself. The alt does double duty: the viewer
+     prints it as the caption under the enlarged photograph.
+
+  Each include resolves its photograph through the doc_url filter, so a
+  filename can be written before the file is uploaded and a typo leaves a
+  placeholder rather than taking the page down. After adding an image:
+
+      python manage.py collectstatic --noinput
+
+  THE PHOTOGRAPHS BELOW ARE STAND-INS. They are pulled from the folders this
+  site already ships so the page is not full of empty frames; each one is
+  meant to be swapped for the real photograph of that occasion by changing
+  the photo= on its line.
+
+THE FIVE PANELS
+  The pills and panels are the site's shared tab script — initTabPanels in
+  main.js — which finds them by the data-tabs attribute on the wrapper, the
+  .tab-btn and .tab-pane classes inside it, and data-tabs-nav on the pill row.
+  Those names are a contract with the script: rename one and the panels stop
+  switching. Everything inside a panel is free.
+
+  Whichever pill carries is-active in the markup opens on load; without one the
+  script falls back to the first. The ids only have to match between a button's
+  data-tab-target and its panel, so a sixth panel is a matter of copying a
+  button and a panel and giving the pair a new id.
+
+  Five pills wrap to three rows on a phone, for panels often shorter than
+  their own navigation, so under 768px they collapse behind the toggle button
+  at the top. That is the same control the department pages use, and it needs
+  no upkeep: the label reads whichever pill is open.
 
 NOTE ON COMMENTS: the hash-style Django comment {# … #} covers a SINGLE line.
 For a multi-line note use a comment/endcomment pair like this one, or the text
-leaks onto the page.
+leaks onto the page and any tag inside it actually runs.
 ===========================================================================
 {% endcomment %}
 
 {% block title %}Academic Activities | {{ site.site_name }}{% endblock %}
-{% block meta_description %}Seminars, workshops, faculty development programmes, guest lectures, industrial visits, student research and certification courses at Swami Vivekananda University.{% endblock %}
+{% block meta_description %}Conferences, workshops, faculty lecture series, faculty development programmes and the industry-academia interface at Swami Vivekananda University.{% endblock %}
 
 {% block extra_head %}
-  <link rel="stylesheet" href="{% static 'css/academics.css' %}">
+  <link rel="stylesheet" href="{% static 'css/page-head.css' %}">
+  <link rel="stylesheet" href="{% static 'css/tabs.css' %}">
+  {# gallery.css is the photograph cell and the full-size viewer the Industry #}
+  {# Academia Interface panel opens on a click — shared with Life at SVU.     #}
+  <link rel="stylesheet" href="{% static 'css/gallery.css' %}">
+  <link rel="stylesheet" href="{% static 'css/activities.css' %}">
 {% endblock %}
 
 {% block content %}
 {% include "includes/page_hero.html" %}
 
-<section class="section">
+<section class="section act-section">
   <div class="shell">
 
-    <div class="page-head">
-      <h2 class="page-heading">What Runs <span>Alongside the Syllabus</span></h2>
-      <span class="page-rule"></span>
-    </div>
+    <div class="tabset" data-tabs>
 
-    <div class="prose prose--full">
-      <p>
-        A degree is more than the papers it examines. These are the activities
-        the university runs beside the timetable, through which students meet
-        the subject as it is practised rather than only as it is taught.
-      </p>
-    </div>
+      {# The pills collapse behind this control under 768px. It is a real   #}
+      {# button rather than a <select> so the pills keep their shape, and   #}
+      {# there is no second copy of the labels to keep in step.             #}
+      <button class="tabset__toggle" type="button" data-tabs-toggle
+              aria-expanded="false" aria-controls="activityTabNav">
+        <span data-tabs-current>Conference</span>
+        {# Sized in the markup as well as the CSS: an <svg> with no        #}
+        {# intrinsic size falls back to 300x150, so a stylesheet that has  #}
+        {# not loaded yet puts a full-width chevron on the page.           #}
+        <svg width="12" height="8" aria-hidden="true" focusable="false"><use href="#i-caret"></use></svg>
+      </button>
 
-    {% if activities %}
-      <ul class="activity-grid">
-        {% for item in activities %}
-          <li class="activity-card">
-            <span class="activity-card__icon" aria-hidden="true">
-              {# Sized in the markup as well as the CSS: an <svg> with a       #}
-              {# viewBox and no dimensions expands to fill its box, so a       #}
-              {# stylesheet that has not loaded yet would put a full-width     #}
-              {# icon on every card.                                          #}
-              <svg width="26" height="26" focusable="false"><use href="#i-{{ item.icon }}"></use></svg>
-            </span>
-            <h3 class="activity-card__title">{{ item.title }}</h3>
-            <p class="activity-card__text">{{ item.description }}</p>
-          </li>
-        {% endfor %}
-      </ul>
-    {% else %}
-      <div class="empty-state">
-        <svg aria-hidden="true"><use href="#i-book"></use></svg>
-        <p>Details of academic activities will be published shortly.</p>
+      <div class="tabset__nav" id="activityTabNav" data-tabs-nav
+           role="tablist" aria-label="Academic activities">
+
+        <button class="tab-btn is-active" type="button" role="tab"
+                id="tab-conference" data-tab-target="#pane-conference"
+                aria-controls="pane-conference"
+                aria-selected="true" tabindex="0">Conference</button>
+
+        <button class="tab-btn" type="button" role="tab"
+                id="tab-workshop" data-tab-target="#pane-workshop"
+                aria-controls="pane-workshop"
+                aria-selected="false" tabindex="-1">Workshop</button>
+
+        <button class="tab-btn" type="button" role="tab"
+                id="tab-lectures" data-tab-target="#pane-lectures"
+                aria-controls="pane-lectures"
+                aria-selected="false" tabindex="-1">Faculty Lecture Series</button>
+
+        <button class="tab-btn" type="button" role="tab"
+                id="tab-fdp" data-tab-target="#pane-fdp"
+                aria-controls="pane-fdp"
+                aria-selected="false" tabindex="-1">Faculty Development Program</button>
+
+        <button class="tab-btn" type="button" role="tab"
+                id="tab-industry" data-tab-target="#pane-industry"
+                aria-controls="pane-industry"
+                aria-selected="false" tabindex="-1">Industry Academia Interface</button>
       </div>
-    {% endif %}
 
+
+      {# ================================================== CONFERENCE === #}
+      <div class="tab-pane is-active" id="pane-conference" role="tabpanel"
+           aria-labelledby="tab-conference" tabindex="0">
+
+        <h2 class="act-title">Conference</h2>
+        <span class="act-rule"></span>
+
+        <p class="act-intro">At Swami Vivekananda University, we organize several
+          conferences and seminars to enrich our students through extracurricular
+          events and discourses. Interacting with noted personalities and eminent
+          scholars helps our students gain associated knowledge not found in books.
+          It also helps to keep the atmosphere lively and rejuvenating, making for
+          an all-encompassing educational institute!</p>
+
+        <p class="act-band">Conferences</p>
+
+        {# One .act-group per year. Copy the whole block for 2024, 2023 … #}
+        <div class="act-group">
+          <h3 class="act-year">2025</h3>
+          <span class="act-rule"></span>
+
+          <ul class="conf-grid">
+            {% include "includes/activity_conference.html" with title="3rd International Conference on Engineering Design and Computing" code="ICEDC-2025" photo="img/events/event-1.jpg" doc="documents/conferences/icedc-2025.pdf" %}
+            {% include "includes/activity_conference.html" with title="International Conference on Nation, Internation and Transnation: Culture, Society and Politics in Tagore and his Contemporaries" photo="img/events/event-2.jpg" doc="documents/conferences/tagore-and-his-contemporaries-2025.pdf" %}
+          </ul>
+        </div>
+      </div>
+
+
+      {# ==================================================== WORKSHOP === #}
+      <div class="tab-pane" id="pane-workshop" role="tabpanel"
+           aria-labelledby="tab-workshop" tabindex="0">
+
+        <h2 class="act-label">Workshop</h2>
+
+        {# One .act-group per department. The heading uses the site's shared #}
+        {# two-tone style: the half inside <span> is the red half.           #}
+        <div class="act-group">
+          <div class="page-head">
+            <h3 class="page-heading">Department Of <span>Multimedia &amp; Animation</span></h3>
+            <span class="page-rule"></span>
+          </div>
+
+          <ul class="act-cards">
+            {% include "includes/activity_card.html" with title="Workshop: Fashion Photography" date="January 29, 2025" photo="img/events/event-3.jpg" %}
+            {% include "includes/activity_card.html" with title="Workshop: Sound an unexplored Territory" date="January 18, 2025" photo="img/events/event-4.jpg" %}
+            {% include "includes/activity_card.html" with title="Workshop: Chroma and 3d Integration" date="January 13, 2025" photo="img/events/event-5.jpg" %}
+            {% include "includes/activity_card.html" with title="Workshop: Mastering the success of corporate life: Insights from a corporate employee" date="October 21, 2024" photo="img/events/event-6.jpg" %}
+          </ul>
+        </div>
+      </div>
+
+
+      {# ====================================== FACULTY LECTURE SERIES === #}
+      <div class="tab-pane" id="pane-lectures" role="tabpanel"
+           aria-labelledby="tab-lectures" tabindex="0">
+
+        <h2 class="act-title">Faculty Lecture Series</h2>
+        <span class="act-rule"></span>
+
+        <p class="act-intro">Academics and practitioners from other institutions
+          and from industry are invited to teach a session, giving students a view
+          of the subject from outside their own department. The series runs
+          through the teaching year across every school in the university.</p>
+
+        {# Written as dated cards, the same arrangement the Workshop panel  #}
+        {# uses. Replace these with the real lectures — title, date and     #}
+        {# photograph on each line.                                         #}
+        <div class="act-group" style="margin-top:26px">
+          {# No year or department between the panel title and the cards, so #}
+          {# the outline would jump from h2 to h4. This keeps it whole       #}
+          {# without putting a word on the page.                             #}
+          <h3 class="sr-only">Lectures</h3>
+          <ul class="act-cards">
+            {% include "includes/activity_card.html" with title="Guest lecture on research methodology and academic writing" date="March 12, 2025" photo="img/events/event-7.jpg" %}
+            {% include "includes/activity_card.html" with title="Guest lecture on emerging tools in the discipline" date="February 6, 2025" photo="img/events/2.jpg" %}
+          </ul>
+        </div>
+      </div>
+
+
+      {# ================================ FACULTY DEVELOPMENT PROGRAM === #}
+      <div class="tab-pane" id="pane-fdp" role="tabpanel"
+           aria-labelledby="tab-fdp" tabindex="0">
+
+        <h2 class="act-title">Faculty Development Program</h2>
+        <span class="act-rule"></span>
+
+        <p class="act-intro">Teachers attend and run faculty development
+          programmes on curriculum design, assessment and new developments in
+          their disciplines, which is how the syllabus keeps pace with the field.
+          Programmes are run in-house and jointly with other institutions.</p>
+
+        <div class="act-group" style="margin-top:26px">
+          <h3 class="sr-only">Programmes</h3>
+          <ul class="act-cards">
+            {% include "includes/activity_card.html" with title="Faculty Development Programme on outcome-based curriculum design" date="July 2025" photo="img/achivements/NPTEL_1.jpeg" %}
+            {% include "includes/activity_card.html" with title="Faculty Development Programme on assessment and evaluation" date="January 2025" photo="img/achivements/MPTEL_2.jpeg" %}
+          </ul>
+        </div>
+      </div>
+
+
+      {# ==================================== INDUSTRY ACADEMIA INTERFACE === #}
+      <div class="tab-pane" id="pane-industry" role="tabpanel"
+           aria-labelledby="tab-industry" tabindex="0">
+
+        <h2 class="act-title">Industry Academia Interface</h2>
+        <span class="act-rule"></span>
+
+        <p class="act-intro">The Industry-Academia Interface at Swami Vivekananda
+          University fosters collaboration between academic experts and industry
+          leaders to bridge the gap between theoretical learning and practical
+          application. This initiative enhances student employability through
+          internships, workshops, and real-world projects. It also promotes
+          innovation and research aligned with current industry needs.</p>
+
+        {% comment %}
+        A record of the occasion rather than a list of items, so these are
+        photographs on their own. Rows are four across, so a count that is a
+        multiple of four never leaves an orphan on a wide screen.
+
+        data-viewer is what makes these one gallery: clicking any of them opens
+        it full size, with arrows, a count, swipe on a touchscreen, Escape to
+        close and a button for true fullscreen. It is NOT optional here — the
+        cells are buttons, and without it they are controls that do nothing.
+        The value is only a name; nothing reads it.
+        {% endcomment %}
+        <ul class="act-photos" data-viewer="industry-academia">
+          {% include "includes/activity_photo.html" with photo="img/achivements/481233106_972665624970210_8860091325710493319_n.jpg.jpeg" alt="Guests being felicitated at the industry-academia meet" %}
+          {% include "includes/activity_photo.html" with photo="img/achivements/481979442_972665414970231_8854528053355663625_n.jpg.jpeg" alt="An industry delegate receiving a memento on stage" %}
+          {% include "includes/activity_photo.html" with photo="img/achivements/482247234_972659861637453_1522331182250338419_n.jpg.jpeg" alt="Faculty and industry guests at the interface programme" %}
+          {% include "includes/activity_photo.html" with photo="img/achivements/536270821_1105990098304428_367322835841659546_n.jpg.jpeg" alt="A speaker being welcomed at the industry-academia meet" %}
+          {% include "includes/activity_photo.html" with photo="img/achivements/540903586_1105990141637757_7221139477378257898_n.jpg.jpeg" alt="Delegates on stage during the industry-academia programme" %}
+          {% include "includes/activity_photo.html" with photo="img/achivements/MPTEL_3.jpeg" alt="Participants at an industry-academia session" %}
+          {% include "includes/activity_photo.html" with photo="img/achivements/MPTEL_4.jpeg" alt="Guests at an industry-academia session" %}
+          {% include "includes/activity_photo.html" with photo="img/achivements/rbangla.jpeg" alt="Industry guests with university faculty" %}
+        </ul>
+      </div>
+
+    </div>
   </div>
 </section>
 {% endblock %}

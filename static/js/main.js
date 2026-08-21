@@ -440,7 +440,10 @@
          wrap to more height than the panel it navigates. Absent above the
          breakpoint and absent entirely on any tab panel that does not ship
          one, so all three lookups are allowed to come back empty. */
-      var nav = $(".dept-tabs__nav", scope);
+      /* data-tabs-nav is the name to use on anything new. .dept-tabs__nav is
+         the older spelling, still carried by the department and course pages
+         and matched here so they keep their dropdown. */
+      var nav = $("[data-tabs-nav], .dept-tabs__nav", scope);
       var toggle = $("[data-tabs-toggle]", scope);
       var label = toggle ? $("[data-tabs-current]", toggle) : null;
 
@@ -731,10 +734,18 @@
   }
 
   /* ----------------------------------------------------------------------
-     6. FAQ accordion
+     6. Accordions — the FAQ, and any [data-disclosure] button elsewhere
+
+     The whole contract is two attributes on the button: aria-expanded for the
+     state, aria-controls naming the panel it opens. The panel hides itself
+     with the hidden attribute, so a panel is closed in the markup and stays
+     closed if this script never runs — which is the right way round.
+
+     data-disclosure is the name to use on anything new. .faq-item__q is the
+     older spelling, still matched here so the FAQ keeps working unchanged.
      ---------------------------------------------------------------------- */
   function initAccordions() {
-    $$(".faq-item__q").forEach(function (button) {
+    $$(".faq-item__q, [data-disclosure]").forEach(function (button) {
       button.addEventListener("click", function () {
         var expanded = button.getAttribute("aria-expanded") === "true";
         var panel = document.getElementById(button.getAttribute("aria-controls"));

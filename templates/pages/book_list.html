@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% comment %}
+===========================================================================
+LIST OF BOOKS  —  served at /page/book/ by website.views.book_list
+---------------------------------------------------------------------------
+Header, navigation and footer come from base.html. Do not add them here.
+
+Styling, two shared files and one of its own: page-head.css is the photo
+banner and the heading with its rule; tabs.css is the two pills and the
+show/hide of the panels, shared with the department, course, Patent & IPR and
+Academic Activities pages; books.css is only the rows.
+
+WHERE THE DEPARTMENTS ARE WRITTEN
+  In this file, one line each — not in data.py. That is the point of the page
+  having its own template: a department can be added, reworded or moved
+  between the two panels by editing the line, with no Python to touch and
+  nothing to keep in step anywhere else.
+
+  The two panels are deliberately separate lists rather than one list filtered
+  twice. They do not hold the same departments, and the same department can
+  appear in both with a different list of books behind it.
+
+TO ADD A DEPARTMENT
+  Copy a line inside the panel it belongs to and change it:
+
+    {% include "includes/book_row.html" with title="DEPARTMENT OF PHYSICS" doc="documents/books/physics.pdf" %}
+
+  title  the department, exactly as it should read. Nothing forces case, so
+         the line is the only place the wording lives.
+  doc    optional list of books the row opens: put the PDF in
+         static/documents/books/ and name it here. Use url= instead to send
+         the row to a page on this site rather than to a document.
+
+  A row with neither still appears, with its arrow faded, so the department
+  list stays complete while the PDFs are being collected. Drop a PDF in, run
+
+      python manage.py collectstatic --noinput
+
+  and that row turns into a link by itself — no edit here.
+
+  NONE OF THE ROWS BELOW NAME A FILE YET, so every arrow is faded so far.
+  Add doc= to a line as each list of books arrives.
+
+  Order is exactly as written. The grid reads ACROSS then down, two to a line
+  on a desktop and one once a name no longer has room, so the first two lines
+  are the first row, the next two the second, and so on. An odd count leaves
+  the last row half empty, which is correct — nothing is reflowed to hide it.
+
+THE TWO PANELS
+  The pills and panels are the site's shared tab script — initTabPanels in
+  main.js — which finds them by the data-tabs attribute on the wrapper and the
+  .tab-btn / .tab-pane classes inside it. Those names are a contract with the
+  script: rename one and the panels stop switching. Everything else is free.
+
+  Whichever pill carries is-active in the markup opens on load; without one the
+  script falls back to the first. The ids only have to match between a button's
+  data-tab-target and its panel, so a third panel is a matter of copying a
+  button and a panel and giving the pair a new id.
+
+  Two pills sit side by side down to the narrowest phone, so this page ships no
+  mobile dropdown for them — unlike Academic Activities, which has five.
+
+NOTE ON COMMENTS: the hash-style Django comment {# … #} covers a SINGLE line.
+For a multi-line note use a comment/endcomment pair like this one, or the text
+leaks onto the page and any tag inside it actually runs.
+===========================================================================
+{% endcomment %}
+
+{% block title %}List of Books | {{ site.site_name }}{% endblock %}
+{% block meta_description %}Books published by the departments of Swami Vivekananda University, and other books authored by its faculty.{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/page-head.css' %}">
+  <link rel="stylesheet" href="{% static 'css/tabs.css' %}">
+  <link rel="stylesheet" href="{% static 'css/books.css' %}">
+{% endblock %}
+
+{% block content %}
+
+{# ===========================================================  BANNER  === #}
+{# THE BACKGROUND IMAGE IS SET HERE. Change the file name in the url() and  #}
+{# that is the whole edit — keep the dark gradient in front of it or the    #}
+{# white title stops being readable over a busy photograph.                 #}
+<section class="page-banner"
+         style="background-image: linear-gradient(0deg, rgba(10,10,10,.72), rgba(10,10,10,.55)), url('{% static 'img/about/campus.jpg' %}');">
+  <div class="shell">
+    <h1 class="page-banner__title">List of Books</h1>
+  </div>
+</section>
+
+
+{# ============================================================  BOOKS  === #}
+<section class="section book-section">
+  <div class="shell">
+
+    <div class="tabset" data-tabs>
+
+      <div class="tabset__nav" data-tabs-nav role="tablist" aria-label="Books">
+        <button class="tab-btn is-active" type="button" role="tab"
+                id="tab-university" data-tab-target="#pane-university"
+                aria-controls="pane-university"
+                aria-selected="true" tabindex="0">University Publications</button>
+
+        <button class="tab-btn" type="button" role="tab"
+                id="tab-others" data-tab-target="#pane-others"
+                aria-controls="pane-others"
+                aria-selected="false" tabindex="-1">Others</button>
+      </div>
+
+
+      {# =================================== UNIVERSITY PUBLICATIONS === #}
+      <div class="tab-pane is-active" id="pane-university" role="tabpanel"
+           aria-labelledby="tab-university" tabindex="0">
+
+        <div class="page-head book-pane__head">
+          <h2 class="page-heading">List of University Publications Books</h2>
+          <span class="page-rule"></span>
+        </div>
+
+        <ul class="book-list">
+          {% include "includes/book_row.html" with title="DEPARTMENT OF COMPUTER SCIENCE &amp; ENGINEERING" %}
+          {% include "includes/book_row.html" with title="DEPARTMENT OF CIVIL ENGINEERING" %}
+          {% include "includes/book_row.html" with title="DEPARTMENT OF ELECTRICAL ENGINEERING" %}
+          {% include "includes/book_row.html" with title="DEPARTMENT OF ELECTRONICS &amp; COMMUNICATION ENGINEERING" %}
+          {% include "includes/book_row.html" with title="DEPARTMENT OF MECHANICAL ENGINEERING" %}
+          {% include "includes/book_row.html" with title="DEPARTMENT OF ENGLISH" %}
+          {% include "includes/book_row.html" with title="DEPARTMENT OF JOURNALISM &amp; MASS COMMUNICATION" %}
+          {% include "includes/book_row.html" with title="DEPARTMENT OF EDUCATION" %}
+          {% include "includes/book_row.html" with title="DEPARTMENT OF AGRICULTURE" %}
+          {% include "includes/book_row.html" with title="DEPARTMENT OF MANAGEMENT STUDIES" %}
+          {% include "includes/book_row.html" with title="DEPARTMENT OF PHYSIOTHERAPY" %}
+          {% include "includes/book_row.html" with title="DEPARTMENT OF OPTOMETRY" %}
+          {% include "includes/book_row.html" with title="DEPARTMENT OF FOOD &amp; NUTRITION" %}
+          {% include "includes/book_row.html" with title="DEPARTMENT OF PSYCHOLOGY" %}
+          {% include "includes/book_row.html" with title="DEPARTMENT OF MEDICAL LABORATORY TECHNOLOGY" %}
+          {% include "includes/book_row.html" with title="DEPARTMENT OF MEDICAL RADIOLOGY &amp; IMAGING TECHNOLOGY" %}
+          {% include "includes/book_row.html" with title="DEPARTMENT OF COMPUTER APPLICATION" %}
+          {% include "includes/book_row.html" with title="DEPARTMENT OF DATA SCIENCE" %}
+          {% include "includes/book_row.html" with title="DEPARTMENT OF ADVANCED NETWORKING &amp; CYBER SECURITY" %}
+          {% include "includes/book_row.html" with title="DEPARTMENT OF MULTIMEDIA &amp; ANIMATION" %}
+          {% include "includes/book_row.html" with title="DEPARTMENT OF BIOTECHNOLOGY" %}
+          {% include "includes/book_row.html" with title="DEPARTMENT OF MICROBIOLOGY" %}
+          {% include "includes/book_row.html" with title="DEPARTMENT OF PHYSICS" %}
+          {% include "includes/book_row.html" with title="DEPARTMENT OF CHEMISTRY" %}
+          {% include "includes/book_row.html" with title="DEPARTMENT OF MATHEMATICS" %}
+          {% include "includes/book_row.html" with title="DEPARTMENT OF LEGAL STUDIES" %}
+          {% include "includes/book_row.html" with title="DEPARTMENT OF ANAESTHESIA &amp; OPERATION THEATRE TECHNOLOGY" %}
+        </ul>
+      </div>
+
+
+      {# ================================================== OTHER BOOKS === #}
+      <div class="tab-pane" id="pane-others" role="tabpanel"
+           aria-labelledby="tab-others" tabindex="0">
+
+        <div class="page-head book-pane__head">
+          <h2 class="page-heading">List of Other Books</h2>
+          <span class="page-rule"></span>
+        </div>
+
+        <ul class="book-list">
+          {% include "includes/book_row.html" with title="DEPARTMENT OF AGRICULTURE" %}
+          {% include "includes/book_row.html" with title="School of Engineering &amp; Department Of Basic Science" %}
+          {% include "includes/book_row.html" with title="Department of Journalism &amp; Mass Communication" %}
+          {% include "includes/book_row.html" with title="Department of Food and Nutrition" %}
+          {% include "includes/book_row.html" with title="Department of English" %}
+          {% include "includes/book_row.html" with title="Department of Microbiology" %}
+          {% include "includes/book_row.html" with title="Department of Biotechnology" %}
+          {% include "includes/book_row.html" with title="Department of Optometry" %}
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+{% endblock %}

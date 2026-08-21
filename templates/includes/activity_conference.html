@@ -1,0 +1,70 @@
+{% comment %}
+One conference row on Academic Activities — photograph on the left, name and
+"View Details" on the right. Sits inside a <ul class="conf-grid">.
+
+Expects:
+  title  the conference, worded as it appears on the programme
+  code   optional short name printed under it, e.g. "ICEDC-2025"
+  photo  optional path under static/, e.g. "img/events/event-1.jpg"
+  doc    optional report to open behind View Details. Either a PDF under
+         static/ — put the file in static/documents/conferences/ and write
+         "documents/conferences/icedc-2025.pdf" — or a full URL to a report
+         hosted elsewhere.
+  url    optional. Use INSTEAD of doc to send View Details to a page on this
+         site rather than to a document, e.g. an event under /events/.
+
+  Give it neither and the button is left off rather than pointing nowhere; the
+  row still reads perfectly well as a record of the conference. doc wins if
+  both are set, since a report is the more specific thing to open.
+
+WHY doc AND photo GO THROUGH doc_url
+Under the manifest storage a bare {% static %} raises for a file that was
+never collected, and one mistyped filename would take the whole page down.
+doc_url returns an empty string instead: the row falls back to a tinted
+placeholder for a missing photograph, and simply drops the button for a
+missing report. It also means both can be named here BEFORE the files are
+uploaded — each appears by itself once the file is in place and collectstatic
+has run:
+
+    python manage.py collectstatic --noinput
+
+doc_url is a template builtin (settings.py registers svu_extras), so there is
+nothing to load for it. A full URL or a rooted path is handed straight back,
+which is why the same slot takes either.
+
+rel="noopener" is not optional alongside target="_blank": without it the opened
+tab can reach back through window.opener and navigate this one.
+{% endcomment %}
+
+<li class="conf-item">
+  <figure class="conf-item__media">
+    {% with src=photo|doc_url %}
+      {% if src %}
+        <img src="{{ src }}" alt="{{ title }}" loading="lazy">
+      {% else %}
+        <span class="act-missing" aria-hidden="true">
+          <svg width="26" height="26" focusable="false"><use href="#i-file"></use></svg>
+        </span>
+      {% endif %}
+    {% endwith %}
+  </figure>
+
+  <div class="conf-item__body">
+    <h4 class="conf-item__title">{{ title }}</h4>
+    {% if code %}<p class="conf-item__code">{{ code }}</p>{% endif %}
+
+    {% with report=doc|doc_url %}
+      {% if report %}
+        {# A report opens in its own tab: it is a document to keep open beside #}
+        {# the page, not a step away from it.                                  #}
+        <a class="conf-item__btn" href="{{ report }}"
+           target="_blank" rel="noopener noreferrer">
+          <svg width="14" height="14" aria-hidden="true" focusable="false"><use href="#i-file"></use></svg>
+          View Details<span class="sr-only"> — report on {{ title }} (opens in a new tab)</span>
+        </a>
+      {% elif url %}
+        <a class="conf-item__btn" href="{{ url }}">View Details<span class="sr-only"> of {{ title }}</span></a>
+      {% endif %}
+    {% endwith %}
+  </div>
+</li>

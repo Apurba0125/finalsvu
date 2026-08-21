@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% comment %}
+===========================================================================
+ACADEMIC PATENT & IPR  —  served at /page/academic-patent-ipr/
+                          by website.views.academic_patent_ipr
+---------------------------------------------------------------------------
+Header, navigation and footer come from base.html. Do not add them here.
+
+Styling: page-head.css gives the photo banner and the heading with its rule
+(shared with About Us and Recognition & Approvals); patent.css is the two
+pills and the invention cards.
+
+WHERE THE PATENTS ARE WRITTEN
+  In this file, one line each — not in data.py. That is the point of the page
+  having its own template: a patent can be added, reworded or moved between
+  the two panels by editing the line, with no Python to touch and nothing to
+  keep in step anywhere else.
+
+TO ADD A PATENT
+  Copy a line inside the panel it belongs to and change it:
+
+    {% include "includes/patent_card.html" with title="Name of the invention" doc="documents/patents/file.pdf" %}
+
+  title  the invention exactly as it reads on the patent
+  doc    optional. A PDF under static/ (put the file in
+         static/documents/patents/), or a full URL to the patent office entry.
+         Drop the doc= half entirely and the card reads "Document to follow"
+         where the link would be — useful while the certificate is being
+         scanned, since the invention still shows up in the list.
+
+  After adding a PDF, run:  python manage.py collectstatic --noinput
+  Skipping it is safe here, unlike on Recognition & Approvals: doc_url hides
+  a link it cannot resolve rather than raising. The cost is a silent missing
+  link rather than a broken page, so it is still worth running.
+
+  Order is top to bottom as written. Newest first is the convention here.
+
+THE TWO PANELS
+  The pills and panels are the site's shared tab script — initTabPanels in
+  main.js — which finds them by the data-tabs attribute on the wrapper and the
+  .tab-btn / .tab-pane classes inside it, and are styled by the shared
+  tabs.css. Those names are a contract with the script: rename one and the
+  panel stops switching. Everything else about the block is free.
+
+  Whichever pill carries is-active in the markup opens on load; without one the
+  script falls back to the first. The ids only have to match between a button's
+  data-tab-target and its panel, so a third panel is a matter of copying a
+  button and a panel and giving the pair a new id.
+
+NOTE ON COMMENTS: the hash-style Django comment {# … #} covers a SINGLE line.
+For a multi-line note use a comment/endcomment pair like this one, or the text
+leaks onto the page and any tag inside it actually runs.
+===========================================================================
+{% endcomment %}
+
+{% block title %}Academic Patent &amp; IPR | {{ site.site_name }}{% endblock %}
+{% block meta_description %}Patents published and patents granted to the faculty and students of Swami Vivekananda University, with the certificate for each invention.{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/page-head.css' %}">
+  <link rel="stylesheet" href="{% static 'css/tabs.css' %}">
+  <link rel="stylesheet" href="{% static 'css/patent.css' %}">
+{% endblock %}
+
+{% block content %}
+
+{# ===========================================================  BANNER  === #}
+<section class="page-banner"
+         style="background-image: linear-gradient(0deg, rgba(10,10,10,.72), rgba(10,10,10,.55)), url('{% static 'img/about/team.png' %}');">
+  <div class="shell">
+    <h1 class="page-banner__title">Academic Patent &amp; IPR</h1>
+  </div>
+</section>
+
+
+{# ==========================================================  PATENTS  === #}
+<section class="section patent-section">
+  <div class="shell">
+
+    {# The half inside <span> is the red half — page-head.css colours it. #}
+    <div class="page-head">
+      <h2 class="page-heading">Academic <span>Patent &amp; IPR</span></h2>
+      <span class="page-rule"></span>
+    </div>
+
+    <div class="tabset" data-tabs>
+
+      <div class="tabset__nav" data-tabs-nav role="tablist" aria-label="Patents">
+        <button class="tab-btn is-active" type="button" role="tab"
+                id="tab-published"
+                data-tab-target="#pane-published"
+                aria-controls="pane-published"
+                aria-selected="true" tabindex="0">Patent Published</button>
+
+        <button class="tab-btn" type="button" role="tab"
+                id="tab-granted"
+                data-tab-target="#pane-granted"
+                aria-controls="pane-granted"
+                aria-selected="false" tabindex="-1">Patent Grant</button>
+      </div>
+
+      {# ------------------------------------------- PATENT PUBLISHED --- #}
+      <div class="tab-pane is-active" id="pane-published" role="tabpanel"
+           aria-labelledby="tab-published" tabindex="0">
+
+        <ul class="patent-list">
+          {% include "includes/patent_card.html" with title="IOT Based Solar Power Waste Water Harvesting And Irrigation System" %}
+          {% include "includes/patent_card.html" with title="Hybrid Solar Powered Car" %}
+          {% include "includes/patent_card.html" with title="System for monitoring and classifying mosquito repellents" %}
+        </ul>
+      </div>
+
+      {# ---------------------------------------------- PATENT GRANT ---- #}
+      {# Replace the paragraph below with a <ul class="patent-list"> of the #}
+      {# same include lines once the granted patents are to hand.          #}
+      <div class="tab-pane" id="pane-granted" role="tabpanel"
+           aria-labelledby="tab-granted" tabindex="0">
+
+        <p class="patent-empty">The granted patents are being compiled and will
+          be listed here shortly. For a certificate in the meantime, write to
+          the research office.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% endblock %}

@@ -2110,6 +2110,141 @@ COURSES = [
                  'and prepared for placement through the training and placement cell.'},
 
 
+{'slug': 'bachelor-of-technology-data-science',
+  'name': 'B.Tech in Data Science',
+  'badge': 'Data Science',
+  'card_image': '',
+  'careers': [
+      'Research Scientist',
+      'Assistant Professor',
+      'Principal Investigator',
+      'Research and Development Lead',
+  ],
+  'school': 'school-of-computer-science',
+  'department': 'department-of-data-science',
+  'program': 'under-graduate',
+  'duration': '3 Years',
+  'total_seats': 120,
+  'is_featured': True,
+  'eligibility': 'Passed 10+2 with Mathematics or Computer Science and a minimum of 45% '
+                 'aggregate.',
+  'description': 'The programme blends classroom instruction, laboratory or field practice and '
+                 'continuous internal assessment. Students are mentored throughout the course '
+                 'and prepared for placement through the training and placement cell.'},
+
+
+{'slug': 'master-of-science-data-science',
+  'name': 'Master of Science in Data Science',
+  'badge': 'Data Science',
+  'card_image': '',
+  'careers': [
+      'Research Scientist',
+      'Assistant Professor',
+      'Principal Investigator',
+      'Research and Development Lead',
+  ],
+  'school': 'school-of-computer-science',
+  'department': 'department-of-data-science',
+  'program': 'post-graduate',
+  'duration': '3 Years',
+  'total_seats': 120,
+  'is_featured': True,
+  'eligibility': 'Passed 10+2 with Mathematics or Computer Science and a minimum of 45% '
+                 'aggregate.',
+  'description': 'The programme blends classroom instruction, laboratory or field practice and '
+                 'continuous internal assessment. Students are mentored throughout the course '
+                 'and prepared for placement through the training and placement cell.'},
+
+{'slug': 'bsc-ancs',
+  'name': 'B.SC(H) In Advanced Networking And Cyber Security',
+  'badge': 'ancs',
+  'card_image': '',
+  'careers': [
+      'Research Scientist',
+      'Assistant Professor',
+      'Principal Investigator',
+      'Research and Development Lead',
+  ],
+  'school': 'school-of-computer-science',
+  'department': 'department-of-advanced-networking-cyber-security',
+  'program': 'under-graduate',
+  'duration': '3 Years',
+  'total_seats': 120,
+  'is_featured': True,
+  'eligibility': 'Passed 10+2 with Mathematics or Computer Science and a minimum of 45% '
+                 'aggregate.',
+  'description': 'The programme blends classroom instruction, laboratory or field practice and '
+                 'continuous internal assessment. Students are mentored throughout the course '
+                 'and prepared for placement through the training and placement cell.'},
+{'slug': 'msc-ancs',
+  'name': 'M.SC(H) In Advanced Networking And Cyber Security',
+  'badge': 'ancs',
+  'card_image': '',
+  'careers': [
+      'Research Scientist',
+      'Assistant Professor',
+      'Principal Investigator',
+      'Research and Development Lead',
+  ],
+  'school': 'school-of-computer-science',
+  'department': 'department-of-advanced-networking-cyber-security',
+  'program': 'post-graduate',
+  'duration': '3 Years',
+  'total_seats': 120,
+  'is_featured': True,
+  'eligibility': 'Passed 10+2 with Mathematics or Computer Science and a minimum of 45% '
+                 'aggregate.',
+  'description': 'The programme blends classroom instruction, laboratory or field practice and '
+                 'continuous internal assessment. Students are mentored throughout the course '
+                 'and prepared for placement through the training and placement cell.'},
+
+
+{'slug': 'bsc-animation',
+  'name': 'Bachelor of Science (Hons.) in Multimedia & Animation',
+  'badge': 'animation',
+  'card_image': '',
+  'careers': [
+      'Research Scientist',
+      'Assistant Professor',
+      'Principal Investigator',
+      'Research and Development Lead',
+  ],
+  'school': 'school-of-computer-science',
+  'department': 'department-of-multimedia-animation',
+  'program': 'under-graduate',
+  'duration': '3 Years',
+  'total_seats': 120,
+  'is_featured': True,
+  'eligibility': 'Passed 10+2 with Mathematics or Computer Science and a minimum of 45% '
+                 'aggregate.',
+  'description': 'The programme blends classroom instruction, laboratory or field practice and '
+                 'continuous internal assessment. Students are mentored throughout the course '
+                 'and prepared for placement through the training and placement cell.'},
+
+
+{'slug': 'msc-animation',
+  'name': 'MSc in Multimedia and Animation',
+  'badge': 'animation',
+  'card_image': '',
+  'careers': [
+      'Research Scientist',
+      'Assistant Professor',
+      'Principal Investigator',
+      'Research and Development Lead',
+  ],
+  'school': 'school-of-computer-science',
+  'department': 'department-of-multimedia-animation',
+  'program': 'post-graduate',
+  'duration': '3 Years',
+  'total_seats': 120,
+  'is_featured': True,
+  'eligibility': 'Passed 10+2 with Mathematics or Computer Science and a minimum of 45% '
+                 'aggregate.',
+  'description': 'The programme blends classroom instruction, laboratory or field practice and '
+                 'continuous internal assessment. Students are mentored throughout the course '
+                 'and prepared for placement through the training and placement cell.'},
+
+
 #computer application end
 
 # math start
@@ -2464,6 +2599,174 @@ COURSES = [
                  'and prepared for placement through the training and placement cell.'},
 
 #english end
+
+# education start
+
+{'slug': 'ba-in-education',
+  'name': 'B.A (Hons.) in Education',
+  'badge': 'BA',
+  'card_image': '',
+  'careers': [
+      'Research Scientist',
+      'Assistant Professor',
+      'Principal Investigator',
+      'Research and Development Lead',
+  ],
+  'school': 'school-of-humanities-social-science',
+  'department': 'department-of-education',
+  'program': 'under-graduate',
+  'duration': '3 Years',
+  'total_seats': 60,
+  'is_featured': False,
+  'eligibility': 'Passed 10+2 in any stream with a minimum of 45% aggregate from a recognised '
+                 'board.',
+  'description': 'The programme blends classroom instruction, laboratory or field practice and '
+                 'continuous internal assessment. Students are mentored throughout the course '
+                 'and prepared for placement through the training and placement cell.'},
+
+
+{'slug': 'ma-in-education',
+  'name': 'M.A in Education',
+  'badge': 'MA',
+  'card_image': '',
+  'careers': [
+      'Research Scientist',
+      'Assistant Professor',
+      'Principal Investigator',
+      'Research and Development Lead',
+  ],
+  'school': 'school-of-humanities-social-science',
+  'department': 'department-of-education',
+  'program': 'post-graduate',
+  'duration': '3 Years',
+  'total_seats': 60,
+  'is_featured': False,
+  'eligibility': 'Passed 10+2 in any stream with a minimum of 45% aggregate from a recognised '
+                 'board.',
+  'description': 'The programme blends classroom instruction, laboratory or field practice and '
+                 'continuous internal assessment. Students are mentored throughout the course '
+                 'and prepared for placement through the training and placement cell.'},
+
+# education end
+
+# agriculture start
+{'slug': 'ba-in-agriculture',
+  'name': ' B.Sc. (H) Agriculture',
+  'badge': 'BA',
+  'card_image': '',
+  'careers': [
+      'Research Scientist',
+      'Assistant Professor',
+      'Principal Investigator',
+      'Research and Development Lead',
+  ],
+  'school': 'school-of-agriculture',
+  'department': 'department-of-agriculture',
+  'program': 'under-graduate',
+  'duration': '3 Years',
+  'total_seats': 60,
+  'is_featured': False,
+  'eligibility': 'Passed 10+2 in any stream with a minimum of 45% aggregate from a recognised '
+                 'board.',
+  'description': 'The programme blends classroom instruction, laboratory or field practice and '
+                 'continuous internal assessment. Students are mentored throughout the course '
+                 'and prepared for placement through the training and placement cell.'},
+
+{'slug': 'msc-in-agronomy',
+  'name': ' M.Sc. (H) Agronomy',
+  'badge': 'M.Sc.',
+  'card_image': '',
+  'careers': [
+      'Research Scientist',
+      'Assistant Professor',
+      'Principal Investigator',
+      'Research and Development Lead',
+  ],
+  'school': 'school-of-agriculture',
+  'department': 'department-of-agriculture',
+  'program': 'post-graduate',
+  'duration': '3 Years',
+  'total_seats': 60,
+  'is_featured': False,
+  'eligibility': 'Passed 10+2 in any stream with a minimum of 45% aggregate from a recognised '
+                 'board.',
+  'description': 'The programme blends classroom instruction, laboratory or field practice and '
+                 'continuous internal assessment. Students are mentored throughout the course '
+                 'and prepared for placement through the training and placement cell.'},
+
+
+{'slug': 'msc-in-soil-science',
+  'name': ' M.Sc. (H) Soil Science',
+  'badge': 'M.Sc.',
+  'card_image': '',
+  'careers': [
+      'Research Scientist',
+      'Assistant Professor',
+      'Principal Investigator',
+      'Research and Development Lead',
+  ],
+  'school': 'school-of-agriculture',
+  'department': 'department-of-agriculture',
+  'program': 'post-graduate',
+  'duration': '3 Years',
+  'total_seats': 60,
+  'is_featured': False,
+  'eligibility': 'Passed 10+2 in any stream with a minimum of 45% aggregate from a recognised '
+                 'board.',
+  'description': 'The programme blends classroom instruction, laboratory or field practice and '
+                 'continuous internal assessment. Students are mentored throughout the course '
+                 'and prepared for placement through the training and placement cell.'},
+{'slug': 'msc-in-genetics-plant-breedinge',
+  'name': ' M.Sc. (H) Genetics & Plant Breedinge',
+  'badge': 'M.Sc.',
+  'card_image': '',
+  'careers': [
+      'Research Scientist',
+      'Assistant Professor',
+      'Principal Investigator',
+      'Research and Development Lead',
+  ],
+  'school': 'school-of-agriculture',
+  'department': 'department-of-agriculture',
+  'program': 'post-graduate',
+  'duration': '3 Years',
+  'total_seats': 60,
+  'is_featured': False,
+  'eligibility': 'Passed 10+2 in any stream with a minimum of 45% aggregate from a recognised '
+                 'board.',
+  'description': 'The programme blends classroom instruction, laboratory or field practice and '
+                 'continuous internal assessment. Students are mentored throughout the course '
+                 'and prepared for placement through the training and placement cell.'},
+{'slug': 'msc-in-horticulture',
+  'name': ' M.Sc. (H) Horticulture',
+  'badge': 'M.Sc.',
+  'card_image': '',
+  'careers': [
+      'Research Scientist',
+      'Assistant Professor',
+      'Principal Investigator',
+      'Research and Development Lead',
+  ],
+  'school': 'school-of-agriculture',
+  'department': 'department-of-agriculture',
+  'program': 'post-graduate',
+  'duration': '3 Years',
+  'total_seats': 60,
+  'is_featured': False,
+  'eligibility': 'Passed 10+2 in any stream with a minimum of 45% aggregate from a recognised '
+                 'board.',
+  'description': 'The programme blends classroom instruction, laboratory or field practice and '
+                 'continuous internal assessment. Students are mentored throughout the course '
+                 'and prepared for placement through the training and placement cell.'},
+
+
+# agriculture end
+
+
+
+
+
+
 
 
 

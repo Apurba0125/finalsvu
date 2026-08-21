@@ -1,0 +1,129 @@
+/* ==========================================================================
+   Tab pills and panels  —  shared furniture
+   Linked by every page that carries a [data-tabs] block: the department and
+   course pages, Academic Patent & IPR and Academic Activities. Lifted out of
+   department.css, which is where it started and where three pages could not
+   reach it.
+
+   THE CLASS NAMES ARE A CONTRACT WITH THE SCRIPT
+   initTabPanels in main.js finds the buttons by .tab-btn and the panels by
+   .tab-pane, and the collapsible pill row by [data-tabs-nav]. Rename any of
+   those and the panel stops switching. .dept-tabs__nav is the older spelling
+   of that last one, still matched by the script, which is why the department
+   and course pages did not have to be re-marked when this file was split out.
+
+   What the panels CONTAIN is not here — .tab-points and .tab-sign stayed in
+   department.css, because they are the shape of that page's copy rather than
+   part of the tab mechanism.
+   ========================================================================== */
+
+.tabset,
+.dept-tabs { margin-top: 8px; }
+
+/* The pill row. Under 768px it collapses behind the toggle below rather than
+   stacking into a column that costs more height than the panel it navigates. */
+.tabset__nav,
+.dept-tabs__nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 26px;
+  padding: 0;
+  list-style: none;
+}
+
+.tab-btn {
+  /* flex: 1 splits the row evenly however many pills there are, so two pills
+     take half the width each and five take a fifth. */
+  flex: 1 1 auto;
+  min-height: 46px;
+  padding: 11px 26px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--blue);
+  color: #fff;
+  font-family: inherit;
+  font-size: .9rem;
+  font-weight: 700;
+  line-height: 1.25;
+  cursor: pointer;
+  transition: background var(--transition), transform var(--transition);
+}
+.tab-btn:hover { background: var(--blue-dark); }
+.tab-btn.is-active { background: var(--red); }
+.tab-btn:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+
+/* Mobile control for the pill row. Hidden here, shown under 768px. Mirrors
+   .about-tab-toggle down to the shape, because it is the same problem: a row
+   of pills that wraps to more height than the panel it navigates. */
+.tabset__toggle,
+.dept-tabs__toggle {
+  display: none;
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 13px 18px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--blue);
+  color: #fff;
+  font: inherit;
+  font-size: .86rem;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+}
+.tabset__toggle svg,
+.dept-tabs__toggle svg {
+  flex-shrink: 0;
+  width: 12px; height: 12px;
+  fill: currentColor;
+  transition: transform var(--transition);
+}
+.tabset__toggle[aria-expanded="true"] svg,
+.dept-tabs__toggle[aria-expanded="true"] svg { transform: rotate(180deg); }
+.tabset__toggle:focus-visible,
+.dept-tabs__toggle:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+
+/* ------------------------------------------------------------ panes ----- */
+.tab-pane { display: none; }
+.tab-pane.is-active { display: block; animation: tab-fade var(--transition) ease-out; }
+
+@keyframes tab-fade {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tab-pane.is-active { animation: none; }
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+@media (max-width: 991.98px) {
+  .tab-btn { padding: 10px 20px; font-size: .85rem; }
+}
+
+@media (max-width: 767.98px) {
+  .tabset__toggle,
+  .dept-tabs__toggle { display: flex; margin-bottom: 22px; }
+  /* The gap below has to live on the toggle: while the list is shut it is
+     display:none and contributes no margin of its own. */
+  .tabset__toggle[aria-expanded="true"],
+  .dept-tabs__toggle[aria-expanded="true"] { margin-bottom: 10px; }
+  .tabset__nav,
+  .dept-tabs__nav {
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 22px;
+  }
+  .tabset__nav.is-open,
+  .dept-tabs__nav.is-open { display: flex; }
+  /* flex-basis is the vertical axis in a column, so the wrapping values used
+     on a wide screen would set each pill's HEIGHT here. */
+  .tab-btn { flex: 0 0 auto; padding: 11px 16px; font-size: .84rem; }
+}

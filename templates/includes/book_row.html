@@ -1,0 +1,80 @@
+{% comment %}
+One department on the List of Books. Sits inside a <ul class="book-list">.
+
+Expects:
+  title  the department, worded as it should read on the page. Nothing here
+         forces case, so "DEPARTMENT OF PHYSICS" and "Department of Physics"
+         both come out exactly as written.
+
+         WRITE AN AMPERSAND AS &amp;. A quoted string in a template tag is
+         marked safe by Django, so whatever is typed between the quotes lands
+         in the page verbatim — it is markup, not text that will be escaped on
+         the way out. A bare & displays the same in every browser but is not
+         valid HTML, and it is a live hazard next to a word: "&amp;copy" would
+         be read as the © entity.
+  doc    optional list of books to open. Either a PDF under static/ — put the
+         file in static/documents/books/ and write
+         "documents/books/computer-science-engineering.pdf" — or a full URL
+         to a list hosted elsewhere.
+  url    optional. Use INSTEAD of doc to send the row to a page on this site
+         rather than to a document.
+
+  doc wins if both are set, since a list of books is the more specific thing
+  to open. Given neither, the row still appears — see below.
+
+A ROW WITHOUT A DESTINATION STILL SHOWS
+It renders as a plain <div> with the arrow faded, so the department list stays
+complete and nobody presses something that goes nowhere. A <div> rather than
+an <a href="">: an anchor with no href is still announced as a link and does
+nothing when followed, which is worse than not being a link at all.
+
+doc goes through the doc_url filter. Under the manifest storage a bare
+{% static %} raises for a file that was never collected, and one mistyped
+filename would take the whole page down. doc_url returns an empty string
+instead, so the row quietly falls back to the faded state. It also means the
+filename can be written HERE BEFORE THE PDF EXISTS — the row turns into a link
+by itself once the file is uploaded and collectstatic has run:
+
+    python manage.py collectstatic --noinput
+
+doc_url is a template builtin (settings.py registers svu_extras), so there is
+nothing to load for it. A full URL or a rooted path is handed straight back,
+which is why the same slot takes either.
+
+rel="noopener" is not optional alongside target="_blank": without it the opened
+tab can reach back through window.opener and navigate this one.
+{% endcomment %}
+
+<li>
+  {% with list_href=doc|doc_url %}
+    {% if list_href %}
+      <a class="book-row" href="{{ list_href }}" target="_blank" rel="noopener noreferrer">
+        <span class="book-row__title">{{ title }}</span>
+        <span class="book-row__icon" aria-hidden="true">
+          {# Sized in the markup as well as the CSS: an <svg> with a viewBox #}
+          {# and no dimensions expands to fill its box, so a stylesheet that #}
+          {# has not loaded yet would put a full-width arrow on every row.   #}
+          <svg width="20" height="20" focusable="false"><use href="#i-arrow-right"></use></svg>
+        </span>
+        <span class="sr-only">— books from the {{ title }} (opens in a new tab)</span>
+      </a>
+
+    {% elif url %}
+      <a class="book-row" href="{{ url }}">
+        <span class="book-row__title">{{ title }}</span>
+        <span class="book-row__icon" aria-hidden="true">
+          <svg width="20" height="20" focusable="false"><use href="#i-arrow-right"></use></svg>
+        </span>
+        <span class="sr-only">— books from the {{ title }}</span>
+      </a>
+
+    {% else %}
+      <div class="book-row book-row--pending">
+        <span class="book-row__title">{{ title }}</span>
+        <span class="book-row__icon" aria-hidden="true">
+          <svg width="20" height="20" focusable="false"><use href="#i-arrow-right"></use></svg>
+        </span>
+      </div>
+    {% endif %}
+  {% endwith %}
+</li>

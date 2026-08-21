@@ -1,0 +1,48 @@
+{% comment %}
+One dated item on Academic Activities — photograph on top, title and date
+beneath. Sits inside a <ul class="act-cards">.
+
+Expects:
+  title  the workshop, lecture or programme
+  date   written however it should read, e.g. "January 29, 2025". A plain
+         string rather than a real date, so a run of sessions can say
+         "18–20 March 2025" and a card with no fixed day can be left blank.
+  photo  optional path under static/, e.g. "img/events/event-3.jpg"
+  url    optional. Given one, the whole card becomes the link.
+
+photo goes through doc_url for the reason set out in activity_conference.html:
+a mistyped or not-yet-uploaded filename leaves a tinted placeholder instead of
+taking the page down, and the card still carries its title and its date.
+
+The wrapper is <a> or <div> depending on url, so a card with nowhere to go is
+not an empty link — a link with no href is announced as a link by a screen
+reader and does nothing when followed.
+{% endcomment %}
+
+<li class="act-card">
+  {% if url %}<a class="act-card__link" href="{{ url }}">{% endif %}
+
+  <figure class="act-card__media">
+    {% with src=photo|doc_url %}
+      {% if src %}
+        <img src="{{ src }}" alt="{{ title }}" loading="lazy">
+      {% else %}
+        <span class="act-missing" aria-hidden="true">
+          <svg width="26" height="26" focusable="false"><use href="#i-file"></use></svg>
+        </span>
+      {% endif %}
+    {% endwith %}
+  </figure>
+
+  <div class="act-card__body">
+    <h4 class="act-card__title">{{ title }}</h4>
+    {% if date %}
+      <p class="act-card__date">
+        <svg width="13" height="13" aria-hidden="true" focusable="false"><use href="#i-calendar"></use></svg>
+        {{ date }}
+      </p>
+    {% endif %}
+  </div>
+
+  {% if url %}</a>{% endif %}
+</li>

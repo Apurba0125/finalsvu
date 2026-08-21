@@ -1,0 +1,41 @@
+{% comment %}
+One invention on the Academic Patent & IPR page.
+
+Expects:
+  title  the invention, worded exactly as it stands on the patent
+  doc    optional. Either a path under static/ to the certificate — e.g.
+         "documents/patents/hybrid-solar-powered-car.pdf" — or a full URL to
+         the entry in the patent office journal. Leave it off and the card
+         still lists the invention, with "Document to follow" where the link
+         would be.
+
+The link is built with the doc_url filter rather than a bare {% static %} tag.
+Under the manifest storage {% static %} raises for a file that was never
+collected, which would take the whole page down over one missing PDF; doc_url
+returns an empty string instead and the card hides its own link. It also means
+a filename can be written here before the file exists — the link appears by
+itself once the PDF is uploaded and collectstatic has run:
+
+    python manage.py collectstatic --noinput
+
+doc_url is a template builtin (settings.py registers svu_extras), so there is
+nothing to load for it. A full URL or a rooted path is handed straight back,
+which is why the same doc= slot takes either.
+
+rel="noopener" is not optional alongside target="_blank": without it the opened
+tab can reach back through window.opener and navigate this one.
+{% endcomment %}
+
+<li class="patent-card">
+  <p class="patent-card__label">Title of the Invention :</p>
+  <p class="patent-card__title">{{ title }}</p>
+
+  {% with href=doc|doc_url %}
+    {% if href %}
+      <a class="patent-card__link" href="{{ href }}"
+         target="_blank" rel="noopener noreferrer">Click to View<span class="sr-only"> — {{ title }} (opens in a new tab)</span></a>
+    {% else %}
+      <span class="patent-card__pending">Document to follow</span>
+    {% endif %}
+  {% endwith %}
+</li>

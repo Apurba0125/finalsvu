@@ -1,0 +1,126 @@
+/* ==========================================================================
+   List of Books  —  /page/book/
+   Loaded alongside two shared files: page-head.css for the photo banner and
+   the heading with its rule, and tabs.css for the two pills and the show/hide
+   of the panels. This file is only the rows of departments beneath them.
+
+   The row is a near-twin of .brochure-row and deliberately not the same class.
+   That one is a download — it carries a download icon, a "Coming soon" state
+   and a left spine that lights up. This one is a way through to a list, so it
+   carries an arrow that moves on hover instead. Two rows that look alike today
+   but answer to different jobs are better apart than merged and then pulled
+   in opposite directions later.
+   ========================================================================== */
+
+.book-section { background: var(--page-alt); }
+
+/* Wider than the 62px page-head.css default: under a heading as long as
+   "List of University Publications Books" the short rule reads as a stray
+   dash rather than an underline. */
+.book-section .page-rule { width: 96px; }
+
+/* The panel heading sits directly under the pills, which already carry the
+   space above them. */
+.book-pane__head { margin-bottom: 22px; }
+
+/* ============================================================ ROWS ======= */
+/* Two to a line on a desktop, reading ACROSS then down, and one to a line
+   once there is no longer width for two. auto-fit with a minimum rather than
+   a fixed repeat(2, 1fr) means the collapse happens when the content actually
+   runs out of room instead of at a breakpoint guessed in advance — a long
+   department name is what decides it, not the device. */
+.book-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+  gap: 14px 26px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* The whole row is the target, not just the arrow: a 20px arrow is well under
+   the 44px a finger needs, and the department name is what people aim at. */
+.book-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  height: 100%;
+  /* Tall enough to clear the 44px touch minimum even when the name is one
+     short line, so a row that wraps to two lines and one that does not still
+     look like the same row. */
+  min-height: 68px;
+  padding: 18px 26px;
+  background: var(--paper);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-xs);
+  transition: box-shadow var(--transition), transform var(--transition);
+}
+
+a.book-row:hover,
+a.book-row:focus-visible {
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-2px);
+}
+a.book-row:focus-visible { outline: 3px solid var(--red); outline-offset: 2px; }
+
+.book-row__title {
+  color: var(--ink);
+  font-size: .95rem;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.book-row__icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  color: var(--ink);
+  transition: transform var(--transition);
+}
+.book-row__icon svg { width: 20px; height: 20px; fill: currentColor; }
+a.book-row:hover .book-row__icon,
+a.book-row:focus-visible .book-row__icon { transform: translateX(4px); }
+
+/* A row whose list has not been uploaded yet. It stays on the page so the
+   department list is complete, and it stops looking like something to press:
+   the arrow fades and the pointer does not change. See the note in
+   includes/book_row.html — the row turns into a link by itself once the file
+   is in place. */
+.book-row--pending .book-row__icon { opacity: .3; }
+
+/* A whole panel with nothing in it yet. */
+.book-empty {
+  margin: 0;
+  padding: 30px 24px;
+  background: var(--paper);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-xs);
+  color: var(--muted);
+  font-size: .9rem;
+  line-height: 1.7;
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+@media (max-width: 575.98px) {
+  .book-list { gap: 12px; }
+  .book-row {
+    min-height: 60px;
+    padding: 15px 18px;
+    gap: 14px;
+  }
+  .book-row__title { font-size: .88rem; }
+  .book-section .page-rule { width: 74px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .book-row,
+  .book-row__icon { transition: none; }
+  a.book-row:hover { transform: none; }
+  a.book-row:hover .book-row__icon,
+  a.book-row:focus-visible .book-row__icon { transform: none; }
+}

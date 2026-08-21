@@ -912,9 +912,17 @@ def list_of_holidays(request):
 
 
 def academic_activities(request):
-    """What the university runs alongside the syllabus, one card per row."""
+    """Conferences, workshops, lectures, FDPs and the industry interface.
+
+    Takes no list of its own. Every item is one ``{% include %}`` line in
+    ``templates/pages/academic_activities.html``, so adding one, rewording it
+    or moving it between the five panels is an edit to that file alone.
+
+    ACADEMIC_ACTIVITIES in data.py fed the card grid this page used to be and
+    is no longer read here. It is left in place rather than deleted: the
+    sentences in it are the source of the copy that now opens each panel.
+    """
     return render(request, "pages/academic_activities.html", {
-        "activities": data.ACADEMIC_ACTIVITIES,
         "hero_title": "Academic Activities",
         "hero_subtitle": "Seminars, workshops, projects and collaborations that "
                          "run alongside the syllabus.",
@@ -929,6 +937,55 @@ def academic_calendar(request):
     Edit ``templates/pages/academic_calendar.html`` to change the schedule.
     """
     return render(request, "pages/academic_calendar.html")
+
+
+def centre_of_excellence(request):
+    """Centre For Excellence — the centres are written in the template.
+
+    Takes no context on purpose. Each centre is one ``{% include %}`` line in
+    ``templates/pages/centre_of_excellence.html``, so adding one, rewording it
+    or reordering the list is an edit to that file alone. The schedule button
+    under the list names its own PDF in the same file.
+
+    Its own template means its route has to sit above the generic
+    ``page/<slug>/`` line in urls.py; below it, page_detail claims the URL
+    first and renders an empty editorial placeholder.
+    """
+    return render(request, "pages/centre_of_excellence.html")
+
+
+def book_list(request):
+    """List of Books — the departments are written in the template.
+
+    Takes no context on purpose. Each department is one ``{% include %}`` line
+    in ``templates/pages/book_list.html``, so adding one, rewording it or
+    moving it between the University Publications and Others panels is an edit
+    to that file alone.
+
+    The two panels are separate lists rather than one list filtered twice: they
+    do not hold the same departments, and a department can appear in both with
+    a different list of books behind it.
+
+    Its own template means its route has to sit above the generic
+    ``page/<slug>/`` line in urls.py; below it, page_detail claims the URL
+    first and renders an empty editorial placeholder.
+    """
+    return render(request, "pages/book_list.html")
+
+
+def academic_patent_ipr(request):
+    """Academic Patent & IPR — the inventions are written in the template.
+
+    Takes no context on purpose. Each patent is one ``{% include %}`` line in
+    ``templates/pages/academic_patent_ipr.html``, so adding one, rewording it
+    or moving it between the Published and Grant panels is an edit to that file
+    alone — no list here to keep in step with it.
+
+    Its own template means its route has to sit above the generic
+    ``page/<slug>/`` line in urls.py; below it, page_detail claims the URL
+    first and renders an empty editorial placeholder.
+    """
+    return render(request, "pages/academic_patent_ipr.html")
 
 
 def recognition_approvals(request):

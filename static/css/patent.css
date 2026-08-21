@@ -1,0 +1,89 @@
+/* ==========================================================================
+   Academic Patent & IPR  —  /page/academic-patent-ipr/
+   Loaded ALONGSIDE two shared files: page-head.css for the photo banner and
+   the section heading with its rule, and tabs.css for the two pills and the
+   show/hide of the panels. This file is only the invention cards.
+   ========================================================================== */
+.patent-section { background: var(--page); }
+
+/* Two words in the heading, so the 62px default rule under it is right as it
+   stands — no override, unlike the wider one Recognition & Approvals needs. */
+
+/* =========================================================== CARDS ======= */
+/* One row per invention. A list rather than a stack of divs, so a screen
+   reader announces how many patents are in the panel before reading them. */
+.patent-list {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.patent-card {
+  padding: 18px 24px 16px;
+  background: var(--paper);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-xs);
+}
+
+.patent-card__label {
+  margin: 0;
+  color: var(--ink);
+  font-size: 1.02rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+.patent-card__title {
+  margin: 10px 0 0;
+  color: var(--ink);
+  font-size: .98rem;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+/* Indented under the title, the way the row reads on the printed patent
+   listings this page replaces. */
+.patent-card__link {
+  display: inline-block;
+  margin: 12px 0 0 14px;
+  color: var(--red);
+  font-size: .82rem;
+  font-weight: 700;
+}
+.patent-card__link:hover { text-decoration: underline; }
+.patent-card__link:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
+
+/* Shown in place of the link when the document named on the card has not been
+   uploaded yet — see the doc_url note in the template. Without it the card
+   would simply end after the title with no hint that a file is coming. */
+.patent-card__pending {
+  display: inline-block;
+  margin: 12px 0 0 14px;
+  color: var(--muted);
+  font-size: .8rem;
+  font-style: italic;
+}
+
+/* A whole panel with nothing in it yet. */
+.patent-empty {
+  margin: 0;
+  padding: 30px 24px;
+  background: var(--paper);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-xs);
+  color: var(--muted);
+  font-size: .9rem;
+  line-height: 1.7;
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+@media (max-width: 575.98px) {
+  .patent-card { padding: 16px 18px 14px; }
+  .patent-card__label { font-size: .95rem; }
+  .patent-card__title { font-size: .92rem; }
+  .patent-card__link,
+  .patent-card__pending { margin-left: 0; }
+}

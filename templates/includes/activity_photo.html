@@ -1,0 +1,46 @@
+{% comment %}
+One photograph on Academic Activities, with nothing written under it. Sits
+inside a <ul class="act-photos" data-viewer="...">.
+
+Expects:
+  photo  path under static/, e.g. "img/achivements/NPTEL_1.jpeg"
+  alt    what is in the frame, for anyone who cannot see it. Say who is doing
+         what, not "photo" — and note that the alt does DOUBLE DUTY here: the
+         viewer prints it as the caption under the enlarged photograph, so it
+         is worth writing well.
+
+CLICKING ONE OPENS IT FULL SIZE
+The cell is a real <button> carrying data-viewer-item, which is half the
+contract with initPhotoViewer in main.js; the other half is data-viewer on the
+<ul> around it, marking those cells as one gallery. THE GRID MUST CARRY IT —
+without data-viewer on the <ul> these buttons are focusable controls that do
+nothing when pressed.
+
+That is the whole contract. No index numbers to keep in step, so a photograph
+can be dropped into the middle of a grid without renumbering anything after
+it, and the viewer works out the count, the arrows and the wrap by itself.
+
+A button rather than a div because it is a control: it takes focus, answers
+Enter and Space, and is announced as a button. The viewer returns focus to it
+on close, which only works because it can hold focus in the first place.
+
+.gallery-cell is the shared cell from gallery.css — the same hover zoom,
+magnifier badge and focus ring as the Life at SVU galleries. The page links
+gallery.css for it, and for the viewer overlay itself.
+
+photo goes through doc_url for the reason set out in activity_conference.html:
+one mistyped filename would otherwise take the whole page down. A cell whose
+photograph cannot be resolved is dropped altogether — unlike a card, an empty
+frame in a photograph grid carries nothing at all, and leaving it in would put
+a button in the gallery with no photograph behind it.
+{% endcomment %}
+
+{% with src=photo|doc_url %}
+  {% if src %}
+    <li class="act-photo">
+      <button class="gallery-cell" type="button" data-viewer-item>
+        <img src="{{ src }}" alt="{{ alt|default:'' }}" loading="lazy">
+      </button>
+    </li>
+  {% endif %}
+{% endwith %}

@@ -1,0 +1,229 @@
+/* ==========================================================================
+   Centre For Excellence  —  /page/centre-of-excellence/
+   Loaded ALONGSIDE page-head.css, which supplies the photo banner and the
+   heading with its rule. This file is the stack of centres, the panel each one
+   opens, and the buttons.
+
+   One column, however wide the screen. These are single-line names in a long
+   list that is read top to bottom, and two columns of them would turn a scan
+   into a search. Nothing here changes at a breakpoint except the padding.
+
+   THE PANELS
+   Read More is a real <button> driving the site's shared accordion —
+   initAccordions in main.js, the same one behind the FAQ. The contract is two
+   attributes on the button: aria-expanded for the state and aria-controls
+   naming the panel. Everything visible about the open state is driven off
+   aria-expanded by the rules below, so there is no second source of truth and
+   no class for the script to keep in step.
+   ========================================================================== */
+
+.coe-section { background: var(--page-alt); }
+
+/* =========================================================== CARDS ======= */
+/* A list rather than a stack of divs, so a screen reader announces how many
+   centres there are before reading them. */
+.coe-list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.coe-card {
+  padding: 15px 22px 13px;
+  background: var(--paper);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-xs);
+  transition: box-shadow var(--transition);
+}
+.coe-card:hover { box-shadow: var(--shadow-sm); }
+
+.coe-card__title {
+  margin: 0;
+  color: var(--ink);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+/* --------------------------------------------------- the Read More ------ */
+/* A <button>, so every one of the browser's own defaults has to be undone: a
+   button does not inherit the page font, and it arrives with a border, a grey
+   background and padding of its own. */
+.coe-card__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin: 8px 0 0 8px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--red);
+  font-family: inherit;
+  font-size: .84rem;
+  font-weight: 500;
+  line-height: 1.4;
+  cursor: pointer;
+  transition: color var(--transition);
+}
+.coe-card__toggle:hover { color: #a80217; text-decoration: underline; }
+.coe-card__toggle:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
+
+/* The triangle turns to point down while the panel is open — the one piece of
+   state that reads at a glance without anyone having to read the words. */
+.coe-card__caret {
+  flex: none;
+  width: 9px;
+  height: 9px;
+  fill: currentColor;
+  transition: transform var(--transition);
+}
+.coe-card__toggle[aria-expanded="true"] .coe-card__caret { transform: rotate(90deg); }
+
+/* Two labels, one hidden. Swapping them in CSS off aria-expanded keeps the
+   wording in the markup where it can be edited, instead of in a string inside
+   main.js that this page would then have to own. */
+.coe-card__less { display: none; }
+.coe-card__toggle[aria-expanded="true"] .coe-card__more { display: none; }
+.coe-card__toggle[aria-expanded="true"] .coe-card__less { display: inline; }
+
+/* ============================================================ PANEL ====== */
+/* hidden in the markup, so a panel is shut before any script runs and stays
+   shut if the script never does. The explicit display:none is not redundant:
+   the hidden attribute is only a UA style rule, and ANY display declaration
+   that matches the element overrides it. */
+.coe-body {
+  margin: 14px 0 4px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+  color: var(--ink-soft);
+  font-size: .89rem;
+  line-height: 1.8;
+}
+.coe-body[hidden] { display: none; }
+
+/* Reset and re-space in one pair of rules at the SAME specificity, so source
+   order decides and the later one wins. A ".coe-body p { margin: 0 }" here
+   would be one type selector heavier than the "> * + *" below it and would
+   silently kill the gap under every paragraph in a panel. */
+.coe-body > *     { margin: 0; }
+.coe-body > * + * { margin-top: 14px; }
+.coe-body strong { color: var(--ink); font-weight: 700; }
+
+/* ---- the label chips: NOTICE, COURSE, MISSION, VISION, DURATION … ------ */
+.coe-tag {
+  display: inline-block;
+  padding: 5px 15px;
+  background: #e3ebf7;
+  border-radius: var(--radius-sm);
+  color: #16202c;
+  font-size: .82rem;
+  font-weight: 700;
+  letter-spacing: .01em;
+}
+/* A chip is a heading for the paragraph under it, so the two belong closer
+   together than two ordinary blocks do. */
+.coe-tag + * { margin-top: 8px; }
+
+/* ---- a heading inside the panel ---------------------------------------- */
+.coe-subhead {
+  margin: 0;
+  color: var(--ink);
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+/* ---- a week, or any other red run-in heading --------------------------- */
+.coe-week {
+  margin: 0;
+  color: var(--red);
+  font-size: .92rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+.coe-week + * { margin-top: 8px; }
+
+/* ---- bullets ----------------------------------------------------------- */
+.coe-points {
+  margin: 0;
+  padding-left: 20px;
+  list-style: disc;
+}
+.coe-points li + li { margin-top: 5px; }
+.coe-points li::marker { color: var(--muted); }
+
+/* ---- a numbered run, each item a bold heading over its own copy --------- */
+/* An <ol>, so the numbers are generated: adding an item in the middle
+   renumbers everything after it by itself, and nothing has to be retyped. */
+.coe-steps {
+  margin: 0;
+  padding-left: 22px;
+  list-style: decimal;
+}
+.coe-steps > li { margin-top: 12px; }
+.coe-steps > li:first-child { margin-top: 0; }
+.coe-steps > li::marker { color: var(--ink); font-weight: 700; }
+.coe-steps > li > strong { display: block; }
+/* Same pairing as .coe-body above, for the blocks inside a numbered item. */
+.coe-steps > li > *     { margin: 0; }
+.coe-steps > li > * + * { margin-top: 5px; }
+
+/* ======================================================== BUTTONS ======== */
+/* Square rather than the site's pill .btn, and near-black rather than a brand
+   colour: these are utilities — one at the foot of a panel, one at the foot of
+   the page — deliberately quieter than anything red above them. */
+.coe-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 44px;
+  padding: 12px 30px;
+  background: var(--darker);
+  color: #fff;
+  font-size: .88rem;
+  font-weight: 500;
+  line-height: 1.2;
+  transition: background var(--transition);
+}
+.coe-btn:hover { background: #000; color: #fff; }
+.coe-btn:focus-visible { outline: 3px solid var(--red); outline-offset: 3px; }
+.coe-btn svg { flex: none; width: 15px; height: 15px; fill: currentColor; }
+
+.coe-foot {
+  margin-top: 30px;
+  text-align: center;
+}
+
+/* Stands in for the schedule button while its PDF has not been uploaded. A
+   line of type rather than a dead button: something that looks pressable and
+   is not is worse than nothing in its place. */
+.coe-foot__pending {
+  margin: 0;
+  color: var(--muted);
+  font-size: .86rem;
+  font-style: italic;
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+@media (max-width: 575.98px) {
+  .coe-card { padding: 13px 16px 11px; }
+  .coe-card__title { font-size: .93rem; }
+  .coe-card__toggle { margin-left: 0; }
+  .coe-body { font-size: .86rem; line-height: 1.75; }
+  .coe-points { padding-left: 18px; }
+  .coe-steps { padding-left: 20px; }
+  /* Full width at this size: a centred button in a column of full-width rows
+     reads as an afterthought, and the tap target is better for being wider. */
+  .coe-btn { display: flex; justify-content: center; width: 100%; padding: 12px 20px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .coe-card,
+  .coe-card__toggle,
+  .coe-card__caret,
+  .coe-btn { transition: none; }
+}
