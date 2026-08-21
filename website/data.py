@@ -1934,9 +1934,10 @@ COURSES = [
  #microbiology end
 
 
- 
- {'slug': 'bachelor-of-physiotherapy-bpt',
-  'name': 'Bachelor of Physiotherapy (BPT)',
+ #Physiotherapy start 
+
+ {'slug': 'bachelor-of-physiotherapy',
+  'name': 'Bachelor of Physiotherapy',
   'badge': 'BPT',
   'card_image': '',
   'careers': [
@@ -1956,6 +1957,33 @@ COURSES = [
   'description': 'The programme blends classroom instruction, laboratory or field practice and '
                  'continuous internal assessment. Students are mentored throughout the course '
                  'and prepared for placement through the training and placement cell.'},
+
+ {'slug': 'master-of-physiotherapy',
+  'name': 'Master of Physiotherapy',
+  'badge': 'MPT',
+  'card_image': '',
+  'careers': [
+      'Research Scientist',
+      'Assistant Professor',
+      'Principal Investigator',
+      'Research and Development Lead',
+  ],
+  'school': 'school-of-allied-health-services',
+  'department': 'department-of-physiotherapy',
+  'program': 'post-graduate',
+  'duration': '4.5 Years',
+  'total_seats': 40,
+  'is_featured': False,
+  'eligibility': 'Passed 10+2 with Physics, Chemistry and Biology, securing a minimum of 45% '
+                 'aggregate.',
+  'description': 'The programme blends classroom instruction, laboratory or field practice and '
+                 'continuous internal assessment. Students are mentored throughout the course '
+                 'and prepared for placement through the training and placement cell.'},
+
+# Physiotherapy end
+
+#jmc start
+
  {'slug': 'ba-honours-in-journalism-mass-communication',
   'name': 'BA (Honours) in Journalism & Mass Communication',
   'badge': 'BA',
@@ -1977,9 +2005,37 @@ COURSES = [
   'description': 'The programme blends classroom instruction, laboratory or field practice and '
                  'continuous internal assessment. Students are mentored throughout the course '
                  'and prepared for placement through the training and placement cell.'},
- {'slug': 'ba-honours-in-psychology',
-  'name': 'BA (Honours) in Psychology',
-  'badge': 'BA',
+
+ {'slug': 'ma-honours-in-journalism-mass-communication',
+  'name': 'M.A in Journalism & Mass Communication',
+  'badge': 'MA',
+  'card_image': '',
+  'careers': [
+      'Research Scientist',
+      'Assistant Professor',
+      'Principal Investigator',
+      'Research and Development Lead',
+  ],
+  'school': 'school-of-humanities-social-science',
+  'department': 'department-of-journalism-mass-communication',
+  'program': 'post-graduate',
+  'duration': '3 Years',
+  'total_seats': 60,
+  'is_featured': True,
+  'eligibility': 'Passed 10+2 in any stream with a minimum of 45% aggregate from a recognised '
+                 'board.',
+  'description': 'The programme blends classroom instruction, laboratory or field practice and '
+                 'continuous internal assessment. Students are mentored throughout the course '
+                 'and prepared for placement through the training and placement cell.'},
+
+     #jmc end
+
+
+#psychology start
+                 
+ {'slug': 'master-applied-psychology',
+  'name': 'M.Sc. / M.A in Applied Psychology (Specialization in Clinical Psychology)',
+  'badge': 'MA/MSc',
   'card_image': '',
   'careers': [
       'Research Scientist',
@@ -1998,29 +2054,17 @@ COURSES = [
   'description': 'The programme blends classroom instruction, laboratory or field practice and '
                  'continuous internal assessment. Students are mentored throughout the course '
                  'and prepared for placement through the training and placement cell.'},
- 
- {'slug': 'ma-in-journalism-mass-communication',
-  'name': 'MA in Journalism & Mass Communication',
-  'badge': 'MA',
-  'card_image': '',
-  'careers': [
-      'Research Scientist',
-      'Assistant Professor',
-      'Principal Investigator',
-      'Research and Development Lead',
-  ],
-  'school': 'school-of-humanities-social-science',
-  'department': 'department-of-journalism-mass-communication',
-  'program': 'post-graduate',
-  'duration': '2 Years',
-  'total_seats': 30,
-  'is_featured': False,
-  'eligibility': "Bachelor's degree in any discipline with a minimum of 50% aggregate.",
-  'description': 'The programme blends classroom instruction, laboratory or field practice and '
-                 'continuous internal assessment. Students are mentored throughout the course '
-                 'and prepared for placement through the training and placement cell.'},
- {'slug': 'bachelor-of-computer-applications-bca',
-  'name': 'Bachelor of Computer Applications (BCA)',
+
+
+ #psychology end
+
+
+
+
+
+#computer application start
+ {'slug': 'bachelor-of-computer-applications',
+  'name': 'Bachelor of Computer Applications',
   'badge': 'BCA',
   'card_image': '',
   'careers': [
@@ -2040,8 +2084,11 @@ COURSES = [
   'description': 'The programme blends classroom instruction, laboratory or field practice and '
                  'continuous internal assessment. Students are mentored throughout the course '
                  'and prepared for placement through the training and placement cell.'},
- {'slug': 'master-of-computer-applications-mca',
-  'name': 'Master of Computer Applications (MCA)',
+
+
+
+ {'slug': 'master-of-computer-applications',
+  'name': 'Master of Computer Applications',
   'badge': 'MCA',
   'card_image': '',
   'careers': [
@@ -2061,8 +2108,13 @@ COURSES = [
   'description': 'The programme blends classroom instruction, laboratory or field practice and '
                  'continuous internal assessment. Students are mentored throughout the course '
                  'and prepared for placement through the training and placement cell.'},
- {'slug': 'm-sc-in-mathematics',
-  'name': 'M.Sc in Mathematics',
+
+
+#computer application end
+
+# math start
+ {'slug': 'msc-in-mathematics',
+  'name': 'Master of Science in Mathematics',
   'badge': 'M.Sc',
   'card_image': '',
   'careers': [
@@ -2082,36 +2134,65 @@ COURSES = [
   'description': 'The programme blends classroom instruction, laboratory or field practice and '
                  'continuous internal assessment. Students are mentored throughout the course '
                  'and prepared for placement through the training and placement cell.'},
- # Pharmacy courses, parked with their school and department — uncomment all
- # three together when the School of Pharmaceutical Sciences returns.
- # {'slug': 'bachelor-of-pharmacy-b-pharm',
- #  'name': 'Bachelor of Pharmacy (B.Pharm)',
- #  'school': 'school-of-pharmacy',
- #  'department': 'pharmacy',
- #  'program': 'under-graduate',
- #  'duration': '4 Years',
- #  'total_seats': 100,
- #  'is_featured': True,
- #  'eligibility': 'Passed 10+2 with Physics, Chemistry and Biology / Mathematics, securing a '
- #                 'minimum of 45% aggregate.',
- #  'description': 'The programme blends classroom instruction, laboratory or field practice and '
- #                 'continuous internal assessment. Students are mentored throughout the course '
- #                 'and prepared for placement through the training and placement cell.'},
- # {'slug': 'diploma-in-pharmacy-d-pharm',
- #  'name': 'Diploma in Pharmacy (D.Pharm)',
- #  'school': 'school-of-pharmacy',
- #  'department': 'pharmacy',
- #  'program': 'diploma',
- #  'duration': '2 Years',
- #  'total_seats': 60,
- #  'is_featured': False,
- #  'eligibility': 'Passed 10+2 with Physics, Chemistry and Biology / Mathematics from a '
- #                 'recognised board.',
- #  'description': 'The programme blends classroom instruction, laboratory or field practice and '
- #                 'continuous internal assessment. Students are mentored throughout the course '
- #                 'and prepared for placement through the training and placement cell.'},
- {'slug': 'ba-ll-b-honours',
-  'name': 'BA LL.B (Honours)',
+
+# math end
+
+
+
+# chem start
+
+ {'slug': 'msc-in-chemestry',
+  'name': 'Master of Science in Chemestry',
+  'badge': 'M.Sc',
+  'card_image': '',
+  'careers': [
+      'Research Scientist',
+      'Assistant Professor',
+      'Principal Investigator',
+      'Research and Development Lead',
+  ],
+  'school': 'school-of-basic-sciences',
+  'department': 'department-of-chemistry',
+  'program': 'post-graduate',
+  'duration': '2 Years',
+  'total_seats': 30,
+  'is_featured': False,
+  'eligibility': 'B.Sc with Mathematics as an honours or major subject, securing a minimum of '
+                 '50% aggregate.',
+  'description': 'The programme blends classroom instruction, laboratory or field practice and '
+                 'continuous internal assessment. Students are mentored throughout the course '
+                 'and prepared for placement through the training and placement cell.'},
+# chem end
+
+# phy start
+{'slug': 'msc-in-physics',
+  'name': 'Master of Science in physics',
+  'badge': 'M.Sc',
+  'card_image': '',
+  'careers': [
+      'Research Scientist',
+      'Assistant Professor',
+      'Principal Investigator',
+      'Research and Development Lead',
+  ],
+  'school': 'school-of-basic-sciences',
+  'department': 'department-of-physics',
+  'program': 'post-graduate',
+  'duration': '2 Years',
+  'total_seats': 30,
+  'is_featured': False,
+  'eligibility': 'B.Sc with Mathematics as an honours or major subject, securing a minimum of '
+                 '50% aggregate.',
+  'description': 'The programme blends classroom instruction, laboratory or field practice and '
+                 'continuous internal assessment. Students are mentored throughout the course '
+                 'and prepared for placement through the training and placement cell.'},
+
+# phy end
+
+#law start
+
+ {'slug': 'ba-llb-honours',
+  'name': 'B.A. LL.B. (Hons.)',
   'badge': 'BA LL.B',
   'card_image': '',
   'careers': [
@@ -2131,9 +2212,10 @@ COURSES = [
   'description': 'The programme blends classroom instruction, laboratory or field practice and '
                  'continuous internal assessment. Students are mentored throughout the course '
                  'and prepared for placement through the training and placement cell.'},
- {'slug': 'll-m',
-  'name': 'LL.M',
-  'badge': 'LL.M',
+
+ {'slug': 'bba-llb-honours',
+  'name': 'BBA LL.B. (Hons.)',
+  'badge': 'BBA LL.B',
   'card_image': '',
   'careers': [
       'Research Scientist',
@@ -2152,50 +2234,240 @@ COURSES = [
                  'continuous internal assessment. Students are mentored throughout the course '
                  'and prepared for placement through the training and placement cell.'},
 
- # Nursing and Sociology courses, parked with their school and department.
- # The department list was rebuilt to match the university's published
- # structure, which has no Nursing and no Sociology department, so these three
- # lost their parent. Nothing is thrown away: give each one a department that
- # exists in DEPARTMENTS and uncomment it, and it is back on the site.
- # {'slug': 'b-sc-nursing',
- #  'name': 'B.Sc Nursing',
- #  'school': 'school-of-allied-health-services',
- #  'department': 'nursing',
- #  'program': 'under-graduate',
- #  'duration': '4 Years',
- #  'total_seats': 60,
- #  'is_featured': True,
- #  'eligibility': 'Passed 10+2 with Physics, Chemistry, Biology and English, securing a minimum '
- #                 'of 45% aggregate. Candidate must be at least 17 years of age.',
- #  'description': 'The programme blends classroom instruction, laboratory or field practice and '
- #                 'continuous internal assessment. Students are mentored throughout the course '
- #                 'and prepared for placement through the training and placement cell.'},
- # {'slug': 'post-basic-b-sc-nursing',
- #  'name': 'Post Basic B.Sc Nursing',
- #  'school': 'school-of-allied-health-services',
- #  'department': 'nursing',
- #  'program': 'under-graduate',
- #  'duration': '2 Years',
- #  'total_seats': 30,
- #  'is_featured': False,
- #  'eligibility': 'GNM qualified with registration as a Registered Nurse and Registered Midwife '
- #                 'with the state nursing council.',
- #  'description': 'The programme blends classroom instruction, laboratory or field practice and '
- #                 'continuous internal assessment. Students are mentored throughout the course '
- #                 'and prepared for placement through the training and placement cell.'},
- # {'slug': 'ba-honours-in-sociology',
- #  'name': 'BA (Honours) in Sociology',
- #  'school': 'school-of-humanities-social-science',
- #  'department': 'sociology',
- #  'program': 'under-graduate',
- #  'duration': '3 Years',
- #  'total_seats': 60,
- #  'is_featured': False,
- #  'eligibility': 'Passed 10+2 in any stream with a minimum of 45% aggregate from a recognised '
- #                 'board.',
- #  'description': 'The programme blends classroom instruction, laboratory or field practice and '
- #                 'continuous internal assessment. Students are mentored throughout the course '
- #                 'and prepared for placement through the training and placement cell.'},
+ {'slug': 'llb-honours',
+  'name': 'LL.B.(Hons.)',
+  'badge': 'LL.B',
+  'card_image': '',
+  'careers': [
+      'Research Scientist',
+      'Assistant Professor',
+      'Principal Investigator',
+      'Research and Development Lead',
+  ],
+  'school': 'school-of-Legal-Studies',
+  'department': 'department-of-legal-studies',
+  'program': 'post-graduate',
+  'duration': '1 Year',
+  'total_seats': 30,
+  'is_featured': False,
+  'eligibility': 'LL.B or an equivalent law degree with a minimum of 50% aggregate.',
+  'description': 'The programme blends classroom instruction, laboratory or field practice and '
+                 'continuous internal assessment. Students are mentored throughout the course '
+                 'and prepared for placement through the training and placement cell.'},
+#law end
+
+
+#optometry start
+
+{'slug': 'bachelor-of-optometry',
+  'name': 'Bachelor of Optometry',
+  'badge': 'BA',
+  'card_image': '',
+  'careers': [
+      'Research Scientist',
+      'Assistant Professor',
+      'Principal Investigator',
+      'Research and Development Lead',
+  ],
+  'school': 'school-of-allied-health-services',
+  'department': 'department-of-optometry',
+  'program': 'under-graduate',
+  'duration': '3 Years',
+  'total_seats': 60,
+  'is_featured': False,
+  'eligibility': 'Passed 10+2 in any stream with a minimum of 45% aggregate from a recognised '
+                 'board.',
+  'description': 'The programme blends classroom instruction, laboratory or field practice and '
+                 'continuous internal assessment. Students are mentored throughout the course '
+                 'and prepared for placement through the training and placement cell.'},
+
+
+#optometry end
+
+
+#food-nutriation start
+
+{'slug': 'bachelor-of-Clinical-Nutrition-Dietetics',
+  'name': 'B.Sc (H) in Clinical Nutrition & Dietetics',
+  'badge': 'BSc',
+  'card_image': '',
+  'careers': [
+      'Research Scientist',
+      'Assistant Professor',
+      'Principal Investigator',
+      'Research and Development Lead',
+  ],
+  'school': 'school-of-allied-health-services',
+  'department': 'department-of-food-nutrition',
+  'program': 'under-graduate',
+  'duration': '3 Years',
+  'total_seats': 60,
+  'is_featured': False,
+  'eligibility': 'Passed 10+2 in any stream with a minimum of 45% aggregate from a recognised '
+                 'board.',
+  'description': 'The programme blends classroom instruction, laboratory or field practice and '
+                 'continuous internal assessment. Students are mentored throughout the course '
+                 'and prepared for placement through the training and placement cell.'},
+
+{'slug': 'master-of-Food-Nutrition',
+  'name': 'M.Sc in Food & Nutrition',
+  'badge': 'MSc',
+  'card_image': '',
+  'careers': [
+      'Research Scientist',
+      'Assistant Professor',
+      'Principal Investigator',
+      'Research and Development Lead',
+  ],
+  'school': 'school-of-allied-health-services',
+  'department': 'department-of-food-nutrition',
+  'program': 'under-graduate',
+  'duration': '3 Years',
+  'total_seats': 60,
+  'is_featured': False,
+  'eligibility': 'Passed 10+2 in any stream with a minimum of 45% aggregate from a recognised '
+                 'board.',
+  'description': 'The programme blends classroom instruction, laboratory or field practice and '
+                 'continuous internal assessment. Students are mentored throughout the course '
+                 'and prepared for placement through the training and placement cell.'},
+
+
+
+#food-nutriation end
+
+
+# bmlt start
+
+
+
+
+{'slug': 'bachelor-of-science-medical-laboratory-technology',
+  'name': 'Bachelor of Science (Hons.) in Medical Laboratory Technology',
+  'badge': 'BA',
+  'card_image': '',
+  'careers': [
+      'Research Scientist',
+      'Assistant Professor',
+      'Principal Investigator',
+      'Research and Development Lead',
+  ],
+  'school': 'school-of-allied-health-services',
+  'department': 'department-of-medical-laboratory-technology',
+  'program': 'under-graduate',
+  'duration': '3 Years',
+  'total_seats': 60,
+  'is_featured': False,
+  'eligibility': 'Passed 10+2 in any stream with a minimum of 45% aggregate from a recognised '
+                 'board.',
+  'description': 'The programme blends classroom instruction, laboratory or field practice and '
+                 'continuous internal assessment. Students are mentored throughout the course '
+                 'and prepared for placement through the training and placement cell.'},
+
+# bmlt end
+
+
+
+# bmrit start
+
+{'slug': 'bachelor-of-medical-radiology-imaging-technology',
+  'name': 'B.Sc. in Medical Radiology & Imaging Technology',
+  'badge': 'BSc',
+  'card_image': '',
+  'careers': [
+      'Research Scientist',
+      'Assistant Professor',
+      'Principal Investigator',
+      'Research and Development Lead',
+  ],
+  'school': 'school-of-allied-health-services',
+  'department': 'department-of-medical-radiology-imaging-technology',
+  'program': 'under-graduate',
+  'duration': '3 Years',
+  'total_seats': 60,
+  'is_featured': False,
+  'eligibility': 'Passed 10+2 in any stream with a minimum of 45% aggregate from a recognised '
+                 'board.',
+  'description': 'The programme blends classroom instruction, laboratory or field practice and '
+                 'continuous internal assessment. Students are mentored throughout the course '
+                 'and prepared for placement through the training and placement cell.'},
+
+
+# bmrit end
+
+# english start
+
+{'slug': 'ba-in-english',
+  'name': 'Bachelor of Arts (B.A.) in English',
+  'badge': 'BA',
+  'card_image': '',
+  'careers': [
+      'Research Scientist',
+      'Assistant Professor',
+      'Principal Investigator',
+      'Research and Development Lead',
+  ],
+  'school': 'school-of-humanities-social-science',
+  'department': 'department-of-language-literature-cultural-studies',
+  'program': 'under-graduate',
+  'duration': '3 Years',
+  'total_seats': 60,
+  'is_featured': False,
+  'eligibility': 'Passed 10+2 in any stream with a minimum of 45% aggregate from a recognised '
+                 'board.',
+  'description': 'The programme blends classroom instruction, laboratory or field practice and '
+                 'continuous internal assessment. Students are mentored throughout the course '
+                 'and prepared for placement through the training and placement cell.'},
+
+
+{'slug': 'ma-in-english',
+  'name': 'Master of Arts (M.A.) in English',
+  'badge': 'MA',
+  'card_image': '',
+  'careers': [
+      'Research Scientist',
+      'Assistant Professor',
+      'Principal Investigator',
+      'Research and Development Lead',
+  ],
+  'school': 'school-of-humanities-social-science',
+  'department': 'department-of-language-literature-cultural-studies',
+  'program': 'under-graduate',
+  'duration': '3 Years',
+  'total_seats': 60,
+  'is_featured': False,
+  'eligibility': 'Passed 10+2 in any stream with a minimum of 45% aggregate from a recognised '
+                 'board.',
+  'description': 'The programme blends classroom instruction, laboratory or field practice and '
+                 'continuous internal assessment. Students are mentored throughout the course '
+                 'and prepared for placement through the training and placement cell.'},
+
+{'slug': 'phd-in-english',
+  'name': 'Doctor of Philosophy (Ph.D.) in English',
+  'badge': 'phd',
+  'card_image': '',
+  'careers': [
+      'Research Scientist',
+      'Assistant Professor',
+      'Principal Investigator',
+      'Research and Development Lead',
+  ],
+  'school': 'school-of-humanities-social-science',
+  'department': 'department-of-language-literature-cultural-studies',
+  'program': 'phd',
+  'duration': '3 Years',
+  'total_seats': 60,
+  'is_featured': False,
+  'eligibility': 'Passed 10+2 in any stream with a minimum of 45% aggregate from a recognised '
+                 'board.',
+  'description': 'The programme blends classroom instruction, laboratory or field practice and '
+                 'continuous internal assessment. Students are mentored throughout the course '
+                 'and prepared for placement through the training and placement cell.'},
+
+#english end
+
+
+
+
 ]
 
 # --------------------------------------------------------------------------
