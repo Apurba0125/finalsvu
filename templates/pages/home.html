@@ -222,12 +222,12 @@
 {% endif %}
 
 
-{# ========================= 5. SVU Schools ========================= #}
+{# ========================= 5. Our Schools ========================= #}
 {% if schools %}
 <section class="section" aria-labelledby="schools-heading">
   <div class="shell">
     <h2 class="section-title section-title--underline" id="schools-heading">
-      <span class="h-dark">SVU</span> <span class="h-accent">SCHOOLS</span>
+      <span class="h-dark">Our</span> <span class="h-accent">Schools</span>
     </h2>
 
     <div class="carousel" data-carousel data-step="1" data-autoplay="5000">
@@ -266,13 +266,16 @@
 {% endif %}
 
 
-{# ========================= 6. Videos ========================= #}
+{# ====================== 6. Campus Stories ====================== #}
 {% if videos %}
-<section class="section section--tight section--white" aria-label="Featured videos">
+<section class="section section--tight section--white" aria-labelledby="videos-heading">
   <div class="shell">
-<h2 class="section-title section-title--underline" id="events-heading">
-  <span class="h-dark">LATEST</span> <span class="h-accent">VIDEO</span>
-</h2>
+    {# id was events-heading, which the events band below also uses. Two #}
+    {# elements sharing an id meant that band's aria-labelledby resolved #}
+    {# to THIS heading and announced the wrong name.                     #}
+    <h2 class="section-title section-title--underline" id="videos-heading">
+      <span class="h-dark">Campus</span> <span class="h-accent">Stories</span>
+    </h2>
 
     <div class="carousel video-carousel" data-carousel data-step="1" data-autoplay="7000">
       <button class="carousel__nav carousel__nav--prev" type="button" aria-label="Previous videos">

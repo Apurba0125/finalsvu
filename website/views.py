@@ -241,7 +241,7 @@ def school_list(request):
     schools = _schools()
     return render(request, "pages/school_list.html", {
         "schools": schools,
-        "hero_title": "SVU Schools",
+        "hero_title": "Our Schools",
         # Counted from SCHOOLS rather than written out, so adding or removing a
         # school never leaves the wrong number on the page.
         "hero_subtitle": "%s schools covering engineering, management, sciences, agriculture, "
@@ -251,7 +251,7 @@ def school_list(request):
         # low opacity, which is what keeps the white title readable — swap the
         # file name here and that is the whole edit.
         "hero_image": "img/about/team.png",
-        "crumbs": [{"label": "Academics"}, {"label": "SVU Schools"}],
+        "crumbs": [{"label": "Academics"}, {"label": "Our Schools"}],
     })
 
 
@@ -279,7 +279,7 @@ def school_detail(request, slug):
         "hero_image": school["card_image"],
         "crumbs": [
             {"label": "Academics"},
-            {"label": "SVU Schools", "url": reverse("website:school_list")},
+            {"label": "Our Schools", "url": reverse("website:school_list")},
             {"label": school["name"]},
         ],
     })
@@ -571,7 +571,7 @@ def department_detail(request, slug):
         "hero_image": school["card_image"] if school else "",
         "crumbs": [
             {"label": "Academics"},
-            {"label": "SVU Schools", "url": reverse("website:school_list")},
+            {"label": "Our Schools", "url": reverse("website:school_list")},
             {"label": department["school_name"], "url": department["school_url"]},
             {"label": department["name"]},
         ],
