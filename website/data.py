@@ -4091,6 +4091,107 @@ ACADEMIC_ACTIVITIES = [
                     'support joint teaching, shared laboratories and collaborative research.'},
 ]
 
+
+# --------------------------------------------------------------------------
+# "Our Recruiters"  —  the second drifting band on the home page
+#
+# Same shape as AFFILIATIONS above and rendered by the same markup, so a row
+# needs the same two keys:
+#
+#   caption  the company name, shown under the mark
+#   logo     the mark, under static/img/industry/
+#   url      OPTIONAL. Given one, the whole card links there in a new tab.
+#
+# The marks are shared with the Industry panel of /page/collaboration/, which
+# is why they live in img/industry/ rather than a folder of their own — one
+# copy of each file, used in both places.
+RECRUITERS = [
+    {'caption': 'Advanced Testing Equipments',
+     'logo': 'img/industry/advanced.png', 'url': ''},
+    {'caption': 'AE',
+     'logo': 'img/industry/ae.png', 'url': ''},
+    {'caption': 'AFCONS',
+     'logo': 'img/industry/afc.png', 'url': ''},
+    {'caption': 'Aimil',
+     'logo': 'img/industry/aimil.png', 'url': ''},
+    {'caption': 'AK Groups (Huion Official Partner)',
+     'logo': 'img/industry/AK Groups (huion official partner).png', 'url': ''},
+    {'caption': 'Ardent Computech Private Limited',
+     'logo': 'img/industry/Ardent-computech-private-limited.jpg', 'url': ''},
+    {'caption': 'ASTRAM Technologies (Pty) Ltd',
+     'logo': 'img/industry/ASTRAM TECHNOLOGIES (PTY) LTD.webp', 'url': ''},
+    {'caption': 'Autism Society West Bengal',
+     'logo': 'img/industry/AUTISM SOCIETY WEST BENGAL.jpg', 'url': ''},
+    {'caption': 'CANTek',
+     'logo': 'img/industry/can.png', 'url': ''},
+    {'caption': 'Chatto Andragogy Life Sciences',
+     'logo': 'img/industry/andralogylifesciences.png', 'url': ''},
+    {'caption': 'Circle of Hope Private Academy',
+     'logo': 'img/industry/circleofhopeprivateacademycoha.png', 'url': ''},
+    {'caption': 'Debgiri Agro Products',
+     'logo': 'img/industry/debgiriagroproductspvtltd.png', 'url': ''},
+    {'caption': 'Dhoot Transmission',
+     'logo': 'img/industry/dhoottransmissionpvtltd.png', 'url': ''},
+    {'caption': 'Digital Googly',
+     'logo': 'img/industry/digital-googly-logo.jpg', 'url': ''},
+    {'caption': 'Fluke',
+     'logo': 'img/industry/fluke.png', 'url': ''},
+    {'caption': 'Gammon India',
+     'logo': 'img/industry/Gammon_India_Logo.svg.png', 'url': ''},
+    {'caption': 'HCC',
+     'logo': 'img/industry/hcc.svg', 'url': ''},
+    {'caption': 'HPSM',
+     'logo': 'img/industry/hpsm.png', 'url': ''},
+    {'caption': 'IBM',
+     'logo': 'img/industry/ibm.png', 'url': ''},
+    {'caption': 'KYB Motorcycle Suspension India',
+     'logo': 'img/industry/KYB MOTORCYCLE SUSPENSION INDIA PVT.LTD.jpeg', 'url': ''},
+    {'caption': 'Larsen &amp; Toubro',
+     'logo': 'img/industry/lt.png', 'url': ''},
+    {'caption': 'Metravi',
+     'logo': 'img/industry/metravi.png', 'url': ''},
+    {'caption': 'Motherson',
+     'logo': 'img/industry/Motherson.jpg', 'url': ''},
+    {'caption': 'Nabajatak Child Development Centre',
+     'logo': 'img/industry/Nabajatak Child development centre.png', 'url': ''},
+    {'caption': 'Nature Technologies',
+     'logo': 'img/industry/nature-technology-logo.jpg', 'url': ''},
+    {'caption': 'OWASP',
+     'logo': 'img/industry/owasp.jpg', 'url': ''},
+    {'caption': 'Policy Research Centre',
+     'logo': 'img/industry/policyresearchcentrebd.png', 'url': ''},
+    {'caption': 'Premium Industrial Solutions',
+     'logo': 'img/industry/pispl.png', 'url': ''},
+    {'caption': 'Proceq',
+     'logo': 'img/industry/proceq.png', 'url': ''},
+    {'caption': 'Pushpanjali Eye Care',
+     'logo': 'img/industry/PUSHPANJALI EYE CARE (A UNIT OF OPHTHATEK PVT LTD).png', 'url': ''},
+    {'caption': 'Shrachi Group',
+     'logo': 'img/industry/shrachigroup.png', 'url': ''},
+    {'caption': 'SHRM',
+     'logo': 'img/industry/shrm.jpg', 'url': ''},
+    {'caption': 'Silver Screen Production House',
+     'logo': 'img/industry/SILVER SCREEN Production house.png', 'url': ''},
+    {'caption': 'Stonex',
+     'logo': 'img/industry/stonex.png', 'url': ''},
+    {'caption': 'Strucxial Projects Consultants',
+     'logo': 'img/industry/strucxial projects consultants.png', 'url': ''},
+    {'caption': 'Taparia',
+     'logo': 'img/industry/taparia.png', 'url': ''},
+    {'caption': 'TATA STRIVE',
+     'logo': 'img/industry/tatastrive.png', 'url': ''},
+    {'caption': 'TCS iON',
+     'logo': 'img/industry/tcs-ion.jpg', 'url': ''},
+    {'caption': 'Tutopia',
+     'logo': 'img/industry/tutopiaprivatelimited.png', 'url': ''},
+    {'caption': 'Unacademy',
+     'logo': 'img/industry/unacademy-recog.jpg', 'url': ''},
+    {'caption': 'Web Skitters',
+     'logo': 'img/industry/webskitter.jpg', 'url': ''},
+    {'caption': 'Webs Techno',
+     'logo': 'img/industry/Webs-techno.jpg', 'url': ''},
+]
+
 # --------------------------------------------------------------------------
 # Brochures  —  /page/brochure/
 #
@@ -4142,4 +4243,45 @@ RECOGNITIONS = [
      'file': 'documents/UGC.pdf'},
     {'name': 'Bar Council of India',
      'file': 'documents/Bar_Council_of_India.pdf'},
+]
+
+# --------------------------------------------------------------------------
+# "Affiliation & Recognitions"  —  the drifting band on the home page
+#
+# Separate from RECOGNITIONS above, which is the four statutory bodies and
+# their certificates. These are the awards, rankings and bodies the university
+# is recognised by, and they carry a mark rather than a PDF.
+#
+#   caption  the line under the mark
+#   logo     the mark, under static/img/AandR/
+#   url      OPTIONAL. Given one, the whole card links there in a new tab.
+#
+# The marks are square and already carry their own whitespace, so the disc
+# adds almost none of its own. A row whose file is missing shows its caption
+# in the disc instead, so the band is never a row of blank circles.
+AFFILIATIONS = [
+    {'caption': "Institution's Innovation Council",
+     'logo': 'img/AandR/01_institutions_innovation_council.png', 'url': ''},
+    {'caption': 'Diamond Jubilee Celebration',
+     'logo': 'img/AandR/02_diamond_jubilee_celebration.png', 'url': ''},
+    {'caption': 'CEGR 2024 Education Excellence',
+     'logo': 'img/AandR/03_cegr_2024_education_excellence.png', 'url': ''},
+    {'caption': 'ABP Ananda Shiksha Samman 2024',
+     'logo': 'img/AandR/04_abp_ananda_shiksha_samman_2024.png', 'url': ''},
+    {'caption': 'News18 Bangla Education Eminence',
+     'logo': 'img/AandR/05_news18_bangla_education_eminence.png', 'url': ''},
+    {'caption': 'Academic Excellence Awards',
+     'logo': 'img/AandR/06_academic_excellence_awards.png', 'url': ''},
+    {'caption': 'R. Bharat Shiksha Samman',
+     'logo': 'img/AandR/07_r_bharat_shiksha_samman.png', 'url': ''},
+    # {'caption': 'Ministry of AYUSH',
+    #  'logo': 'img/AandR/08_ministry_of_ayush.png', 'url': ''},
+    # {'caption': 'Ranked by Outlook',
+    #  'logo': 'img/AandR/09_outlook.png', 'url': ''},
+    # {'caption': 'Ranked by The Week',
+    #  'logo': 'img/AandR/10_the_week.png', 'url': ''},
+    # {'caption': 'Internshala',
+    #  'logo': 'img/AandR/11_internshala.png', 'url': ''},
+    # {'caption': 'TimesSchool.com',
+    #  'logo': 'img/AandR/12_times_school_com.png', 'url': ''},
 ]

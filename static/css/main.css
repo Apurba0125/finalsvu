@@ -1451,6 +1451,97 @@ table { border-collapse: collapse; width: 100%; }
 }
 
 /* --------------------------------------------------------------------------
+   12b. Affiliation & Recognitions  —  home page
+   The same drifting strip as .enlist-strip above, on a dark ground with the
+   marks in white discs.
+
+   Its own classes rather than a modifier on the enlist ones: that band is
+   white with rectangular panels and this is the opposite on both counts, so
+   sharing would mean overriding nearly every rule.
+   -------------------------------------------------------------------------- */
+/* A near-white field with a fine dot grid drawn in CSS rather than shipped as
+   an image: one gradient, no extra request, and it stays crisp at any zoom or
+   pixel density. background-size is the spacing of the dots — raise it for a
+   looser weave, lower it for a tighter one.
+
+   The heading and captions keep the site's normal dark-on-light colours here,
+   so nothing needs inverting. */
+.affil-band {
+  background-color: #f2f2f4;
+  background-image: radial-gradient(circle, rgba(31, 31, 31, .09) 1px, transparent 1px);
+  background-size: 13px 13px;
+}
+
+.affil-strip {
+  display: flex;
+  gap: 24px;
+  overflow-x: auto;
+  text-align: center;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  /* The ticker writes scrollLeft every frame; smooth scrolling would queue an
+     animation per frame and turn the drift into a stutter. */
+  scroll-behavior: auto;
+}
+.affil-strip::-webkit-scrollbar { display: none; }
+.affil-strip .affil-card { flex: 0 0 calc(100% - 12px); }
+
+.affil-card__link { display: block; color: inherit; }
+
+/* A fixed circle, not an aspect-ratio: aspect-ratio only sets a PREFERRED
+   size and a flex item's automatic minimum still lets a tall mark push past
+   it, which is what left the Collaboration grid ragged. A fixed width and
+   height cannot be pushed, so every disc is identical. */
+.affil-card__disc {
+  display: grid;
+  place-items: center;
+  width: 150px;
+  height: 150px;
+  margin: 0 auto;
+  /* Barely any padding: these marks are square and already sit inside their
+     own generous whitespace, so the disc adding more would shrink them to
+     nothing. A mark that arrives tight to its edges is the case to raise
+     this for. */
+  padding: 8px;
+  background: #fff;
+  border-radius: 50%;
+  /* On the near-white field a plain white disc would have no edge, so it gets
+     a hairline and a soft lift to sit above the dots. */
+  box-shadow: 0 0 0 1px rgba(31, 31, 31, .07), 0 4px 14px rgba(31, 31, 31, .08);
+  overflow: hidden;
+}
+/* min-width/min-height:0 is what makes the max-* caps bite: without them the
+   image keeps its own intrinsic size as a minimum and ignores them. */
+.affil-card__disc img {
+  min-width: 0;
+  min-height: 0;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+/* Shown inside the disc until a mark is uploaded — see the note in data.py. */
+.affil-card__fallback {
+  color: var(--ink);
+  font-size: .74rem;
+  font-weight: 700;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.affil-card__title {
+  margin: 16px auto 0;
+  max-width: 22ch;
+  color: var(--ink);
+  font-size: .93rem;
+  font-weight: 500;
+  line-height: 1.55;
+}
+.affil-card__link:hover .affil-card__title { text-decoration: underline; }
+.affil-card__link:focus-visible { outline: 3px solid var(--red); outline-offset: 4px; }
+
+/* --------------------------------------------------------------------------
    13. Life at SVU
    -------------------------------------------------------------------------- */
 /* Red rather than the site's gold accent, matching the heading in the design
@@ -2996,6 +3087,7 @@ table { border-collapse: collapse; width: 100%; }
   .quicklinks { grid-template-columns: 1fr 1fr; }
   .enlist-grid { grid-template-columns: repeat(2, 1fr); }
   .enlist-strip .enlist-card { flex: 0 0 calc((100% - 24px) / 2); }
+  .affil-strip .affil-card { flex: 0 0 calc((100% - 24px) / 2); }
   .offerings__panel { grid-template-columns: 1fr 1fr; padding: 32px 28px; }
   .video-grid { grid-template-columns: 1fr 1fr; }
   .carousel__item { flex-basis: calc((100% - 18px) / 2); }
@@ -3012,6 +3104,9 @@ table { border-collapse: collapse; width: 100%; }
   .section { padding: 52px 0; }
   .enlist-grid { grid-template-columns: repeat(3, 1fr); }
   .enlist-strip .enlist-card { flex: 0 0 calc((100% - 48px) / 3); }
+  /* Four across from here: these discs are smaller than the enlist panels, so
+     three would leave the band looking half empty on a wide screen. */
+  .affil-strip .affil-card { flex: 0 0 calc((100% - 72px) / 4); }
   /* Three across, matching the grid this replaced. */
   /* Three link columns beside each other; brand still spans the full row. */
   .footer__grid { grid-template-columns: repeat(3, 1fr); }
