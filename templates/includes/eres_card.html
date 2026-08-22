@@ -1,0 +1,60 @@
+{% comment %}
+One resource on the E-Resource page. Sits inside a <ul class="eres-grid">.
+
+Expects:
+  title  the resource, worded exactly as it should read. Nothing forces case.
+
+         WRITE AN AMPERSAND AS &amp; — a quoted string in a template tag is
+         marked safe by Django, so whatever is typed between the quotes lands
+         in the page verbatim. A bare & displays the same in every browser but
+         is not valid HTML and misparses next to a word.
+
+  doc    what View More opens. EITHER a PDF under static/ — put the file in
+         static/documents/e-resource/ and write
+         "documents/e-resource/jstor.pdf" — OR the resource's own web address,
+         written in full: "https://www.jstor.org/".
+
+         Both go in the same slot. doc_url hands a full URL or a rooted path
+         straight back untouched and only resolves the bare paths, so nothing
+         has to say which kind it is.
+
+  Leave doc off and the card still names the resource, reading "Link to
+  follow" where View More would be, so the list stays complete while the
+  documents are being collected.
+
+WHY doc GOES THROUGH doc_url
+Under the manifest storage a bare {% static %} raises for a file that was
+never collected, and one mistyped filename would take the whole page down.
+doc_url returns an empty string instead and the card quietly falls back. It
+also means a filename can be written HERE BEFORE THE PDF EXISTS — the link
+appears by itself once the file is uploaded and collectstatic has run:
+
+    python manage.py collectstatic --noinput
+
+doc_url is a template builtin (settings.py registers svu_extras), so there is
+nothing to load for it.
+
+rel="noopener" is not optional alongside target="_blank": without it the opened
+tab can reach back through window.opener and navigate this one. It matters
+more here than anywhere else on the site, because most of these links leave
+for somebody else's server.
+{% endcomment %}
+
+<li class="eres-card">
+  <span class="eres-card__title">{{ title }}</span>
+
+  {% with href=doc|doc_url %}
+    {% if href %}
+      <a class="eres-card__link" href="{{ href }}" target="_blank" rel="noopener noreferrer">
+        View More
+        {# Sized in the markup as well as the CSS: an <svg> with a viewBox and #}
+        {# no dimensions expands to fill its box, so a stylesheet that has not #}
+        {# loaded yet would put a full-width chevron on every card.            #}
+        <svg width="12" height="12" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg>
+        <span class="sr-only">about {{ title }} (opens in a new tab)</span>
+      </a>
+    {% else %}
+      <span class="eres-card__pending">Link to follow</span>
+    {% endif %}
+  {% endwith %}
+</li>

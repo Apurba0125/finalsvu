@@ -1,0 +1,273 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% comment %}
+===========================================================================
+COLLABORATION  —  served at /page/collaboration/
+                  by website.views.collaboration
+---------------------------------------------------------------------------
+Header, navigation and footer come from base.html. Do not add them here.
+
+Styling: page-head.css is the photo banner and the heading with its rule;
+tabs.css is the three pills, their mobile dropdown and the show/hide of the
+panels; collab.css is the ruled logo grid inside a panel.
+
+EVERYTHING IS IN THIS ONE FILE
+  Every partner is below, ONE LINE EACH, in the panel it belongs to. No
+  data.py and no per-panel template to open.
+
+ONE LINE IS ONE PARTNER
+  A line looks like this, and it is deliberately a single line so a panel of
+  forty of them still reads as a list in the editor:
+
+    <li class="collab-cell">{% with src="img/collab/fortis.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Fortis Hospitals" loading="lazy">{% else %}<span class="collab-cell__name">Fortis Hospitals</span>{% endif %}{% endwith %}</li>
+
+  Three things in it, and nothing else ever changes:
+    img/collab/fortis.png   the logo file
+    alt="Fortis Hospitals"  what a screen reader reads instead of the mark
+    the <span>              what SHOWS while the file is not uploaded yet
+
+  To add a partner, copy a line and change those three. To remove one, delete
+  its line. Order on the page is the order of the lines — nothing is sorted.
+
+THE LOGOS ARE NOT UPLOADED YET
+  Every cell currently shows the partner's NAME instead of its mark, which is
+  why the page is readable rather than a grid of empty boxes. Put a logo in
+  static/img/collab/ under the name already written on that partner's line,
+  run
+
+      python manage.py collectstatic --noinput
+
+  and that cell switches to the mark by itself. No edit here.
+
+  PNG with a transparent background works best — cells are white and a logo
+  on its own white rectangle will show its edges. The cell is a 4:3 box and
+  the mark is scaled to fit inside it without cropping, so any proportion is
+  fine and nothing needs resizing first.
+
+  doc_url rather than a bare {% static %} tag: under the manifest storage
+  {% static %} raises for a file that was never collected, so one mistyped
+  filename would take the whole page down instead of leaving one cell showing
+  a name.
+
+THE THREE PANELS
+  The pills and panels are the site's shared tab script — initTabPanels in
+  main.js — which finds them by the data-tabs attribute on the wrapper, the
+  .tab-btn and .tab-pane classes inside it, and data-tabs-nav on the pill row.
+  Those names are a contract with the script: rename one and the panels stop
+  switching.
+
+  Whichever pill carries is-active opens on load. The ids only have to match
+  between a button's data-tab-target and its panel, so a fourth panel is a
+  matter of copying a button and a panel and giving the pair a new id.
+
+  Under 768px the pills collapse behind the toggle at the top, whose label
+  reads whichever panel is open.
+
+WRITE AN AMPERSAND AS &amp; — a bare & is not valid HTML and misparses next to
+a word, e.g. "&copy" would be read as the © symbol. That is why the lines below
+say "Peerless Hospital &amp; B. K. Roy Research Centre".
+
+NOTE ON COMMENTS: the hash-style Django comment {# … #} covers a SINGLE line.
+For a multi-line note use a comment/endcomment pair like this one, or the text
+leaks onto the page and any tag inside it actually runs.
+===========================================================================
+{% endcomment %}
+
+{% block title %}Collaboration | {{ site.site_name }}{% endblock %}
+{% block meta_description %}Academic, industry and healthcare partners of Swami Vivekananda University, Barrackpore.{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/page-head.css' %}">
+  <link rel="stylesheet" href="{% static 'css/tabs.css' %}">
+  <link rel="stylesheet" href="{% static 'css/collab.css' %}">
+{% endblock %}
+
+{% block content %}
+
+{# ===========================================================  BANNER  === #}
+{# THE BACKGROUND IMAGE IS SET HERE. Change the file name in the url() and  #}
+{# that is the whole edit — keep the dark gradient in front of it or the    #}
+{# white title stops being readable over a busy photograph.                 #}
+<section class="page-banner"
+         style="background-image: linear-gradient(0deg, rgba(10,10,10,.72), rgba(10,10,10,.55)), url('{% static 'img/about/campus.jpg' %}');">
+  <div class="shell">
+    <h1 class="page-banner__title">Collaboration</h1>
+  </div>
+</section>
+
+
+{# ====================================================  COLLABORATIONS  == #}
+<section class="section collab-section">
+  <div class="shell">
+
+    <div class="page-head">
+      <h2 class="page-heading">Collaboration</h2>
+      <span class="page-rule"></span>
+    </div>
+
+    <div class="tabset" data-tabs>
+
+      {# Under 768px the pills collapse behind this control. It is a real   #}
+      {# button rather than a <select> so the pills keep their shape above  #}
+      {# the breakpoint, and there is no second copy of the labels to keep  #}
+      {# in step — the label below reads whichever pill is open.            #}
+      <button class="tabset__toggle" type="button" data-tabs-toggle
+              aria-expanded="false" aria-controls="collabTabNav">
+        <span data-tabs-current>Academics</span>
+        {# Sized in the markup as well as the CSS: an <svg> with no        #}
+        {# intrinsic size falls back to 300x150, so a stylesheet that has  #}
+        {# not loaded yet puts a full-width chevron on the page.           #}
+        <svg width="12" height="8" aria-hidden="true" focusable="false"><use href="#i-caret"></use></svg>
+      </button>
+
+      <div class="tabset__nav" id="collabTabNav" data-tabs-nav
+           role="tablist" aria-label="Collaborations">
+
+        <button class="tab-btn is-active" type="button" role="tab"
+                id="tab-academics" data-tab-target="#pane-academics"
+                aria-controls="pane-academics"
+                aria-selected="true" tabindex="0">Academics</button>
+
+        <button class="tab-btn" type="button" role="tab"
+                id="tab-industry" data-tab-target="#pane-industry"
+                aria-controls="pane-industry"
+                aria-selected="false" tabindex="-1">Industry</button>
+
+        <button class="tab-btn" type="button" role="tab"
+                id="tab-healthcare" data-tab-target="#pane-healthcare"
+                aria-controls="pane-healthcare"
+                aria-selected="false" tabindex="-1">Healthcare</button>
+      </div>
+
+
+      {# =================================================== ACADEMICS === #}
+      <div class="tab-pane is-active" id="pane-academics" role="tabpanel"
+           aria-labelledby="tab-academics" tabindex="0">
+
+        <h3 class="collab-pane__title">Academics</h3>
+
+        {% comment %}
+        EMPTY ON PURPOSE — the academic partners were not part of what this
+        page was rebuilt from, so nothing has been invented here. Replace the
+        paragraph below with a grid and one line per partner, exactly as the
+        Industry and Healthcare panels do it:
+
+          <ul class="collab-grid">
+            <li class="collab-cell">…</li>
+          </ul>
+        {% endcomment %}
+        <p class="collab-empty">The academic collaborations are being compiled
+          and will be listed here shortly.</p>
+      </div>
+
+
+      {# ==================================================== INDUSTRY === #}
+      <div class="tab-pane" id="pane-industry" role="tabpanel"
+           aria-labelledby="tab-industry" tabindex="0">
+
+        <h3 class="collab-pane__title">Industry</h3>
+
+        <ul class="collab-grid">
+          <li class="collab-cell">{% with src="img/collab/chatto.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Chatto Andragogy Life Sciences" loading="lazy">{% else %}<span class="collab-cell__name">Chatto Andragogy Life Sciences</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/ibm.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="IBM" loading="lazy">{% else %}<span class="collab-cell__name">IBM</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/circle-of-hope.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Circle of Hope Private Academy" loading="lazy">{% else %}<span class="collab-cell__name">Circle of Hope Private Academy</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/tata-strive.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="TATA STRIVE" loading="lazy">{% else %}<span class="collab-cell__name">TATA STRIVE</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/silverscreen.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Silverscreen Production House" loading="lazy">{% else %}<span class="collab-cell__name">Silverscreen Production House</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/tcs-ion.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="TCS iON" loading="lazy">{% else %}<span class="collab-cell__name">TCS iON</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/tutopia.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Tutopia" loading="lazy">{% else %}<span class="collab-cell__name">Tutopia</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/unacademy.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Unacademy" loading="lazy">{% else %}<span class="collab-cell__name">Unacademy</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/debgiri.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Debgiri Seeds" loading="lazy">{% else %}<span class="collab-cell__name">Debgiri Seeds</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/lt.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Larsen  Toubro" loading="lazy">{% else %}<span class="collab-cell__name">Larsen &amp; Toubro</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/ardent.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Ardent Computech Pvt. Ltd." loading="lazy">{% else %}<span class="collab-cell__name">Ardent Computech Pvt. Ltd.</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/afcons.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="AFCONS" loading="lazy">{% else %}<span class="collab-cell__name">AFCONS</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/shrm.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="SHRM" loading="lazy">{% else %}<span class="collab-cell__name">SHRM</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/strucxial.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Strucxial Projects Consultants" loading="lazy">{% else %}<span class="collab-cell__name">Strucxial Projects Consultants</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/hcc.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="HCC" loading="lazy">{% else %}<span class="collab-cell__name">HCC</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/gammon.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Gammon" loading="lazy">{% else %}<span class="collab-cell__name">Gammon</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell"><span class="collab-cell__name">UNIDENTIFIED &mdash; name this partner</span></li>
+          <li class="collab-cell">{% with src="img/collab/pri.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Policy Research Institute" loading="lazy">{% else %}<span class="collab-cell__name">Policy Research Institute</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/shrachi.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Shrachi" loading="lazy">{% else %}<span class="collab-cell__name">Shrachi</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/ate.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Advanced Testing Equipments" loading="lazy">{% else %}<span class="collab-cell__name">Advanced Testing Equipments</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/ae.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="AE" loading="lazy">{% else %}<span class="collab-cell__name">AE</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/aimil.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Aimil" loading="lazy">{% else %}<span class="collab-cell__name">Aimil</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/cantek.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="CANTek" loading="lazy">{% else %}<span class="collab-cell__name">CANTek</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/fluke.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Fluke" loading="lazy">{% else %}<span class="collab-cell__name">Fluke</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/metravi.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Metravi" loading="lazy">{% else %}<span class="collab-cell__name">Metravi</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/hpsm.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="HPSM" loading="lazy">{% else %}<span class="collab-cell__name">HPSM</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/pispl.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Premium Industrial Solutions Pvt. Ltd." loading="lazy">{% else %}<span class="collab-cell__name">Premium Industrial Solutions Pvt. Ltd.</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/proceq.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Proceq" loading="lazy">{% else %}<span class="collab-cell__name">Proceq</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/stonex.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Stonex" loading="lazy">{% else %}<span class="collab-cell__name">Stonex</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/taparia.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Taparia" loading="lazy">{% else %}<span class="collab-cell__name">Taparia</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/huion.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Huion" loading="lazy">{% else %}<span class="collab-cell__name">Huion</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/astram.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="ASTRAM" loading="lazy">{% else %}<span class="collab-cell__name">ASTRAM</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/autism-society-wb.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Autism Society West Bengal" loading="lazy">{% else %}<span class="collab-cell__name">Autism Society West Bengal</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/kyb.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="KYB" loading="lazy">{% else %}<span class="collab-cell__name">KYB</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/ncdc.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Nabajatak Child Development Centre" loading="lazy">{% else %}<span class="collab-cell__name">Nabajatak Child Development Centre</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/pushpanjali.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Pushpanjali Eye Care" loading="lazy">{% else %}<span class="collab-cell__name">Pushpanjali Eye Care</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/digital-googly.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Digital Googly" loading="lazy">{% else %}<span class="collab-cell__name">Digital Googly</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/nature-technologies.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Nature Technologies" loading="lazy">{% else %}<span class="collab-cell__name">Nature Technologies</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/webs-techno.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Webs Techno" loading="lazy">{% else %}<span class="collab-cell__name">Webs Techno</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/motherson.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Motherson" loading="lazy">{% else %}<span class="collab-cell__name">Motherson</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/web-skitters.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Web Skitters" loading="lazy">{% else %}<span class="collab-cell__name">Web Skitters</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/owasp.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="OWASP" loading="lazy">{% else %}<span class="collab-cell__name">OWASP</span>{% endif %}{% endwith %}</li>
+        </ul>
+      </div>
+
+
+      {# ================================================== HEALTHCARE === #}
+      <div class="tab-pane" id="pane-healthcare" role="tabpanel"
+           aria-labelledby="tab-healthcare" tabindex="0">
+
+        <h3 class="collab-pane__title">Healthcare</h3>
+
+        <ul class="collab-grid">
+          <li class="collab-cell">{% with src="img/collab/antara.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Antara" loading="lazy">{% else %}<span class="collab-cell__name">Antara</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/apollo-homecare.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Apollo Homecare" loading="lazy">{% else %}<span class="collab-cell__name">Apollo Homecare</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/fortis.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Fortis Hospitals" loading="lazy">{% else %}<span class="collab-cell__name">Fortis Hospitals</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/galaxy.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Galaxy Hospitals" loading="lazy">{% else %}<span class="collab-cell__name">Galaxy Hospitals</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/ils.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="ILS Hospitals" loading="lazy">{% else %}<span class="collab-cell__name">ILS Hospitals</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/peerless.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Peerless Hospital  B. K. Roy Research Centre" loading="lazy">{% else %}<span class="collab-cell__name">Peerless Hospital &amp; B. K. Roy Research Centre</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/apollo-hospitals.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Apollo Hospitals" loading="lazy">{% else %}<span class="collab-cell__name">Apollo Hospitals</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell"><span class="collab-cell__name">UNIDENTIFIED &mdash; name this partner</span></li>
+          <li class="collab-cell">{% with src="img/collab/narayana-health.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Narayana Health" loading="lazy">{% else %}<span class="collab-cell__name">Narayana Health</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/sarada.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Sarada Multispeciality Hospital" loading="lazy">{% else %}<span class="collab-cell__name">Sarada Multispeciality Hospital</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/techno-global.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Nehru Memorial Techno Global Hospital" loading="lazy">{% else %}<span class="collab-cell__name">Nehru Memorial Techno Global Hospital</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/rgh.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="RGH" loading="lazy">{% else %}<span class="collab-cell__name">RGH</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/autism-society-wb.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Autism Society West Bengal" loading="lazy">{% else %}<span class="collab-cell__name">Autism Society West Bengal</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/ccrh.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Central Council for Research in Homoeopathy" loading="lazy">{% else %}<span class="collab-cell__name">Central Council for Research in Homoeopathy</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/skm.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="SKM Hospital" loading="lazy">{% else %}<span class="collab-cell__name">SKM Hospital</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/disha-eye.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Disha Eye Hospitals" loading="lazy">{% else %}<span class="collab-cell__name">Disha Eye Hospitals</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/e-age.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="e-AGE Healthcare Pvt Ltd" loading="lazy">{% else %}<span class="collab-cell__name">e-AGE Healthcare Pvt Ltd</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/amri.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="AMRI Hospitals" loading="lazy">{% else %}<span class="collab-cell__name">AMRI Hospitals</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/amr-plus.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="AMR+" loading="lazy">{% else %}<span class="collab-cell__name">AMR+</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/desun.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Desun Hospital" loading="lazy">{% else %}<span class="collab-cell__name">Desun Hospital</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/bp-poddar.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="B. P. Poddar Hospital  Medical Research Ltd" loading="lazy">{% else %}<span class="collab-cell__name">B. P. Poddar Hospital &amp; Medical Research Ltd</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/ck-birla.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="CK Birla Hospital" loading="lazy">{% else %}<span class="collab-cell__name">CK Birla Hospital</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/columbia-asia.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Columbia Asia" loading="lazy">{% else %}<span class="collab-cell__name">Columbia Asia</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/nabajiban.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Nabajiban Hospital Pvt Ltd" loading="lazy">{% else %}<span class="collab-cell__name">Nabajiban Hospital Pvt Ltd</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/gnrc.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="GNRC" loading="lazy">{% else %}<span class="collab-cell__name">GNRC</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/iris.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="IRIS Hospital" loading="lazy">{% else %}<span class="collab-cell__name">IRIS Hospital</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/manipal.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Manipal Hospitals" loading="lazy">{% else %}<span class="collab-cell__name">Manipal Hospitals</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/parkview.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Parkview Super Speciality Hospital" loading="lazy">{% else %}<span class="collab-cell__name">Parkview Super Speciality Hospital</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/rtiics.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Rabindranath Tagore International Institute of Cardiac Sciences" loading="lazy">{% else %}<span class="collab-cell__name">Rabindranath Tagore International Institute of Cardiac Sciences</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/woodlands.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Woodlands Hospital" loading="lazy">{% else %}<span class="collab-cell__name">Woodlands Hospital</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell"><span class="collab-cell__name">UNIDENTIFIED &mdash; name this partner</span></li>
+          <li class="collab-cell">{% with src="img/collab/nfna.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="NFNA" loading="lazy">{% else %}<span class="collab-cell__name">NFNA</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/panacea.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Panacea Solutions" loading="lazy">{% else %}<span class="collab-cell__name">Panacea Solutions</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/ava-nutrition.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="AVA Nutrition" loading="lazy">{% else %}<span class="collab-cell__name">AVA Nutrition</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/watch-your-health.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Watch Your Health" loading="lazy">{% else %}<span class="collab-cell__name">Watch Your Health</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/charing-cross.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Charing Cross Nursing Home" loading="lazy">{% else %}<span class="collab-cell__name">Charing Cross Nursing Home</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/naturava.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Naturava" loading="lazy">{% else %}<span class="collab-cell__name">Naturava</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/sanjibon.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Sanjibon" loading="lazy">{% else %}<span class="collab-cell__name">Sanjibon</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/snr.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="SNR" loading="lazy">{% else %}<span class="collab-cell__name">SNR</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/spectra-eye.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Spectra Eye Hospital" loading="lazy">{% else %}<span class="collab-cell__name">Spectra Eye Hospital</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/supernova.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Supernova Care Home" loading="lazy">{% else %}<span class="collab-cell__name">Supernova Care Home</span>{% endif %}{% endwith %}</li>
+          <li class="collab-cell">{% with src="img/collab/manipal-2.png"|doc_url %}{% if src %}<img src="{{ src }}" alt="Manipal Hospitals" loading="lazy">{% else %}<span class="collab-cell__name">Manipal Hospitals</span>{% endif %}{% endwith %}</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+{% endblock %}

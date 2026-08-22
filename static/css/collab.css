@@ -1,0 +1,115 @@
+/* ==========================================================================
+   Collaboration  —  /page/collaboration/
+   Loaded alongside two shared files: page-head.css for the photo banner and
+   the heading with its rule, and tabs.css for the three pills, their mobile
+   dropdown and the show/hide of the panels.
+
+   This file is the logo grid inside a panel. Nothing else on the page needs
+   styling — the banner, the heading and the pills all come from the two
+   shared files.
+   ========================================================================== */
+
+.collab-section { background: var(--paper); }
+
+/* The name of the open panel, sitting under the pills. Quieter than
+   .page-heading, which is the heading of the whole page. */
+.collab-pane__title {
+  margin: 0 0 18px;
+  color: var(--ink);
+  font-size: clamp(1.1rem, 1rem + .6vw, 1.35rem);
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+/* ============================================================ GRID ======= */
+/* Drawn as a ruled table rather than separated cards: these are partner marks
+   in no particular order, and a continuous rule reads as one set where gaps
+   would read as many.
+
+   The rules are made from ONE border per edge, not two. The container carries
+   the top and left, each cell carries its right and bottom, so neighbouring
+   cells never double up into a 2px line — which is what happens if every cell
+   is given a full border. gap MUST stay 0 for that to hold. */
+.collab-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+}
+
+.collab-cell {
+  display: grid;
+  place-items: center;
+  /* A fixed shape, so a wide wordmark and a square emblem occupy the same
+     box and the rules stay straight across every row. */
+  aspect-ratio: 4 / 3;
+  padding: 16px;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  text-align: center;
+}
+
+/* contain, not cover: a logo must never be cropped, and these arrive in every
+   proportion from a square emblem to a long wordmark. */
+.collab-cell img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Shown in place of the mark while its file is not uploaded — see the note in
+   the template. The partner is still named, so the grid is a complete and
+   readable list from the day it goes up rather than a page of empty boxes. */
+.collab-cell__name {
+  color: var(--ink-soft);
+  font-size: .78rem;
+  font-weight: 600;
+  line-height: 1.4;
+  /* Long names are common here and a cell is narrow. Break inside a word
+     rather than let one push the column wider than its track. */
+  overflow-wrap: anywhere;
+}
+
+/* A whole panel with nothing in it yet. */
+.collab-empty {
+  margin: 0;
+  padding: 30px 24px;
+  background: var(--page-alt);
+  border-radius: var(--radius-sm);
+  color: var(--muted);
+  font-size: .9rem;
+  line-height: 1.7;
+}
+
+/* ==========================================================================
+   Responsive
+   Four steps down from six columns. A logo cell has a floor below which the
+   mark is too small to recognise, so the count drops rather than the cells
+   shrinking indefinitely.
+   ========================================================================== */
+@media (max-width: 1100px) {
+  .collab-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+}
+
+@media (max-width: 991.98px) {
+  .collab-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .collab-cell { padding: 13px; }
+}
+
+@media (max-width: 767.98px) {
+  .collab-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (max-width: 479.98px) {
+  /* Two across is the floor. At one across a cell would be the full width of
+     the phone for a mark a couple of centimetres wide. */
+  .collab-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .collab-cell { padding: 11px; }
+  .collab-cell__name { font-size: .72rem; }
+}

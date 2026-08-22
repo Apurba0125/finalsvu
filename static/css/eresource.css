@@ -1,0 +1,117 @@
+/* ==========================================================================
+   E-Resource  —  /page/e-resource/
+   Loaded ALONGSIDE page-head.css, which supplies the photo banner and the
+   heading with its rule. This file is only the grid of resource cards.
+   ========================================================================== */
+
+.eres-section { background: var(--page); }
+
+/* ============================================================ GRID ======= */
+/* Three to a row, reading ACROSS then down, and three is a fixed count rather
+   than an auto-fit minimum. auto-fit would put FOUR across inside the 1240px
+   shell, which is not what this page is: the titles here run to three lines
+   and a fourth column makes every one of them narrower for no gain. The count
+   steps down explicitly in the responsive block at the foot of this file.
+
+   minmax(0, 1fr), never plain 1fr: a grid track's default minimum is auto,
+   which is the width of its longest unbreakable word, so one long title would
+   push its column past its share and the page sideways with it. */
+.eres-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.eres-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  /* Equal height across the row whatever the title wraps to, so the View More
+     links sit level instead of stepping up and down the row. */
+  height: 100%;
+  min-height: 84px;
+  padding: 17px 16px 14px;
+  background: #dde7fa;
+  border-radius: var(--radius-sm);
+  text-align: center;
+  transition: background var(--transition), transform var(--transition);
+}
+.eres-card:hover { background: #cfdef8; transform: translateY(-2px); }
+
+.eres-card__title {
+  color: var(--ink);
+  font-size: .9rem;
+  font-weight: 600;
+  line-height: 1.45;
+  /* Some of these titles are a single unbroken word or URL. Break inside one
+     rather than let it push its column wider than the track. */
+  overflow-wrap: anywhere;
+}
+
+/* margin-top:auto pins the link to the foot of the card, which is what keeps
+   the row of links level under titles of one, two and three lines. */
+.eres-card__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: auto;
+  color: var(--red);
+  font-size: .87rem;
+  font-weight: 500;
+  line-height: 1.4;
+  transition: color var(--transition);
+}
+.eres-card__link:hover { color: #a80217; text-decoration: underline; }
+.eres-card__link:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
+
+.eres-card__link svg {
+  flex: none;
+  width: 12px;
+  height: 12px;
+  fill: currentColor;
+  transition: transform var(--transition);
+}
+.eres-card__link:hover svg { transform: translateX(3px); }
+
+/* Shown in place of View More while the document or address for a resource is
+   not set — see the note in includes/eres_card.html. A line of type rather
+   than a dead link: something that looks clickable and is not is worse than
+   nothing in its place. */
+.eres-card__pending {
+  margin-top: auto;
+  color: var(--muted);
+  font-size: .8rem;
+  font-style: italic;
+}
+
+/* ==========================================================================
+   Responsive
+   Three across, then two, then one. A card here is mostly type rather than a
+   mark or a photograph, so the step-down is driven by how many words fit on a
+   line rather than by a minimum cell size.
+   ========================================================================== */
+@media (max-width: 991.98px) {
+  .eres-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 575.98px) {
+  /* One across is right at this width: two 145px cards would set a title like
+     "Publishers of open access sources : OXFORD ACADEMIC" three words to a
+     line and give the row the height of a paragraph. */
+  .eres-grid { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .eres-card { min-height: 0; padding: 14px 13px 12px; }
+  .eres-card__title { font-size: .86rem; }
+  .eres-card__link { font-size: .83rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .eres-card,
+  .eres-card__link,
+  .eres-card__link svg { transition: none; }
+  .eres-card:hover { transform: none; }
+  .eres-card__link:hover svg { transform: none; }
+}

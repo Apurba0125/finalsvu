@@ -1,0 +1,104 @@
+/* ==========================================================================
+   Consultancy  —  /page/consultancy/
+   Loaded ALONGSIDE page-head.css, which supplies the photo banner and the
+   section heading. This file is the stack of cards under it.
+
+   Two kinds of card, and they are the same card: one carries a paragraph
+   above its link, the others carry only a link. Nothing switches between
+   them — a card simply has a <p> in it or does not.
+   ========================================================================== */
+
+.consult-section { background: var(--paper); }
+
+/* The whole heading is red here rather than the site's usual dark-then-red
+   split, so the markup puts all of it inside the <span> that page-head.css
+   colours. No rule under it: this page opens with a card rather than a band
+   of copy, and the card edge already does that job. */
+
+/* =========================================================== CARDS ======= */
+.consult-list {
+  display: grid;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.consult-card {
+  padding: 24px 28px 20px;
+  background: var(--paper);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition);
+}
+.consult-card:hover { box-shadow: var(--shadow); }
+
+.consult-card__text {
+  margin: 0;
+  color: var(--ink);
+  font-size: 1.03rem;
+  line-height: 1.65;
+}
+
+/* Indented a little from the copy above it, the way the row reads on the
+   printed circulars this page replaces. A card with no paragraph has nothing
+   to sit under, so the top margin only applies when one is there. */
+.consult-card__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 11px;
+  color: var(--red);
+  font-size: .95rem;
+  font-weight: 700;
+  line-height: 1.45;
+  transition: color var(--transition);
+}
+.consult-card__text + .consult-card__link { margin-top: 18px; }
+.consult-card__link:hover { color: #a80217; text-decoration: underline; }
+.consult-card__link:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
+
+.consult-card__link svg {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+}
+
+/* Shown in place of the link while its PDF has not been uploaded — see the
+   note in the template. A line of type rather than a dead link: something
+   that looks clickable and is not is worse than nothing in its place. */
+.consult-card__pending {
+  display: inline-block;
+  margin-left: 11px;
+  color: var(--muted);
+  font-size: .85rem;
+  font-style: italic;
+}
+.consult-card__text + .consult-card__pending { margin-top: 18px; }
+
+/* ==========================================================================
+   Responsive
+   The cards are full width at every size, so there is nothing to reflow —
+   only the padding and the type come down.
+   ========================================================================== */
+@media (max-width: 767.98px) {
+  .consult-card { padding: 20px 20px 17px; }
+  .consult-card__text { font-size: .96rem; }
+}
+
+@media (max-width: 575.98px) {
+  .consult-list { gap: 11px; }
+  .consult-card { padding: 17px 16px 15px; }
+  .consult-card__text { font-size: .92rem; line-height: 1.7; }
+  .consult-card__link { font-size: .88rem; }
+  /* The indent goes: at this width every millimetre of measure counts, and a
+     link that wraps to two lines reads worse than one that starts flush. */
+  .consult-card__link,
+  .consult-card__pending { margin-left: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .consult-card,
+  .consult-card__link { transition: none; }
+}

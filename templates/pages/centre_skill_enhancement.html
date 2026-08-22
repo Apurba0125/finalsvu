@@ -1,0 +1,673 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% comment %}
+===========================================================================
+CENTRE FOR SKILL ENHANCEMENT  —  served at /page/centre-skill-enhancement/
+                                 by website.views.centre_skill_enhancement
+---------------------------------------------------------------------------
+Header, navigation and footer come from base.html. Do not add them here.
+
+Styling: page-head.css gives the photo banner and the heading with its rule
+(shared with About Us and the other centres); skills.css is the two links and
+the course cards.
+
+EVERYTHING IS IN THIS ONE FILE
+  Every course and every word of its syllabus is below — no data.py, no
+  per-course template to open. One course is one block of markup, and the page
+  is those blocks stacked in the order they should read.
+
+TO ADD A COURSE
+  Copy a whole <li class="skill-card"> block, paste it where it belongs, and
+  change four things:
+
+    1. the icon    — any symbol in includes/icons.html, e.g. #i-lab
+    2. the <h3>    — the course name
+    3. the id pair — aria-controls="skill-25" on the button and id="skill-25"
+                     on the body. THEY MUST MATCH EACH OTHER AND BE UNIQUE ON
+                     THE PAGE. That pair is the whole wiring; nothing counts
+                     the cards or renumbers them, so a course can be dropped
+                     into the middle without touching any other.
+    4. the body    — the syllabus
+
+  Nothing else in the block changes, ever.
+
+USING A REAL LOGO INSTEAD OF A SPRITE ICON
+  The icon slot takes either. To use the actual Python, Excel or Cisco mark,
+  put the file in static/img/skills/ and swap the <svg> line for:
+
+    <img src="{{ "img/skills/python.png"|doc_url }}" alt="">
+
+  Same 36px square either way, and object-fit keeps a logo of any proportion
+  inside it without distorting. doc_url rather than a bare {% static %} tag:
+  under the manifest storage {% static %} raises for a file that was never
+  collected, so one mistyped name would take the whole page down. After adding
+  an image run:
+
+      python manage.py collectstatic --noinput
+
+  alt="" is right here — the course name is already in the heading beside it,
+  so announcing the logo as well would just say everything twice.
+
+WHAT CAN GO IN A BODY
+  The first card carries the pair every syllabus is built from:
+
+    <p class="skill-unit">Unit I</p>   the pale blue chip
+    <p>…</p>                            the paragraph under it, justified
+
+  Spacing is automatic — skills.css sets it — so there is no need for <br> or
+  empty paragraphs. <strong> around a lead-in comes out dark against the grey.
+
+  WRITE AN AMPERSAND AS &amp; — a bare & is not valid HTML and misparses next
+  to a word, e.g. "&copy" would be read as the © symbol.
+
+HOW READ MORE WORKS
+  It is a real <button> driving the site's shared accordion — initAccordions
+  in main.js, the same one behind the FAQ, Centre For Excellence and the FDP
+  reports. The contract is the two attributes on the button: aria-expanded
+  holds the state, aria-controls names the body. The body carries the hidden
+  attribute, so it is shut in the markup and stays shut if the script never
+  runs.
+
+  The caret turning, and "Read More" becoming "Read Less", are both CSS keyed
+  off aria-expanded, so nothing has to be kept in step and both labels stay
+  here in the markup where they can be reworded.
+
+NOTE ON COMMENTS: the hash-style Django comment {# … #} covers a SINGLE line.
+For a multi-line note use a comment/endcomment pair like this one, or the text
+leaks onto the page and any tag inside it actually runs.
+===========================================================================
+{% endcomment %}
+
+{% block title %}Centre For Skill Enhancement | {{ site.site_name }}{% endblock %}
+{% block meta_description %}Skill courses at Swami Vivekananda University — data entry, solar energy, welding, retail, full stack web development, Python, data science, cyber security and more.{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/page-head.css' %}">
+  <link rel="stylesheet" href="{% static 'css/skills.css' %}">
+{% endblock %}
+
+{% block content %}
+
+{# ===========================================================  BANNER  === #}
+{# THE BACKGROUND IMAGE IS SET HERE. Change the file name in the url() and  #}
+{# that is the whole edit — keep the dark gradient in front of it or the    #}
+{# white title stops being readable over a busy photograph.                 #}
+<section class="page-banner"
+         style="background-image: linear-gradient(0deg, rgba(10,10,10,.72), rgba(10,10,10,.55)), url('{% static 'img/about/campus.jpg' %}');">
+  <div class="shell">
+    <h1 class="page-banner__title">Centre For Skill Enhancement</h1>
+  </div>
+</section>
+
+
+{# ==========================================================  COURSES  === #}
+<section class="section skill-section">
+  <div class="shell">
+
+    {# The half inside <span> is the red half — page-head.css colours it. #}
+    <div class="page-head">
+      <h2 class="page-heading">Centre For <span>Skill Enhancement</span></h2>
+      <span class="page-rule"></span>
+    </div>
+
+    {# Notice goes to the notice board, Enroll Now to the application form. #}
+    {# Point either somewhere else by changing its href — a {% url %} tag   #}
+    {# for a page on this site, a plain path or full URL for anything else. #}
+    <ul class="skill-links">
+      <li><a class="skill-links__notice" href="{% url 'website:notice_list' %}">Notice</a></li>
+      <li><a class="skill-links__enrol" href="{% url 'website:apply' %}">Enroll Now</a></li>
+    </ul>
+
+    <ul class="skill-list">
+
+          {# --------------------------------------------------- skill-1 --- #}
+          {# THIS CARD IS THE WORKED EXAMPLE. Its body carries the unit chip #}
+          {# and paragraph pair that every syllabus is built from — copy the #}
+          {# pieces out of it rather than starting from a blank card.        #}
+          <li class="skill-card">
+            <div class="skill-card__head">
+              <span class="skill-card__icon" aria-hidden="true">
+                {# Sized in the markup as well as the CSS: an <svg> with a   #}
+                {# viewBox and no dimensions expands to fill its box, so a   #}
+                {# stylesheet that has not loaded yet would put a full-width #}
+                {# icon on every card.                                       #}
+                <svg width="29" height="29" focusable="false"><use href="#i-file"></use></svg>
+              </span>
+              <div>
+                <h3 class="skill-card__title">Domestic Data Entry Operator</h3>
+                <button class="skill-card__toggle" type="button" data-disclosure
+                        aria-expanded="false" aria-controls="skill-1">
+                  <svg class="skill-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+                  <span class="skill-card__more">Read More</span>
+                  <span class="skill-card__less">Read Less</span>
+                  <span class="sr-only"> about Domestic Data Entry Operator</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="skill-card__body" id="skill-1" hidden>
+              <p class="skill-unit">Unit I</p>
+              <p>Understand the IT/ITeS Industry: Evolution of the BPM Industry and structure of IT-BPM industry, key trends in BPM sector. Understanding Computers: History and Generation of Computer, basic terminology and functioning of Computer System, Architecture of computer system, types of Computers, Advantages &amp; Disadvantages of Computers, Windows and its components, Computer Hardware and Software, System software, Application Software, Applications of Computer System. M.S. Office: Introduction to MS Office package. Microsoft Word and its working: Anatomy of MS Word Window, File tab, Quick Access toolbar, Ribbon, Tabs, Groups, Title bar, Rulers, View buttons and views, document area, Status bar, Using the Microsoft Office Button and Quick Access Toolbar, Using Keyboard Commands, Create/Save/Open/Close/Print a word document, Character formatting, Paragraph Formatting and Page setup, Headers and Footers, bullets and numbering, spellings and grammar, working with tables and graphics. Microsoft Excel and its working: Introduction to various Excel Screen Elements, about cell, Workbook, Worksheet, Cell Alignment Options, Number Formatting, sort and filter, basic excel formulae, creating and formatting charts: Bar charts, pie charts for a given set of data. Enter Data into the Excel Worksheet, Save an Excel Worksheet, selection and navigation and shortcuts.</p>
+
+              <p class="skill-unit">Unit II</p>
+              <p>Microsoft PowerPoint and its working: Creating and saving presentation, insert slides, Different slide layouts, applying different themes, PowerPoint views, formatting text, adding pictures, audio and video, adding speaker notes and presentation, setting up and running a slide show. Microsoft Access and its working: Introduction to database and basic terms, working with access tables, relationships, queries, reports and forms. Data Confidentiality: Understand its meaning and importance, and ways to implement and enhance data confidentiality at workplace. Internet and Email: Web browser, search engines, networking sites for personal and professional usage, popular web applications, Email and its uses: popular web-mail services, basic structure of email, composing and sending an email and other general terms associated with an email: compose, draft, spam, trash, attachment etc. Typing Skills: Benefits of speed touch typing, Correct body posture, memorizing various key positions and practicing types for various categories of keys as listed below: Home Row Keys, Top-Row Keys, Bottom-Row Keys, Fourth-Row Number and Symbol Keys, Shift Keys, Enter and Backspace Keys, Tab and Caps Lock Keys, Shortcut Keys, Mastering the Keys, Typing practice exercises.</p>
+
+              <p class="skill-unit">Unit III</p>
+              <p>Undertaking Data Entry Services: Understanding Job, competency and responsibilities of a data entry operator. Dealing with customers: prioritization of service requests, getting the information from customer, verification of information from database and providing the right information within reasonable and estimated time, analyse customer queries for resolution, escalation matrix, seeking advice and guidance from manager, performance measures: Turnaround time, Accuracy and Service level agreements. Managing work to meet requirements: Time management: Importance, Categorisation and prioritization of various tasks on the basis of urgency and importance. Work Management: Importance of prioritization and planning, operationalize a plan: Identification of objective and outcomes for a particular job at hand, providing right direction and resources i.e. infrastructure, establish priorities using time quadrant, documentation and communication of plan, progress check. Performance measures for quality and Standards: Service level agreements, setting goals and objectives which are SMART (i.e. Specific, Measurable, Achievable, Realistic and Time bound).</p>
+
+              <p class="skill-unit">Unit IV</p>
+              <p>Health and Safety Management System: Significance of workplace safety, basic safety guidelines: fire safety (fire extinguishers, their operation types and usage), electrical safety, falls and slips, use of first aid. Accidents and Emergencies: Understanding the meaning and types of accidents and emergencies. Identify and report accidents and emergencies: Notice and correctly identify accidents and emergencies. Get help promptly and in the most suitable way. Follow company policy and procedures for preventing further injury while waiting for help to arrive. Act within the limits of your responsibility and authority when accidents and emergencies arise. Promptly follow the instructions given by senior staff and the emergency services personnel. Handling accidents: Attend the injured person immediately. Inform your supervisor about the accident giving details. Assist your supervisor in investigating and finding out the actual cause of the accident. General emergency handling procedures: Keep a list of numbers to call during emergencies. Regularly check that all emergency handling equipment is in working condition. Ensure that emergency exits are not obstructed. Hazards &ndash; Definition and potential sources of hazards like using computers, handling office equipment, handling objects, stress at work, working environment. Evacuation procedures and workplace safety rules. Safety signs in offices, report non-compliance to safety rules and safety hazard. First aid/response to health conditions like choking, fainting, cardiac failure etc. at workplace.</p>
+            </div>
+          </li>
+
+          {# --------------------------------------------------- skill-2 --- #}
+          <li class="skill-card">
+            <div class="skill-card__head">
+              <span class="skill-card__icon" aria-hidden="true">
+                <svg width="29" height="29" focusable="false"><use href="#i-phone"></use></svg>
+              </span>
+              <div>
+                <h3 class="skill-card__title">Mobile Phone Hardware Repair Technician</h3>
+                <button class="skill-card__toggle" type="button" data-disclosure
+                        aria-expanded="false" aria-controls="skill-2">
+                  <svg class="skill-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+                  <span class="skill-card__more">Read More</span>
+                  <span class="skill-card__less">Read Less</span>
+                  <span class="sr-only"> about Mobile Phone Hardware Repair Technician</span>
+                </button>
+              </div>
+            </div>
+            <div class="skill-card__body" id="skill-2" hidden>
+              <p>The syllabus for this course will be published shortly.</p>
+            </div>
+          </li>
+
+          {# --------------------------------------------------- skill-3 --- #}
+          <li class="skill-card">
+            <div class="skill-card__head">
+              <span class="skill-card__icon" aria-hidden="true">
+                <svg width="29" height="29" focusable="false"><use href="#i-leaf"></use></svg>
+              </span>
+              <div>
+                <h3 class="skill-card__title">Solar Energy Technician</h3>
+                <button class="skill-card__toggle" type="button" data-disclosure
+                        aria-expanded="false" aria-controls="skill-3">
+                  <svg class="skill-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+                  <span class="skill-card__more">Read More</span>
+                  <span class="skill-card__less">Read Less</span>
+                  <span class="sr-only"> about Solar Energy Technician</span>
+                </button>
+              </div>
+            </div>
+            <div class="skill-card__body" id="skill-3" hidden>
+              <p>The syllabus for this course will be published shortly.</p>
+            </div>
+          </li>
+
+          {# --------------------------------------------------- skill-4 --- #}
+          <li class="skill-card">
+            <div class="skill-card__head">
+              <span class="skill-card__icon" aria-hidden="true">
+                <svg width="29" height="29" focusable="false"><use href="#i-industry"></use></svg>
+              </span>
+              <div>
+                <h3 class="skill-card__title">Tractor Operator</h3>
+                <button class="skill-card__toggle" type="button" data-disclosure
+                        aria-expanded="false" aria-controls="skill-4">
+                  <svg class="skill-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+                  <span class="skill-card__more">Read More</span>
+                  <span class="skill-card__less">Read Less</span>
+                  <span class="sr-only"> about Tractor Operator</span>
+                </button>
+              </div>
+            </div>
+            <div class="skill-card__body" id="skill-4" hidden>
+              <p>The syllabus for this course will be published shortly.</p>
+            </div>
+          </li>
+
+          {# --------------------------------------------------- skill-5 --- #}
+          <li class="skill-card">
+            <div class="skill-card__head">
+              <span class="skill-card__icon" aria-hidden="true">
+                <svg width="29" height="29" focusable="false"><use href="#i-lab"></use></svg>
+              </span>
+              <div>
+                <h3 class="skill-card__title">Welding Technician</h3>
+                <button class="skill-card__toggle" type="button" data-disclosure
+                        aria-expanded="false" aria-controls="skill-5">
+                  <svg class="skill-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+                  <span class="skill-card__more">Read More</span>
+                  <span class="skill-card__less">Read Less</span>
+                  <span class="sr-only"> about Welding Technician</span>
+                </button>
+              </div>
+            </div>
+            <div class="skill-card__body" id="skill-5" hidden>
+              <p>The syllabus for this course will be published shortly.</p>
+            </div>
+          </li>
+
+          {# --------------------------------------------------- skill-6 --- #}
+          <li class="skill-card">
+            <div class="skill-card__head">
+              <span class="skill-card__icon" aria-hidden="true">
+                <svg width="29" height="29" focusable="false"><use href="#i-handshake"></use></svg>
+              </span>
+              <div>
+                <h3 class="skill-card__title">Retail Management</h3>
+                <button class="skill-card__toggle" type="button" data-disclosure
+                        aria-expanded="false" aria-controls="skill-6">
+                  <svg class="skill-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+                  <span class="skill-card__more">Read More</span>
+                  <span class="skill-card__less">Read Less</span>
+                  <span class="sr-only"> about Retail Management</span>
+                </button>
+              </div>
+            </div>
+            <div class="skill-card__body" id="skill-6" hidden>
+              <p>The syllabus for this course will be published shortly.</p>
+            </div>
+          </li>
+
+          {# --------------------------------------------------- skill-7 --- #}
+          <li class="skill-card">
+            <div class="skill-card__head">
+              <span class="skill-card__icon" aria-hidden="true">
+                <svg width="29" height="29" focusable="false"><use href="#i-globe"></use></svg>
+              </span>
+              <div>
+                <h3 class="skill-card__title">Full Stack Web Development</h3>
+                <button class="skill-card__toggle" type="button" data-disclosure
+                        aria-expanded="false" aria-controls="skill-7">
+                  <svg class="skill-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+                  <span class="skill-card__more">Read More</span>
+                  <span class="skill-card__less">Read Less</span>
+                  <span class="sr-only"> about Full Stack Web Development</span>
+                </button>
+              </div>
+            </div>
+            <div class="skill-card__body" id="skill-7" hidden>
+              <p>The syllabus for this course will be published shortly.</p>
+            </div>
+          </li>
+
+          {# --------------------------------------------------- skill-8 --- #}
+          <li class="skill-card">
+            <div class="skill-card__head">
+              <span class="skill-card__icon" aria-hidden="true">
+                <svg width="29" height="29" focusable="false"><use href="#i-curriculum"></use></svg>
+              </span>
+              <div>
+                <h3 class="skill-card__title">Introduction to Python Training</h3>
+                <button class="skill-card__toggle" type="button" data-disclosure
+                        aria-expanded="false" aria-controls="skill-8">
+                  <svg class="skill-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+                  <span class="skill-card__more">Read More</span>
+                  <span class="skill-card__less">Read Less</span>
+                  <span class="sr-only"> about Introduction to Python Training</span>
+                </button>
+              </div>
+            </div>
+            <div class="skill-card__body" id="skill-8" hidden>
+              <p>The syllabus for this course will be published shortly.</p>
+            </div>
+          </li>
+
+          {# --------------------------------------------------- skill-9 --- #}
+          <li class="skill-card">
+            <div class="skill-card__head">
+              <span class="skill-card__icon" aria-hidden="true">
+                <svg width="29" height="29" focusable="false"><use href="#i-file"></use></svg>
+              </span>
+              <div>
+                <h3 class="skill-card__title">Advanced Microsoft Excel Training</h3>
+                <button class="skill-card__toggle" type="button" data-disclosure
+                        aria-expanded="false" aria-controls="skill-9">
+                  <svg class="skill-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+                  <span class="skill-card__more">Read More</span>
+                  <span class="skill-card__less">Read Less</span>
+                  <span class="sr-only"> about Advanced Microsoft Excel Training</span>
+                </button>
+              </div>
+            </div>
+            <div class="skill-card__body" id="skill-9" hidden>
+              <p>The syllabus for this course will be published shortly.</p>
+            </div>
+          </li>
+
+          {# --------------------------------------------------- skill-10 --- #}
+          <li class="skill-card">
+            <div class="skill-card__head">
+              <span class="skill-card__icon" aria-hidden="true">
+                <svg width="29" height="29" focusable="false"><use href="#i-curriculum"></use></svg>
+              </span>
+              <div>
+                <h3 class="skill-card__title">Advanced PHP Training</h3>
+                <button class="skill-card__toggle" type="button" data-disclosure
+                        aria-expanded="false" aria-controls="skill-10">
+                  <svg class="skill-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+                  <span class="skill-card__more">Read More</span>
+                  <span class="skill-card__less">Read Less</span>
+                  <span class="sr-only"> about Advanced PHP Training</span>
+                </button>
+              </div>
+            </div>
+            <div class="skill-card__body" id="skill-10" hidden>
+              <p>The syllabus for this course will be published shortly.</p>
+            </div>
+          </li>
+
+          {# --------------------------------------------------- skill-11 --- #}
+          <li class="skill-card">
+            <div class="skill-card__head">
+              <span class="skill-card__icon" aria-hidden="true">
+                <svg width="29" height="29" focusable="false"><use href="#i-research"></use></svg>
+              </span>
+              <div>
+                <h3 class="skill-card__title">Data Science Training</h3>
+                <button class="skill-card__toggle" type="button" data-disclosure
+                        aria-expanded="false" aria-controls="skill-11">
+                  <svg class="skill-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+                  <span class="skill-card__more">Read More</span>
+                  <span class="skill-card__less">Read Less</span>
+                  <span class="sr-only"> about Data Science Training</span>
+                </button>
+              </div>
+            </div>
+            <div class="skill-card__body" id="skill-11" hidden>
+              <p>The syllabus for this course will be published shortly.</p>
+            </div>
+          </li>
+
+          {# --------------------------------------------------- skill-12 --- #}
+          <li class="skill-card">
+            <div class="skill-card__head">
+              <span class="skill-card__icon" aria-hidden="true">
+                <svg width="29" height="29" focusable="false"><use href="#i-globe"></use></svg>
+              </span>
+              <div>
+                <h3 class="skill-card__title">HTML Training</h3>
+                <button class="skill-card__toggle" type="button" data-disclosure
+                        aria-expanded="false" aria-controls="skill-12">
+                  <svg class="skill-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+                  <span class="skill-card__more">Read More</span>
+                  <span class="skill-card__less">Read Less</span>
+                  <span class="sr-only"> about HTML Training</span>
+                </button>
+              </div>
+            </div>
+            <div class="skill-card__body" id="skill-12" hidden>
+              <p>The syllabus for this course will be published shortly.</p>
+            </div>
+          </li>
+
+          {# --------------------------------------------------- skill-13 --- #}
+          <li class="skill-card">
+            <div class="skill-card__head">
+              <span class="skill-card__icon" aria-hidden="true">
+                <svg width="29" height="29" focusable="false"><use href="#i-research"></use></svg>
+              </span>
+              <div>
+                <h3 class="skill-card__title">IBM Cognos Training</h3>
+                <button class="skill-card__toggle" type="button" data-disclosure
+                        aria-expanded="false" aria-controls="skill-13">
+                  <svg class="skill-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+                  <span class="skill-card__more">Read More</span>
+                  <span class="skill-card__less">Read Less</span>
+                  <span class="sr-only"> about IBM Cognos Training</span>
+                </button>
+              </div>
+            </div>
+            <div class="skill-card__body" id="skill-13" hidden>
+              <p>The syllabus for this course will be published shortly.</p>
+            </div>
+          </li>
+
+          {# --------------------------------------------------- skill-14 --- #}
+          <li class="skill-card">
+            <div class="skill-card__head">
+              <span class="skill-card__icon" aria-hidden="true">
+                <svg width="29" height="29" focusable="false"><use href="#i-innovation"></use></svg>
+              </span>
+              <div>
+                <h3 class="skill-card__title">Prompt Engineering Training</h3>
+                <button class="skill-card__toggle" type="button" data-disclosure
+                        aria-expanded="false" aria-controls="skill-14">
+                  <svg class="skill-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+                  <span class="skill-card__more">Read More</span>
+                  <span class="skill-card__less">Read Less</span>
+                  <span class="sr-only"> about Prompt Engineering Training</span>
+                </button>
+              </div>
+            </div>
+            <div class="skill-card__body" id="skill-14" hidden>
+              <p>The syllabus for this course will be published shortly.</p>
+            </div>
+          </li>
+
+          {# --------------------------------------------------- skill-15 --- #}
+          <li class="skill-card">
+            <div class="skill-card__head">
+              <span class="skill-card__icon" aria-hidden="true">
+                <svg width="29" height="29" focusable="false"><use href="#i-excellence"></use></svg>
+              </span>
+              <div>
+                <h3 class="skill-card__title">Competitive Coding Training</h3>
+                <button class="skill-card__toggle" type="button" data-disclosure
+                        aria-expanded="false" aria-controls="skill-15">
+                  <svg class="skill-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+                  <span class="skill-card__more">Read More</span>
+                  <span class="skill-card__less">Read Less</span>
+                  <span class="sr-only"> about Competitive Coding Training</span>
+                </button>
+              </div>
+            </div>
+            <div class="skill-card__body" id="skill-15" hidden>
+              <p>The syllabus for this course will be published shortly.</p>
+            </div>
+          </li>
+
+          {# --------------------------------------------------- skill-16 --- #}
+          <li class="skill-card">
+            <div class="skill-card__head">
+              <span class="skill-card__icon" aria-hidden="true">
+                <svg width="29" height="29" focusable="false"><use href="#i-scales"></use></svg>
+              </span>
+              <div>
+                <h3 class="skill-card__title">Cyber Security Training</h3>
+                <button class="skill-card__toggle" type="button" data-disclosure
+                        aria-expanded="false" aria-controls="skill-16">
+                  <svg class="skill-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+                  <span class="skill-card__more">Read More</span>
+                  <span class="skill-card__less">Read Less</span>
+                  <span class="sr-only"> about Cyber Security Training</span>
+                </button>
+              </div>
+            </div>
+            <div class="skill-card__body" id="skill-16" hidden>
+              <p>The syllabus for this course will be published shortly.</p>
+            </div>
+          </li>
+
+          {# --------------------------------------------------- skill-17 --- #}
+          <li class="skill-card">
+            <div class="skill-card__head">
+              <span class="skill-card__icon" aria-hidden="true">
+                <svg width="29" height="29" focusable="false"><use href="#i-lab"></use></svg>
+              </span>
+              <div>
+                <h3 class="skill-card__title">VLSI Skill Development Training</h3>
+                <button class="skill-card__toggle" type="button" data-disclosure
+                        aria-expanded="false" aria-controls="skill-17">
+                  <svg class="skill-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+                  <span class="skill-card__more">Read More</span>
+                  <span class="skill-card__less">Read Less</span>
+                  <span class="sr-only"> about VLSI Skill Development Training</span>
+                </button>
+              </div>
+            </div>
+            <div class="skill-card__body" id="skill-17" hidden>
+              <p>The syllabus for this course will be published shortly.</p>
+            </div>
+          </li>
+
+          {# --------------------------------------------------- skill-18 --- #}
+          <li class="skill-card">
+            <div class="skill-card__head">
+              <span class="skill-card__icon" aria-hidden="true">
+                <svg width="29" height="29" focusable="false"><use href="#i-scales"></use></svg>
+              </span>
+              <div>
+                <h3 class="skill-card__title">Ethical Hacking Training</h3>
+                <button class="skill-card__toggle" type="button" data-disclosure
+                        aria-expanded="false" aria-controls="skill-18">
+                  <svg class="skill-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+                  <span class="skill-card__more">Read More</span>
+                  <span class="skill-card__less">Read Less</span>
+                  <span class="sr-only"> about Ethical Hacking Training</span>
+                </button>
+              </div>
+            </div>
+            <div class="skill-card__body" id="skill-18" hidden>
+              <p>The syllabus for this course will be published shortly.</p>
+            </div>
+          </li>
+
+          {# --------------------------------------------------- skill-19 --- #}
+          <li class="skill-card">
+            <div class="skill-card__head">
+              <span class="skill-card__icon" aria-hidden="true">
+                <svg width="29" height="29" focusable="false"><use href="#i-curriculum"></use></svg>
+              </span>
+              <div>
+                <h3 class="skill-card__title">Linux Administration Training</h3>
+                <button class="skill-card__toggle" type="button" data-disclosure
+                        aria-expanded="false" aria-controls="skill-19">
+                  <svg class="skill-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+                  <span class="skill-card__more">Read More</span>
+                  <span class="skill-card__less">Read Less</span>
+                  <span class="sr-only"> about Linux Administration Training</span>
+                </button>
+              </div>
+            </div>
+            <div class="skill-card__body" id="skill-19" hidden>
+              <p>The syllabus for this course will be published shortly.</p>
+            </div>
+          </li>
+
+          {# --------------------------------------------------- skill-20 --- #}
+          <li class="skill-card">
+            <div class="skill-card__head">
+              <span class="skill-card__icon" aria-hidden="true">
+                <svg width="29" height="29" focusable="false"><use href="#i-curriculum"></use></svg>
+              </span>
+              <div>
+                <h3 class="skill-card__title">Core Java Training</h3>
+                <button class="skill-card__toggle" type="button" data-disclosure
+                        aria-expanded="false" aria-controls="skill-20">
+                  <svg class="skill-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+                  <span class="skill-card__more">Read More</span>
+                  <span class="skill-card__less">Read Less</span>
+                  <span class="sr-only"> about Core Java Training</span>
+                </button>
+              </div>
+            </div>
+            <div class="skill-card__body" id="skill-20" hidden>
+              <p>The syllabus for this course will be published shortly.</p>
+            </div>
+          </li>
+
+          {# --------------------------------------------------- skill-21 --- #}
+          <li class="skill-card">
+            <div class="skill-card__head">
+              <span class="skill-card__icon" aria-hidden="true">
+                <svg width="29" height="29" focusable="false"><use href="#i-globe"></use></svg>
+              </span>
+              <div>
+                <h3 class="skill-card__title">MERN Stack Development Training</h3>
+                <button class="skill-card__toggle" type="button" data-disclosure
+                        aria-expanded="false" aria-controls="skill-21">
+                  <svg class="skill-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+                  <span class="skill-card__more">Read More</span>
+                  <span class="skill-card__less">Read Less</span>
+                  <span class="sr-only"> about MERN Stack Development Training</span>
+                </button>
+              </div>
+            </div>
+            <div class="skill-card__body" id="skill-21" hidden>
+              <p>The syllabus for this course will be published shortly.</p>
+            </div>
+          </li>
+
+          {# --------------------------------------------------- skill-22 --- #}
+          <li class="skill-card">
+            <div class="skill-card__head">
+              <span class="skill-card__icon" aria-hidden="true">
+                <svg width="29" height="29" focusable="false"><use href="#i-phone"></use></svg>
+              </span>
+              <div>
+                <h3 class="skill-card__title">Android Development Training</h3>
+                <button class="skill-card__toggle" type="button" data-disclosure
+                        aria-expanded="false" aria-controls="skill-22">
+                  <svg class="skill-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+                  <span class="skill-card__more">Read More</span>
+                  <span class="skill-card__less">Read Less</span>
+                  <span class="sr-only"> about Android Development Training</span>
+                </button>
+              </div>
+            </div>
+            <div class="skill-card__body" id="skill-22" hidden>
+              <p>The syllabus for this course will be published shortly.</p>
+            </div>
+          </li>
+
+          {# --------------------------------------------------- skill-23 --- #}
+          <li class="skill-card">
+            <div class="skill-card__head">
+              <span class="skill-card__icon" aria-hidden="true">
+                <svg width="29" height="29" focusable="false"><use href="#i-globe"></use></svg>
+              </span>
+              <div>
+                <h3 class="skill-card__title">Cisco Packet Tracer</h3>
+                <button class="skill-card__toggle" type="button" data-disclosure
+                        aria-expanded="false" aria-controls="skill-23">
+                  <svg class="skill-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+                  <span class="skill-card__more">Read More</span>
+                  <span class="skill-card__less">Read Less</span>
+                  <span class="sr-only"> about Cisco Packet Tracer</span>
+                </button>
+              </div>
+            </div>
+            <div class="skill-card__body" id="skill-23" hidden>
+              <p>The syllabus for this course will be published shortly.</p>
+            </div>
+          </li>
+
+          {# --------------------------------------------------- skill-24 --- #}
+          <li class="skill-card">
+            <div class="skill-card__head">
+              <span class="skill-card__icon" aria-hidden="true">
+                <svg width="29" height="29" focusable="false"><use href="#i-curriculum"></use></svg>
+              </span>
+              <div>
+                <h3 class="skill-card__title">Django</h3>
+                <button class="skill-card__toggle" type="button" data-disclosure
+                        aria-expanded="false" aria-controls="skill-24">
+                  <svg class="skill-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+                  <span class="skill-card__more">Read More</span>
+                  <span class="skill-card__less">Read Less</span>
+                  <span class="sr-only"> about Django</span>
+                </button>
+              </div>
+            </div>
+            <div class="skill-card__body" id="skill-24" hidden>
+              <p>The syllabus for this course will be published shortly.</p>
+            </div>
+          </li>
+
+    </ul>
+  </div>
+</section>
+{% endblock %}

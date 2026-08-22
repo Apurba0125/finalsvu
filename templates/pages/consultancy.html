@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% comment %}
+===========================================================================
+CONSULTANCY  —  served at /page/consultancy/ by website.views.consultancy
+---------------------------------------------------------------------------
+Header, navigation and footer come from base.html. Do not add them here.
+
+Styling: page-head.css gives the photo banner and the section heading (shared
+with About Us and the other centres); consultancy.css is only the cards.
+
+EVERYTHING IS IN THIS ONE FILE
+  Every card and every word of it is below — no data.py, no include to open.
+
+TWO KINDS OF CARD, WHICH ARE THE SAME CARD
+  One carries a paragraph above its link; the others carry only a link.
+  Nothing switches between them — a card simply has a <p class="consult-card__text">
+  in it or does not, and the spacing sorts itself out either way.
+
+TO ADD A CARD
+  Copy a whole <li class="consult-card"> block, paste it where it belongs and
+  change two things: the wording, and the filename in its {% with %} line.
+  Nothing else in the block ever changes.
+
+EVERY LINK OPENS A PDF
+  The filename for a card is set in the {% with %} tag at the top of that
+  card and nowhere else. Put the PDF in static/documents/consultancy/ and run
+
+      python manage.py collectstatic --noinput
+
+  THE FILENAME CAN BE WRITTEN BEFORE THE FILE EXISTS. That is the doc_url
+  filter doing the work: a bare {% static %} tag raises under the manifest
+  storage for a path that was never collected, so one mistyped name would take
+  the whole page down. doc_url returns an empty string instead, the card falls
+  back to a quiet "Document to follow" where the link would be, and the link
+  appears by itself once the PDF is uploaded — no edit here.
+
+  NONE OF THE THREE PDFs BELOW ARE UPLOADED YET, so all three cards read
+  "Document to follow" so far.
+
+  To point a card at a page on this site or a document hosted elsewhere
+  instead, put the full URL or the rooted path in the same slot — doc_url
+  hands those straight back untouched.
+
+  rel="noopener" is not optional alongside target="_blank": without it the
+  opened tab can reach back through window.opener and navigate this one.
+
+WRITE AN AMPERSAND AS &amp; — a bare & is not valid HTML and misparses next to
+a word, e.g. "&copy" would be read as the © symbol.
+
+NOTE ON COMMENTS: the hash-style Django comment {# … #} covers a SINGLE line.
+For a multi-line note use a comment/endcomment pair like this one, or the text
+leaks onto the page and any tag inside it actually runs.
+===========================================================================
+{% endcomment %}
+
+{% block title %}Consultancy | {{ site.site_name }}{% endblock %}
+{% block meta_description %}Consulting and corporate training services offered by Swami Vivekananda University, its faculty and its departments, with the governing regulation.{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/page-head.css' %}">
+  <link rel="stylesheet" href="{% static 'css/consultancy.css' %}">
+{% endblock %}
+
+{% block content %}
+
+{# ===========================================================  BANNER  === #}
+{# THE BACKGROUND IMAGE IS SET HERE. Change the file name in the url() and  #}
+{# that is the whole edit — keep the dark gradient in front of it or the    #}
+{# white title stops being readable over a busy photograph.                 #}
+<section class="page-banner"
+         style="background-image: linear-gradient(0deg, rgba(10,10,10,.72), rgba(10,10,10,.55)), url('{% static 'img/about/campus.jpg' %}');">
+  <div class="shell">
+    <h1 class="page-banner__title">Consultancy</h1>
+  </div>
+</section>
+
+
+{# ======================================================  CONSULTANCY  === #}
+<section class="section consult-section">
+  <div class="shell">
+
+    {# The whole heading is red on this page, so all of it goes inside the #}
+    {# <span> that page-head.css colours — no rule under it here.          #}
+    <div class="page-head">
+      <h2 class="page-heading"><span>Consultancy</span></h2>
+    </div>
+
+    <ul class="consult-list">
+
+      {# ------------------------------------------------- the policy --- #}
+      <li class="consult-card">
+        <p class="consult-card__text">In order to control consulting offers in
+          the capacity of both individuals and the organization, Swami
+          Vivekananda University has a centralized method and a structured
+          policy. Individual or group consulting and corporate training services
+          are encouraged for all faculty members. The university has a plan to
+          offer individuals and companies specialized consulting services and
+          corporate trainings by utilizing its unique infrastructure and the
+          technical and faculty skills.</p>
+
+        {% with doc="documents/consultancy/regulation.pdf"|doc_url %}
+          {% if doc %}
+            <a class="consult-card__link" href="{{ doc }}"
+               target="_blank" rel="noopener noreferrer">
+              <svg width="14" height="14" aria-hidden="true" focusable="false"><use href="#i-file"></use></svg>
+              View Regulation<span class="sr-only"> (PDF, opens in a new tab)</span>
+            </a>
+          {% else %}
+            <span class="consult-card__pending">Regulation to follow</span>
+          {% endif %}
+        {% endwith %}
+      </li>
+
+      {# ------------------------------------------ mechanical engg. --- #}
+      <li class="consult-card">
+        {% with doc="documents/consultancy/mechanical-engineering.pdf"|doc_url %}
+          {% if doc %}
+            <a class="consult-card__link" href="{{ doc }}"
+               target="_blank" rel="noopener noreferrer">
+              <svg width="14" height="14" aria-hidden="true" focusable="false"><use href="#i-file"></use></svg>
+              Consultancy Services : Department of Mechanical Engineering<span class="sr-only"> (PDF, opens in a new tab)</span>
+            </a>
+          {% else %}
+            <span class="consult-card__pending">Consultancy Services : Department of Mechanical Engineering — document to follow</span>
+          {% endif %}
+        {% endwith %}
+      </li>
+
+      {# ----------------------------------------------- civil engg. --- #}
+      <li class="consult-card">
+        {% with doc="documents/consultancy/civil-engineering.pdf"|doc_url %}
+          {% if doc %}
+            <a class="consult-card__link" href="{{ doc }}"
+               target="_blank" rel="noopener noreferrer">
+              <svg width="14" height="14" aria-hidden="true" focusable="false"><use href="#i-file"></use></svg>
+              Consultancy Services : Department of Civil Engineering<span class="sr-only"> (PDF, opens in a new tab)</span>
+            </a>
+          {% else %}
+            <span class="consult-card__pending">Consultancy Services : Department of Civil Engineering — document to follow</span>
+          {% endif %}
+        {% endwith %}
+      </li>
+
+    </ul>
+  </div>
+</section>
+{% endblock %}

@@ -939,6 +939,64 @@ def academic_calendar(request):
     return render(request, "pages/academic_calendar.html")
 
 
+def e_resource(request):
+    """E-Resource — the open access resources open to students and faculty.
+
+    Takes no context on purpose. Each resource is one ``{% include %}`` line in
+    ``templates/pages/e_resource.html``, carrying its title and whatever View
+    More should open, so adding one is a line in that file and nothing else.
+
+    Its own template means its route has to sit above the generic
+    ``page/<slug>/`` line in urls.py; below it, page_detail claims the URL
+    first and renders an empty editorial placeholder.
+    """
+    return render(request, "pages/e_resource.html")
+
+
+def consultancy(request):
+    """Consultancy — the policy, and the services each department offers.
+
+    Takes no context on purpose. Every card is markup in
+    ``templates/pages/consultancy.html``, each naming its own PDF, so adding a
+    department or rewording the policy is an edit to that file alone.
+
+    Its own template means its route has to sit above the generic
+    ``page/<slug>/`` line in urls.py; below it, page_detail claims the URL
+    first and renders an empty editorial placeholder.
+    """
+    return render(request, "pages/consultancy.html")
+
+
+def collaboration(request):
+    """Collaboration — academic, industry and healthcare partners.
+
+    Takes no context on purpose. Each partner is one line in
+    ``templates/pages/collaboration.html``, carrying its logo filename, its alt
+    text and the name to show until the file is uploaded, so adding a partner
+    is one line in that file and nothing else.
+
+    Its own template means its route has to sit above the generic
+    ``page/<slug>/`` line in urls.py; below it, page_detail claims the URL
+    first and renders an empty editorial placeholder.
+    """
+    return render(request, "pages/collaboration.html")
+
+
+def centre_skill_enhancement(request):
+    """Centre For Skill Enhancement — the courses are written in the template.
+
+    Takes no context on purpose. Each course is one block of markup in
+    ``templates/pages/centre_skill_enhancement.html``, carrying its own
+    syllabus behind Read More, so adding a course or rewording a unit is an
+    edit to that file alone.
+
+    Its own template means its route has to sit above the generic
+    ``page/<slug>/`` line in urls.py; below it, page_detail claims the URL
+    first and renders an empty editorial placeholder.
+    """
+    return render(request, "pages/centre_skill_enhancement.html")
+
+
 def centre_faculty_development(request):
     """Centre For Faculty Development Programme — written in the template.
 

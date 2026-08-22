@@ -1,0 +1,193 @@
+/* ==========================================================================
+   Centre For Skill Enhancement  —  /page/centre-skill-enhancement/
+   Loaded ALONGSIDE page-head.css, which supplies the photo banner and the
+   heading with its rule. This file is the two links under the heading and the
+   stack of course cards below them.
+
+   One column, however wide the screen. These are course names in a long list
+   read top to bottom, and two columns of them would turn a scan into a search.
+   Nothing here changes at a breakpoint except the padding and the type size.
+   ========================================================================== */
+
+.skill-section { background: var(--paper); }
+
+/* ====================================================== HEADER LINKS ===== */
+/* The pair under the heading. A list, so a screen reader says there are two
+   of them, and inline-flex so they sit on one row without a typed separator. */
+.skill-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 22px;
+  margin: 0 0 22px;
+  padding: 0;
+  list-style: none;
+  font-size: .93rem;
+  font-weight: 600;
+}
+.skill-links a { transition: color var(--transition); }
+.skill-links a:hover { text-decoration: underline; }
+.skill-links a:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+
+.skill-links__notice { color: var(--red); }
+.skill-links__notice:hover { color: #a80217; }
+/* Green rather than a brand colour: it is the one action on the page, and it
+   has to read as separate from the red notice beside it at a glance. */
+.skill-links__enrol { color: #1c8c3f; }
+.skill-links__enrol:hover { color: #14682e; }
+
+/* =========================================================== CARDS ======= */
+.skill-list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.skill-card {
+  padding: 14px 18px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-xs);
+  transition: box-shadow var(--transition);
+}
+.skill-card:hover { box-shadow: var(--shadow-sm); }
+
+/* Icon beside the title, both on one row. */
+.skill-card__head {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+}
+
+/* The slot takes EITHER a sprite <svg> or an <img> of a real logo, at the same
+   size either way — see the note in the template. object-fit keeps a logo of
+   any proportion inside the square without distorting it. */
+.skill-card__icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  color: var(--red);
+}
+.skill-card__icon svg { width: 29px; height: 29px; fill: currentColor; }
+.skill-card__icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.skill-card__title {
+  margin: 0;
+  color: var(--ink);
+  font-size: .97rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+/* --------------------------------------------------- the Read More ------ */
+/* A <button>, so the browser's defaults all have to be undone: it does not
+   inherit the page font and arrives with a border, a grey face and padding. */
+.skill-card__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin: 6px 0 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--red);
+  font-family: inherit;
+  font-size: .84rem;
+  font-weight: 500;
+  line-height: 1.4;
+  cursor: pointer;
+  transition: color var(--transition);
+}
+.skill-card__toggle:hover { color: #a80217; text-decoration: underline; }
+.skill-card__toggle:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
+
+.skill-card__caret {
+  flex: none;
+  width: 9px;
+  height: 9px;
+  fill: currentColor;
+  transition: transform var(--transition);
+}
+.skill-card__toggle[aria-expanded="true"] .skill-card__caret { transform: rotate(90deg); }
+
+/* Two labels, one hidden. Swapping them off aria-expanded keeps the wording
+   in the markup where it can be edited rather than in a string in main.js. */
+.skill-card__less { display: none; }
+.skill-card__toggle[aria-expanded="true"] .skill-card__more { display: none; }
+.skill-card__toggle[aria-expanded="true"] .skill-card__less { display: inline; }
+
+/* --------------------------------------------------------- the body ----- */
+/* hidden in the markup, so it is shut before any script runs and stays shut if
+   the script never does. The explicit display:none is not redundant: the
+   hidden attribute is only a UA rule, and ANY display declaration that matches
+   the element overrides it. */
+.skill-card__body {
+  margin-top: 16px;
+  color: var(--ink-soft);
+  font-size: .87rem;
+  line-height: 1.85;
+}
+.skill-card__body[hidden] { display: none; }
+
+/* Reset and re-space at the SAME specificity, so source order decides. A
+   ".skill-card__body p { margin: 0 }" here would be one type selector heavier
+   and would silently kill the gap under every paragraph. */
+.skill-card__body > *     { margin: 0; }
+.skill-card__body > * + * { margin-top: 14px; }
+.skill-card__body strong { color: var(--ink); font-weight: 700; }
+
+/* A syllabus paragraph is a solid block of terms rather than prose, and reads
+   better justified — except on a phone, where justification opens rivers in a
+   narrow measure. The override is in the responsive block below. */
+.skill-card__body p { text-align: justify; }
+
+/* The pale unit chip: Unit I, Unit II … */
+.skill-unit {
+  display: table;
+  padding: 6px 16px;
+  background: #d3e6f8;
+  color: var(--ink);
+  font-size: .87rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+/* A chip is the heading for the paragraph under it, so the two belong closer
+   together than two ordinary blocks do. */
+.skill-unit + * { margin-top: 10px; }
+/* …and further from the block before it than from its own paragraph. */
+* + .skill-unit { margin-top: 22px; }
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+@media (max-width: 767.98px) {
+  /* Justified type opens rivers in a narrow measure, and these paragraphs are
+     long runs of comma-separated terms — the worst case for it. */
+  .skill-card__body p { text-align: left; }
+}
+
+@media (max-width: 575.98px) {
+  .skill-links { gap: 18px; font-size: .88rem; }
+  .skill-card { padding: 12px 14px; }
+  .skill-card__head { gap: 11px; }
+  .skill-card__icon { width: 28px; height: 28px; }
+  .skill-card__icon svg { width: 23px; height: 23px; }
+  .skill-card__title { font-size: .9rem; }
+  .skill-card__body { font-size: .84rem; line-height: 1.8; }
+  .skill-unit { font-size: .83rem; padding: 5px 13px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skill-card,
+  .skill-card__toggle,
+  .skill-card__caret,
+  .skill-links a { transition: none; }
+}
