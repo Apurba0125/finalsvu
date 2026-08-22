@@ -87,7 +87,20 @@ leaks onto the page and any tag inside it actually runs.
 
     <div class="tabset" data-tabs>
 
-      <div class="tabset__nav" data-tabs-nav role="tablist" aria-label="Patents">
+      {# Under 768px the pills collapse behind this control. It is a real   #}
+      {# button rather than a <select> so the pills keep their shape above  #}
+      {# the breakpoint, and there is no second copy of the labels to keep  #}
+      {# in step — the label below reads whichever pill is open.            #}
+      <button class="tabset__toggle" type="button" data-tabs-toggle
+              aria-expanded="false" aria-controls="patentTabNav">
+        <span data-tabs-current>Patent Published</span>
+        {# Sized in the markup as well as the CSS: an <svg> with no        #}
+        {# intrinsic size falls back to 300x150, so a stylesheet that has  #}
+        {# not loaded yet puts a full-width chevron on the page.           #}
+        <svg width="12" height="8" aria-hidden="true" focusable="false"><use href="#i-caret"></use></svg>
+      </button>
+
+      <div class="tabset__nav" id="patentTabNav" data-tabs-nav role="tablist" aria-label="Patents">
         <button class="tab-btn is-active" type="button" role="tab"
                 id="tab-published"
                 data-tab-target="#pane-published"

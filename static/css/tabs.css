@@ -114,16 +114,25 @@
      display:none and contributes no margin of its own. */
   .tabset__toggle[aria-expanded="true"],
   .dept-tabs__toggle[aria-expanded="true"] { margin-bottom: 10px; }
-  .tabset__nav,
-  .dept-tabs__nav {
+  /* ONLY a pill row that has a toggle ahead of it collapses. The sibling
+     combinator is the guard, and it is not decoration: without it a page
+     that ships a nav and no toggle loses its tabs completely here — hidden
+     by this rule, with nothing on the page able to add .is-open. Since the
+     toggle always precedes the nav in the markup, ~ can ask the question. */
+  .tabset__toggle ~ .tabset__nav,
+  .dept-tabs__toggle ~ .dept-tabs__nav {
     display: none;
     flex-direction: column;
     gap: 8px;
     margin-bottom: 22px;
   }
+  /* Same specificity as the rule above (two classes), so source order is what
+     decides — this one has to stay below it. */
   .tabset__nav.is-open,
   .dept-tabs__nav.is-open { display: flex; }
-  /* flex-basis is the vertical axis in a column, so the wrapping values used
-     on a wide screen would set each pill's HEIGHT here. */
+
+  /* A row with no toggle keeps its pills and simply wraps them. flex-basis is
+     the vertical axis once a nav turns into a column, so the wrapping values
+     used on a wide screen would set each pill's HEIGHT there. */
   .tab-btn { flex: 0 0 auto; padding: 11px 16px; font-size: .84rem; }
 }

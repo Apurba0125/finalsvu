@@ -14,7 +14,11 @@
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  /* min(320px, 100%), not a bare 320px: a bare minimum is a HARD floor, so
+     inside the 288px the shell leaves on a 320px phone the track stays 320px
+     and the right edge of every card is clipped away. min() lets the track
+     fall back to the width of the grid once there is less room than that. */
+  grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
   gap: 18px 26px;
 }
 

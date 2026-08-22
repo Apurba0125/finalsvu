@@ -84,7 +84,7 @@ leaks onto the page and any tag inside it actually runs.
 {# that is the whole edit — keep the dark gradient in front of it or the    #}
 {# white title stops being readable over a busy photograph.                 #}
 <section class="page-banner"
-         style="background-image: linear-gradient(0deg, rgba(10,10,10,.72), rgba(10,10,10,.55)), url('{% static 'img/about/campus.jpg' %}');">
+         style="background-image: linear-gradient(0deg, rgba(10,10,10,.72), rgba(10,10,10,.55)), url('{% static 'img/about/team.png' %}');">
   <div class="shell">
     <h1 class="page-banner__title">List of Books</h1>
   </div>
@@ -97,7 +97,20 @@ leaks onto the page and any tag inside it actually runs.
 
     <div class="tabset" data-tabs>
 
-      <div class="tabset__nav" data-tabs-nav role="tablist" aria-label="Books">
+      {# Under 768px the pills collapse behind this control. It is a real   #}
+      {# button rather than a <select> so the pills keep their shape above  #}
+      {# the breakpoint, and there is no second copy of the labels to keep  #}
+      {# in step — the label below reads whichever pill is open.            #}
+      <button class="tabset__toggle" type="button" data-tabs-toggle
+              aria-expanded="false" aria-controls="bookTabNav">
+        <span data-tabs-current>University Publications</span>
+        {# Sized in the markup as well as the CSS: an <svg> with no        #}
+        {# intrinsic size falls back to 300x150, so a stylesheet that has  #}
+        {# not loaded yet puts a full-width chevron on the page.           #}
+        <svg width="12" height="8" aria-hidden="true" focusable="false"><use href="#i-caret"></use></svg>
+      </button>
+
+      <div class="tabset__nav" id="bookTabNav" data-tabs-nav role="tablist" aria-label="Books">
         <button class="tab-btn is-active" type="button" role="tab"
                 id="tab-university" data-tab-target="#pane-university"
                 aria-controls="pane-university"
