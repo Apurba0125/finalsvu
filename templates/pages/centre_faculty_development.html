@@ -1,0 +1,702 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% comment %}
+===========================================================================
+CENTRE FOR FACULTY DEVELOPMENT PROGRAMME
+             served at /page/centre-faculty-development/
+             by website.views.centre_faculty_development
+---------------------------------------------------------------------------
+Header, navigation and footer come from base.html. Do not add them here.
+
+Styling, two shared files and one of its own: page-head.css is the photo
+banner and the heading with its rule; tabs.css is the four pills, their mobile
+dropdown and the show/hide of the panels; fdp.css is everything inside a
+panel.
+
+EVERYTHING IS IN THIS ONE FILE
+  Every word of all four panels is below — no data.py, no per-panel template
+  to open.
+
+THE FOUR PANELS
+  The pills and panels are the site's shared tab script — initTabPanels in
+  main.js — which finds them by the data-tabs attribute on the wrapper, the
+  .tab-btn and .tab-pane classes inside it, and data-tabs-nav on the pill row.
+  Those names are a contract with the script: rename one and the panels stop
+  switching.
+
+  Whichever pill carries is-active opens on load; without one the script falls
+  back to the first. The ids only have to match between a button's
+  data-tab-target and its panel, so a fifth panel is a matter of copying a
+  button and a panel and giving the pair a new id.
+
+  Four pills wrap to two rows on a phone, so under 768px they collapse behind
+  the toggle at the top. Its label reads whichever panel is open and needs no
+  upkeep.
+
+MISSION, VISION AND OBJECTIVES ARE THE SAME TWO SHAPES
+  A numbered blue chip, then the bullets belonging to it. Repeat. To add one,
+  copy a pair and change the words:
+
+    <h4 class="fdp-tag">6. Name of the point:</h4>
+    <ul class="fdp-points">
+      <li>
+        <svg class="fdp-points__icon" width="19" height="19" aria-hidden="true" focusable="false"><use href="#i-graduation"></use></svg>
+        <span>The sentence.</span>
+      </li>
+    </ul>
+
+  THE NUMBER IS TYPED, not generated. These are separate blocks with bullets
+  between them rather than one list, so an <ol> cannot hold them — renumber by
+  hand if you reorder. Spacing between blocks is automatic; no <br> needed.
+
+THE REPORT PANEL
+  A stack of cards, each opening its own write-up behind Read More on the
+  site's shared accordion — initAccordions in main.js, the same one behind the
+  FAQ and Centre For Excellence. The contract is the two attributes on the
+  button: aria-expanded for the state, aria-controls naming the panel, and the
+  panel carries hidden so it is shut before any script runs.
+
+  TO ADD A REPORT, copy a whole <li class="fdp-report"> and change:
+    1. the icon    — any symbol in includes/icons.html, e.g. #i-clock
+    2. the title
+    3. the id pair — aria-controls="rep-8" and id="rep-8" MUST MATCH EACH
+                     OTHER AND BE UNIQUE ON THE PAGE. That pair is the whole
+                     wiring, so a card can be dropped into the middle without
+                     touching any other.
+    4. the body
+
+  Inside a body:
+    <p class="fdp-label">Introduction:</p>   the pale blue label chip
+    <p>…</p>                                  a paragraph, justified
+    <strong>Lead-in:</strong> …               a dark run-in at the head of one
+    <figure class="fdp-poster">               the poster, floated right
+    <div class="fdp-clear"></div>             put ONE after the last block
+                                              that runs beside the poster, or
+                                              the next chip rides up into it
+
+  THE POSTER IS OPTIONAL and resolved through the doc_url filter, so a name
+  can be written before the file is uploaded and a typo leaves a placeholder
+  rather than taking the page down. Put the image in static/img/fdp/ and run
+
+      python manage.py collectstatic --noinput
+
+  WRITE AN AMPERSAND AS &amp; — a bare & is not valid HTML and misparses next
+  to a word, e.g. "&copy" would be read as the © symbol.
+
+NOTE ON COMMENTS: the hash-style Django comment {# … #} covers a SINGLE line.
+For a multi-line note use a comment/endcomment pair like this one, or the text
+leaks onto the page and any tag inside it actually runs.
+===========================================================================
+{% endcomment %}
+
+{% block title %}Centre For Faculty Development Programme | {{ site.site_name }}{% endblock %}
+{% block meta_description %}The Centre for Faculty Development Programme at Swami Vivekananda University — its mission, vision and objectives, and reports from the programmes run for teaching staff.{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/page-head.css' %}">
+  <link rel="stylesheet" href="{% static 'css/tabs.css' %}">
+  <link rel="stylesheet" href="{% static 'css/fdp.css' %}">
+{% endblock %}
+
+{% block content %}
+
+{# ===========================================================  BANNER  === #}
+{# THE BACKGROUND IMAGE IS SET HERE. Change the file name in the url() and  #}
+{# that is the whole edit — keep the dark gradient in front of it or the    #}
+{# white title stops being readable over a busy photograph.                 #}
+<section class="page-banner"
+         style="background-image: linear-gradient(0deg, rgba(10,10,10,.72), rgba(10,10,10,.55)), url('{% static 'img/about/campus.jpg' %}');">
+  <div class="shell">
+    <h1 class="page-banner__title">Centre For Faculty Development Programme</h1>
+  </div>
+</section>
+
+
+{# =============================================================  BODY  === #}
+<section class="section fdp-section">
+  <div class="shell">
+
+    {# The half inside <span> is the red half — page-head.css colours it. #}
+    <div class="page-head">
+      <h2 class="page-heading">Centre For Faculty <span>Development Programme</span></h2>
+      <span class="page-rule"></span>
+    </div>
+
+    <div class="tabset" data-tabs>
+
+      {# Under 768px the pills collapse behind this control. It is a real   #}
+      {# button rather than a <select> so the pills keep their shape above  #}
+      {# the breakpoint, and there is no second copy of the labels to keep  #}
+      {# in step — the label below reads whichever pill is open.            #}
+      <button class="tabset__toggle" type="button" data-tabs-toggle
+              aria-expanded="false" aria-controls="fdpTabNav">
+        <span data-tabs-current>Mission</span>
+        {# Sized in the markup as well as the CSS: an <svg> with no        #}
+        {# intrinsic size falls back to 300x150, so a stylesheet that has  #}
+        {# not loaded yet puts a full-width chevron on the page.           #}
+        <svg width="12" height="8" aria-hidden="true" focusable="false"><use href="#i-caret"></use></svg>
+      </button>
+
+      <div class="tabset__nav" id="fdpTabNav" data-tabs-nav
+           role="tablist" aria-label="Faculty Development Programme">
+
+        <button class="tab-btn is-active" type="button" role="tab"
+                id="tab-mission" data-tab-target="#pane-mission"
+                aria-controls="pane-mission"
+                aria-selected="true" tabindex="0">Mission</button>
+
+        <button class="tab-btn" type="button" role="tab"
+                id="tab-vision" data-tab-target="#pane-vision"
+                aria-controls="pane-vision"
+                aria-selected="false" tabindex="-1">Vision</button>
+
+        <button class="tab-btn" type="button" role="tab"
+                id="tab-objectives" data-tab-target="#pane-objectives"
+                aria-controls="pane-objectives"
+                aria-selected="false" tabindex="-1">Objectives</button>
+
+        <button class="tab-btn" type="button" role="tab"
+                id="tab-report" data-tab-target="#pane-report"
+                aria-controls="pane-report"
+                aria-selected="false" tabindex="-1">Report</button>
+      </div>
+
+
+      {# ===================================================== MISSION === #}
+      <div class="tab-pane is-active" id="pane-mission" role="tabpanel"
+           aria-labelledby="tab-mission" tabindex="0">
+
+        <h3 class="fdp-pane__title">Mission</h3>
+
+        <h4 class="fdp-tag">1. Professional Growth and Development:</h4>
+        <ul class="fdp-points">
+          <li>
+            <svg class="fdp-points__icon" width="19" height="19" aria-hidden="true" focusable="false"><use href="#i-graduation"></use></svg>
+            <span>To facilitate continuous professional growth and development of faculty members.</span>
+          </li>
+          <li>
+            <svg class="fdp-points__icon" width="19" height="19" aria-hidden="true" focusable="false"><use href="#i-graduation"></use></svg>
+            <span>To provide opportunities for faculty to acquire new skills, knowledge, and pedagogical techniques.</span>
+          </li>
+        </ul>
+
+        <h4 class="fdp-tag">2. Excellence in Teaching and Learning:</h4>
+        <ul class="fdp-points">
+          <li>
+            <svg class="fdp-points__icon" width="19" height="19" aria-hidden="true" focusable="false"><use href="#i-graduation"></use></svg>
+            <span>To enhance the quality of teaching and learning methodologies within the institution.</span>
+          </li>
+          <li>
+            <svg class="fdp-points__icon" width="19" height="19" aria-hidden="true" focusable="false"><use href="#i-graduation"></use></svg>
+            <span>To foster an environment that promotes innovative and effective teaching practices.</span>
+          </li>
+        </ul>
+
+        <h4 class="fdp-tag">3. Research and Scholarship:</h4>
+        <ul class="fdp-points">
+          <li>
+            <svg class="fdp-points__icon" width="19" height="19" aria-hidden="true" focusable="false"><use href="#i-graduation"></use></svg>
+            <span>To encourage and support faculty engagement in meaningful research and scholarly activities.</span>
+          </li>
+          <li>
+            <svg class="fdp-points__icon" width="19" height="19" aria-hidden="true" focusable="false"><use href="#i-graduation"></use></svg>
+            <span>To contribute to the creation of a vibrant intellectual community within the institution.</span>
+          </li>
+        </ul>
+
+        <h4 class="fdp-tag">4. Adaptation to Technological Advancements:</h4>
+        <ul class="fdp-points">
+          <li>
+            <svg class="fdp-points__icon" width="19" height="19" aria-hidden="true" focusable="false"><use href="#i-graduation"></use></svg>
+            <span>To equip faculty with the necessary technological skills and tools to enhance the educational experience.</span>
+          </li>
+          <li>
+            <svg class="fdp-points__icon" width="19" height="19" aria-hidden="true" focusable="false"><use href="#i-graduation"></use></svg>
+            <span>To promote the integration of technology into teaching and research processes.</span>
+          </li>
+        </ul>
+
+        <h4 class="fdp-tag">5. Student-Centered Approach:</h4>
+        <ul class="fdp-points">
+          <li>
+            <svg class="fdp-points__icon" width="19" height="19" aria-hidden="true" focusable="false"><use href="#i-graduation"></use></svg>
+            <span>To focus on strategies that positively impact student success and engagement.</span>
+          </li>
+          <li>
+            <svg class="fdp-points__icon" width="19" height="19" aria-hidden="true" focusable="false"><use href="#i-graduation"></use></svg>
+            <span>To cultivate a student-centered learning environment through faculty development initiatives.</span>
+          </li>
+        </ul>
+      </div>
+
+
+      {# ====================================================== VISION === #}
+      <div class="tab-pane" id="pane-vision" role="tabpanel"
+           aria-labelledby="tab-vision" tabindex="0">
+
+        <h3 class="fdp-pane__title">Vision</h3>
+
+        <h4 class="fdp-tag">1. Leadership in Education:</h4>
+        <ul class="fdp-points">
+          <li>
+            <svg class="fdp-points__icon" width="19" height="19" aria-hidden="true" focusable="false"><use href="#i-graduation"></use></svg>
+            <span>To position the institution as a leader in providing high-quality education through the development of its faculty.</span>
+          </li>
+        </ul>
+
+        <h4 class="fdp-tag">2. Innovation in Teaching and Research:</h4>
+        <ul class="fdp-points">
+          <li>
+            <svg class="fdp-points__icon" width="19" height="19" aria-hidden="true" focusable="false"><use href="#i-graduation"></use></svg>
+            <span>To foster a culture of innovation and creativity in teaching and research methodologies.</span>
+          </li>
+        </ul>
+
+        <h4 class="fdp-tag">3. Global Recognition:</h4>
+        <ul class="fdp-points">
+          <li>
+            <svg class="fdp-points__icon" width="19" height="19" aria-hidden="true" focusable="false"><use href="#i-graduation"></use></svg>
+            <span>To enhance the institution&rsquo;s global recognition by producing well-rounded and highly skilled graduates.</span>
+          </li>
+        </ul>
+
+        <h4 class="fdp-tag">4. Collaboration and Networking:</h4>
+        <ul class="fdp-points">
+          <li>
+            <svg class="fdp-points__icon" width="19" height="19" aria-hidden="true" focusable="false"><use href="#i-graduation"></use></svg>
+            <span>To promote collaboration and networking among faculty members, both within the institution and with external academic communities.</span>
+          </li>
+        </ul>
+
+        <h4 class="fdp-tag">5. Continuous Improvement:</h4>
+        <ul class="fdp-points">
+          <li>
+            <svg class="fdp-points__icon" width="19" height="19" aria-hidden="true" focusable="false"><use href="#i-graduation"></use></svg>
+            <span>To establish a culture of continuous improvement, where faculty members are committed to lifelong learning and development.</span>
+          </li>
+        </ul>
+
+        <h4 class="fdp-tag">6. Community Engagement:</h4>
+        <ul class="fdp-points">
+          <li>
+            <svg class="fdp-points__icon" width="19" height="19" aria-hidden="true" focusable="false"><use href="#i-graduation"></use></svg>
+            <span>To encourage faculty involvement in community service, outreach programs, and initiatives that contribute to societal development.</span>
+          </li>
+        </ul>
+
+        <h4 class="fdp-tag">7. Alignment with Institutional Goals:</h4>
+        <ul class="fdp-points">
+          <li>
+            <svg class="fdp-points__icon" width="19" height="19" aria-hidden="true" focusable="false"><use href="#i-graduation"></use></svg>
+            <span>To align the Faculty Development Programme with the overall goals and strategic objectives of the institution.</span>
+          </li>
+        </ul>
+      </div>
+
+
+      {# ================================================== OBJECTIVES === #}
+      <div class="tab-pane" id="pane-objectives" role="tabpanel"
+           aria-labelledby="tab-objectives" tabindex="0">
+
+        <h3 class="fdp-pane__title">Objectives</h3>
+
+        <h4 class="fdp-tag">1. Enhancing Teaching Skills:</h4>
+        <ul class="fdp-points">
+          <li>
+            <svg class="fdp-points__icon" width="19" height="19" aria-hidden="true" focusable="false"><use href="#i-graduation"></use></svg>
+            <span>To improve the pedagogical skills of faculty members, fostering innovative and effective teaching methods.</span>
+          </li>
+          <li>
+            <svg class="fdp-points__icon" width="19" height="19" aria-hidden="true" focusable="false"><use href="#i-graduation"></use></svg>
+            <span>To promote student-centered approaches and active learning strategies.</span>
+          </li>
+        </ul>
+
+        <h4 class="fdp-tag">2. Promoting Research and Scholarly Activities:</h4>
+        <ul class="fdp-points">
+          <li>
+            <svg class="fdp-points__icon" width="19" height="19" aria-hidden="true" focusable="false"><use href="#i-graduation"></use></svg>
+            <span>To encourage and support faculty engagement in research and scholarly activities.</span>
+          </li>
+          <li>
+            <svg class="fdp-points__icon" width="19" height="19" aria-hidden="true" focusable="false"><use href="#i-graduation"></use></svg>
+            <span>To provide resources and mentorship for faculty pursuing advanced degrees or conducting impactful research.</span>
+          </li>
+        </ul>
+
+        <h4 class="fdp-tag">3. Keeping Abreast of Advancements in the Field:</h4>
+        <ul class="fdp-points">
+          <li>
+            <svg class="fdp-points__icon" width="19" height="19" aria-hidden="true" focusable="false"><use href="#i-graduation"></use></svg>
+            <span>To ensure that faculty members stay current with the latest developments, trends, and advancements in their respective fields.</span>
+          </li>
+          <li>
+            <svg class="fdp-points__icon" width="19" height="19" aria-hidden="true" focusable="false"><use href="#i-graduation"></use></svg>
+            <span>To provide training on emerging technologies and methodologies relevant to teaching and research.</span>
+          </li>
+        </ul>
+
+        <h4 class="fdp-tag">4. Developing Leadership and Administrative Skills:</h4>
+        <ul class="fdp-points">
+          <li>
+            <svg class="fdp-points__icon" width="19" height="19" aria-hidden="true" focusable="false"><use href="#i-graduation"></use></svg>
+            <span>To equip faculty with leadership and administrative skills necessary for roles such as department chairs, program coordinators, or other administrative positions.</span>
+          </li>
+          <li>
+            <svg class="fdp-points__icon" width="19" height="19" aria-hidden="true" focusable="false"><use href="#i-graduation"></use></svg>
+            <span>To foster a culture of academic leadership within the institution.</span>
+          </li>
+        </ul>
+
+        <h4 class="fdp-tag">5. Facilitating Interdisciplinary Collaboration:</h4>
+        <ul class="fdp-points">
+          <li>
+            <svg class="fdp-points__icon" width="19" height="19" aria-hidden="true" focusable="false"><use href="#i-graduation"></use></svg>
+            <span>To encourage collaboration and interdisciplinary interactions among faculty members.</span>
+          </li>
+          <li>
+            <svg class="fdp-points__icon" width="19" height="19" aria-hidden="true" focusable="false"><use href="#i-graduation"></use></svg>
+            <span>To create opportunities for faculty to engage in cross-disciplinary projects and initiatives.</span>
+          </li>
+        </ul>
+
+        <h4 class="fdp-tag">6. Integrating Technology in Teaching and Learning:</h4>
+        <ul class="fdp-points">
+          <li>
+            <svg class="fdp-points__icon" width="19" height="19" aria-hidden="true" focusable="false"><use href="#i-graduation"></use></svg>
+            <span>To enhance the technological proficiency of faculty members.</span>
+          </li>
+          <li>
+            <svg class="fdp-points__icon" width="19" height="19" aria-hidden="true" focusable="false"><use href="#i-graduation"></use></svg>
+            <span>To promote the effective integration of technology in curriculum development, course delivery, and assessment.</span>
+          </li>
+        </ul>
+
+        <h4 class="fdp-tag">7. Addressing Diversity and Inclusion:</h4>
+        <ul class="fdp-points">
+          <li>
+            <svg class="fdp-points__icon" width="19" height="19" aria-hidden="true" focusable="false"><use href="#i-graduation"></use></svg>
+            <span>To promote inclusive teaching practices that accommodate diverse student populations.</span>
+          </li>
+          <li>
+            <svg class="fdp-points__icon" width="19" height="19" aria-hidden="true" focusable="false"><use href="#i-graduation"></use></svg>
+            <span>To raise awareness of cultural competence and sensitivity among faculty members.</span>
+          </li>
+        </ul>
+
+        <h4 class="fdp-tag">8. Improving Assessment and Evaluation Techniques:</h4>
+        <ul class="fdp-points">
+          <li>
+            <svg class="fdp-points__icon" width="19" height="19" aria-hidden="true" focusable="false"><use href="#i-graduation"></use></svg>
+            <span>To enhance faculty skills in designing effective assessments and evaluating student learning outcomes.</span>
+          </li>
+          <li>
+            <svg class="fdp-points__icon" width="19" height="19" aria-hidden="true" focusable="false"><use href="#i-graduation"></use></svg>
+            <span>To promote the use of data-driven approaches for continuous improvement.</span>
+          </li>
+        </ul>
+
+        <h4 class="fdp-tag">9. Encouraging Professional Networking:</h4>
+        <ul class="fdp-points">
+          <li>
+            <svg class="fdp-points__icon" width="19" height="19" aria-hidden="true" focusable="false"><use href="#i-graduation"></use></svg>
+            <span>To facilitate networking and collaboration among faculty members within the institution and with external academic communities.</span>
+          </li>
+          <li>
+            <svg class="fdp-points__icon" width="19" height="19" aria-hidden="true" focusable="false"><use href="#i-graduation"></use></svg>
+            <span>To provide opportunities for sharing best practices and experiences.</span>
+          </li>
+        </ul>
+
+        <h4 class="fdp-tag">10. Supporting Work-Life Balance and Well-being:</h4>
+        <ul class="fdp-points">
+          <li>
+            <svg class="fdp-points__icon" width="19" height="19" aria-hidden="true" focusable="false"><use href="#i-graduation"></use></svg>
+            <span>To promote faculty well-being and work-life balance through programs addressing stress management, time management, and self-care.</span>
+          </li>
+        </ul>
+
+        <h4 class="fdp-tag">11. Aligning with Institutional Goals:</h4>
+        <ul class="fdp-points">
+          <li>
+            <svg class="fdp-points__icon" width="19" height="19" aria-hidden="true" focusable="false"><use href="#i-graduation"></use></svg>
+            <span>To ensure that the Faculty Development Programme aligns with the overall goals and strategic priorities of the institution.</span>
+          </li>
+        </ul>
+      </div>
+
+
+      {# ====================================================== REPORT === #}
+      <div class="tab-pane" id="pane-report" role="tabpanel"
+           aria-labelledby="tab-report" tabindex="0">
+
+        <h3 class="fdp-pane__title">Report</h3>
+
+        <ul class="fdp-reports">
+
+          {# ---------------------------------------------------- rep-1 --- #}
+          {# THIS CARD IS THE WORKED EXAMPLE — it carries one of every block #}
+          {# a report body can use. Copy the pieces out of it.               #}
+          <li class="fdp-report">
+            <div class="fdp-report__head">
+              <span class="fdp-report__icon" aria-hidden="true">
+                <svg width="28" height="28" focusable="false"><use href="#i-research"></use></svg>
+              </span>
+              <div>
+                <h4 class="fdp-report__title">Institutional Development</h4>
+                <button class="fdp-report__toggle" type="button" data-disclosure
+                        aria-expanded="false" aria-controls="rep-1">
+                  <svg class="fdp-report__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+                  <span class="fdp-report__more">Read More</span>
+                  <span class="fdp-report__less">Read Less</span>
+                  <span class="sr-only"> about the Institutional Development programme</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="fdp-report__body" id="rep-1" hidden>
+
+              {# The poster comes first so the copy below wraps beside it.   #}
+              {# Put the image in static/img/fdp/ and it appears by itself.  #}
+              <figure class="fdp-poster">
+                {% with poster="img/fdp/institutional-development.jpg"|doc_url %}
+                  {% if poster %}
+                    <img src="{{ poster }}" loading="lazy"
+                         alt="Poster for the Faculty Development Programme on Institutional Development, keynote by Saurabh Adhikari, 20 July 2023">
+                  {% else %}
+                    <span class="fdp-poster--missing">
+                      <svg width="26" height="26" aria-hidden="true" focusable="false"><use href="#i-file"></use></svg>
+                    </span>
+                  {% endif %}
+                {% endwith %}
+              </figure>
+
+              <p class="fdp-label">Introduction:</p>
+              <p>This report provides an overview of the Faculty Development Program
+                (FDP) conducted on institutional development. The FDP aimed to enhance
+                the knowledge and skills of participants in various aspects of
+                institutional development, including strategic planning, leadership,
+                governance, and quality assurance.</p>
+
+              <p class="fdp-label">Objectives:</p>
+              <p>To familiarize participants with the concept and importance of
+                institutional development in higher education.</p>
+              <p>To provide participants with an understanding of strategic planning
+                and its role in institutional growth and sustainability.</p>
+              <p>To enhance participants&rsquo; leadership and management skills for
+                effective institutional governance.</p>
+              <p>To promote a culture of quality assurance and continuous improvement
+                within the institution.</p>
+
+              <p class="fdp-label">Methodology:</p>
+              <p>The FDP was conducted through a combination of lectures, interactive
+                sessions, case studies, workshops, and group discussions. Experts in
+                the field of institutional development and higher education management
+                were invited to share their knowledge and experiences. Participants
+                were encouraged to actively engage in discussions, share their
+                institutional challenges, and seek solutions collaboratively.</p>
+
+              {# One of these after the last block that runs beside the poster, #}
+              {# or the next chip rides up into the floated image.              #}
+              <div class="fdp-clear"></div>
+
+              <p class="fdp-label">Key Topics Covered:</p>
+              <p><strong>Understanding institutional development:</strong> Participants
+                were introduced to the concept of institutional development and its
+                significance in the context of higher education. They learned about the
+                key components of institutional development, including strategic
+                planning, leadership, governance, and quality assurance.</p>
+              <p><strong>Strategic planning:</strong> The FDP focused on the importance
+                of strategic planning in institutional development. Participants learned
+                about the process of developing a strategic plan, including conducting a
+                SWOT analysis, setting goals and objectives, and implementing strategies
+                for achieving them.</p>
+              <p><strong>Leadership and governance:</strong> The program emphasized the
+                role of effective leadership and governance in institutional
+                development. Participants gained insights into leadership styles,
+                decision-making processes, and the importance of fostering a
+                collaborative and inclusive culture within the institution.</p>
+              <p><strong>Quality assurance:</strong> The FDP addressed the significance
+                of quality assurance in institutional development. Participants learned
+                about quality assurance frameworks, accreditation processes, and the
+                importance of continuous improvement in maintaining and enhancing
+                institutional quality.</p>
+              <p><strong>Change management:</strong> The program explored the challenges
+                and strategies associated with managing change within an institution.
+                Participants learned about change management models, communication
+                strategies, and the role of leadership in facilitating successful
+                organizational change.</p>
+
+              <p class="fdp-label">Outcomes:</p>
+              <p><strong>Enhanced knowledge and skills:</strong> Participants developed a
+                deeper understanding of institutional development and acquired practical
+                skills in strategic planning, leadership, governance, and quality
+                assurance.</p>
+              <p><strong>Improved institutional planning and management:</strong> The FDP
+                equipped participants with the tools and techniques to develop and
+                implement effective strategic plans, enhance leadership and governance
+                practices, and establish quality assurance mechanisms within their
+                institutions.</p>
+              <p><strong>Collaboration and networking:</strong> The program provided a
+                platform for participants to connect with experts and fellow educators,
+                fostering potential collaborations and sharing of best practices in
+                institutional development.</p>
+              <p><strong>Institutional growth and sustainability:</strong> It is expected
+                that the knowledge and skills gained through the FDP will contribute to
+                the overall growth and sustainability of the participating institutions,
+                leading to improved academic outcomes and institutional reputation.</p>
+
+              <p class="fdp-label">Conclusion:</p>
+              <p>The FDP on institutional development successfully achieved its
+                objectives of enhancing participants&rsquo; knowledge and skills in
+                strategic planning, leadership, governance, and quality assurance. The
+                program equipped participants with practical tools and strategies to
+                drive institutional growth and sustainability. It is anticipated that the
+                knowledge gained will positively impact the participating institutions,
+                leading to improved academic outcomes and institutional excellence.</p>
+            </div>
+          </li>
+
+          {# ---------------------------------------------------- rep-2 --- #}
+          {# From here down the bodies hold a holding line. Replace the <p>  #}
+          {# inside one with that report's write-up — the blocks are all in  #}
+          {# the card above. Nothing else in a card needs touching.          #}
+          <li class="fdp-report">
+            <div class="fdp-report__head">
+              <span class="fdp-report__icon" aria-hidden="true">
+                <svg width="28" height="28" focusable="false"><use href="#i-clock"></use></svg>
+              </span>
+              <div>
+                <h4 class="fdp-report__title">Time Management Skills for Teaching Fraternity</h4>
+                <button class="fdp-report__toggle" type="button" data-disclosure
+                        aria-expanded="false" aria-controls="rep-2">
+                  <svg class="fdp-report__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+                  <span class="fdp-report__more">Read More</span>
+                  <span class="fdp-report__less">Read Less</span>
+                  <span class="sr-only"> about the Time Management Skills programme</span>
+                </button>
+              </div>
+            </div>
+            <div class="fdp-report__body" id="rep-2" hidden>
+              <p>The report for this programme will be published shortly.</p>
+            </div>
+          </li>
+
+          {# ---------------------------------------------------- rep-3 --- #}
+          <li class="fdp-report">
+            <div class="fdp-report__head">
+              <span class="fdp-report__icon" aria-hidden="true">
+                <svg width="28" height="28" focusable="false"><use href="#i-clock"></use></svg>
+              </span>
+              <div>
+                <h4 class="fdp-report__title">Time Management Skills for Teaching Fraternity</h4>
+                <button class="fdp-report__toggle" type="button" data-disclosure
+                        aria-expanded="false" aria-controls="rep-3">
+                  <svg class="fdp-report__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+                  <span class="fdp-report__more">Read More</span>
+                  <span class="fdp-report__less">Read Less</span>
+                  <span class="sr-only"> about the Time Management Skills programme</span>
+                </button>
+              </div>
+            </div>
+            <div class="fdp-report__body" id="rep-3" hidden>
+              <p>The report for this programme will be published shortly.</p>
+            </div>
+          </li>
+
+          {# ---------------------------------------------------- rep-4 --- #}
+          <li class="fdp-report">
+            <div class="fdp-report__head">
+              <span class="fdp-report__icon" aria-hidden="true">
+                <svg width="28" height="28" focusable="false"><use href="#i-clock"></use></svg>
+              </span>
+              <div>
+                <h4 class="fdp-report__title">Time Management Skills for Teaching Fraternity</h4>
+                <button class="fdp-report__toggle" type="button" data-disclosure
+                        aria-expanded="false" aria-controls="rep-4">
+                  <svg class="fdp-report__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+                  <span class="fdp-report__more">Read More</span>
+                  <span class="fdp-report__less">Read Less</span>
+                  <span class="sr-only"> about the Time Management Skills programme</span>
+                </button>
+              </div>
+            </div>
+            <div class="fdp-report__body" id="rep-4" hidden>
+              <p>The report for this programme will be published shortly.</p>
+            </div>
+          </li>
+
+          {# ---------------------------------------------------- rep-5 --- #}
+          <li class="fdp-report">
+            <div class="fdp-report__head">
+              <span class="fdp-report__icon" aria-hidden="true">
+                <svg width="28" height="28" focusable="false"><use href="#i-library"></use></svg>
+              </span>
+              <div>
+                <h4 class="fdp-report__title">Indian Cultural Heritage</h4>
+                <button class="fdp-report__toggle" type="button" data-disclosure
+                        aria-expanded="false" aria-controls="rep-5">
+                  <svg class="fdp-report__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+                  <span class="fdp-report__more">Read More</span>
+                  <span class="fdp-report__less">Read Less</span>
+                  <span class="sr-only"> about the Indian Cultural Heritage programme</span>
+                </button>
+              </div>
+            </div>
+            <div class="fdp-report__body" id="rep-5" hidden>
+              <p>The report for this programme will be published shortly.</p>
+            </div>
+          </li>
+
+          {# ---------------------------------------------------- rep-6 --- #}
+          <li class="fdp-report">
+            <div class="fdp-report__head">
+              <span class="fdp-report__icon" aria-hidden="true">
+                <svg width="28" height="28" focusable="false"><use href="#i-file"></use></svg>
+              </span>
+              <div>
+                <h4 class="fdp-report__title">Research Paper Writing and Publication in Scopus/ WoS Journals</h4>
+                <button class="fdp-report__toggle" type="button" data-disclosure
+                        aria-expanded="false" aria-controls="rep-6">
+                  <svg class="fdp-report__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+                  <span class="fdp-report__more">Read More</span>
+                  <span class="fdp-report__less">Read Less</span>
+                  <span class="sr-only"> about the Research Paper Writing programme</span>
+                </button>
+              </div>
+            </div>
+            <div class="fdp-report__body" id="rep-6" hidden>
+              <p>The report for this programme will be published shortly.</p>
+            </div>
+          </li>
+
+          {# ---------------------------------------------------- rep-7 --- #}
+          <li class="fdp-report">
+            <div class="fdp-report__head">
+              <span class="fdp-report__icon" aria-hidden="true">
+                <svg width="28" height="28" focusable="false"><use href="#i-file"></use></svg>
+              </span>
+              <div>
+                <h4 class="fdp-report__title">Research Paper Writing and Publication in Scopus/ WoS Journals</h4>
+                <button class="fdp-report__toggle" type="button" data-disclosure
+                        aria-expanded="false" aria-controls="rep-7">
+                  <svg class="fdp-report__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+                  <span class="fdp-report__more">Read More</span>
+                  <span class="fdp-report__less">Read Less</span>
+                  <span class="sr-only"> about the Research Paper Writing programme</span>
+                </button>
+              </div>
+            </div>
+            <div class="fdp-report__body" id="rep-7" hidden>
+              <p>The report for this programme will be published shortly.</p>
+            </div>
+          </li>
+
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+{% endblock %}

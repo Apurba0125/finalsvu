@@ -63,6 +63,8 @@ urlpatterns = [
     path("page/about-svu/", views.about, name="about"),
     path("page/our-team/", views.our_team, name="our_team"),
     path("page/our-mentors/", views.our_mentors, name="our_mentors"),
+    path("page/centre-faculty-development/", views.centre_faculty_development,
+         name="centre_faculty_development"),
     path("page/centre-of-excellence/", views.centre_of_excellence,
          name="centre_of_excellence"),
     path("page/book/", views.book_list, name="book_list"),

@@ -939,6 +939,21 @@ def academic_calendar(request):
     return render(request, "pages/academic_calendar.html")
 
 
+def centre_faculty_development(request):
+    """Centre For Faculty Development Programme — written in the template.
+
+    Takes no context on purpose. All four panels — Mission, Vision, Objectives
+    and the stack of reports — are markup in
+    ``templates/pages/centre_faculty_development.html``, so rewording a point
+    or adding a report is an edit to that file alone.
+
+    Its own template means its route has to sit above the generic
+    ``page/<slug>/`` line in urls.py; below it, page_detail claims the URL
+    first and renders an empty editorial placeholder.
+    """
+    return render(request, "pages/centre_faculty_development.html")
+
+
 def centre_of_excellence(request):
     """Centre For Excellence — the centres are written in the template.
 
