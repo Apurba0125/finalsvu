@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% comment %}
+===========================================================================
+LIST OF JOURNALS  —  served at /page/journals/
+                     by website.views.journal_list
+---------------------------------------------------------------------------
+Header, navigation and footer come from base.html. Do not add them here.
+
+Styling: page-head.css gives the photo banner and the heading with its rule;
+journals.css is only the rows.
+
+ONE LINE IS ONE JOURNAL
+  Every journal is below, one {% include %} line each, in the order it should
+  appear. No data.py and nothing else to keep in step.
+
+    {% include "includes/journal_row.html" with title="Journal of Advanced Science and Research" url="https://example.org/jasr/" %}
+
+  title  the journal, worded exactly as it should read
+  url    THE JOURNAL'S OWN SITE, written in full. The row becomes an anchor to
+         it, OPENING IN A NEW TAB with rel="noopener" — which matters here,
+         because every one of these leaves for somebody else's server.
+
+  To add a journal, copy a line. To remove one, delete it. Order on the page
+  is the order of the lines; the grid reads ACROSS then down, two to a row on
+  a desktop, and nothing is sorted.
+
+  NONE OF THE LINES BELOW CARRY A url= YET, so every row shows its journal
+  with a faded arrow and is not clickable. Add url= to a line as each address
+  is settled and that row becomes a link on its own — no other edit.
+
+  A journal with no site of its own can point at a PDF instead:
+  url="documents/journals/name.pdf", with the file in static/documents/. The
+  same slot takes either, because doc_url resolves a bare path and hands a
+  full address straight back.
+
+WRITE AN AMPERSAND AS &amp; — a quoted string in a template tag is marked safe
+by Django, so what is typed between the quotes lands in the page verbatim. A
+bare & is not valid HTML and misparses next to a word.
+
+NOTE ON COMMENTS: the hash-style Django comment {# … #} covers a SINGLE line.
+For a multi-line note use a comment/endcomment pair like this one, or the text
+leaks onto the page and any tag inside it actually runs.
+===========================================================================
+{% endcomment %}
+
+{% block title %}List of Journals | {{ site.site_name }}{% endblock %}
+{% block meta_description %}Academic journals published by the departments and schools of Swami Vivekananda University.{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/page-head.css' %}">
+  <link rel="stylesheet" href="{% static 'css/journals.css' %}">
+{% endblock %}
+
+{% block content %}
+
+{# ===========================================================  BANNER  === #}
+{# THE BACKGROUND IMAGE IS SET HERE. Change the file name in the url() and  #}
+{# that is the whole edit — keep the dark gradient in front of it or the    #}
+{# white title stops being readable over a busy photograph.                 #}
+<section class="page-banner"
+         style="background-image: linear-gradient(0deg, rgba(10,10,10,.72), rgba(10,10,10,.55)), url('{% static 'img/about/campus.jpg' %}');">
+  <div class="shell">
+    <h1 class="page-banner__title">Journals</h1>
+  </div>
+</section>
+
+
+{# =========================================================  JOURNALS  === #}
+<section class="section journal-section">
+  <div class="shell">
+
+    <div class="page-head">
+      <h2 class="page-heading">List of Journals</h2>
+      <span class="page-rule"></span>
+    </div>
+
+    <ul class="journal-list">
+      {% include "includes/journal_row.html" with title="Journal of Mechanical Engineering Advancements" %}
+      {% include "includes/journal_row.html" with title="Journal of Literary and Cultural Studies: Theory and Praxis" %}
+      {% include "includes/journal_row.html" with title="Journal of Advance Agricultural Research" %}
+      {% include "includes/journal_row.html" with title="Journal Of Recent Trends of Electrical Engineering" %}
+      {% include "includes/journal_row.html" with title="Journal of Computer Applications Technologies" %}
+      {% include "includes/journal_row.html" with title="Prabandhan Darpan - Journal of Management Studies" %}
+      {% include "includes/journal_row.html" with title="Journal of Innovation and Advancement in Electronic Frontier" %}
+      {% include "includes/journal_row.html" with title="JOURNAL OF MEDIA RESEARCH AND COMMUNICATION STUDIES" %}
+      {% include "includes/journal_row.html" with title="Journal of Advances in Civil Engineering Researches" %}
+      {% include "includes/journal_row.html" with title="Interdisciplinary Perspectives of Education" %}
+      {% include "includes/journal_row.html" with title="Journal of Advanced Science and Research" %}
+      {% include "includes/journal_row.html" with title="Journal of Research in Allied Life Sciences" %}
+      {% include "includes/journal_row.html" with title="International Journal of Interdisciplinary Health Sciences (IJIHS)" %}
+    </ul>
+
+  </div>
+</section>
+{% endblock %}

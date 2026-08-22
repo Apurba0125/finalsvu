@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% comment %}
+===========================================================================
+NEWSLETTER  —  served at /page/newsletter/ by website.views.newsletter
+---------------------------------------------------------------------------
+Header, navigation and footer come from base.html. Do not add them here.
+
+Styling: page-head.css gives the photo banner and the heading with its rule;
+tabs.css is the two pills and the show/hide of the panels; newsletter.css is
+the nested collapse.
+
+ONE LINE IS ONE DEPARTMENT
+  The Academics panel below is twenty lines, one per department:
+
+    {% include "includes/newsletter_dept.html" with name="Department of Civil Engineering" slug="civil-engineering" %}
+
+  name  the department, worded exactly as it should read on the bar
+  slug  a short lowercase name with hyphens, UNIQUE ON THE PAGE. It builds the
+        ids that wire each bar to its panel, AND it names the folder the PDFs
+        are read from.
+
+  To add a department, copy a line. To remove one, delete it. The grid reads
+  ACROSS then down, two to a row on a desktop, so the order of the lines is
+  the order on the page.
+
+  Everything below a department — the years and the twelve months inside each
+  — is built by the include. There are 480 month rows on this page and not one
+  of them is typed.
+
+THE COLLAPSE IS THREE LEVELS DEEP
+  A department opens its years; a year opens its months. Both bars run on the
+  site's shared accordion — initAccordions in main.js, the same one behind the
+  FAQ — so there is no script on this page. Every panel is shut on load, and
+  opening one leaves the others alone.
+
+WHERE THE PDFs GO
+  Every month reads one file, and the path is worked out rather than typed:
+
+      static/documents/newsletter/<slug>/<year>-<month>.pdf
+      e.g.  static/documents/newsletter/civil-engineering/2024-january.pdf
+
+  Drop the file there, run
+
+      python manage.py collectstatic --noinput
+
+  and that month turns from "Not published" into a View link BY ITSELF —
+  nothing in this file changes. A month with no file stays on the list, so a
+  year always reads as a complete twelve.
+
+  NO PDFs ARE UPLOADED YET, so every month currently reads "Not published".
+
+WHICH YEARS ARE OFFERED
+  The years and the month names come from website.views.newsletter, because
+  they are a calendar rather than content and repeating them on twenty lines
+  would be twenty places to keep in step. To offer 2026, add it to that list
+  in the view and every department gains it.
+
+WRITE AN AMPERSAND AS &amp; — a quoted string in a template tag is marked safe
+by Django, so what is typed between the quotes lands in the page verbatim. A
+bare & is not valid HTML and misparses next to a word.
+
+NOTE ON COMMENTS: the hash-style Django comment {# … #} covers a SINGLE line.
+For a multi-line note use a comment/endcomment pair like this one, or the text
+leaks onto the page and any tag inside it actually runs.
+===========================================================================
+{% endcomment %}
+
+{% block title %}Newsletter | {{ site.site_name }}{% endblock %}
+{% block meta_description %}Monthly newsletters from the departments of Swami Vivekananda University.{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/page-head.css' %}">
+  <link rel="stylesheet" href="{% static 'css/tabs.css' %}">
+  <link rel="stylesheet" href="{% static 'css/newsletter.css' %}">
+{% endblock %}
+
+{% block content %}
+
+{# ===========================================================  BANNER  === #}
+{# THE BACKGROUND IMAGE IS SET HERE. Change the file name in the url() and  #}
+{# that is the whole edit — keep the dark gradient in front of it or the    #}
+{# white title stops being readable over a busy photograph.                 #}
+<section class="page-banner"
+         style="background-image: linear-gradient(0deg, rgba(10,10,10,.72), rgba(10,10,10,.55)), url('{% static 'img/about/campus.jpg' %}');">
+  <div class="shell">
+    <h1 class="page-banner__title">Newsletter</h1>
+  </div>
+</section>
+
+
+{# =======================================================  NEWSLETTER  === #}
+<section class="section nl-section">
+  <div class="shell">
+
+    <div class="page-head">
+      <h2 class="page-heading">Newsletter</h2>
+      <span class="page-rule"></span>
+    </div>
+
+    <div class="tabset" data-tabs>
+
+      {# Under 768px the pills collapse behind this control. It is a real   #}
+      {# button rather than a <select> so the pills keep their shape above  #}
+      {# the breakpoint, and the label below reads whichever pill is open.  #}
+      <button class="tabset__toggle" type="button" data-tabs-toggle
+              aria-expanded="false" aria-controls="nlTabNav">
+        <span data-tabs-current>At a Glance</span>
+        <svg width="12" height="8" aria-hidden="true" focusable="false"><use href="#i-caret"></use></svg>
+      </button>
+
+      <div class="tabset__nav" id="nlTabNav" data-tabs-nav
+           role="tablist" aria-label="Newsletter">
+
+        <button class="tab-btn is-active" type="button" role="tab"
+                id="tab-glance" data-tab-target="#pane-glance"
+                aria-controls="pane-glance"
+                aria-selected="true" tabindex="0">At a Glance</button>
+
+        <button class="tab-btn" type="button" role="tab"
+                id="tab-academics" data-tab-target="#pane-academics"
+                aria-controls="pane-academics"
+                aria-selected="false" tabindex="-1">Academics</button>
+      </div>
+
+
+      {# ================================================= AT A GLANCE === #}
+      <div class="tab-pane is-active" id="pane-glance" role="tabpanel"
+           aria-labelledby="tab-glance" tabindex="0">
+
+        <p class="nl-intro">As we progress through this academic year, we invite
+          you to stay connected with the dynamic developments at Swami
+          Vivekananda University through this edition of our newsletter. In this
+          issue, we reflect on key milestones across our academic, research, and
+          student initiatives, while offering a glimpse into how these
+          achievements are shaping our vision for the future.</p>
+      </div>
+
+
+      {# =================================================== ACADEMICS === #}
+      <div class="tab-pane" id="pane-academics" role="tabpanel"
+           aria-labelledby="tab-academics" tabindex="0">
+
+        <ul class="nl-grid">
+          {% include "includes/newsletter_dept.html" with name="Department of Computer Science &amp; Application" slug="computer-science-application" %}
+          {% include "includes/newsletter_dept.html" with name="Department of Mechanical Engineering" slug="mechanical-engineering" %}
+          {% include "includes/newsletter_dept.html" with name="Department of Civil Engineering" slug="civil-engineering" %}
+          {% include "includes/newsletter_dept.html" with name="Department of Electronics &amp; Communication Engineering" slug="electronics-communication-engineering" %}
+          {% include "includes/newsletter_dept.html" with name="Department of Electrical Engineering" slug="electrical-engineering" %}
+          {% include "includes/newsletter_dept.html" with name="Department of Language, Literature and Cultural Studies" slug="language-literature-cultural-studies" %}
+          {% include "includes/newsletter_dept.html" with name="Department of Agriculture" slug="agriculture" %}
+          {% include "includes/newsletter_dept.html" with name="Department of Management" slug="management" %}
+          {% include "includes/newsletter_dept.html" with name="Department of Multimedia And Animation" slug="multimedia-animation" %}
+          {% include "includes/newsletter_dept.html" with name="Department of Journalism &amp; Mass Communication" slug="journalism-mass-communication" %}
+          {% include "includes/newsletter_dept.html" with name="Department of Food and Neutration" slug="food-and-neutration" %}
+          {% include "includes/newsletter_dept.html" with name="Department of Basic Science" slug="basic-science" %}
+          {% include "includes/newsletter_dept.html" with name="Department of Psychology" slug="psychology" %}
+          {% include "includes/newsletter_dept.html" with name="Department of Education" slug="education" %}
+          {% include "includes/newsletter_dept.html" with name="Departtment of Medical Radiology &amp; Image Technology" slug="medical-radiology-image-technology" %}
+          {% include "includes/newsletter_dept.html" with name="Department of Optometry" slug="optometry" %}
+          {% include "includes/newsletter_dept.html" with name="Department of Physiotherapy" slug="physiotherapy" %}
+          {% include "includes/newsletter_dept.html" with name="Department of Biotechnology" slug="biotechnology" %}
+          {% include "includes/newsletter_dept.html" with name="Department of Microbiology" slug="microbiology" %}
+          {% include "includes/newsletter_dept.html" with name="Department of Medical Laboratory Technology" slug="medical-laboratory-technology" %}
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+{% endblock %}

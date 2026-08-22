@@ -1,0 +1,111 @@
+/* ==========================================================================
+   List of Journals  —  /page/journals/
+   Loaded ALONGSIDE page-head.css, which supplies the photo banner and the
+   heading with its rule. This file is only the rows.
+
+   The row is a near-twin of .book-row on the List of Books page, and it is
+   deliberately its own class rather than a shared one. This site keeps a
+   stylesheet per page — recognition.css, brochure.css and books.css all carry
+   a similar card — so that a page can be restyled without a second one moving
+   with it. If the two ever need to change together, that is the moment to
+   lift them into a shared file, not before.
+   ========================================================================== */
+
+.journal-section { background: var(--page-alt); }
+
+/* ============================================================ ROWS ======= */
+/* Two to a line on a desktop, reading ACROSS then down, and one to a line on
+   a phone. The count is FIXED rather than left to auto-fit with a minimum:
+   auto-fit divides the 1240px shell by that minimum, so a 320-330px floor
+   yields THREE columns above about 1200px — wider than this page is meant to
+   be and not what the design asks for.
+
+   minmax(0, 1fr), never plain 1fr: a track's default minimum is auto, the
+   width of its longest unbreakable word, so one long name would push its
+   column past its share and the page sideways with it. */
+.journal-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 26px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* The whole row is the target, not just the arrow: a 20px arrow is well under
+   the 44px a finger needs, and the journal name is what people aim at. */
+.journal-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  height: 100%;
+  /* Tall enough to clear the 44px touch minimum even when the name is one
+     short line, so a row that wraps to two lines and one that does not still
+     look like the same row. */
+  min-height: 68px;
+  padding: 18px 26px;
+  background: var(--paper);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-xs);
+  transition: box-shadow var(--transition), transform var(--transition);
+}
+
+a.journal-row:hover,
+a.journal-row:focus-visible {
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-2px);
+}
+a.journal-row:focus-visible { outline: 3px solid var(--red); outline-offset: 2px; }
+
+.journal-row__title {
+  color: var(--ink);
+  font-size: .95rem;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.journal-row__icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  color: var(--ink);
+  transition: transform var(--transition);
+}
+.journal-row__icon svg { width: 20px; height: 20px; fill: currentColor; }
+a.journal-row:hover .journal-row__icon,
+a.journal-row:focus-visible .journal-row__icon { transform: translateX(4px); }
+
+/* A row whose address is not set yet. It stays on the page so the list of
+   journals is complete, and it stops looking like something to press: the
+   arrow fades and the pointer does not change. See the note in
+   includes/journal_row.html — the row becomes a link by itself once a url is
+   written on its line. */
+.journal-row--pending .journal-row__icon { opacity: .3; }
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+@media (max-width: 767.98px) {
+  .journal-list { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 575.98px) {
+  .journal-list { gap: 12px; }
+  .journal-row {
+    min-height: 60px;
+    padding: 15px 18px;
+    gap: 14px;
+  }
+  .journal-row__title { font-size: .88rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .journal-row,
+  .journal-row__icon { transition: none; }
+  a.journal-row:hover { transform: none; }
+  a.journal-row:hover .journal-row__icon,
+  a.journal-row:focus-visible .journal-row__icon { transform: none; }
+}

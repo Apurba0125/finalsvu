@@ -1,0 +1,111 @@
+/* ==========================================================================
+   Centre Of Incubation  —  /page/incubation-centre/
+   Loaded ALONGSIDE page-head.css, which supplies the photo banner and the
+   heading with its rule. This file is the body copy beneath it.
+
+   One column at every width. This is a long piece of writing read top to
+   bottom, not a set of cards to scan, so nothing here reflows into columns —
+   only the type size and the spacing come down on a narrow screen.
+
+   FIVE BLOCKS BUILD THE WHOLE PAGE
+     .inc-tag      the pale blue chip that opens a section
+     <p>           a paragraph, justified
+     .inc-runin    a dark bold line introducing the paragraph under it
+     .inc-subhead  a dark bold heading over a short list
+     .inc-points   disc bullets, with <strong> for a lead-in
+
+   Spacing between them is set here, so the markup needs no <br> and no empty
+   paragraphs anywhere.
+   ========================================================================== */
+
+.inc-section { background: var(--paper); }
+
+/* Everything below the page heading lives in one .inc-body, which is what
+   gives every block its spacing without each one carrying its own margin. */
+.inc-body > *     { margin: 0; }
+.inc-body > * + * { margin-top: 14px; }
+
+.inc-body p {
+  color: var(--ink-soft);
+  font-size: .89rem;
+  line-height: 1.8;
+  /* Justified, the way the rest of the site sets body copy. Dropped on a
+     phone in the responsive block — it opens rivers in a narrow measure. */
+  text-align: justify;
+}
+.inc-body strong { color: var(--ink); font-weight: 700; }
+
+/* ------------------------------------------------------------- chip ----- */
+/* Square and shrink-to-fit, so the tint ends where the words do. An <h3>,
+   because everything under it until the next chip belongs to it. */
+.inc-tag {
+  display: table;
+  padding: 8px 16px;
+  background: #d3e6f8;
+  color: var(--ink);
+  font-size: .95rem;
+  font-weight: 700;
+  line-height: 1.45;
+}
+/* A chip is the heading for what follows, so it sits closer to its own first
+   paragraph than to the block before it. */
+.inc-tag + * { margin-top: 12px; }
+* + .inc-tag { margin-top: 30px; }
+
+/* ---------------------------------------------------------- run-in ------ */
+/* "Fostering Innovation:" and its kin — a bold line that introduces the
+   paragraph directly beneath it, so the two are set tight together. */
+.inc-runin {
+  color: var(--ink);
+  font-size: .92rem;
+  font-weight: 700;
+  line-height: 1.5;
+}
+.inc-runin + * { margin-top: 4px; }
+* + .inc-runin { margin-top: 20px; }
+
+/* --------------------------------------------------------- subhead ------ */
+/* "Hands-on Learning" and its kin — a heading over a short list rather than
+   over a paragraph, so it carries a little more air above it. */
+.inc-subhead {
+  color: var(--ink);
+  font-size: .93rem;
+  font-weight: 700;
+  line-height: 1.5;
+}
+.inc-subhead + * { margin-top: 8px; }
+* + .inc-subhead { margin-top: 22px; }
+
+/* ---------------------------------------------------------- bullets ----- */
+.inc-points {
+  padding-left: 24px;
+  list-style: disc;
+}
+.inc-points li {
+  color: var(--ink-soft);
+  font-size: .89rem;
+  line-height: 1.8;
+}
+.inc-points li + li { margin-top: 6px; }
+.inc-points li::marker { color: var(--ink); }
+
+/* The closing line, set apart from the list above it. */
+.inc-close { margin-top: 24px; }
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+@media (max-width: 767.98px) {
+  /* Justified type opens rivers in a narrow measure. */
+  .inc-body p { text-align: left; }
+}
+
+@media (max-width: 575.98px) {
+  .inc-tag { font-size: .89rem; padding: 7px 13px; }
+  * + .inc-tag { margin-top: 24px; }
+  .inc-body p,
+  .inc-points li { font-size: .85rem; line-height: 1.75; }
+  .inc-runin { font-size: .88rem; }
+  .inc-subhead { font-size: .89rem; }
+  .inc-points { padding-left: 20px; }
+}

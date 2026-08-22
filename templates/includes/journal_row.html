@@ -1,0 +1,69 @@
+{% comment %}
+One journal on the List of Journals. Sits inside a <ul class="journal-list">.
+
+Expects:
+  title  the journal, worded exactly as it should read. Nothing forces case,
+         so "JOURNAL OF MEDIA RESEARCH" and "Journal of Media Research" both
+         come out as written.
+
+         WRITE AN AMPERSAND AS &amp; — a quoted string in a template tag is
+         marked safe by Django, so whatever is typed between the quotes lands
+         in the page verbatim. A bare & displays the same in every browser but
+         is not valid HTML and misparses next to a word.
+
+  url    THE JOURNAL'S OWN SITE, written in full:
+             url="https://journals.svu.ac.in/mechanical/"
+         The row becomes an anchor to it, opening in a new tab.
+
+         It also takes a PDF under static/ if a journal has no site of its
+         own — url="documents/journals/name.pdf" — because the same doc_url
+         filter resolves a bare path and hands a full address straight back.
+         Nothing has to say which kind it is.
+
+  Leave url off and the row still names the journal, with its arrow faded, so
+  the list stays complete while the addresses are being collected. It becomes
+  a link the moment a url is written on its line.
+
+A ROW WITHOUT AN ADDRESS IS A <div>, NOT AN EMPTY <a>
+An anchor with no href is still announced as a link by a screen reader and
+does nothing when followed, which is worse than not being a link at all.
+
+WHY url GOES THROUGH doc_url EVEN FOR A WEB ADDRESS
+It costs nothing — a full URL is handed straight back untouched — and it means
+the same slot accepts a PDF without a second code path. For the PDF case it
+also matters: under the manifest storage a bare {% static %} tag raises for a
+file that was never collected, so one mistyped filename would take the whole
+page down instead of leaving one row unlinked. After adding a PDF run:
+
+    python manage.py collectstatic --noinput
+
+rel="noopener" is not optional alongside target="_blank": without it the
+opened tab can reach back through window.opener and navigate this one. It
+matters here more than on most pages, because every one of these links leaves
+for somebody else's server.
+{% endcomment %}
+
+<li>
+  {% with href=url|doc_url %}
+    {% if href %}
+      <a class="journal-row" href="{{ href }}" target="_blank" rel="noopener noreferrer">
+        <span class="journal-row__title">{{ title }}</span>
+        <span class="journal-row__icon" aria-hidden="true">
+          {# Sized in the markup as well as the CSS: an <svg> with a viewBox #}
+          {# and no dimensions expands to fill its box, so a stylesheet that #}
+          {# has not loaded yet would put a full-width arrow on every row.   #}
+          <svg width="20" height="20" focusable="false"><use href="#i-arrow-right"></use></svg>
+        </span>
+        <span class="sr-only">— {{ title }} (opens in a new tab)</span>
+      </a>
+
+    {% else %}
+      <div class="journal-row journal-row--pending">
+        <span class="journal-row__title">{{ title }}</span>
+        <span class="journal-row__icon" aria-hidden="true">
+          <svg width="20" height="20" focusable="false"><use href="#i-arrow-right"></use></svg>
+        </span>
+      </div>
+    {% endif %}
+  {% endwith %}
+</li>

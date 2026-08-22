@@ -1,0 +1,495 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% comment %}
+===========================================================================
+INSTITUTION'S INNOVATION COUNCIL  —  served at /page/iic/
+                                     by website.views.iic
+---------------------------------------------------------------------------
+Header, navigation and footer come from base.html. Do not add them here.
+
+Styling, three shared files and one of its own: page-head.css is the photo
+banner; tabs.css is the six pills, their mobile dropdown and the show/hide of
+the panels; gallery.css is the event photograph cells and the full-size viewer
+they open; iic.css is everything inside a panel.
+
+EVERYTHING IS IN THIS ONE FILE
+  All six panels are below. No data.py and no per-panel template to open.
+
+THE SIX PANELS
+  The pills and panels are the site's shared tab script — initTabPanels in
+  main.js — which finds them by the data-tabs attribute on the wrapper, the
+  .tab-btn and .tab-pane classes inside it, and data-tabs-nav on the pill row.
+  Those names are a contract with the script: rename one and the panels stop
+  switching. The ids only have to match between a button's data-tab-target and
+  its panel, so a seventh panel is a matter of copying a button and a panel and
+  giving the pair a new id.
+
+  Six pills wrap to three rows on a phone, so under 768px they collapse behind
+  the toggle at the top, whose label reads whichever panel is open.
+
+  Each panel is a different shape. What follows is one note per panel.
+
+1. MISSION & VISION
+     <h3 class="iic-tag">Our Vision</h3>     the pale blue chip
+     <div class="iic-prose"><p>…</p>          justified paragraphs
+     <ul class="iic-points"><li>…             disc bullets
+   Spacing is automatic; no <br> or empty paragraphs needed.
+
+2. EVENTS
+   One <div class="iic-event"> per occasion. Its heading is two-tone — the
+   lead-in red, the rest dark — and BOTH halves are typed:
+
+     <h3 class="iic-event__title">Expert Talk :<span> Role Of Insurance…</span></h3>
+
+   An event whose name has no natural break can put everything in one half.
+
+   ONE PHOTOGRAPH IS ONE LINE:
+
+     {% include "includes/iic_photo.html" with photo="img/iic/nirman-mela-3.jpg" alt="Students at their stall" %}
+
+   photo  the image, as a plain path under static/. Drop the file into
+          static/img/iic/ and write its name here; that is the whole edit.
+   alt    what is in the frame. It does DOUBLE DUTY — the viewer prints it as
+          the caption under the enlarged photograph — so write it properly.
+
+   To add a photograph, copy a line. To remove one, delete it. Nothing counts
+   the cells, so one can be dropped into the middle of an event without
+   touching any other.
+
+   data-viewer on the <ul> makes those cells ONE GALLERY: clicking any of them
+   opens it full size, with arrows, a count, swipe, Escape to close and a
+   fullscreen button. GIVE EACH EVENT ITS OWN data-viewer NAME, or the arrows
+   will walk from one event's photographs into the next one's.
+
+   NONE OF THE IMAGES ARE UPLOADED YET, so every cell shows a hatched
+   placeholder — and a placeholder is not clickable, because there is nothing
+   to enlarge. Drop the files in, run
+       python manage.py collectstatic --noinput
+   and the photographs and the zoom appear together.
+
+3. NEWSLETTER
+   A year bar that opens months, and a month bar that opens its issues. Both
+   bars are the same .iic-bar on the site's shared accordion — initAccordions
+   in main.js, the same one behind the FAQ. The contract per bar is
+   aria-expanded for the state and aria-controls naming the panel, and the
+   panel carries hidden so it is shut before any script runs. THE ID PAIR MUST
+   MATCH AND BE UNIQUE, which is all that nests them: nothing counts levels.
+
+   To add a year, copy the whole 2025 block and change the two ids and every
+   month id inside it. To add an issue, copy an <li class="iic-issue"> line
+   and change its name and its PDF.
+
+4. IMPORTANT DOCUMENTS
+   Empty on purpose — it was not part of what this page was rebuilt from, so
+   nothing has been invented. The note inside it shows what to paste.
+
+5. MEMBERS
+   A plain table. Add a member by copying a <tr>. It scrolls sideways inside
+   its own box below about 620px rather than making the whole page pan.
+
+6. MESSAGE DESK
+   A portrait beside a letter. The portrait is optional and resolved the same
+   way as the event photographs.
+
+EVERY FILE PATH GOES THROUGH doc_url, so a name can be written before the file
+exists and a typo leaves a placeholder rather than taking the page down — a
+bare {% static %} tag raises under the manifest storage for a path that was
+never collected.
+
+WRITE AN AMPERSAND AS &amp; — a bare & is not valid HTML and misparses next to
+a word, e.g. "&copy" would be read as the © symbol.
+
+NOTE ON COMMENTS: the hash-style Django comment {# … #} covers a SINGLE line.
+For a multi-line note use a comment/endcomment pair like this one, or the text
+leaks onto the page and any tag inside it actually runs.
+===========================================================================
+{% endcomment %}
+
+{% block title %}Institution&#39;s Innovation Council | {{ site.site_name }}{% endblock %}
+{% block meta_description %}The Institution's Innovation Council at Swami Vivekananda University — its mission and vision, events, newsletters, members and a message from the Director.{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/page-head.css' %}">
+  <link rel="stylesheet" href="{% static 'css/tabs.css' %}">
+  <link rel="stylesheet" href="{% static 'css/gallery.css' %}">
+  <link rel="stylesheet" href="{% static 'css/iic.css' %}">
+{% endblock %}
+
+{% block content %}
+
+{# ===========================================================  BANNER  === #}
+{# THE BACKGROUND IMAGE IS SET HERE. Change the file name in the url() and  #}
+{# that is the whole edit — keep the dark gradient in front of it or the    #}
+{# white title stops being readable over a busy photograph.                 #}
+<section class="page-banner"
+         style="background-image: linear-gradient(0deg, rgba(10,10,10,.72), rgba(10,10,10,.55)), url('{% static 'img/about/campus.jpg' %}');">
+  <div class="shell">
+    <h1 class="page-banner__title">Institution&rsquo;s Innovation Council</h1>
+  </div>
+</section>
+
+
+{# =============================================================  BODY  === #}
+<section class="section iic-section">
+  <div class="shell">
+
+    <div class="tabset" data-tabs>
+
+      {# Under 768px the pills collapse behind this control. It is a real   #}
+      {# button rather than a <select> so the pills keep their shape above  #}
+      {# the breakpoint, and the label below reads whichever pill is open.  #}
+      <button class="tabset__toggle" type="button" data-tabs-toggle
+              aria-expanded="false" aria-controls="iicTabNav">
+        <span data-tabs-current>Mission &amp; Vision</span>
+        {# Sized in the markup as well as the CSS: an <svg> with no        #}
+        {# intrinsic size falls back to 300x150, so a stylesheet that has  #}
+        {# not loaded yet puts a full-width chevron on the page.           #}
+        <svg width="12" height="8" aria-hidden="true" focusable="false"><use href="#i-caret"></use></svg>
+      </button>
+
+      <div class="tabset__nav" id="iicTabNav" data-tabs-nav
+           role="tablist" aria-label="Institution&rsquo;s Innovation Council">
+
+        <button class="tab-btn is-active" type="button" role="tab"
+                id="tab-mission" data-tab-target="#pane-mission"
+                aria-controls="pane-mission"
+                aria-selected="true" tabindex="0">Mission &amp; Vision</button>
+
+        <button class="tab-btn" type="button" role="tab"
+                id="tab-events" data-tab-target="#pane-events"
+                aria-controls="pane-events"
+                aria-selected="false" tabindex="-1">Events</button>
+
+        <button class="tab-btn" type="button" role="tab"
+                id="tab-newsletter" data-tab-target="#pane-newsletter"
+                aria-controls="pane-newsletter"
+                aria-selected="false" tabindex="-1">Newsletter</button>
+
+        <button class="tab-btn" type="button" role="tab"
+                id="tab-documents" data-tab-target="#pane-documents"
+                aria-controls="pane-documents"
+                aria-selected="false" tabindex="-1">Important Documents</button>
+
+        <button class="tab-btn" type="button" role="tab"
+                id="tab-members" data-tab-target="#pane-members"
+                aria-controls="pane-members"
+                aria-selected="false" tabindex="-1">Members</button>
+
+        <button class="tab-btn" type="button" role="tab"
+                id="tab-desk" data-tab-target="#pane-desk"
+                aria-controls="pane-desk"
+                aria-selected="false" tabindex="-1">Message Desk</button>
+      </div>
+
+
+      {# =========================================== MISSION & VISION === #}
+      <div class="tab-pane is-active" id="pane-mission" role="tabpanel"
+           aria-labelledby="tab-mission" tabindex="0">
+
+        <h3 class="iic-tag">Our Vision</h3>
+        <div class="iic-prose">
+          <p>To establish a thriving innovation ecosystem at Swami Vivekananda University that nurtures creative thinking, fosters entrepreneurial mindsets, and transforms innovative ideas into impactful solutions for societal challenges. We envision becoming a premier hub for innovation that bridges academic knowledge with practical application, creating pathways for inclusive growth where innovation serves as a vehicle for economic empowerment.</p>
+          <p>Guided by Swami Vivekananda&rsquo;s principles of self-reliance, service, and national development, we strive to democratize innovation by making it accessible to all students regardless of their financial background. Our vision encompasses a future where innovative thinking becomes a tool for social mobility, enabling students from all socioeconomic backgrounds to realize their potential and contribute meaningfully to society.</p>
+          <p>By 2030, we aim to be recognized as a model institution where innovation, inclusion, and impact converge to create sustainable solutions for local and global challenges, while nurturing the next generation of socially conscious innovators and entrepreneurs.</p>
+        </div>
+
+        <h3 class="iic-tag">Our Mission</h3>
+        <div class="iic-prose">
+          <p>The Innovation and Incubation Council (IIC) at Swami Vivekananda
+            University is committed to:</p>
+          <ul class="iic-points">
+            <li>Cultivating a culture of innovation and creative problem-solving among students and faculty.</li>
+            <li>Providing essential infrastructure, mentorship, and resources to transform ideas into viable ventures.</li>
+            <li>Facilitating meaningful industry-academia collaborations to address real-world challenges.</li>
+            <li>Supporting research initiatives that contribute to technological advancement and social progress.</li>
+            <li>Aligning our innovation framework with the National Innovation and Startup Policy.</li>
+            <li>Empowering students to develop entrepreneurial skills and mindsets that prepare them for future leadership.</li>
+            <li>Creating platforms for knowledge exchange through workshops, seminars, and innovation competitions.</li>
+            <li>Building a sustainable innovation ecosystem that serves as a catalyst for regional economic development.</li>
+            <li>Developing innovative scholarship programs and financial support mechanisms to ensure that financially challenged students can fully participate in innovation activities.</li>
+            <li>Implementing inclusive innovation models that particularly benefit economically disadvantaged students and help them build sustainable careers.</li>
+          </ul>
+        </div>
+      </div>
+
+
+      {# ====================================================== EVENTS === #}
+      <div class="tab-pane" id="pane-events" role="tabpanel"
+           aria-labelledby="tab-events" tabindex="0">
+
+        <div class="iic-event">
+          <h3 class="iic-event__title">First Council Meeting of<span> IIC</span></h3>
+          <ul class="iic-photos" data-viewer="iic-council">
+            {% include "includes/iic_photo.html" with photo="img/iic/council-meeting-1.jpg" alt="First Council Meeting of the IIC — photograph 1" %}
+            {% include "includes/iic_photo.html" with photo="img/iic/council-meeting-2.jpg" alt="First Council Meeting of the IIC — photograph 2" %}
+            {% include "includes/iic_photo.html" with photo="img/iic/council-meeting-3.jpg" alt="First Council Meeting of the IIC — photograph 3" %}
+            {% include "includes/iic_photo.html" with photo="img/iic/council-meeting-4.jpg" alt="First Council Meeting of the IIC — photograph 4" %}
+          </ul>
+        </div>
+
+        <div class="iic-event">
+          <h3 class="iic-event__title">Nirman Mela 2025:<span> A Confluence of Innovation and Enterprise</span></h3>
+          <ul class="iic-photos" data-viewer="iic-nirman">
+            {% include "includes/iic_photo.html" with photo="img/iic/nirman-mela-1.jpg" alt="Nirman Mela 2025 — photograph 1" %}
+            {% include "includes/iic_photo.html" with photo="img/iic/nirman-mela-2.jpg" alt="Nirman Mela 2025 — photograph 2" %}
+            {% include "includes/iic_photo.html" with photo="img/iic/nirman-mela-3.jpg" alt="Nirman Mela 2025 — photograph 3" %}
+            {% include "includes/iic_photo.html" with photo="img/iic/nirman-mela-4.jpg" alt="Nirman Mela 2025 — photograph 4" %}
+            {% include "includes/iic_photo.html" with photo="img/iic/nirman-mela-5.jpg" alt="Nirman Mela 2025 — photograph 5" %}
+            {% include "includes/iic_photo.html" with photo="img/iic/nirman-mela-6.jpg" alt="Nirman Mela 2025 — photograph 6" %}
+            {% include "includes/iic_photo.html" with photo="img/iic/nirman-mela-7.jpg" alt="Nirman Mela 2025 — photograph 7" %}
+            {% include "includes/iic_photo.html" with photo="img/iic/nirman-mela-8.jpg" alt="Nirman Mela 2025 — photograph 8" %}
+            {% include "includes/iic_photo.html" with photo="img/iic/nirman-mela-9.jpg" alt="Nirman Mela 2025 — photograph 9" %}
+            {% include "includes/iic_photo.html" with photo="img/iic/nirman-mela-10.jpg" alt="Nirman Mela 2025 — photograph 10" %}
+            {% include "includes/iic_photo.html" with photo="img/iic/nirman-mela-11.jpg" alt="Nirman Mela 2025 — photograph 11" %}
+            {% include "includes/iic_photo.html" with photo="img/iic/nirman-mela-12.jpg" alt="Nirman Mela 2025 — photograph 12" %}
+          </ul>
+        </div>
+
+        <div class="iic-event">
+          <h3 class="iic-event__title">Expert Talk :<span> Role Of Insurance For The Growth Of Entrepreneurship</span></h3>
+          <ul class="iic-photos" data-viewer="iic-expert">
+            {% include "includes/iic_photo.html" with photo="img/iic/expert-talk-1.jpg" alt="Expert Talk on the role of insurance — photograph 1" %}
+            {% include "includes/iic_photo.html" with photo="img/iic/expert-talk-2.jpg" alt="Expert Talk on the role of insurance — photograph 2" %}
+            {% include "includes/iic_photo.html" with photo="img/iic/expert-talk-3.jpg" alt="Expert Talk on the role of insurance — photograph 3" %}
+            {% include "includes/iic_photo.html" with photo="img/iic/expert-talk-4.jpg" alt="Expert Talk on the role of insurance — photograph 4" %}
+          </ul>
+        </div>
+
+        <div class="iic-event">
+          <h3 class="iic-event__title">Workshop On :<span> Innovation Pathways in the field of Optometry</span></h3>
+          <ul class="iic-photos" data-viewer="iic-optometry">
+            {% include "includes/iic_photo.html" with photo="img/iic/optometry-workshop-1.jpg" alt="Workshop on innovation pathways in optometry — photograph 1" %}
+            {% include "includes/iic_photo.html" with photo="img/iic/optometry-workshop-2.jpg" alt="Workshop on innovation pathways in optometry — photograph 2" %}
+            {% include "includes/iic_photo.html" with photo="img/iic/optometry-workshop-3.jpg" alt="Workshop on innovation pathways in optometry — photograph 3" %}
+            {% include "includes/iic_photo.html" with photo="img/iic/optometry-workshop-4.jpg" alt="Workshop on innovation pathways in optometry — photograph 4" %}
+          </ul>
+        </div>
+      </div>
+
+
+      {# ================================================== NEWSLETTER === #}
+      <div class="tab-pane" id="pane-newsletter" role="tabpanel"
+           aria-labelledby="tab-newsletter" tabindex="0">
+
+        <h3 class="iic-heading">Newsletter</h3>
+        <span class="iic-rule"></span>
+
+        {# One block per year. Copy the whole thing for 2024 and change the #}
+        {# two ids here plus every month id inside it.                      #}
+        <button class="iic-bar" type="button" data-disclosure
+                aria-expanded="true" aria-controls="nl-2025">
+          <span>2025</span>
+          <svg width="14" height="9" aria-hidden="true" focusable="false"><use href="#i-caret"></use></svg>
+        </button>
+        <div class="iic-year__body" id="nl-2025">
+          <ul class="iic-months">
+                <li>
+                  <button class="iic-bar" type="button" data-disclosure
+                          aria-expanded="false" aria-controls="nl-2025-06">
+                    <span>June</span>
+                    <svg width="14" height="9" aria-hidden="true" focusable="false"><use href="#i-caret"></use></svg>
+                  </button>
+                  <div class="iic-month__body" id="nl-2025-06" hidden>
+                    <ul class="iic-issues">
+                    <li class="iic-issue">
+                      <span class="iic-issue__name">World Environment Day Celebration</span>
+                      {% with pdf="documents/iic/2025-06-world-environment-day.pdf"|doc_url %}
+                        {% if pdf %}
+                          <a class="iic-issue__link" href="{{ pdf }}" target="_blank" rel="noopener noreferrer">Click to View<span class="sr-only"> — World Environment Day Celebration (PDF, opens in a new tab)</span></a>
+                        {% else %}
+                          <span class="iic-issue__link" style="color:var(--muted)">To follow</span>
+                        {% endif %}
+                      {% endwith %}
+                    </li>
+                    <li class="iic-issue">
+                      <span class="iic-issue__name">Multilingual Natural Language Processing for Text Analysis</span>
+                      {% with pdf="documents/iic/2025-06-multilingual-nlp.pdf"|doc_url %}
+                        {% if pdf %}
+                          <a class="iic-issue__link" href="{{ pdf }}" target="_blank" rel="noopener noreferrer">Click to View<span class="sr-only"> — Multilingual Natural Language Processing for Text Analysis (PDF, opens in a new tab)</span></a>
+                        {% else %}
+                          <span class="iic-issue__link" style="color:var(--muted)">To follow</span>
+                        {% endif %}
+                      {% endwith %}
+                    </li>
+                    </ul>
+                  </div>
+                </li>
+                <li>
+                  <button class="iic-bar" type="button" data-disclosure
+                          aria-expanded="false" aria-controls="nl-2025-05">
+                    <span>May</span>
+                    <svg width="14" height="9" aria-hidden="true" focusable="false"><use href="#i-caret"></use></svg>
+                  </button>
+                  <div class="iic-month__body" id="nl-2025-05" hidden>
+                    <ul class="iic-issues">
+                    <li class="iic-empty">No issue published for this month.</li>
+                    </ul>
+                  </div>
+                </li>
+                <li>
+                  <button class="iic-bar" type="button" data-disclosure
+                          aria-expanded="false" aria-controls="nl-2025-04">
+                    <span>April</span>
+                    <svg width="14" height="9" aria-hidden="true" focusable="false"><use href="#i-caret"></use></svg>
+                  </button>
+                  <div class="iic-month__body" id="nl-2025-04" hidden>
+                    <ul class="iic-issues">
+                    <li class="iic-empty">No issue published for this month.</li>
+                    </ul>
+                  </div>
+                </li>
+                <li>
+                  <button class="iic-bar" type="button" data-disclosure
+                          aria-expanded="false" aria-controls="nl-2025-03">
+                    <span>March</span>
+                    <svg width="14" height="9" aria-hidden="true" focusable="false"><use href="#i-caret"></use></svg>
+                  </button>
+                  <div class="iic-month__body" id="nl-2025-03" hidden>
+                    <ul class="iic-issues">
+                    <li class="iic-empty">No issue published for this month.</li>
+                    </ul>
+                  </div>
+                </li>
+                <li>
+                  <button class="iic-bar" type="button" data-disclosure
+                          aria-expanded="false" aria-controls="nl-2025-02">
+                    <span>February</span>
+                    <svg width="14" height="9" aria-hidden="true" focusable="false"><use href="#i-caret"></use></svg>
+                  </button>
+                  <div class="iic-month__body" id="nl-2025-02" hidden>
+                    <ul class="iic-issues">
+                    <li class="iic-empty">No issue published for this month.</li>
+                    </ul>
+                  </div>
+                </li>
+                <li>
+                  <button class="iic-bar" type="button" data-disclosure
+                          aria-expanded="false" aria-controls="nl-2025-01">
+                    <span>January</span>
+                    <svg width="14" height="9" aria-hidden="true" focusable="false"><use href="#i-caret"></use></svg>
+                  </button>
+                  <div class="iic-month__body" id="nl-2025-01" hidden>
+                    <ul class="iic-issues">
+                    <li class="iic-empty">No issue published for this month.</li>
+                    </ul>
+                  </div>
+                </li>
+          </ul>
+        </div>
+      </div>
+
+
+      {# ========================================= IMPORTANT DOCUMENTS === #}
+      <div class="tab-pane" id="pane-documents" role="tabpanel"
+           aria-labelledby="tab-documents" tabindex="0">
+
+        <h3 class="iic-heading">Important Documents</h3>
+        <span class="iic-rule"></span>
+
+        {% comment %}
+        EMPTY ON PURPOSE — the documents were not part of what this page was
+        rebuilt from, so nothing has been invented here. Replace the paragraph
+        below with the same rows the Newsletter panel uses:
+
+          <ul class="iic-issues">
+            <li class="iic-issue">
+              <span class="iic-issue__name">Name of the document</span>
+              {% with pdf="documents/iic/name.pdf"|doc_url %}
+                {% if pdf %}<a class="iic-issue__link" href="{{ pdf }}" target="_blank" rel="noopener noreferrer">Click to View</a>{% endif %}
+              {% endwith %}
+            </li>
+          </ul>
+        {% endcomment %}
+        <p class="iic-pane-empty">The important documents are being compiled and
+          will be listed here shortly.</p>
+      </div>
+
+
+      {# ===================================================== MEMBERS === #}
+      <div class="tab-pane" id="pane-members" role="tabpanel"
+           aria-labelledby="tab-members" tabindex="0">
+
+        <div class="iic-table-scroll">
+          <table class="iic-table">
+            <caption>EXTERNAL MEMBERS of IIC</caption>
+            <thead>
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Designation</th>
+                <th scope="col">Nominees</th>
+              </tr>
+            </thead>
+            <tbody>
+                    <tr>
+                      <td>Professor Ashutosh Ghosh, FASc</td>
+                      <td>Former Vice Chancellor, Calcutta University</td>
+                      <td>From Education sector</td>
+                    </tr>
+                    <tr>
+                      <td>Mr. Manojit Sengupta</td>
+                      <td>Delivery Centre Head - Eastern Region, Tata Consultancy Services</td>
+                      <td>From Industry</td>
+                    </tr>
+                    <tr>
+                      <td>Shri Sitanath Mukhopadhyay</td>
+                      <td>Indian Enterprise Development Service (IEDS)<br>Assistant Director, Min. of Micro Small &amp; Medium Enterprises, Govt of India.</td>
+                      <td>From MSME. Govt. of India</td>
+                    </tr>
+                    <tr>
+                      <td>Dr. Sonali Roy</td>
+                      <td>COO, RISE Foundation, IISER Kolkata</td>
+                      <td>From Incubation Centre</td>
+                    </tr>
+                    <tr>
+                      <td>Dr. Subhadip Basu</td>
+                      <td>Professor, Department of Computer Science &amp; Engineering, Jadavpur University</td>
+                      <td>From Education sector with a StartUP venture</td>
+                    </tr>
+                    <tr>
+                      <td>Mr. Subrata Roy</td>
+                      <td>The Founder and Managing Director, Hi-Tech Animation</td>
+                      <td>Entrepreneur</td>
+                    </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+
+      {# ================================================ MESSAGE DESK === #}
+      <div class="tab-pane" id="pane-desk" role="tabpanel"
+           aria-labelledby="tab-desk" tabindex="0">
+
+        <div class="iic-desk">
+          <figure class="iic-desk__photo">
+            {% with portrait="img/iic/director.jpg"|doc_url %}
+              {% if portrait %}
+                <img src="{{ portrait }}" alt="Prof. (Dr.) Keya Das Ghosh, Director of the Institution&rsquo;s Innovation Council" loading="lazy">
+              {% else %}
+                <span class="iic-missing" aria-hidden="true">
+                  <svg width="24" height="24" focusable="false"><use href="#i-file"></use></svg>
+                </span>
+              {% endif %}
+            {% endwith %}
+          </figure>
+
+          <div>
+            <p class="iic-desk__name">Prof. (Dr.) Keya Das Ghosh</p>
+            <p class="iic-desk__role">Director, Institution&rsquo;s Innovation Council (IIC),</p>
+            <p class="iic-desk__where">Swami Vivekananda University, Barrackpore</p>
+
+            <div class="iic-desk__body">
+            <p>As the Director of the Institution&rsquo;s Innovation Council at Swami Vivekananda University, I am pleased to present our institutional progress in fostering innovation and entrepreneurship. Since University&rsquo;s establishment, we have made significant strides in building a robust innovation ecosystem.</p>
+            <p>Our council, though young, has established core initiatives focusing on student innovation, research development, and industry collaboration. We have successfully implemented a basic innovation framework that aligns with the National Innovation and Startup Policy while accounting for our institution&rsquo;s developing status.</p>
+            <p>In our initial five years, we have established essential innovation infrastructure including a dedicated innovation lab and a modest incubation center. Looking ahead, we have outlined a pragmatic growth strategy for 2025-26, prioritizing the expansion of our innovation capabilities through enhanced industry collaborations and increased research opportunities for our students and faculty.</p>
+            <p>We welcome continued engagement from all as we build upon these foundational elements to strengthen our innovation ecosystem.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+{% endblock %}

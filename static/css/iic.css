@@ -1,0 +1,377 @@
+/* ==========================================================================
+   Institution's Innovation Council  —  /page/iic/
+   Loaded alongside three shared files: page-head.css for the photo banner,
+   tabs.css for the six pills and their mobile dropdown, and gallery.css for
+   the event photograph cells and the full-size viewer they open.
+
+   This file is what sits INSIDE a panel. The six panels are six different
+   shapes, so the sections below run in the same order as the pills:
+
+     1. Mission & Vision   a chip, then prose or bullets
+     2. Events             a two-tone heading over a grid of photographs
+     3. Newsletter         a year that opens months that open their issues
+     4. Important Docs     the same rows as Newsletter, without the nesting
+     5. Members            a table
+     6. Message Desk       a portrait beside a letter
+   ========================================================================== */
+
+.iic-section { background: var(--paper); }
+
+/* ============================================ 1. MISSION & VISION ======== */
+/* The pale chip heading, square and shrink-to-fit so the tint ends where the
+   words do. An <h3>, because what follows belongs to it. */
+.iic-tag {
+  display: table;
+  margin: 0 0 16px;
+  padding: 9px 18px;
+  background: #d3e6f8;
+  color: var(--ink);
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+* + .iic-tag { margin-top: 34px; }
+
+.iic-prose > *     { margin: 0; }
+.iic-prose > * + * { margin-top: 16px; }
+.iic-prose p {
+  color: var(--ink-soft);
+  font-size: .94rem;
+  line-height: 1.85;
+  /* Justified, the way the rest of the site sets body copy. Dropped on a
+     phone in the responsive block — it opens rivers in a narrow measure. */
+  text-align: justify;
+}
+
+.iic-points {
+  margin: 0;
+  padding-left: 22px;
+  list-style: disc;
+}
+.iic-points li {
+  color: var(--ink-soft);
+  font-size: .94rem;
+  line-height: 1.8;
+}
+.iic-points li + li { margin-top: 14px; }
+.iic-points li::marker { color: var(--ink); }
+
+/* ==================================================== 2. EVENTS ========== */
+/* A two-tone heading: the lead-in red, the rest dark. Both halves are typed
+   into the markup, so an event whose name has no natural break can simply put
+   everything in one half. */
+.iic-event__title {
+  margin: 0 0 14px;
+  color: var(--red);
+  font-size: 1.02rem;
+  font-weight: 700;
+  line-height: 1.45;
+}
+.iic-event__title span { color: var(--ink); }
+
+.iic-event + .iic-event { margin-top: 34px; }
+
+/* Four photographs to a row. The cell inside is .gallery-cell from
+   gallery.css, so the hover zoom, the magnifier badge, the focus ring and the
+   reduced-motion handling are the ones already used by the Life at SVU
+   galleries rather than a second set written here. Only the height is
+   overridden: gallery.css pins it at 260px and these take their frame from
+   the aspect-ratio below instead. */
+.iic-photos {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.iic-photo {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--page-alt);
+  border-radius: var(--radius-sm);
+}
+.iic-photo .gallery-cell { height: 100%; }
+
+/* Stands in for a photograph not uploaded yet, so an event can be written
+   before its pictures exist — see the note in the template. */
+.iic-missing {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    -45deg, #e8e8e8 0 10px, #e2e2e2 10px 20px);
+  color: var(--muted);
+}
+.iic-missing svg { width: 24px; height: 24px; fill: currentColor; opacity: .55; }
+
+/* ============================================ 3. NEWSLETTER ============== */
+/* The red panel heading with its rule, used by Newsletter and Important
+   Documents. */
+.iic-heading {
+  margin: 0;
+  color: var(--red);
+  font-size: clamp(1.15rem, 1rem + .8vw, 1.5rem);
+  font-weight: 800;
+  line-height: 1.3;
+}
+.iic-heading + .iic-rule { margin: 10px 0 22px; }
+.iic-rule {
+  display: block;
+  width: 110px;
+  height: 3px;
+  background: var(--red);
+}
+
+/* A blue bar that opens something. Used at both levels — the year and the
+   months inside it — so the two nest without a second set of rules. */
+.iic-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  width: 100%;
+  padding: 15px 20px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--blue-dark);
+  color: #fff;
+  font-family: inherit;
+  font-size: .95rem;
+  font-weight: 600;
+  line-height: 1.35;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+.iic-bar:hover { background: #1d477a; }
+.iic-bar:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+
+/* The chevron points down when shut and up when open — the one piece of state
+   that reads at a glance. */
+.iic-bar svg {
+  flex: none;
+  width: 14px; height: 9px;
+  fill: currentColor;
+  transition: transform var(--transition);
+}
+.iic-bar[aria-expanded="true"] svg { transform: rotate(180deg); }
+
+/* The year's panel: a bordered box holding the months. */
+.iic-year__body {
+  margin-top: 0;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-top: 0;
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+}
+.iic-year__body[hidden] { display: none; }
+
+/* Months, two to a row on a desktop. They read ACROSS then down, so the order
+   in the markup is the order on the page. */
+.iic-months {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 22px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  /* align-items:start so an open month grows downward on its own instead of
+     stretching the shut one beside it to the same height. */
+  align-items: start;
+}
+
+.iic-month__body {
+  padding: 14px 4px 10px;
+  border: 1px solid var(--line);
+  border-top: 0;
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+}
+.iic-month__body[hidden] { display: none; }
+
+/* One issue: its name, and the link to open it. */
+.iic-issues { margin: 0; padding: 0; list-style: none; }
+.iic-issue {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px 18px;
+  padding: 9px 16px;
+}
+.iic-issue + .iic-issue { border-top: 1px solid var(--page-alt); }
+.iic-issue__name {
+  color: var(--ink-soft);
+  font-size: .92rem;
+  line-height: 1.5;
+}
+.iic-issue__link {
+  flex: none;
+  color: var(--blue);
+  font-size: .92rem;
+  font-weight: 500;
+}
+.iic-issue__link:hover { color: var(--blue-dark); text-decoration: underline; }
+.iic-issue__link:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+
+/* A month with nothing in it yet, and the same for a whole panel. */
+.iic-empty {
+  margin: 0;
+  padding: 14px 16px;
+  color: var(--muted);
+  font-size: .86rem;
+  font-style: italic;
+  line-height: 1.6;
+}
+.iic-pane-empty {
+  margin: 0;
+  padding: 30px 24px;
+  background: var(--page-alt);
+  border-radius: var(--radius-sm);
+  color: var(--muted);
+  font-size: .9rem;
+  line-height: 1.7;
+}
+
+/* ============================================== 5. MEMBERS =============== */
+/* The table keeps its own scroller rather than letting the page scroll
+   sideways: three columns and a long designation will not fit a narrow phone,
+   and a page that pans horizontally is worse than a table that does. */
+.iic-table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.iic-table {
+  width: 100%;
+  min-width: 620px;
+  border-collapse: collapse;
+  background: var(--paper);
+}
+
+/* The band naming the table, spanning every column. */
+.iic-table caption {
+  padding: 14px 18px;
+  background: var(--blue-dark);
+  color: #fff;
+  font-size: .95rem;
+  font-weight: 600;
+  letter-spacing: .02em;
+  text-align: center;
+}
+
+.iic-table thead th {
+  padding: 13px 18px;
+  background: var(--blue-dark);
+  border-top: 1px solid rgba(255, 255, 255, .18);
+  color: #fff;
+  font-size: .92rem;
+  font-weight: 600;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.iic-table td {
+  padding: 14px 18px;
+  border: 1px solid var(--line);
+  color: var(--ink-soft);
+  font-size: .92rem;
+  line-height: 1.6;
+  vertical-align: top;
+}
+.iic-table tbody tr:nth-child(odd) { background: var(--page-alt); }
+
+/* ========================================== 6. MESSAGE DESK ============== */
+.iic-desk {
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr);
+  gap: 34px;
+  align-items: start;
+  padding: 26px;
+  background: var(--page-alt);
+}
+
+.iic-desk__photo { margin: 0; }
+.iic-desk__photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-sm);
+}
+/* Stands in for the portrait until it is uploaded, at the height the real one
+   will occupy so the copy beside it does not reflow when it lands. */
+.iic-desk__photo .iic-missing {
+  aspect-ratio: 3 / 4;
+  border-radius: var(--radius-sm);
+}
+
+.iic-desk__name {
+  margin: 0;
+  color: var(--ink);
+  font-size: .97rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+.iic-desk__role {
+  margin: 4px 0 0;
+  color: var(--ink);
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+.iic-desk__where {
+  margin: 6px 0 16px;
+  color: var(--ink);
+  font-size: .97rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+.iic-desk__body > *     { margin: 0; }
+.iic-desk__body > * + * { margin-top: 12px; }
+.iic-desk__body p {
+  color: var(--ink-soft);
+  font-size: .92rem;
+  line-height: 1.8;
+  text-align: justify;
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+@media (max-width: 991.98px) {
+  .iic-photos { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  /* The portrait goes above the letter: side by side, a 300px column leaves
+     the copy too narrow to set at this width. */
+  .iic-desk {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 22px;
+  }
+  .iic-desk__photo { max-width: 300px; }
+}
+
+@media (max-width: 767.98px) {
+  .iic-months { grid-template-columns: minmax(0, 1fr); }
+  /* Justified type opens rivers in a narrow measure. */
+  .iic-prose p,
+  .iic-desk__body p { text-align: left; }
+}
+
+@media (max-width: 575.98px) {
+  .iic-photos { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .iic-tag { font-size: .95rem; padding: 8px 14px; }
+  * + .iic-tag { margin-top: 26px; }
+  .iic-prose p,
+  .iic-points li { font-size: .89rem; }
+  .iic-bar { padding: 13px 15px; font-size: .89rem; }
+  .iic-year__body { padding: 14px 12px; }
+  .iic-issue { padding: 9px 8px; }
+  .iic-desk { padding: 18px 16px; }
+  .iic-desk__role { font-size: 1.05rem; }
+  .iic-rule { width: 84px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .iic-bar,
+  .iic-bar svg { transition: none; }
+}

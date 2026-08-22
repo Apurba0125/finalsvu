@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% comment %}
+===========================================================================
+CENTRE OF INCUBATION  —  served at /page/incubation-centre/
+                         by website.views.incubation_centre
+---------------------------------------------------------------------------
+Header, navigation and footer come from base.html. Do not add them here.
+
+Styling: page-head.css gives the photo banner and the heading with its rule;
+incubation.css is the body copy.
+
+EVERYTHING IS IN THIS ONE FILE
+  The whole page is below, in the order it reads. No data.py, no include, no
+  tabs — it is one column of writing from top to bottom.
+
+FIVE BLOCKS BUILD THE WHOLE PAGE
+  Copy any of them and change the words. Spacing between blocks is set in
+  incubation.css, so there is NO need for <br> or empty paragraphs anywhere:
+
+    <h3 class="inc-tag">1. Purpose and Services:</h3>   the pale blue chip
+    <p>…</p>                                             a paragraph, justified
+    <p class="inc-runin">Fostering Innovation:</p>       a bold line introducing
+                                                         the paragraph under it
+    <h4 class="inc-subhead">Hands-on Learning</h4>       a bold heading over a
+                                                         short list
+    <ul class="inc-points"><li>…                         disc bullets
+
+  Put <strong> around anything that should come out dark against the grey of
+  the copy — a lead-in inside a bullet, or a name inside a sentence:
+
+    <li><strong>Foster Innovation:</strong> Create a leading hub…</li>
+
+  The chip sits closer to its own first paragraph than to the block above it,
+  and the run-in sits tight to the paragraph beneath it. That is all handled
+  by the stylesheet; the markup just runs in order.
+
+WRITE AN AMPERSAND AS &amp; — a bare & is not valid HTML and misparses next to
+a word, e.g. "&copy" would be read as the © symbol. An apostrophe is best
+written &rsquo; so it curls, as in "centre&rsquo;s".
+
+NOTE ON COMMENTS: the hash-style Django comment {# … #} covers a SINGLE line.
+For a multi-line note use a comment/endcomment pair like this one, or the text
+leaks onto the page and any tag inside it actually runs.
+===========================================================================
+{% endcomment %}
+
+{% block title %}Centre Of Incubation | {{ site.site_name }}{% endblock %}
+{% block meta_description %}The Incubation Centre at Swami Vivekananda University — its purpose, facilities, mission, vision and objectives for students and early-stage ventures.{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/page-head.css' %}">
+  <link rel="stylesheet" href="{% static 'css/incubation.css' %}">
+{% endblock %}
+
+{% block content %}
+
+{# ===========================================================  BANNER  === #}
+{# THE BACKGROUND IMAGE IS SET HERE. Change the file name in the url() and  #}
+{# that is the whole edit — keep the dark gradient in front of it or the    #}
+{# white title stops being readable over a busy photograph.                 #}
+<section class="page-banner"
+         style="background-image: linear-gradient(0deg, rgba(10,10,10,.72), rgba(10,10,10,.55)), url('{% static 'img/about/campus.jpg' %}');">
+  <div class="shell">
+    <h1 class="page-banner__title">Centre Of Incubation</h1>
+  </div>
+</section>
+
+
+{# =============================================================  BODY  === #}
+<section class="section inc-section">
+  <div class="shell">
+
+    {# The half inside <span> is the red half — page-head.css colours it. #}
+    <div class="page-head">
+      <h2 class="page-heading">Centre Of <span>Incubation</span></h2>
+      <span class="page-rule"></span>
+    </div>
+
+    <div class="inc-body">
+      <h3 class="inc-tag">Incubation Centre: Fostering Innovation and Entrepreneurship</h3>
+      <p>The Incubation Centre at <strong>Swami Vivekananda University</strong> is dedicated to nurturing the entrepreneurial spirit and fostering innovation among students, faculty, and community members. Our <strong>mission</strong> is to provide a dynamic and supportive environment that accelerates the growth of startups and transformative projects, bridging the gap between academic research and real-world application.</p>
+      <h3 class="inc-tag">1. Purpose and Services:</h3>
+      <p>The Incubation Centre is designed to support early-stage ventures by offering a range of essential services and resources. These include access to state-of-the-art facilities, mentorship from industry experts, networking opportunities, and financial guidance. Our goal is to empower innovators with the tools they need to turn their ideas into viable, scalable businesses.</p>
+      <h3 class="inc-tag">2. Facilities and Resources:</h3>
+      <p>Our centre features modern co-working spaces, advanced technology labs, and meeting rooms equipped with the latest communication tools. These facilities are complemented by a comprehensive suite of services, including legal and business consulting, marketing support, and funding advice. By providing these resources, we aim to create a conducive environment for startups to thrive and overcome common entrepreneurial challenges.</p>
+      <h3 class="inc-tag">3. Community and Networking:</h3>
+      <p>We actively foster a collaborative community where entrepreneurs can connect with peers, mentors, and investors. Regular workshops, seminars, and networking events are organized to facilitate knowledge exchange and build valuable relationships. Through these interactions, our students of Incubation centre gain insights into industry trends, best practices, and potential market opportunities.</p>
+      <h3 class="inc-tag">4. Impact and Vision:</h3>
+      <p>The Incubation Centre envisions becoming a leading hub for innovation, driving economic growth and technological advancement. By supporting emerging ventures and encouraging creative problem-solving, we contribute to the development of a robust entrepreneurial ecosystem that benefits both the university and the wider community.</p>
+      <p>At Swami Vivekananda University we are committed to shaping the future through innovation and entrepreneurship, and the Incubation Centre stands as a testament to our dedication to fostering impactful ideas and nurturing the next generation of leaders.</p>
+      <h3 class="inc-tag">Mission of Incubation Centre</h3>
+      <p>The mission of the Incubation Centre at Swami Vivekananda University is to cultivate a vibrant ecosystem that fosters creativity, encourages calculated risk-taking, and supports the growth of scalable and sustainable enterprises. We achieve this by providing robust resources, personalized mentorship, and a collaborative environment designed to turn innovative ideas into successful, impactful businesses. We are committed to:</p>
+      <p class="inc-runin">Fostering Innovation:</p>
+      <p>Cultivating a culture of innovation and creativity by providing an inspiring environment where students and entrepreneurs are encouraged to explore bold ideas, experiment with new approaches, and challenge conventional thinking. We support this through dynamic workshops, collaborative projects, and access to cutting-edge resources, all aimed at igniting and sustaining a passion for groundbreaking innovation.</p>
+      <p class="inc-runin">Providing Resources:</p>
+      <p>Offering state-of-the-art infrastructure, expert mentorship, and access to diverse funding opportunities to transform innovative ideas into viable and scalable ventures. Our Centre provides cutting-edge facilities, personalized guidance from industry professionals, and financial support options designed to empower entrepreneurs and students at every stage of their journey.</p>
+      <p class="inc-runin">Facilitating Learning:</p>
+      <p>Providing practical learning opportunities through a variety of workshops, hands-on training programs, and real-world experiences. Our approach integrates theoretical knowledge with actionable skills, enabling participants to gain valuable insights, apply their learning in practical settings, and develop competencies essential for entrepreneurial success and innovation.</p>
+      <p class="inc-runin">Building Networks:</p>
+      <p>Creating a robust network of industry experts, experienced mentors, and investors to support startups and foster valuable collaborations. By facilitating connections and interactions within this ecosystem, we aim to provide startups with strategic guidance, access to investment opportunities, and collaborative partnerships that drive growth, innovation, and success.</p>
+      <p class="inc-runin">Promoting Social Impact:</p>
+      <p>Encouraging startups to tackle social and environmental challenges by fostering a strong sense of responsibility and purpose. We support this by offering guidance on integrating sustainable practices, providing resources for socially-driven initiatives, and recognizing ventures that make a positive impact on society and the environment.</p>
+      <h3 class="inc-tag">Vision of Incubation Centre</h3>
+      <p>At <strong>Swami Vivekananda University</strong>, our Incubation Centre aspires to be a dynamic epicentre of innovation, entrepreneurship, and sustainable development. We are dedicated to empowering students and emerging entrepreneurs by providing comprehensive tools, resources, and mentorship. Our aim is to nurture transformative ideas into thriving, socially responsible enterprises that drive positive change and contribute to the broader community.</p>
+      <p>Ultimately, the incubation centre&rsquo;s vision is to inspire and enable entrepreneurs to build companies that transform industries, improve lives, and shape the future. By providing a supportive and nurturing environment, the incubator empowers entrepreneurs to unleash their full potential and create businesses that have a lasting and meaningful impact on the world.</p>
+      <ul class="inc-points">
+        <li><strong>Foster Innovation:</strong> Create a leading hub for groundbreaking ideas and technological advancements, driving creativity and pioneering solutions.</li>
+        <li><strong>Empower Entrepreneurs:</strong> Provide comprehensive support to students and budding entrepreneurs, equipping them with the tools, resources, and mentorship needed for success.</li>
+        <li><strong>Promote Sustainable Growth:</strong> Encourage the development of scalable, sustainable businesses that contribute positively to society and the environment.</li>
+        <li><strong>Facilitate Collaboration:</strong> Build a collaborative ecosystem where startups can connect with industry experts, mentors, and investors to accelerate their growth.</li>
+        <li><strong>Enhance Learning:</strong> Offer practical learning experiences through workshops, training programs, and real-world projects to develop essential entrepreneurial skills.</li>
+        <li><strong>Support Global Impact:</strong> Enable startups to showcase their innovations on an international stage and explore global partnerships.</li>
+        <li><strong>Cultivate Responsibility:</strong> Inspire startups to address social and environmental challenges with a strong sense of responsibility and ethical practices.</li>
+        <li><strong>Drive Economic Development:</strong> Contribute to the local and global economy by fostering job creation, supporting entrepreneurship, and driving innovation.</li>
+      </ul>
+      <h3 class="inc-tag">Objectives of the Incubation Centre:</h3>
+      <h4 class="inc-subhead">Hands-on Learning</h4>
+      <ul class="inc-points">
+        <li>Acquire practical entrepreneurship experience through real-world projects.</li>
+        <li>Develop innovative ideas in a supportive and collaborative environment.</li>
+      </ul>
+      <h4 class="inc-subhead">Mentorship and Guidance</h4>
+      <ul class="inc-points">
+        <li>Receive guidance and insights from experienced mentors.</li>
+        <li>Acquire knowledge from accomplished entrepreneurs and industry experts.</li>
+      </ul>
+      <h4 class="inc-subhead">Infrastructure and Resources</h4>
+      <ul class="inc-points">
+        <li>Cutting-edge facilities and workspaces to support idea development.</li>
+        <li>Access to advanced technology and research facilities.</li>
+      </ul>
+      <h4 class="inc-subhead">Access to Accelerators and Funding</h4>
+      <ul class="inc-points">
+        <li>Engage with potential investors and venture capitalists.</li>
+        <li>Support in identifying and securing grants and funding opportunities.</li>
+      </ul>
+      <h4 class="inc-subhead">Networking Opportunities</h4>
+      <ul class="inc-points">
+        <li>Develop a robust professional network with like-minded individuals.</li>
+        <li>Network with alumni who have achieved success in entrepreneurship.</li>
+      </ul>
+      <h4 class="inc-subhead">Skill Enhancement</h4>
+      <ul class="inc-points">
+        <li>Engage in workshops and training programs to strengthen entrepreneurial skills.</li>
+        <li>Cultivate a comprehensive skill set in business planning, marketing, and financial management.</li>
+      </ul>
+      <h4 class="inc-subhead">Global Exposure</h4>
+      <ul class="inc-points">
+        <li>Exhibit innovations on a global platform.</li>
+        <li>Pursue international collaborations and partnerships.</li>
+      </ul>
+      <h4 class="inc-subhead">Job Creation</h4>
+      <ul class="inc-points">
+        <li>Support economic development through job creation.</li>
+        <li>Acquire skills that are essential for emerging industries.</li>
+      </ul>
+      <h4 class="inc-subhead">Social Responsibility</h4>
+      <ul class="inc-points">
+        <li>Inspire startups to tackle social and environmental challenges.</li>
+        <li>Foster a sense of responsibility and ethical business practices.</li>
+      </ul>
+      <p class="inc-close">Join us at <strong>Swami Vivekananda University</strong>, where innovation meets opportunity. Together, let&rsquo;s shape the future of entrepreneurship.</p>
+    </div>
+
+  </div>
+</section>
+{% endblock %}

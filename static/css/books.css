@@ -24,18 +24,18 @@
 .book-pane__head { margin-bottom: 22px; }
 
 /* ============================================================ ROWS ======= */
-/* Two to a line on a desktop, reading ACROSS then down, and one to a line
-   once there is no longer width for two. auto-fit with a minimum rather than
-   a fixed repeat(2, 1fr) means the collapse happens when the content actually
-   runs out of room instead of at a breakpoint guessed in advance — a long
-   department name is what decides it, not the device. */
+/* Two to a line on a desktop, reading ACROSS then down, and one to a line on
+   a phone. The count is FIXED rather than left to auto-fit with a minimum:
+   auto-fit divides the 1240px shell by that minimum, so a 320-330px floor
+   yields THREE columns above about 1200px — wider than this page is meant to
+   be and not what the design asks for.
+
+   minmax(0, 1fr), never plain 1fr: a track's default minimum is auto, the
+   width of its longest unbreakable word, so one long name would push its
+   column past its share and the page sideways with it. */
 .book-list {
   display: grid;
-  /* min(330px, 100%), not a bare 330px: a bare minimum is a HARD floor, so on
-     a 320px phone the track stays 330px wide and pushes the whole page
-     sideways. Wrapping it in min() lets the track fall back to the width of
-     the grid itself once there is less room than that. */
-  grid-template-columns: repeat(auto-fit, minmax(min(330px, 100%), 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px 26px;
   margin: 0;
   padding: 0;
@@ -110,6 +110,10 @@ a.book-row:focus-visible .book-row__icon { transform: translateX(4px); }
 /* ==========================================================================
    Responsive
    ========================================================================== */
+@media (max-width: 767.98px) {
+  .book-list { grid-template-columns: minmax(0, 1fr); }
+}
+
 @media (max-width: 575.98px) {
   .book-list { gap: 12px; }
   .book-row {

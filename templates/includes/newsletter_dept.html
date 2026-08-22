@@ -1,0 +1,88 @@
+{% comment %}
+One department on the Newsletter page, with every year and month nested inside
+it. Sits inside a <ul class="nl-grid">.
+
+Expects:
+  name  the department, worded exactly as it should read on the bar
+  slug  a short lowercase name with hyphens, e.g. "civil-engineering". It does
+        TWO jobs, so it has to be unique on the page:
+          1. it builds the ids that wire each bar to the panel it opens
+          2. it names the folder the PDFs are read from
+
+  years and months come from the view — they are a calendar, not content, so
+  they are not repeated on every line.
+
+WHERE THE PDFs GO
+Every month reads one file, and the path is worked out rather than typed:
+
+    static/documents/newsletter/<slug>/<year>-<month>.pdf
+
+so for January 2024 of the department above:
+
+    static/documents/newsletter/civil-engineering/2024-january.pdf
+
+Name the file that way, run
+
+    python manage.py collectstatic --noinput
+
+and that month turns from "Not published" into a View link by itself. NOTHING
+IN THE TEMPLATE CHANGES — the whole page is driven by where the files sit.
+A month with no file stays on the list, so a year always reads as a complete
+twelve.
+
+The path goes through doc_url, so a folder that does not exist yet costs
+nothing: it resolves to an empty string and the month shows as unpublished. A
+bare {% static %} tag would raise instead and take the whole page down.
+
+THREE LEVELS, ONE CONTRACT
+Both bars are the same .nl-bar on the site's shared accordion — initAccordions
+in main.js, the same one behind the FAQ. Per bar it is aria-expanded for the
+state and aria-controls naming the panel, and the panel carries hidden so it
+is shut before any script runs. That pair is all that nests them: nothing
+counts levels, so a department can be dropped anywhere in the list.
+
+Every panel is shut on load. A department opens its years; a year opens its
+months. Opening one leaves the others alone.
+{% endcomment %}
+
+<li>
+  <button class="nl-bar" type="button" data-disclosure
+          aria-expanded="false" aria-controls="nl-{{ slug }}">
+    <span>{{ name }}</span>
+    {# Sized in the markup as well as the CSS: an <svg> with no intrinsic #}
+    {# size falls back to 300x150, so a stylesheet that has not loaded    #}
+    {# yet would put a full-width chevron on every bar.                   #}
+    <svg width="14" height="9" aria-hidden="true" focusable="false"><use href="#i-caret"></use></svg>
+  </button>
+
+  <div class="nl-panel" id="nl-{{ slug }}" hidden>
+    <ul class="nl-years">
+      {% for year in years %}
+        <li>
+          <button class="nl-bar" type="button" data-disclosure
+                  aria-expanded="false" aria-controls="nl-{{ slug }}-{{ year }}">
+            <span>{{ year }}</span>
+            <svg width="14" height="9" aria-hidden="true" focusable="false"><use href="#i-caret"></use></svg>
+          </button>
+
+          <ul class="nl-months" id="nl-{{ slug }}-{{ year }}" hidden>
+            {% for month in months %}
+              <li class="nl-month">
+                <span class="nl-month__name">For the Month of {{ month }}</span>
+                {% with mslug=month|lower %}
+                  {% with pdf="documents/newsletter/"|add:slug|add:"/"|add:year|add:"-"|add:mslug|add:".pdf"|doc_url %}
+                    {% if pdf %}
+                      <a class="nl-month__link" href="{{ pdf }}" target="_blank" rel="noopener noreferrer">View<span class="sr-only"> the {{ month }} {{ year }} newsletter of the {{ name }} (PDF, opens in a new tab)</span></a>
+                    {% else %}
+                      <span class="nl-month__pending">Not published</span>
+                    {% endif %}
+                  {% endwith %}
+                {% endwith %}
+              </li>
+            {% endfor %}
+          </ul>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+</li>

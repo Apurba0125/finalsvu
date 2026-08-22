@@ -1,0 +1,162 @@
+/* ==========================================================================
+   Newsletter  —  /page/newsletter/
+   Loaded alongside two shared files: page-head.css for the photo banner and
+   the heading with its rule, and tabs.css for the two pills and the show/hide
+   of the panels.
+
+   This file is the nested collapse inside the Academics panel: a department
+   opens its years, and a year opens its months.
+
+   ONE BAR STYLE, THREE LEVELS DEEP
+   .nl-bar is used for the department and for the year alike. They differ only
+   in the width of the box they sit in, so there is no second set of rules to
+   keep in step — and a fourth level, if one were ever needed, would need no
+   new CSS at all.
+   ========================================================================== */
+
+.nl-section { background: var(--paper); }
+
+/* Departments, two to a row on a desktop, reading ACROSS then down.
+   align-items:start is what stops an opened department stretching the shut one
+   beside it to the same height — without it the whole row grows together. */
+.nl-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 26px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  align-items: start;
+}
+
+/* ============================================================= BAR ======= */
+.nl-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  width: 100%;
+  padding: 14px 20px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--blue-dark);
+  color: #fff;
+  font-family: inherit;
+  font-size: .93rem;
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+.nl-bar:hover { background: #1d477a; }
+.nl-bar:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+
+/* The chevron points down when shut and up when open — the one piece of state
+   that reads at a glance without anyone having to read the words. */
+.nl-bar svg {
+  flex: none;
+  width: 14px; height: 9px;
+  fill: currentColor;
+  transition: transform var(--transition);
+}
+.nl-bar[aria-expanded="true"] svg { transform: rotate(180deg); }
+
+/* --------------------------------------------------------- the panels --- */
+/* hidden in the markup, so every level is shut before any script runs and
+   stays shut if the script never does. The explicit display:none is not
+   redundant: the hidden attribute is only a UA style rule, and ANY display
+   declaration that matches the element overrides it. */
+.nl-panel {
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-top: 0;
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+}
+.nl-panel[hidden] { display: none; }
+
+/* A year bar sits inside a department's panel, so it needs a little air
+   between it and the one below. */
+.nl-years { margin: 0; padding: 0; list-style: none; }
+.nl-years > li + li { margin-top: 12px; }
+
+/* The innermost panel — the months — is a plain white box rather than another
+   tinted one, so the nesting reads as going inward rather than repeating. */
+.nl-months {
+  margin: 0;
+  padding: 6px 0;
+  border: 1px solid var(--line);
+  border-top: 0;
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+  list-style: none;
+}
+.nl-months[hidden] { display: none; }
+
+/* One month: its name, and the link to open that issue. */
+.nl-month {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px 18px;
+  padding: 7px 18px;
+}
+.nl-month__name {
+  color: var(--ink-soft);
+  font-size: .9rem;
+  line-height: 1.5;
+}
+.nl-month__link {
+  flex: none;
+  color: var(--blue);
+  font-size: .9rem;
+  font-weight: 500;
+}
+.nl-month__link:hover { color: var(--blue-dark); text-decoration: underline; }
+.nl-month__link:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+
+/* Shown in place of View while that month's PDF is not uploaded. Quiet, and
+   not a link: something that looks clickable and is not is worse than nothing
+   in its place. */
+.nl-month__pending {
+  flex: none;
+  color: var(--muted);
+  font-size: .84rem;
+  font-style: italic;
+}
+
+/* ------------------------------------------------------ At a Glance ----- */
+.nl-intro {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: .94rem;
+  line-height: 1.85;
+  /* Justified, the way the rest of the site sets body copy. Dropped on a
+     phone in the responsive block — it opens rivers in a narrow measure. */
+  text-align: justify;
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+@media (max-width: 767.98px) {
+  /* One department to a row. Two columns of bars this deep leaves each one
+     too narrow for a name like "Department of Electronics & Communication
+     Engineering" without wrapping it to three lines. */
+  .nl-grid { grid-template-columns: minmax(0, 1fr); }
+  .nl-intro { text-align: left; }
+}
+
+@media (max-width: 575.98px) {
+  .nl-bar { padding: 12px 15px; font-size: .87rem; }
+  .nl-panel { padding: 12px; }
+  .nl-month { padding: 7px 12px; }
+  .nl-month__name,
+  .nl-month__link { font-size: .85rem; }
+  .nl-intro { font-size: .89rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nl-bar,
+  .nl-bar svg { transition: none; }
+}

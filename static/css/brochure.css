@@ -4,21 +4,21 @@
    rule come from page-head.css.
    ========================================================================== */
 
-/* Two rows to a line on a desktop, reading across then down, and one to a
-   line once there is no longer width for two. auto-fit with a minimum rather
-   than a fixed "repeat(2, 1fr)" means the collapse happens when the content
-   actually runs out of room instead of at a breakpoint guessed in advance —
-   a long school name is what decides it, not the device. */
+/* Two to a line on a desktop, reading ACROSS then down, and one to a line on
+   a phone. The count is FIXED rather than left to auto-fit with a minimum:
+   auto-fit divides the 1240px shell by that minimum, so a 320-330px floor
+   yields THREE columns above about 1200px — wider than this page is meant to
+   be, and not what this file's own comment has always said it wanted.
+
+   minmax(0, 1fr), never plain 1fr: a track's default minimum is auto, the
+   width of its longest unbreakable word, so one long name would push its
+   column past its share and the page sideways with it. */
 .brochure-list {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  /* min(320px, 100%), not a bare 320px: a bare minimum is a HARD floor, so
-     inside the 288px the shell leaves on a 320px phone the track stays 320px
-     and the right edge of every card is clipped away. min() lets the track
-     fall back to the width of the grid once there is less room than that. */
-  grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 18px 26px;
 }
 
@@ -97,6 +97,10 @@ a.brochure-row:focus-visible .brochure-row__icon {
 }
 
 /* ---------------------------------------------------------- responsive -- */
+@media (max-width: 767.98px) {
+  .brochure-list { grid-template-columns: minmax(0, 1fr); }
+}
+
 @media (max-width: 575.98px) {
   /* Below this a two-line title in a padded row starts to feel cramped, and
      the gap between rows matters more than the padding inside them. */

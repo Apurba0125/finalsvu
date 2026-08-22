@@ -939,6 +939,74 @@ def academic_calendar(request):
     return render(request, "pages/academic_calendar.html")
 
 
+# The twelve months and the years the Newsletter page offers. A calendar
+# rather than content, which is why it is here and not repeated on each of the
+# twenty department lines in the template. Add a year and every department
+# gains it; the PDFs are then read from
+# static/documents/newsletter/<slug>/<year>-<month>.pdf
+NEWSLETTER_YEARS = ["2024", "2025"]
+NEWSLETTER_MONTHS = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December",
+]
+
+
+def newsletter(request):
+    """Newsletter — a department opens its years, a year opens its months.
+
+    The departments are twenty ``{% include %}`` lines in
+    ``templates/pages/newsletter.html``; everything below one of them is built
+    from the two lists above, so none of the 480 month rows is typed.
+    """
+    return render(request, "pages/newsletter.html", {
+        "years": NEWSLETTER_YEARS,
+        "months": NEWSLETTER_MONTHS,
+    })
+
+
+def incubation_centre(request):
+    """Centre Of Incubation — one column of writing, all in the template.
+
+    Takes no context on purpose. The whole page is markup in
+    ``templates/pages/incubation_centre.html``, built from five repeating
+    blocks, so any of it can be reworded without touching Python.
+
+    Its own template means its route has to sit above the generic
+    ``page/<slug>/`` line in urls.py; below it, page_detail claims the URL
+    first and renders an empty editorial placeholder.
+    """
+    return render(request, "pages/incubation_centre.html")
+
+
+def journal_list(request):
+    """List of Journals — each row an anchor to that journal's own site.
+
+    Takes no context on purpose. Each journal is one ``{% include %}`` line in
+    ``templates/pages/journal_list.html``, carrying its title and its address,
+    so adding one is a line in that file and nothing else.
+
+    Its own template means its route has to sit above the generic
+    ``page/<slug>/`` line in urls.py; below it, page_detail claims the URL
+    first and renders an empty editorial placeholder.
+    """
+    return render(request, "pages/journal_list.html")
+
+
+def iic(request):
+    """Institution's Innovation Council — six panels, all in the template.
+
+    Takes no context on purpose. The mission, the events, the newsletters, the
+    members table and the Director's message are all markup in
+    ``templates/pages/iic.html``, so any of them can be edited without
+    touching Python.
+
+    Its own template means its route has to sit above the generic
+    ``page/<slug>/`` line in urls.py; below it, page_detail claims the URL
+    first and renders an empty editorial placeholder.
+    """
+    return render(request, "pages/iic.html")
+
+
 def e_resource(request):
     """E-Resource — the open access resources open to students and faculty.
 
