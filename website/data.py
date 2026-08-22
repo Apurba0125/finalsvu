@@ -366,23 +366,25 @@ QUICK_LINKS = [{'title': 'Notice', 'description': 'Click to check all Notice', '
 
 # --------------------------------------------------------------------------
 # "Explore our offerings" band
-OFFERINGS = [{'title': 'Curriculum',
-  'description': 'SVU is committed to provide an effective and dynamic curriculum with a '
-                 'distinctive mission to transform lives through education.',
-  'icon': 'curriculum'},
- {'title': 'Tech Classroom',
-  'description': 'The digital whiteboards make learning methods to be the most interactive. '
-                 'Our faculty provides academic training through smart classrooms.',
-  'icon': 'classroom'},
- {'title': 'Experts',
-  'description': "SVU's course features expert faculty to impart quality training to the "
-                 'students.',
-  'icon': 'experts'},
- {'title': 'Digital Library',
-  'description': 'We are pleased to offer an online storehouse of knowledge to maintain '
-                 'text-books, notes, journals, e-thesis, maps, rare books, and other important '
-                 'documents with the advent of digital technology!',
-  'icon': 'library'}]
+OFFERINGS = [
+#     {'title': 'Curriculum',
+#   'description': 'SVU is committed to provide an effective and dynamic curriculum with a '
+#                  'distinctive mission to transform lives through education.',
+#   'icon': 'curriculum'},
+#  {'title': 'Tech Classroom',
+#   'description': 'The digital whiteboards make learning methods to be the most interactive. '
+#                  'Our faculty provides academic training through smart classrooms.',
+#   'icon': 'classroom'},
+#  {'title': 'Experts',
+#   'description': "SVU's course features expert faculty to impart quality training to the "
+#                  'students.',
+#   'icon': 'experts'},
+#  {'title': 'Digital Library',
+#   'description': 'We are pleased to offer an online storehouse of knowledge to maintain '
+#                  'text-books, notes, journals, e-thesis, maps, rare books, and other important '
+#                  'documents with the advent of digital technology!',
+#   'icon': 'library'}
+  ]
 
 # --------------------------------------------------------------------------
 # "We are now enlisted" logos
