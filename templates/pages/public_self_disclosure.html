@@ -1,0 +1,209 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% comment %}
+===========================================================================
+MANDATORY DISCLOSURE  —  served at /page/public-self-disclosure/
+                         by website.views.public_self_disclosure
+---------------------------------------------------------------------------
+Header, navigation and footer come from base.html. Do not add them here.
+
+Styling: page-head.css gives the photo banner and the heading with its rule;
+disclosure.css is the section chips and the rows.
+
+THE WHOLE PAGE IS TWO THINGS
+  A pale blue chip naming a section, and a bulleted row under it carrying a
+  label and usually a link. Ten sections of it, all in this one file.
+
+    <h3 class="disc-tag">Research</h3>
+    <ul class="disc-list">
+      {% include "includes/disclosure_row.html" with label="Incubation Centre:" doc="/page/incubation-centre/" %}
+    </ul>
+
+ONE LINE IS ONE ROW
+
+  label  what the row is asking for, ending in its colon exactly as it reads
+  doc    optional. What Click to View opens, and IT TAKES EITHER KIND:
+
+           a page on this site   doc="/page/about-svu/"
+           a PDF under static/   doc="documents/disclosure/prospectus.pdf"
+           somewhere else        doc="https://example.org/report.pdf"
+
+         Nothing has to say which it is — all three go in the same slot.
+
+  note   optional. Plain text INSTEAD of a link, for a row answered by a rule
+         rather than a document. Three rows use it.
+  text   optional wording for the link when "Click to View" is wrong.
+
+  Give none of them and the row is just its label, which is right for the four
+  entries that are headings rather than links — Academic Leadership, Library,
+  Central facilities and Sports facilities.
+
+A PAGE OPENS IN THE SAME TAB, A DOCUMENT IN A NEW ONE
+  Worked out from whether the resolved address starts with "/" and is not
+  under /static/, so there is no extra attribute to remember and no chance of
+  the two getting out of step.
+
+WHAT IS ALREADY WIRED
+  Fifteen rows point at pages that exist on this site and work now — About Us,
+  Recognition, Chancellor, Academic Calendar, Departments, Collaboration,
+  Research and Publication Cell, Incubation Centre, Placement Cell, Notices,
+  Newsletters, Events, Picture Gallery and Contact.
+
+  THE REST NAME A PDF THAT IS NOT UPLOADED YET and read "to follow". Put the
+  file in static/documents/disclosure/ under the name already on its line, run
+
+      python manage.py collectstatic --noinput
+
+  and that row becomes a link by itself — no edit here. A mistyped filename
+  leaves one row reading "to follow" rather than taking the whole page down,
+  which is what a bare {% static %} tag would do under the manifest storage.
+
+WRITE AN AMPERSAND AS &amp; — a quoted string in a template tag is marked safe
+by Django, so what is typed between the quotes lands in the page verbatim. A
+bare & is not valid HTML and misparses next to a word.
+
+NOTE ON COMMENTS: the hash-style Django comment {# … #} covers a SINGLE line.
+For a multi-line note use a comment/endcomment pair like this one, or the text
+leaks onto the page and any tag inside it actually runs.
+===========================================================================
+{% endcomment %}
+
+{% block title %}Mandatory Disclosure | {{ site.site_name }}{% endblock %}
+{% block meta_description %}Mandatory public self-disclosure by Swami Vivekananda University — governance, academics, admissions, research, student life and contact information.{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/page-head.css' %}">
+  <link rel="stylesheet" href="{% static 'css/disclosure.css' %}">
+{% endblock %}
+
+{% block content %}
+
+{# ===========================================================  BANNER  === #}
+{# THE BACKGROUND IMAGE IS SET HERE. Change the file name in the url() and  #}
+{# that is the whole edit — keep the dark gradient in front of it or the    #}
+{# white title stops being readable over a busy photograph.                 #}
+<section class="page-banner"
+         style="background-image: linear-gradient(0deg, rgba(10,10,10,.72), rgba(10,10,10,.55)), url('{% static 'img/about/campus.jpg' %}');">
+  <div class="shell">
+    <h1 class="page-banner__title">Mandatory Disclosure</h1>
+  </div>
+</section>
+
+
+{# =======================================================  DISCLOSURE  === #}
+<section class="section disc-section">
+  <div class="shell">
+
+    {# The half inside <span> is the red half — page-head.css colours it. #}
+    <div class="page-head">
+      <h2 class="page-heading">Mandatory <span>Disclosure</span></h2>
+      <span class="page-rule"></span>
+    </div>
+
+      <h3 class="disc-tag">About the HEI</h3>
+      <ul class="disc-list">
+        {% include "includes/disclosure_row.html" with label="About Us:" doc="/page/about-svu/" %}
+        {% include "includes/disclosure_row.html" with label="Institutional Development Plan:" doc="documents/disclosure/institutional-development-plan.pdf" %}
+        {% include "includes/disclosure_row.html" with label="Recognition :" doc="/page/recognition-approvals/" %}
+        {% include "includes/disclosure_row.html" with label="Annual Reports :" doc="documents/disclosure/annual-report.pdf" %}
+        {# The one row with more than one link — written out rather than    #}
+        {# squeezed through the include, which carries a single link.       #}
+        <li>
+          Annual Accounts including Balance Sheet :
+          {% with pdf="documents/disclosure/annual-accounts-2020-2021.pdf"|doc_url %}
+            {% if pdf %}<a class="disc-link" href="{{ pdf }}" target="_blank" rel="noopener noreferrer">2020-2021</a>,
+            {% else %}<span class="disc-pending">2020-2021 to follow</span>,
+            {% endif %}
+          {% endwith %}
+          {% with pdf="documents/disclosure/annual-accounts-2021-2022.pdf"|doc_url %}
+            {% if pdf %}<a class="disc-link" href="{{ pdf }}" target="_blank" rel="noopener noreferrer">2021-2022</a>,
+            {% else %}<span class="disc-pending">2021-2022 to follow</span>,
+            {% endif %}
+          {% endwith %}
+          {% with pdf="documents/disclosure/annual-accounts-2023-2024.pdf"|doc_url %}
+            {% if pdf %}<a class="disc-link" href="{{ pdf }}" target="_blank" rel="noopener noreferrer">2023-2024</a>
+            {% else %}<span class="disc-pending">2023-2024 to follow</span>
+            {% endif %}
+          {% endwith %}
+        </li>
+      </ul>
+
+      <h3 class="disc-tag">Administration</h3>
+      <ul class="disc-list">
+        {% include "includes/disclosure_row.html" with label="Chancellor:" doc="/page/chancellors-message/" %}
+        {% include "includes/disclosure_row.html" with label="Vice-Chancellor:" doc="documents/disclosure/vice-chancellor.pdf" %}
+        {% include "includes/disclosure_row.html" with label="Registrar:" doc="documents/disclosure/registrar.pdf" %}
+        {% include "includes/disclosure_row.html" with label="Controller of Examination:" doc="documents/disclosure/controller-of-examination.pdf" %}
+        {% include "includes/disclosure_row.html" with label="Ombudsperson :" doc="documents/disclosure/ombudsperson.pdf" %}
+        {% include "includes/disclosure_row.html" with label="Internal Complaint Committee :" doc="documents/disclosure/internal-complaint-committee.pdf" %}
+        {% include "includes/disclosure_row.html" with label="Academic Leadership (Dean/HoD of Schools/Departments/Centres)" %}
+      </ul>
+
+      <h3 class="disc-tag">Academics</h3>
+      <ul class="disc-list">
+        {% include "includes/disclosure_row.html" with label="Academic Calendar :" doc="/page/academic-calendar/" %}
+        {% include "includes/disclosure_row.html" with label="Department/ School :" doc="/academics/departments/" %}
+        {% include "includes/disclosure_row.html" with label="Centre wise faculty/ staff details with photographs:" doc="documents/disclosure/faculty-staff-details.pdf" %}
+        {% include "includes/disclosure_row.html" with label="Internal Quality Assurance Cell (IQAC):-" doc="documents/disclosure/iqac.pdf" %}
+        {% include "includes/disclosure_row.html" with label="Library" %}
+        {% include "includes/disclosure_row.html" with label="Academic collaborations:" doc="/page/collaboration/" %}
+      </ul>
+
+      <h3 class="disc-tag">Admissions &amp; Fee</h3>
+      <ul class="disc-list">
+        {% include "includes/disclosure_row.html" with label="Prospectus :" doc="documents/disclosure/prospectus.pdf" %}
+        {% include "includes/disclosure_row.html" with label="Admission process and guidelines :" note="As per norm of Government of West Bengal &amp; UGC as applicable" %}
+        {% include "includes/disclosure_row.html" with label="Fee refund policy :" note="As per norm of Government of West Bengal &amp; UGC as applicable" %}
+      </ul>
+
+      <h3 class="disc-tag">Research</h3>
+      <ul class="disc-list">
+        {% include "includes/disclosure_row.html" with label="Research and Development Cell :" doc="/page/research-publication-cell/" %}
+        {% include "includes/disclosure_row.html" with label="Incubation Centre:" doc="/page/incubation-centre/" %}
+        {% include "includes/disclosure_row.html" with label="Central facilities" %}
+      </ul>
+
+      <h3 class="disc-tag">Student Life</h3>
+      <ul class="disc-list">
+        {% include "includes/disclosure_row.html" with label="Sports facilities" %}
+        {% include "includes/disclosure_row.html" with label="NSS :" doc="documents/disclosure/nss.pdf" %}
+        {% include "includes/disclosure_row.html" with label="Placement Cell and its activities:" doc="/page/training-placements/" %}
+        {% include "includes/disclosure_row.html" with label="Details of Student Grievance Redressal Committee (SGRC) and Ombudsperson:" doc="documents/disclosure/sgrc-and-ombudsperson.pdf" %}
+        {% include "includes/disclosure_row.html" with label="Internal Complaint Committee:" doc="documents/disclosure/internal-complaint-committee.pdf" %}
+        {% include "includes/disclosure_row.html" with label="Anti-Ragging Cell :" doc="documents/disclosure/anti-ragging-cell.pdf" %}
+      </ul>
+
+      <h3 class="disc-tag">Alumni</h3>
+      <ul class="disc-list">
+        {% include "includes/disclosure_row.html" with label="Alumni Association with details :" doc="documents/disclosure/alumni-association.pdf" %}
+      </ul>
+
+      <h3 class="disc-tag">Information Corner</h3>
+      <ul class="disc-list">
+        {% include "includes/disclosure_row.html" with label="Circulars and Notices:" doc="/notices/" %}
+        {% include "includes/disclosure_row.html" with label="Announcements:" doc="/notices/" %}
+        {% include "includes/disclosure_row.html" with label="Newsletters:" doc="/page/newsletter/" %}
+        {% include "includes/disclosure_row.html" with label="News, Recent events &amp; Achievements:" doc="/events/" %}
+        {% include "includes/disclosure_row.html" with label="Job openings:" doc="documents/disclosure/job-openings.pdf" %}
+        {% include "includes/disclosure_row.html" with label="Reservation Roster :" note="As per norm of Government of West Bengal &amp; UGC as applicable" %}
+      </ul>
+
+      <h3 class="disc-tag">Picture Gallery</h3>
+      {# A single line rather than a bulleted list, as the design has it. #}
+      <p class="disc-line">
+        Link:
+        {% with gallery="/page/gallery/"|doc_url %}
+          <a class="disc-link" href="{{ gallery }}">Click to View</a>
+        {% endwith %}
+      </p>
+
+      <h3 class="disc-tag">Contact us</h3>
+      <ul class="disc-list">
+        {% include "includes/disclosure_row.html" with label="Details with Phone Number, Official Email ID and Address, Location map:" doc="/contact/" %}
+        {% include "includes/disclosure_row.html" with label="Telephone Directory:" doc="documents/disclosure/telephone-directory.pdf" %}
+      </ul>
+
+  </div>
+</section>
+{% endblock %}

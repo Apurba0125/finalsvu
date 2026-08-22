@@ -1,0 +1,51 @@
+{% comment %}
+One funding agency on the Research Funding page. Sits inside the
+<ul class="fund-agencies"> that the first card opens.
+
+Expects:
+  name  the agency, worded exactly as it should read.
+
+        WRITE AN AMPERSAND AS &amp; — a quoted string in a template tag is
+        marked safe by Django, so whatever is typed between the quotes lands
+        in the page verbatim. A bare & displays the same in every browser but
+        is not valid HTML and misparses next to a word. Most of the names on
+        this page carry one, so it matters here more than most.
+
+  url   what Click To View opens. EITHER the agency's own site, written in
+        full — url="https://www.dst.gov.in/" — OR a PDF under static/, with
+        the file in static/documents/funding/ and
+        url="documents/funding/dst.pdf".
+
+        Both go in the same slot. doc_url hands a full URL or a rooted path
+        straight back untouched and only resolves the bare paths, so nothing
+        has to say which kind it is.
+
+  Leave url off and the row still names the agency, reading "To follow" where
+  the link would be, so the list is complete from the day it goes up.
+
+WHY url GOES THROUGH doc_url EVEN FOR A WEB ADDRESS
+It costs nothing — a full URL is handed straight back — and it means the same
+slot takes a PDF without a second code path. For the PDF case it also matters:
+under the manifest storage a bare {% static %} tag raises for a file that was
+never collected, so one mistyped filename among eighty rows would take the
+whole page down instead of leaving one row unlinked. After adding a PDF run:
+
+    python manage.py collectstatic --noinput
+
+rel="noopener" is not optional alongside target="_blank": without it the
+opened tab can reach back through window.opener and navigate this one. It
+matters here more than on most pages, because nearly every one of these links
+leaves for somebody else's server.
+{% endcomment %}
+
+<li class="fund-agency">
+  <span class="fund-agency__name">{{ name }}</span>
+
+  {% with href=url|doc_url %}
+    {% if href %}
+      <a class="fund-agency__link" href="{{ href }}" target="_blank" rel="noopener noreferrer">Click To View<svg width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg><span class="sr-only"> &mdash; {{ name }} (opens in a new tab)</span></a>
+    {% else %}
+      <span class="fund-agency__pending">To follow</span>
+    {% endif %}
+  {% endwith %}
+</li>

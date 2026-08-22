@@ -1,0 +1,97 @@
+/* ==========================================================================
+   Mandatory Disclosure  —  /page/public-self-disclosure/
+   Loaded ALONGSIDE page-head.css, which supplies the photo banner and the
+   heading with its rule. This file is the section chips and the rows under
+   them.
+
+   THE WHOLE PAGE IS TWO THINGS
+   A pale blue chip naming a section, and a bulleted row under it carrying a
+   label and — usually — a link. That is all; ten sections of it.
+   ========================================================================== */
+
+.disc-section { background: var(--paper); }
+
+/* --------------------------------------------------------- the chip ---- */
+/* Square and shrink-to-fit, so the tint ends where the words do. An <h3>,
+   because every row under it until the next chip belongs to it. */
+.disc-tag {
+  display: table;
+  margin: 0;
+  padding: 8px 17px;
+  background: #d7e7f7;
+  color: var(--ink);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+/* A chip sits closer to its own rows than to the section before it. */
+.disc-tag + .disc-list { margin-top: 14px; }
+.disc-list + .disc-tag { margin-top: 30px; }
+
+/* --------------------------------------------------------- the rows ---- */
+.disc-list {
+  margin: 0;
+  padding-left: 22px;
+  list-style: disc;
+}
+.disc-list li {
+  color: var(--ink-soft);
+  font-size: .93rem;
+  line-height: 1.7;
+  /* A label and its link sit on one line and wrap together as a block, so a
+     long label never leaves its link stranded alone on the next line. */
+  overflow-wrap: anywhere;
+}
+.disc-list li + li { margin-top: 7px; }
+.disc-list li::marker { color: var(--ink); }
+
+/* The link itself. Red and bold against the grey of the label, which is what
+   makes a page of thirty of them scannable. */
+.disc-link {
+  color: var(--red);
+  font-size: .93rem;
+  font-weight: 700;
+  transition: color var(--transition);
+}
+.disc-link:hover { color: #a80217; text-decoration: underline; }
+.disc-link:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+
+/* A row that answers with a rule rather than a document — "As per norm of
+   Government of West Bengal…". Plain text, deliberately not styled as a link. */
+.disc-note { color: var(--ink-soft); }
+
+/* Shown in place of the link while the document or page is not set. Quiet,
+   and not a link: something that looks clickable and is not is worse than
+   nothing in its place. */
+.disc-pending {
+  color: var(--muted);
+  font-size: .84rem;
+  font-style: italic;
+}
+
+/* A row that sits outside a bulleted list — the Picture Gallery section is a
+   single line rather than a list of them. */
+.disc-line {
+  margin: 14px 0 0;
+  color: var(--ink-soft);
+  font-size: .93rem;
+  line-height: 1.7;
+}
+
+/* ==========================================================================
+   Responsive
+   One column at every width — this is a list of links read top to bottom, so
+   only the type and the indent come down.
+   ========================================================================== */
+@media (max-width: 575.98px) {
+  .disc-tag { font-size: .92rem; padding: 7px 13px; }
+  .disc-list + .disc-tag { margin-top: 24px; }
+  .disc-list { padding-left: 19px; }
+  .disc-list li,
+  .disc-link,
+  .disc-line { font-size: .88rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .disc-link { transition: none; }
+}

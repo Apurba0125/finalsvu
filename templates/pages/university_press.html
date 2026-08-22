@@ -1,0 +1,359 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% comment %}
+===========================================================================
+UNIVERSITY PRESS  —  served at /page/university-press/
+                     by website.views.university_press
+---------------------------------------------------------------------------
+Header, navigation and footer come from base.html. Do not add them here.
+
+Styling, two shared files and one of its own: page-head.css is the photo
+banner and the heading with its rule; tabs.css is the five pills, their mobile
+dropdown and the show/hide of the panels; press.css is everything inside a
+panel.
+
+EVERYTHING IS IN THIS ONE FILE
+  All five panels are below. No data.py and no per-panel template.
+
+THE FIVE PANELS
+  The pills and panels are the site's shared tab script — initTabPanels in
+  main.js — which finds them by the data-tabs attribute on the wrapper, the
+  .tab-btn and .tab-pane classes inside it, and data-tabs-nav on the pill row.
+  Those names are a contract with the script: rename one and the panels stop
+  switching. The ids only have to match between a button's data-tab-target and
+  its panel, so a sixth panel is a matter of copying a button and a panel and
+  giving the pair a new id.
+
+  Five pills wrap to three rows on a phone, so under 768px they collapse
+  behind the toggle at the top, whose label reads whichever panel is open.
+
+MISSION, VISION AND OBJECTIVES ARE THE SAME TWO SHAPES
+  A numbered blue chip, then the paragraph belonging to it. Repeat. To add
+  one, copy a pair and change the words:
+
+    <h4 class="press-tag">9. Name of the point:</h4>
+    <p class="press-text">The sentence that explains it.</p>
+
+  THE NUMBER IS TYPED here, not generated. These are separate blocks with a
+  paragraph between them rather than one list, so an <ol> cannot hold them —
+  renumber by hand if you reorder. Spacing is automatic; no <br> needed.
+
+  A panel can open with a paragraph above the first chip — Objectives does —
+  by putting a <p class="press-lead"> before it.
+
+COMMITTEE
+  One <li class="press-member"> per person: a name, and a role under it. A
+  card with no role simply leaves the second <span> out, as the last one does.
+  Three to a row on a desktop, two under 992px, one under 576px.
+
+PUBLISHED BOOKES
+  One {% include %} line per book:
+
+    {% include "includes/press_book.html" with title="Biotech Miracles" doc="documents/press/biotech-miracles.pdf" %}
+
+  doc is what Click to View opens: a PDF under static/ (put it in
+  static/documents/press/) or a full address. The same slot takes either.
+  Leave it off and the row still names the book, reading "To follow".
+
+  NONE OF THE BOOKS BELOW CARRY A doc= YET. Add doc= as each file is settled
+  and that row becomes a link on its own — no other edit, and after adding a
+  PDF run
+
+      python manage.py collectstatic --noinput
+
+WRITE AN AMPERSAND AS &amp; — a bare & is not valid HTML and misparses next to
+a word, e.g. "&copy" would be read as the © symbol.
+
+NOTE ON COMMENTS: the hash-style Django comment {# … #} covers a SINGLE line.
+For a multi-line note use a comment/endcomment pair like this one, or the text
+leaks onto the page and any tag inside it actually runs.
+===========================================================================
+{% endcomment %}
+
+{% block title %}University Press | {{ site.site_name }}{% endblock %}
+{% block meta_description %}The University Press at Swami Vivekananda University — its mission, vision and objectives, the press committee, and the books it has published.{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/page-head.css' %}">
+  <link rel="stylesheet" href="{% static 'css/tabs.css' %}">
+  <link rel="stylesheet" href="{% static 'css/press.css' %}">
+{% endblock %}
+
+{% block content %}
+
+{# ===========================================================  BANNER  === #}
+{# THE BACKGROUND IMAGE IS SET HERE. Change the file name in the url() and  #}
+{# that is the whole edit — keep the dark gradient in front of it or the    #}
+{# white title stops being readable over a busy photograph.                 #}
+<section class="page-banner"
+         style="background-image: linear-gradient(0deg, rgba(10,10,10,.72), rgba(10,10,10,.55)), url('{% static 'img/about/campus.jpg' %}');">
+  <div class="shell">
+    <h1 class="page-banner__title">University Press</h1>
+  </div>
+</section>
+
+
+{# =============================================================  BODY  === #}
+<section class="section press-section">
+  <div class="shell">
+
+    {# The half inside <span> is the red half — page-head.css colours it. #}
+    <div class="page-head">
+      <h2 class="page-heading">University <span>Press</span></h2>
+      <span class="page-rule"></span>
+    </div>
+
+    <div class="tabset" data-tabs>
+
+      {# Under 768px the pills collapse behind this control. It is a real   #}
+      {# button rather than a <select> so the pills keep their shape above  #}
+      {# the breakpoint, and the label below reads whichever pill is open.  #}
+      <button class="tabset__toggle" type="button" data-tabs-toggle
+              aria-expanded="false" aria-controls="pressTabNav">
+        <span data-tabs-current>Mission</span>
+        {# Sized in the markup as well as the CSS: an <svg> with no        #}
+        {# intrinsic size falls back to 300x150, so a stylesheet that has  #}
+        {# not loaded yet puts a full-width chevron on the page.           #}
+        <svg width="12" height="8" aria-hidden="true" focusable="false"><use href="#i-caret"></use></svg>
+      </button>
+
+      <div class="tabset__nav" id="pressTabNav" data-tabs-nav
+           role="tablist" aria-label="University Press">
+
+        <button class="tab-btn is-active" type="button" role="tab"
+                id="tab-press-mission" data-tab-target="#pane-press-mission"
+                aria-controls="pane-press-mission"
+                aria-selected="true" tabindex="0">Mission</button>
+
+        <button class="tab-btn" type="button" role="tab"
+                id="tab-press-vision" data-tab-target="#pane-press-vision"
+                aria-controls="pane-press-vision"
+                aria-selected="false" tabindex="-1">Vision</button>
+
+        <button class="tab-btn" type="button" role="tab"
+                id="tab-press-objectives" data-tab-target="#pane-press-objectives"
+                aria-controls="pane-press-objectives"
+                aria-selected="false" tabindex="-1">Objectives</button>
+
+        <button class="tab-btn" type="button" role="tab"
+                id="tab-press-committee" data-tab-target="#pane-press-committee"
+                aria-controls="pane-press-committee"
+                aria-selected="false" tabindex="-1">Committee</button>
+
+        {# "Bookes" is how this pill reads on the page it was rebuilt from. #}
+        <button class="tab-btn" type="button" role="tab"
+                id="tab-press-books" data-tab-target="#pane-press-books"
+                aria-controls="pane-press-books"
+                aria-selected="false" tabindex="-1">Published Bookes</button>
+      </div>
+
+
+      {# ===================================================== MISSION === #}
+      <div class="tab-pane is-active" id="pane-press-mission" role="tabpanel"
+           aria-labelledby="tab-press-mission" tabindex="0">
+
+        <h3 class="press-pane__title">Mission</h3>
+
+        <h4 class="press-tag">1. Scholarly Excellence:</h4>
+        <p class="press-text">To publish high-quality, peer-reviewed academic works that contribute to the scholarly excellence of the university and the broader academic community.</p>
+
+        <h4 class="press-tag">2. Dissemination of Knowledge:</h4>
+        <p class="press-text">To facilitate the dissemination of knowledge by making scholarly research accessible to a wide audience, both within and beyond the academic community.</p>
+
+        <h4 class="press-tag">3. Supporting University Goals:</h4>
+        <p class="press-text">To align with and support the academic goals, mission, and values of the university through the publication of works that reflect its commitment to education and research.</p>
+
+        <h4 class="press-tag">4. Promoting Diversity of Thought:</h4>
+        <p class="press-text">To publish a diverse range of works that represent various disciplines, perspectives, and methodologies, fostering a rich intellectual environment.</p>
+
+        <h4 class="press-tag">5. Cultivating Emerging Scholars:</h4>
+        <p class="press-text">To provide a platform for emerging scholars, including faculty members, graduate students, and researchers, to showcase their research and contribute to academic discourse.</p>
+
+        <h4 class="press-tag">6. Encouraging Interdisciplinary Collaboration:</h4>
+        <p class="press-text">To promote interdisciplinary collaboration by publishing works that bridge gaps between different academic fields and contribute to a holistic understanding of complex issues.</p>
+
+        <h4 class="press-tag">7. Serving as a Hub for Academic Dialogue:</h4>
+        <p class="press-text">To serve as a hub for academic dialogue and collaboration, facilitating the exchange of ideas among scholars and researchers.</p>
+
+        <h4 class="press-tag">8. Maintaining Ethical Publishing Practices:</h4>
+        <p class="press-text">To uphold ethical publishing practices, including rigorous peer review processes, to ensure the integrity and reliability of published works.</p>
+      </div>
+
+
+      {# ====================================================== VISION === #}
+      <div class="tab-pane" id="pane-press-vision" role="tabpanel"
+           aria-labelledby="tab-press-vision" tabindex="0">
+
+        <h3 class="press-pane__title">Vision</h3>
+
+        <h4 class="press-tag">1. Global Recognition:</h4>
+        <p class="press-text">To establish the university press as a globally recognized and respected publisher of academic works.</p>
+
+        <h4 class="press-tag">2. Contributing to the Advancement of Knowledge:</h4>
+        <p class="press-text">To contribute significantly to the advancement of knowledge by publishing works that push the boundaries of research and scholarship.</p>
+
+        <h4 class="press-tag">3. Open Access and Accessibility:</h4>
+        <p class="press-text">To explore and promote open access initiatives, making scholarly content more widely accessible to researchers, students, and the general public.</p>
+
+        <h4 class="press-tag">4. Innovation in Publishing:</h4>
+        <p class="press-text">To embrace and pioneer innovative publishing practices, including the integration of digital technologies, to enhance the dissemination and impact of scholarly works.</p>
+
+        <h4 class="press-tag">5. Building a Diverse and Inclusive Collection:</h4>
+        <p class="press-text">To build a diverse and inclusive collection of publications that reflects a variety of voices, perspectives, and research traditions.</p>
+
+        <h4 class="press-tag">6. Catalyzing Intellectual Conversations:</h4>
+        <p class="press-text">To catalyze intellectual conversations and debates through the publication of works that challenge existing paradigms and contribute to the evolution of thought.</p>
+
+        <h4 class="press-tag">7. Supporting Educational Initiatives:</h4>
+        <p class="press-text">To support educational initiatives by publishing materials that enhance the learning experience for students and educators.</p>
+
+        <h4 class="press-tag">8. Adaptability and Sustainability:</h4>
+        <p class="press-text">To remain adaptable and sustainable in the face of changing trends in publishing, ensuring the continued impact and relevance of the university press.</p>
+
+        <h4 class="press-tag">9. Preserving Academic Heritage:</h4>
+        <p class="press-text">To play a role in preserving and disseminating the academic heritage of the university by publishing works that contribute to its intellectual legacy.</p>
+
+        <h4 class="press-tag">10. Alignment with University Values:</h4>
+        <p class="press-text">To align with the core values of the university, including a commitment to academic excellence, diversity, integrity, and community engagement.</p>
+      </div>
+
+
+      {# ================================================== OBJECTIVES === #}
+      <div class="tab-pane" id="pane-press-objectives" role="tabpanel"
+           aria-labelledby="tab-press-objectives" tabindex="0">
+
+        <h3 class="press-pane__title">Objectives</h3>
+
+        <p class="press-lead">The objectives of a University Press are diverse
+          and encompass a range of goals related to scholarly publishing,
+          knowledge dissemination, and supporting the academic mission of the
+          university. Here are common objectives of a University Press:</p>
+
+        <h4 class="press-tag">1. Publishing High-Quality Academic Works:</h4>
+        <p class="press-text">Publish scholarly books, monographs, journals, and other academic materials that meet high standards of quality and contribute to the advancement of knowledge in various disciplines.</p>
+
+        <h4 class="press-tag">2. Supporting Faculty and Research Community:</h4>
+        <p class="press-text">Provide a platform for faculty members, researchers, and scholars to publish and share their research findings, contributing to their academic visibility and impact.</p>
+
+        <h4 class="press-tag">3. Disseminating Knowledge Widely:</h4>
+        <p class="press-text">Facilitate the dissemination of academic knowledge by making scholarly works accessible to a broad audience, including students, researchers, educators, and the general public.</p>
+
+        <h4 class="press-tag">4. Encouraging Interdisciplinary Collaboration:</h4>
+        <p class="press-text">Foster interdisciplinary collaboration by publishing works that bridge gaps between different academic disciplines and contribute to a holistic understanding of complex issues.</p>
+
+        <h4 class="press-tag">5. Showcasing Emerging Scholars:</h4>
+        <p class="press-text">Support and showcase the work of emerging scholars, including graduate students and early-career researchers, providing them with opportunities to establish their academic credentials.</p>
+
+        <h4 class="press-tag">6. Promoting Open Access Initiatives:</h4>
+        <p class="press-text">Explore and implement open access initiatives to make scholarly content freely available, fostering a culture of accessibility and openness in academic publishing.</p>
+
+        <h4 class="press-tag">7. Maintaining Ethical Publishing Practices:</h4>
+        <p class="press-text">Uphold rigorous ethical standards in the publishing process, including peer review, to ensure the credibility and integrity of the published works.</p>
+
+        <h4 class="press-tag">8. Contributing to Global Academic Dialogue:</h4>
+        <p class="press-text">Contribute to the global academic discourse by publishing works that address international research questions and engage with diverse perspectives from around the world.</p>
+
+        <h4 class="press-tag">9. Embracing Digital Technologies:</h4>
+        <p class="press-text">Embrace and leverage digital technologies to enhance the reach and impact of scholarly works, including online platforms, e-books, and multimedia content.</p>
+
+        <h4 class="press-tag">10. Supporting Educational Initiatives:</h4>
+        <p class="press-text">Publish materials that support educational initiatives, including textbooks, course materials, and resources that enhance the learning experience for students and educators.</p>
+
+        <h4 class="press-tag">11. Preserving Academic Heritage:</h4>
+        <p class="press-text">Play a role in preserving and disseminating the academic heritage of the university by publishing works that contribute to its intellectual legacy.</p>
+
+        <h4 class="press-tag">12. Engaging with the Community:</h4>
+        <p class="press-text">Engage with the local and global community by publishing works that address societal challenges, contribute to public discourse, and promote the university&rsquo;s commitment to social responsibility.</p>
+
+        <h4 class="press-tag">13. Innovating in Publishing Practices:</h4>
+        <p class="press-text">Innovate in publishing practices, exploring new models and approaches to enhance the efficiency and effectiveness of the publishing process.</p>
+
+        <h4 class="press-tag">14. Ensuring Financial Sustainability:</h4>
+        <p class="press-text">Develop and implement strategies to ensure the financial sustainability of the University Press, balancing the commitment to academic goals with prudent business practices.</p>
+
+        <h4 class="press-tag">15. Alignment with University Goals:</h4>
+        <p class="press-text">Align the activities of the University Press with the overarching goals and mission of the university, contributing to its academic reputation and impact.</p>
+
+        <h4 class="press-tag">16. Measuring Impact and Effectiveness:</h4>
+        <p class="press-text">Establish mechanisms to measure the impact and effectiveness of the University Press in terms of scholarly influence, audience reach, and contribution to the university&rsquo;s academic mission.</p>
+      </div>
+
+
+      {# =================================================== COMMITTEE === #}
+      <div class="tab-pane" id="pane-press-committee" role="tabpanel"
+           aria-labelledby="tab-press-committee" tabindex="0">
+
+        <h3 class="press-pane__title">Committee</h3>
+
+        <ul class="press-committee">
+          <li class="press-member">
+            <span class="press-member__name">Prof. (Dr.) Subrata Kumar Dey</span>
+            <span class="press-member__role">Hon&rsquo;ble Vice Chancellor</span>
+          </li>
+          <li class="press-member">
+            <span class="press-member__name">Dr. Pinak Pani Nath</span>
+            <span class="press-member__role">Registrar</span>
+          </li>
+          <li class="press-member">
+            <span class="press-member__name">Mr. Tanmoy Mazumder</span>
+            <span class="press-member__role">Deputy Registrar</span>
+          </li>
+          <li class="press-member">
+            <span class="press-member__name">Mr. Souryadeep Sanyal</span>
+            <span class="press-member__role">Convenor</span>
+          </li>
+          <li class="press-member">
+            <span class="press-member__name">All Departmental Heads</span>
+          </li>
+        </ul>
+      </div>
+
+
+      {# ============================================ PUBLISHED BOOKES === #}
+      <div class="tab-pane" id="pane-press-books" role="tabpanel"
+           aria-labelledby="tab-press-books" tabindex="0">
+
+        <h3 class="press-pane__title">Published <span>Books</span></h3>
+
+        <ul class="press-books">
+          {% include "includes/press_book.html" with title="5G Media Convergence and Cybersecurity" %}
+          {% include "includes/press_book.html" with title="Advances in Computational Solutions" %}
+          {% include "includes/press_book.html" with title="Agriculture Re-imagined" %}
+          {% include "includes/press_book.html" with title="Applied Clinical Nutrition and" %}
+          {% include "includes/press_book.html" with title="Articles from Different Disciplines that Serve" %}
+          {% include "includes/press_book.html" with title="Biotech Miracles" %}
+          {% include "includes/press_book.html" with title="Computational Techniques" %}
+          {% include "includes/press_book.html" with title="Empowering Media" %}
+          {% include "includes/press_book.html" with title="Eye and Vision Science" %}
+          {% include "includes/press_book.html" with title="From Colony to Postcolony" %}
+          {% include "includes/press_book.html" with title="Frontiers of Engineering Innovation Interdisciplinary" %}
+          {% include "includes/press_book.html" with title="Fusion of Minds" %}
+          {% include "includes/press_book.html" with title="Global Media and Cultural Exchange" %}
+          {% include "includes/press_book.html" with title="Harvesting Tomorrow" %}
+          {% include "includes/press_book.html" with title="Harvesting Tomorrow" %}
+          {% include "includes/press_book.html" with title="Innovations and Challenges in" %}
+          {% include "includes/press_book.html" with title="Innovative Approaches in" %}
+          {% include "includes/press_book.html" with title="Interdisciplinary Review Articles" %}
+          {% include "includes/press_book.html" with title="Linking Latitudes_FInal" %}
+          {% include "includes/press_book.html" with title="Media Convergence and Design Skills" %}
+          {% include "includes/press_book.html" with title="Media Gender and Society" %}
+          {% include "includes/press_book.html" with title="Microbes and Biotechnology" %}
+          {% include "includes/press_book.html" with title="Microbial Biotechnology" %}
+          {% include "includes/press_book.html" with title="Postcolonial Subjectivities Autonomy" %}
+          {% include "includes/press_book.html" with title="Postcolonialism Text" %}
+          {% include "includes/press_book.html" with title="Research Methodologies" %}
+          {% include "includes/press_book.html" with title="Scientific Frontiers Sustainable" %}
+          {% include "includes/press_book.html" with title="Studies in Tagore" %}
+          {% include "includes/press_book.html" with title="Sociological Perspectives on Media, Gender and Cultural Studies" %}
+          {% include "includes/press_book.html" with title="Synergy in Science and Engineering" %}
+          {% include "includes/press_book.html" with title="Therapeutic Nutrition" %}
+          {% include "includes/press_book.html" with title="Through the Postcolonial Lens" %}
+          {% include "includes/press_book.html" with title="Virtual Reality and Artificial" %}
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+{% endblock %}

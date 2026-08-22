@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% comment %}
+===========================================================================
+VIVEK JYOTI SAMMAN  —  served at /page/vivek-jyoti-samman/
+                       by website.views.vivek_jyoti_samman
+---------------------------------------------------------------------------
+Header, navigation and footer come from base.html. Do not add them here.
+
+Styling: page-head.css gives the photo banner and the heading with its rule;
+samman.css is the grid of honourees.
+
+ONE LINE IS ONE PERSON
+  Every honouree is below, one {% include %} line each, in the order they
+  should appear. No data.py and nothing else to keep in step.
+
+    {% include "includes/samman_card.html" with name="Rupak Barua" role="CEO, AMRI Hospitals" photo="img/samman/rupak-barua.jpg" watch="https://www.youtube.com/watch?v=XXXXXXXXXXX" %}
+
+  name   the person, with the titles they use
+  role   what they do, in a line or two
+  photo  their portrait, as a plain path under static/
+  watch  THE YOUTUBE LINK the Watch Now button opens, written in full
+  more   optional longer note, opened by Read More
+  id     required whenever more is used, and unique on the page
+
+  To add someone, copy a line. To remove one, delete it. The grid reads ACROSS
+  then down, three to a row on a desktop, so the order of the lines is the
+  order on the page. Nothing is sorted and nothing counts the cards.
+
+THE YOUTUBE LINKS ARE NOT SET YET
+  Every card currently reads "Film to follow" where the Watch Now button goes.
+  Paste each film's address into that person's watch= slot and the button
+  appears on its own:
+
+      watch="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+
+  A youtu.be short link works just as well. The address is used exactly as
+  written — it is somebody else's server, so there is nothing to resolve. Each
+  opens in a new tab with rel="noopener", which stops the opened page reaching
+  back through window.opener to navigate this one.
+
+THE PORTRAITS ARE NOT UPLOADED YET
+  Every card names the file it is looking for — img/samman/rupak-barua.jpg and
+  so on. Drop the images into static/img/samman/ under those names and run
+
+      python manage.py collectstatic --noinput
+
+  and each portrait appears by itself. Until then the card shows a hatched
+  placeholder OF THE SAME SHAPE, so nothing on the page moves when the real
+  photograph lands. A mistyped filename leaves that one placeholder rather
+  than taking the whole page down, which is what a bare {% static %} tag would
+  do under the manifest storage.
+
+  Portraits are cropped to a 4:3 box from the TOP rather than the centre,
+  because a face sits in the upper half of a portrait far more often than the
+  middle. Change the ratio in samman.css and every card follows.
+
+WRITE AN AMPERSAND AS &amp; — a quoted string in a template tag is marked safe
+by Django, so what is typed between the quotes lands in the page verbatim. A
+bare & is not valid HTML and misparses next to a word.
+
+NOTE ON COMMENTS: the hash-style Django comment {# … #} covers a SINGLE line.
+For a multi-line note use a comment/endcomment pair like this one, or the text
+leaks onto the page and any tag inside it actually runs.
+===========================================================================
+{% endcomment %}
+
+{% block title %}Vivek Jyoti Samman | {{ site.site_name }}{% endblock %}
+{% block meta_description %}Vivek Jyoti Samman — the academics, industrialists, clinicians and artists honoured by Swami Vivekananda University, each with their film.{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/page-head.css' %}">
+  <link rel="stylesheet" href="{% static 'css/samman.css' %}">
+{% endblock %}
+
+{% block content %}
+
+{# ===========================================================  BANNER  === #}
+{# THE BACKGROUND IMAGE IS SET HERE. Change the file name in the url() and  #}
+{# that is the whole edit — keep the dark gradient in front of it or the    #}
+{# white title stops being readable over a busy photograph.                 #}
+<section class="page-banner"
+         style="background-image: linear-gradient(0deg, rgba(10,10,10,.72), rgba(10,10,10,.55)), url('{% static 'img/about/campus.jpg' %}');">
+  <div class="shell">
+    <h1 class="page-banner__title">Vivek Jyoti Samman</h1>
+  </div>
+</section>
+
+
+{# =========================================================  HONOUREES === #}
+<section class="section samman-section">
+  <div class="shell">
+
+    {# The half inside <span> is the red half — page-head.css colours it. #}
+    <div class="page-head">
+      <h2 class="page-heading">Vivek Jyoti <span>Samman</span></h2>
+      <span class="page-rule"></span>
+    </div>
+
+    <ul class="samman-grid">
+      {% include "includes/samman_card.html" with name="SHRI ALOK RAJORIA, IPS" role="Commissioner of Police, Barrackpore Police Commissionerate" photo="img/samman/shri-alok-rajoria-ips.jpg" %}
+      {% include "includes/samman_card.html" with name="Prof. (Dr.) Rajasekharan Pillai" role="Former Chairman of UGC, Former Director of NAAC" photo="img/samman/prof-dr-rajasekharan-pillai.jpg" more="Former Director of NBA." id="prof-dr-rajasekharan-pillai" %}
+      {% include "includes/samman_card.html" with name="Prof. (Dr.) Suranjan Das" role="Former Vice-Chancellor, Jadavpur University. Former Vice-Chancellor, University of Calcutta" photo="img/samman/prof-dr-suranjan-das.jpg" %}
+      {% include "includes/samman_card.html" with name="Prof. (Dr.) G. D. Sharma" role="Vice Chancellor, University of Science and Technology, Meghalaya" photo="img/samman/prof-dr-g-d-sharma.jpg" more="&amp; President, AIU." id="prof-dr-g-d-sharma" %}
+      {% include "includes/samman_card.html" with name="Dhrubajyoti Chattopadhyay" role="Vice Chancellor, Sister Nivedita University Kolkata" photo="img/samman/dhrubajyoti-chattopadhyay.jpg" %}
+      {% include "includes/samman_card.html" with name="Prof. (Dr.) Deb Narayan Bandyopadhyay" role="Founder Vice Chancellor, Bankura University" photo="img/samman/prof-dr-deb-narayan-bandyopadhyay.jpg" %}
+      {% include "includes/samman_card.html" with name="Chandra Shekhar Ghosh" role="Founder, MD &amp; CEO of Bandhan Bank" photo="img/samman/chandra-shekhar-ghosh.jpg" %}
+      {% include "includes/samman_card.html" with name="Harshavardhan Neotia" role="Chairman, Ambuja Neotia Group" photo="img/samman/harshavardhan-neotia.jpg" %}
+      {% include "includes/samman_card.html" with name="Sanjay Jhunjhunwala" role="Managing Director, Mani Group" photo="img/samman/sanjay-jhunjhunwala.jpg" %}
+      {% include "includes/samman_card.html" with name="Utsav Parekh" role="Director &mdash; Texmaco Limited" photo="img/samman/utsav-parekh.jpg" %}
+      {% include "includes/samman_card.html" with name="Satyam Roychowdhury" role="Chancellor, Sister Nivedita University" photo="img/samman/satyam-roychowdhury.jpg" %}
+      {% include "includes/samman_card.html" with name="Mr. Rahul Todi" role="Managing Director, Shrachi Group" photo="img/samman/mr-rahul-todi.jpg" %}
+      {% include "includes/samman_card.html" with name="Mayank Jalan" role="Chairman and Managing Director, Keventer Agro Limited" photo="img/samman/mayank-jalan.jpg" %}
+      {% include "includes/samman_card.html" with name="Mr. Sushil Mohta" role="Chairman, Merlin Group of Companies" photo="img/samman/mr-sushil-mohta.jpg" %}
+      {% include "includes/samman_card.html" with name="Ambarish Dasgupta" role="Founder and Senior Partner of Intueri Consulting LLP" photo="img/samman/ambarish-dasgupta.jpg" %}
+      {% include "includes/samman_card.html" with name="Mr. Subrata Roy" role="Director of Hi-Tech Animation and Tulipia Learning App" photo="img/samman/mr-subrata-roy.jpg" %}
+      {% include "includes/samman_card.html" with name="Rupak Barua" role="CEO, AMRI Hospitals" photo="img/samman/rupak-barua.jpg" %}
+      {% include "includes/samman_card.html" with name="Dr. Joy Basu" role="Vice President, Apollo Hospitals" photo="img/samman/dr-joy-basu.jpg" %}
+      {% include "includes/samman_card.html" with name="Dr. Rupali Basu" role="Managing Director, Woodlands Hospitals" photo="img/samman/dr-rupali-basu.jpg" %}
+      {% include "includes/samman_card.html" with name="Dr. Shubnum Agarwal" role="M.Sc. Physiotherapy (U.K), PhD (Australia), Hon." photo="img/samman/dr-shubnum-agarwal.jpg" more="Consultant Physiotherapist." id="dr-shubnum-agarwal" %}
+      {% include "includes/samman_card.html" with name="Dr. Lav Kochgaway" role="MBBS, MS &mdash; Ophthalmology. Ophthalmologist, Eye Surgeon. Director of Netrayam" photo="img/samman/dr-lav-kochgaway.jpg" %}
+      {% include "includes/samman_card.html" with name="Kaya Seth" role="Founder, Kaya Seth Aromatherapy Private Limited" photo="img/samman/kaya-seth.jpg" %}
+      {% include "includes/samman_card.html" with name="Subrata Dutta" role="Founder of The George Group of Colleges" photo="img/samman/subrata-dutta.jpg" %}
+      {% include "includes/samman_card.html" with name="Supriya Roy" role="Managing Director, Sugar &amp; Spice" photo="img/samman/supriya-roy.jpg" %}
+      {% include "includes/samman_card.html" with name="Subrata Bhattacharya" role="Former Indian Footballer" photo="img/samman/subrata-bhattacharya.jpg" %}
+      {% include "includes/samman_card.html" with name="Pandit Tejendra Narayan Majumdar" role="Indian Sarod Player" photo="img/samman/pandit-tejendra-narayan-majumdar.jpg" %}
+      {% include "includes/samman_card.html" with name="Baidyanath Chakraborty" role="Renowned Gynecologist and IVF Specialist" photo="img/samman/baidyanath-chakraborty.jpg" %}
+      {% include "includes/samman_card.html" with name="Dr. Bashabi Fraser" role="Professor Emerita of English and Creative Writing" photo="img/samman/dr-bashabi-fraser.jpg" more="Edinburgh Napier University." id="dr-bashabi-fraser" %}
+      {% include "includes/samman_card.html" with name="Dr. Neil Fraser" role="Professor, School of Social and Political Studies, University of Edinburgh" photo="img/samman/dr-neil-fraser.jpg" %}
+      {% include "includes/samman_card.html" with name="Prof. (Dr.) Ambar Chakrabarti" role="Head IT &amp; Tech. Innovation Cell, Dept. of Higher Education" photo="img/samman/prof-dr-ambar-chakrabarti.jpg" %}
+      {% include "includes/samman_card.html" with name="Prof. (Dr.) Arun Bandyopadhyay" role="Director, Gujarat Bidyapeeth University, Gandhinagar" photo="img/samman/prof-dr-arun-bandyopadhyay.jpg" more="Formerly of the Indian Institute of Chemical Biology." id="prof-dr-arun-bandyopadhyay" %}
+      {% include "includes/samman_card.html" with name="Prof. Partha P. Majumder" role="National Science Chair (Scientific Excellence)" photo="img/samman/prof-partha-p-majumder.jpg" %}
+      {% include "includes/samman_card.html" with name="Anjan Mitra" role="Architect, Proprietor, The Appropriate Alternative (TAA)" photo="img/samman/anjan-mitra.jpg" %}
+      {% include "includes/samman_card.html" with name="Satyam Roychowdhury" role="Chancellor, Sister Nivedita University" photo="img/samman/satyam-roychowdhury-2.jpg" %}
+    </ul>
+
+  </div>
+</section>
+{% endblock %}

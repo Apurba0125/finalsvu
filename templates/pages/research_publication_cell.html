@@ -1,0 +1,359 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% comment %}
+===========================================================================
+RESEARCH AND PUBLICATION CELL  —  served at /page/research-publication-cell/
+                                  by website.views.research_publication_cell
+---------------------------------------------------------------------------
+Header, navigation and footer come from base.html. Do not add them here.
+
+Styling, two shared files and one of its own: page-head.css is the photo
+banner and the heading with its rule; tabs.css is the four pills, their mobile
+dropdown and the show/hide of the panels; rpc.css is everything inside a
+panel.
+
+EVERYTHING IS IN THIS ONE FILE
+  All four panels are below. No data.py, no include, no per-panel template.
+
+THE FOUR PANELS
+  The pills and panels are the site's shared tab script — initTabPanels in
+  main.js — which finds them by the data-tabs attribute on the wrapper, the
+  .tab-btn and .tab-pane classes inside it, and data-tabs-nav on the pill row.
+  Those names are a contract with the script: rename one and the panels stop
+  switching. The ids only have to match between a button's data-tab-target and
+  its panel, so a fifth panel is a matter of copying a button and a panel and
+  giving the pair a new id.
+
+  Four pills wrap to two rows on a phone, so under 768px they collapse behind
+  the toggle at the top, whose label reads whichever panel is open.
+
+MISSION, VISION AND OBJECTIVES ARE THE SAME TWO SHAPES
+  A numbered blue chip, then the paragraph belonging to it. Repeat. To add
+  one, copy a pair and change the words:
+
+    <h4 class="rpc-tag">12. Name of the point:</h4>
+    <p class="rpc-text">The sentence that explains it.</p>
+
+  THE NUMBER IS TYPED here, not generated. These are separate blocks with a
+  paragraph between them rather than one list, so an <ol> cannot hold them —
+  renumber by hand if you reorder. Spacing is automatic; no <br> needed.
+
+THE ACTIVITY PANEL IS THE ODD ONE
+  A department, then one or more categories of output under it, each with a
+  numbered list of citations:
+
+    <h3 class="rpc-dept">Department of Civil Engineering</h3>
+    <h4 class="rpc-cat">Journal</h4>
+    <ol class="rpc-cites">
+      <li>Author, A. (2025). Title. <strong>Journal Name</strong>, 4(2), 11-20.</li>
+    </ol>
+
+  HERE THE NUMBER IS GENERATED — the citations are one real list, so adding
+  one in the middle renumbers the rest by itself. A department can carry any
+  number of categories, and a category any number of citations.
+
+  The FIRST department is the worked example and carries one of every block.
+  The rest hold a holding line; replace that <p class="rpc-empty"> with the
+  real categories and citations.
+
+WRITE AN AMPERSAND AS &amp; — a bare & is not valid HTML and misparses next to
+a word, e.g. "&copy" would be read as the © symbol.
+
+NOTE ON COMMENTS: the hash-style Django comment {# … #} covers a SINGLE line.
+For a multi-line note use a comment/endcomment pair like this one, or the text
+leaks onto the page and any tag inside it actually runs.
+===========================================================================
+{% endcomment %}
+
+{% block title %}Research And Publication Cell | {{ site.site_name }}{% endblock %}
+{% block meta_description %}The Research and Publication Cell at Swami Vivekananda University — its mission, vision, objectives and the published output of every department.{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/page-head.css' %}">
+  <link rel="stylesheet" href="{% static 'css/tabs.css' %}">
+  <link rel="stylesheet" href="{% static 'css/rpc.css' %}">
+{% endblock %}
+
+{% block content %}
+
+{# ===========================================================  BANNER  === #}
+{# THE BACKGROUND IMAGE IS SET HERE. Change the file name in the url() and  #}
+{# that is the whole edit — keep the dark gradient in front of it or the    #}
+{# white title stops being readable over a busy photograph.                 #}
+<section class="page-banner"
+         style="background-image: linear-gradient(0deg, rgba(10,10,10,.72), rgba(10,10,10,.55)), url('{% static 'img/about/campus.jpg' %}');">
+  <div class="shell">
+    <h1 class="page-banner__title">Research And Publication Cell</h1>
+  </div>
+</section>
+
+
+{# =============================================================  BODY  === #}
+<section class="section rpc-section">
+  <div class="shell">
+
+    {# The half inside <span> is the red half — page-head.css colours it. #}
+    <div class="page-head">
+      <h2 class="page-heading">Research And <span>Publication Cell</span></h2>
+      <span class="page-rule"></span>
+    </div>
+
+    <div class="tabset" data-tabs>
+
+      {# Under 768px the pills collapse behind this control. It is a real   #}
+      {# button rather than a <select> so the pills keep their shape above  #}
+      {# the breakpoint, and the label below reads whichever pill is open.  #}
+      <button class="tabset__toggle" type="button" data-tabs-toggle
+              aria-expanded="false" aria-controls="rpcTabNav">
+        <span data-tabs-current>Mission</span>
+        {# Sized in the markup as well as the CSS: an <svg> with no        #}
+        {# intrinsic size falls back to 300x150, so a stylesheet that has  #}
+        {# not loaded yet puts a full-width chevron on the page.           #}
+        <svg width="12" height="8" aria-hidden="true" focusable="false"><use href="#i-caret"></use></svg>
+      </button>
+
+      <div class="tabset__nav" id="rpcTabNav" data-tabs-nav
+           role="tablist" aria-label="Research and Publication Cell">
+
+        <button class="tab-btn is-active" type="button" role="tab"
+                id="tab-rpc-mission" data-tab-target="#pane-rpc-mission"
+                aria-controls="pane-rpc-mission"
+                aria-selected="true" tabindex="0">Mission</button>
+
+        <button class="tab-btn" type="button" role="tab"
+                id="tab-rpc-vision" data-tab-target="#pane-rpc-vision"
+                aria-controls="pane-rpc-vision"
+                aria-selected="false" tabindex="-1">Vision</button>
+
+        <button class="tab-btn" type="button" role="tab"
+                id="tab-rpc-objectives" data-tab-target="#pane-rpc-objectives"
+                aria-controls="pane-rpc-objectives"
+                aria-selected="false" tabindex="-1">Objectives</button>
+
+        <button class="tab-btn" type="button" role="tab"
+                id="tab-rpc-activity" data-tab-target="#pane-rpc-activity"
+                aria-controls="pane-rpc-activity"
+                aria-selected="false" tabindex="-1">Activity</button>
+      </div>
+
+
+      {# ===================================================== MISSION === #}
+      <div class="tab-pane is-active" id="pane-rpc-mission" role="tabpanel"
+           aria-labelledby="tab-rpc-mission" tabindex="0">
+
+        <h3 class="rpc-pane__title">Mission</h3>
+
+        <h4 class="rpc-tag">1. Promoting Research Excellence:</h4>
+        <p class="rpc-text">To foster a culture of research excellence within the institution by providing support and resources for faculty and students.</p>
+
+        <h4 class="rpc-tag">2. Facilitating Interdisciplinary Research:</h4>
+        <p class="rpc-text">To encourage and facilitate interdisciplinary research collaborations among faculty members and research scholars.</p>
+
+        <h4 class="rpc-tag">3. Supporting Research Initiatives:</h4>
+        <p class="rpc-text">To provide comprehensive support for research initiatives, including funding, mentorship, and access to research facilities.</p>
+
+        <h4 class="rpc-tag">4. Enhancing Research Skills:</h4>
+        <p class="rpc-text">To organize workshops, seminars, and training programs to enhance the research skills of faculty and students.</p>
+
+        <h4 class="rpc-tag">5. Ensuring Ethical Research Practices:</h4>
+        <p class="rpc-text">To uphold and promote ethical standards in research by providing guidelines, training, and oversight.</p>
+
+        <h4 class="rpc-tag">6. Facilitating Knowledge Transfer:</h4>
+        <p class="rpc-text">To facilitate the transfer of knowledge from research findings to practical applications, contributing to societal development.</p>
+
+        <h4 class="rpc-tag">7. Encouraging Student Involvement:</h4>
+        <p class="rpc-text">To involve students in research activities, fostering a research-oriented mindset and providing opportunities for hands-on experience.</p>
+
+        <h4 class="rpc-tag">8. Promoting Collaboration and Networking:</h4>
+        <p class="rpc-text">To promote collaboration and networking among researchers within the institution and with external research organizations.</p>
+
+        <h4 class="rpc-tag">9. Increasing Research Output:</h4>
+        <p class="rpc-text">To increase the quantity and quality of research publications, presentations, and contributions to conferences.</p>
+
+        <h4 class="rpc-tag">10. Supporting Grant Applications:</h4>
+        <p class="rpc-text">To assist faculty members and researchers in preparing and submitting grant applications for research funding.</p>
+
+        <h4 class="rpc-tag">11. Engaging with Industry and Community:</h4>
+        <p class="rpc-text">To establish connections with industry partners and the community, facilitating collaborative research projects and knowledge exchange.</p>
+      </div>
+
+
+      {# ====================================================== VISION === #}
+      <div class="tab-pane" id="pane-rpc-vision" role="tabpanel"
+           aria-labelledby="tab-rpc-vision" tabindex="0">
+
+        <h3 class="rpc-pane__title">Vision</h3>
+
+        <h4 class="rpc-tag">1. Research Hub of Excellence:</h4>
+        <p class="rpc-text">To position the institution as a hub of research excellence, recognized nationally and internationally for its impactful contributions.</p>
+
+        <h4 class="rpc-tag">2. Innovative Solutions through Research:</h4>
+        <p class="rpc-text">To contribute to the creation of innovative solutions to societal challenges through cutting-edge research.</p>
+
+        <h4 class="rpc-tag">3. Global Collaboration:</h4>
+        <p class="rpc-text">To foster global collaboration by establishing partnerships with renowned research institutions and organizations.</p>
+
+        <h4 class="rpc-tag">4. High-Impact Publications:</h4>
+        <p class="rpc-text">To achieve a reputation for high-impact publications and presentations in reputable journals and conferences.</p>
+
+        <h4 class="rpc-tag">5. Nurturing Future Researchers:</h4>
+        <p class="rpc-text">To inspire and nurture the next generation of researchers by providing a conducive environment for research and scholarly activities.</p>
+
+        <h4 class="rpc-tag">6. Contribution to Knowledge Base:</h4>
+        <p class="rpc-text">To actively contribute to the expansion of the global knowledge base in various disciplines.</p>
+
+        <h4 class="rpc-tag">7. Research with Societal Impact:</h4>
+        <p class="rpc-text">To conduct research that has a positive and tangible impact on society, addressing pressing issues and challenges.</p>
+
+        <h4 class="rpc-tag">8. Continuous Growth and Development:</h4>
+        <p class="rpc-text">To continually evolve and adapt, staying at the forefront of research trends and methodologies.</p>
+
+        <h4 class="rpc-tag">9. Integration of Technology:</h4>
+        <p class="rpc-text">To leverage technological advancements to enhance the efficiency and effectiveness of research processes.</p>
+
+        <h4 class="rpc-tag">10. Alignment with Institutional Goals:</h4>
+        <p class="rpc-text">To align the activities of the Research and Publication Cell with the overall goals and strategic priorities of the institution.</p>
+      </div>
+
+
+      {# ================================================== OBJECTIVES === #}
+      <div class="tab-pane" id="pane-rpc-objectives" role="tabpanel"
+           aria-labelledby="tab-rpc-objectives" tabindex="0">
+
+        <h3 class="rpc-pane__title">Objectives</h3>
+
+        <h4 class="rpc-tag">1. Foster a Research Culture:</h4>
+        <p class="rpc-text">Cultivate a culture that values and prioritizes research within the academic community.</p>
+
+        <h4 class="rpc-tag">2. Support Faculty and Student Research:</h4>
+        <p class="rpc-text">Provide support and resources to faculty members and students engaged in research activities, including funding, mentorship, and access to research facilities.</p>
+
+        <h4 class="rpc-tag">3. Encourage Interdisciplinary Collaboration:</h4>
+        <p class="rpc-text">Promote collaboration among researchers from different disciplines, fostering interdisciplinary research initiatives.</p>
+
+        <h4 class="rpc-tag">4. Enhance Research Skills:</h4>
+        <p class="rpc-text">Organize workshops, training programs, and seminars to enhance the research skills of faculty and students.</p>
+
+        <h4 class="rpc-tag">5. Ensure Ethical Research Practices:</h4>
+        <p class="rpc-text">Establish and uphold ethical standards in research, providing guidelines and oversight to ensure the integrity of research activities.</p>
+
+        <h4 class="rpc-tag">6. Facilitate Knowledge Transfer:</h4>
+        <p class="rpc-text">Support initiatives that facilitate the transfer of research findings into practical applications, contributing to societal development.</p>
+
+        <h4 class="rpc-tag">7. Engage Students in Research:</h4>
+        <p class="rpc-text">Involve students in research activities to encourage a research-oriented mindset and provide hands-on experience.</p>
+
+        <h4 class="rpc-tag">8. Promote Research Output:</h4>
+        <p class="rpc-text">Increase the quantity and quality of research publications, presentations, and contributions to conferences.</p>
+
+        <h4 class="rpc-tag">9. Assist in Grant Applications:</h4>
+        <p class="rpc-text">Provide assistance to faculty members and researchers in preparing and submitting grant applications to secure research funding.</p>
+
+        <h4 class="rpc-tag">10. Build Collaboration Networks:</h4>
+        <p class="rpc-text">Facilitate collaboration and networking opportunities for researchers within the institution and with external research organizations.</p>
+
+        <h4 class="rpc-tag">11. Establish Industry and Community Connections:</h4>
+        <p class="rpc-text">Establish connections with industry partners and the community to facilitate collaborative research projects and knowledge exchange.</p>
+
+        <h4 class="rpc-tag">12. Monitor and Evaluate Research Impact:</h4>
+        <p class="rpc-text">Develop mechanisms to monitor and evaluate the impact of research activities, both within the institution and in broader contexts.</p>
+
+        <h4 class="rpc-tag">13. Promote Open Access and Dissemination:</h4>
+        <p class="rpc-text">Encourage open access to research outputs and promote effective dissemination of research findings through publications, conferences, and other channels.</p>
+
+        <h4 class="rpc-tag">14. Support Innovation and Technology Integration:</h4>
+        <p class="rpc-text">Support research initiatives that incorporate innovative technologies and methodologies, contributing to advancements in the field.</p>
+
+        <h4 class="rpc-tag">15. Nurture Emerging Researchers:</h4>
+        <p class="rpc-text">Provide mentorship and support for emerging researchers, including graduate students and early-career faculty.</p>
+
+        <h4 class="rpc-tag">16. Align with Institutional Goals:</h4>
+        <p class="rpc-text">Ensure that the activities of the Research and Publication Cell align with the overall goals and strategic priorities of the institution.</p>
+      </div>
+
+
+      {# ==================================================== ACTIVITY === #}
+      <div class="tab-pane" id="pane-rpc-activity" role="tabpanel"
+           aria-labelledby="tab-rpc-activity" tabindex="0">
+
+        <h3 class="rpc-pane__title">Activity</h3>
+
+        {# THE ACTIVITY BLOCKS. Copy these into any other department and    #}
+        {# change the words. A department can carry any number of           #}
+        {# categories, and a category any number of citations.              #}
+        <h3 class="rpc-dept">Department of Computer Science and Engineering</h3>
+
+        <h4 class="rpc-cat">Conference</h4>
+        <ol class="rpc-cites">
+          <li>Author, A., Author, B. (2025). Title of the paper presented. <strong>Name of the Conference</strong>, place, date.</li>
+          <li>THE NUMBER IS NOT TYPED — this is an &lt;ol&gt;, so adding a citation
+            in the middle renumbers the rest by itself.</li>
+        </ol>
+
+        <h4 class="rpc-cat">Journal</h4>
+        <ol class="rpc-cites">
+          <li>Author, A. (2025). Title of the article. <strong>Journal Name</strong>, volume(issue), pages.</li>
+        </ol>
+
+        <h4 class="rpc-cat">Book Chapter</h4>
+        <ol class="rpc-cites">
+          <li>Author, A. (2025). Title of the chapter. In <strong>Title of the Book</strong> (pp. 1&ndash;20). Publisher.</li>
+        </ol>
+
+        <h3 class="rpc-dept">Department of Electronics and Communication Engineering</h3>
+        <p class="rpc-empty">The publications of this department will be listed here shortly.</p>
+
+        <h3 class="rpc-dept">Department of Electrical Engineering</h3>
+        <p class="rpc-empty">The publications of this department will be listed here shortly.</p>
+
+        <h3 class="rpc-dept">Department of Mechanical Engineering</h3>
+        <p class="rpc-empty">The publications of this department will be listed here shortly.</p>
+
+        <h3 class="rpc-dept">Department of Civil Engineering</h3>
+        <p class="rpc-empty">The publications of this department will be listed here shortly.</p>
+
+        <h3 class="rpc-dept">Department of Basic Science and Humanities</h3>
+        <p class="rpc-empty">The publications of this department will be listed here shortly.</p>
+
+        <h3 class="rpc-dept">Department of Agriculture</h3>
+        <p class="rpc-empty">The publications of this department will be listed here shortly.</p>
+
+        <h3 class="rpc-dept">Department of Biotechnology</h3>
+        <p class="rpc-empty">The publications of this department will be listed here shortly.</p>
+
+        <h3 class="rpc-dept">Department of Microbiology</h3>
+        <p class="rpc-empty">The publications of this department will be listed here shortly.</p>
+
+        <h3 class="rpc-dept">Department of Food and Nutrition</h3>
+        <p class="rpc-empty">The publications of this department will be listed here shortly.</p>
+
+        <h3 class="rpc-dept">Department of Physiotherapy</h3>
+        <p class="rpc-empty">The publications of this department will be listed here shortly.</p>
+
+        <h3 class="rpc-dept">Department of Optometry</h3>
+        <p class="rpc-empty">The publications of this department will be listed here shortly.</p>
+
+        <h3 class="rpc-dept">Department of Medical Laboratory Technology</h3>
+        <p class="rpc-empty">The publications of this department will be listed here shortly.</p>
+
+        <h3 class="rpc-dept">Department of Management</h3>
+        <p class="rpc-empty">The publications of this department will be listed here shortly.</p>
+
+        <h3 class="rpc-dept">Department of Education</h3>
+        <p class="rpc-empty">The publications of this department will be listed here shortly.</p>
+
+        <h3 class="rpc-dept">Department of Journalism and Mass Communication</h3>
+        <p class="rpc-empty">The publications of this department will be listed here shortly.</p>
+
+        <h3 class="rpc-dept">Department of Multimedia and Animation</h3>
+        <p class="rpc-empty">The publications of this department will be listed here shortly.</p>
+
+        <h3 class="rpc-dept">Department of Psychology</h3>
+        <p class="rpc-empty">The publications of this department will be listed here shortly.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+{% endblock %}

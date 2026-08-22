@@ -1,0 +1,69 @@
+{% comment %}
+One row on the Mandatory Disclosure page. Sits inside a <ul class="disc-list">.
+
+Expects:
+  label  what the row is asking for, ending in its colon exactly as it should
+         read — "Recognition :", "Job openings:".
+
+         WRITE AN AMPERSAND AS &amp; — a quoted string in a template tag is
+         marked safe by Django, so whatever is typed between the quotes lands
+         in the page verbatim. A bare & is not valid HTML and misparses next
+         to a word.
+
+  doc    optional. What Click to View opens, and IT TAKES EITHER KIND:
+
+           a page on this site   doc="/page/about-svu/"
+           a PDF under static/   doc="documents/disclosure/recognition.pdf"
+           somewhere else        doc="https://example.org/report.pdf"
+
+         Nothing has to say which it is. doc_url hands a rooted path or a full
+         address straight back untouched and only resolves the bare ones
+         against static/, so all three work in the same slot.
+
+  note   optional. Plain text INSTEAD of a link, for a row answered by a rule
+         rather than a document — "As per norm of Government of West Bengal
+         &amp; UGC as applicable". Deliberately not styled as a link, because
+         it is not one.
+
+  text   optional wording for the link, when "Click to View" is wrong — the
+         Annual Accounts rows use it to read "2020-2021" and so on.
+
+  Give none of doc, note or text and the row is just its label, which is right
+  for the handful of entries that are headings rather than links.
+
+WHY doc GOES THROUGH doc_url
+Under the manifest storage a bare {% static %} tag raises for a file that was
+never collected, and one mistyped filename among thirty-odd rows would take
+the whole page down. doc_url returns an empty string instead and the row falls
+back to a quiet "to follow". It also means a filename can be written HERE
+BEFORE THE PDF EXISTS — the link appears by itself once it is uploaded and
+collectstatic has run:
+
+    python manage.py collectstatic --noinput
+
+A LINK TO A PAGE ON THIS SITE OPENS IN THE SAME TAB; a document or an outside
+address opens in a new one. That is the distinction people expect, and it is
+worked out from whether the resolved address starts with "/" — no extra
+attribute to remember, and no chance of the two getting out of step.
+rel="noopener" rides along on the new-tab case: without it the opened tab can
+reach back through window.opener and navigate this one.
+{% endcomment %}
+
+<li>
+  {{ label }}
+  {% if note %}
+    <span class="disc-note">{{ note }}</span>
+  {% else %}
+    {% with href=doc|doc_url %}
+      {% if href %}
+        {% if href|slice:":1" == "/" and href|slice:":8" != "/static/" %}
+          <a class="disc-link" href="{{ href }}">{{ text|default:"Click to View" }}</a>
+        {% else %}
+          <a class="disc-link" href="{{ href }}" target="_blank" rel="noopener noreferrer">{{ text|default:"Click to View" }}<span class="sr-only"> (opens in a new tab)</span></a>
+        {% endif %}
+      {% elif doc %}
+        <span class="disc-pending">to follow</span>
+      {% endif %}
+    {% endwith %}
+  {% endif %}
+</li>

@@ -1,0 +1,236 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% comment %}
+===========================================================================
+RESEARCH FUNDING  —  served at /page/research-funding/
+                     by website.views.research_funding
+---------------------------------------------------------------------------
+Header, navigation and footer come from base.html. Do not add them here.
+
+Styling: page-head.css gives the photo banner and the heading with its rule;
+funding.css is the three cards and the list of agencies.
+
+TWO KINDS OF CARD, WHICH ARE THE SAME CARD
+  The first opens its list in place behind Read More. The other two go
+  straight to a document behind Click To View. Nothing switches between them:
+  a card either holds a toggle and a panel, or a link.
+
+ONE LINE IS ONE AGENCY
+
+    {% include "includes/funding_row.html" with name="Wellcome Trust" url="https://wellcome.org/" %}
+
+  name  the agency, worded exactly as it should read
+  url   what Click To View opens: the agency's own site written in full, or a
+        PDF under static/ (put it in static/documents/funding/). The same slot
+        takes either.
+
+  To add an agency, copy a line. To remove one, delete it. Order on the page
+  is the order of the lines; nothing is sorted.
+
+  NONE OF THE LINES BELOW CARRY A url= YET, so every row reads "To follow".
+  Add url= as each address is settled and that row becomes a link on its own.
+
+  A filename can be written BEFORE the PDF exists — the link appears by itself
+  once the file is uploaded and collectstatic has run. A mistyped one leaves
+  that row unlinked rather than taking the whole page down, which is what a
+  bare {% static %} tag would do under the manifest storage. That guard earns
+  its keep here: one typo among eighty-odd rows would otherwise be fatal.
+
+HOW READ MORE WORKS
+  It is a real <button> driving the site's shared accordion — initAccordions
+  in main.js, the same one behind the FAQ — so this page ships no script of
+  its own. The contract is the two attributes on the button: aria-expanded
+  holds the state, aria-controls names the panel. The panel carries hidden, so
+  it is shut in the markup and stays shut if the script never runs. The
+  triangle turning, and "Read More" becoming "Read Less", are both CSS keyed
+  off aria-expanded.
+
+  To add a fourth card, copy a whole <li class="fund-card"> and change its
+  title, its id pair if it opens a list, and what it points at. THE ID PAIR
+  MUST MATCH AND BE UNIQUE ON THE PAGE — nothing counts the cards.
+
+WRITE AN AMPERSAND AS &amp; — a quoted string in a template tag is marked safe
+by Django, so what is typed between the quotes lands in the page verbatim. A
+bare & is not valid HTML and misparses next to a word. Most agency names here
+carry one, so it matters on this page more than most.
+
+NOTE ON COMMENTS: the hash-style Django comment {# … #} covers a SINGLE line.
+For a multi-line note use a comment/endcomment pair like this one, or the text
+leaks onto the page and any tag inside it actually runs.
+===========================================================================
+{% endcomment %}
+
+{% block title %}Research Funding | {{ site.site_name }}{% endblock %}
+{% block meta_description %}Funding agencies for research proposals open to faculty and scholars of Swami Vivekananda University — national, Indian and international schemes.{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/page-head.css' %}">
+  <link rel="stylesheet" href="{% static 'css/funding.css' %}">
+{% endblock %}
+
+{% block content %}
+
+{# ===========================================================  BANNER  === #}
+{# THE BACKGROUND IMAGE IS SET HERE. Change the file name in the url() and  #}
+{# that is the whole edit — keep the dark gradient in front of it or the    #}
+{# white title stops being readable over a busy photograph.                 #}
+<section class="page-banner"
+         style="background-image: linear-gradient(0deg, rgba(10,10,10,.72), rgba(10,10,10,.55)), url('{% static 'img/about/campus.jpg' %}');">
+  <div class="shell">
+    <h1 class="page-banner__title">List Of Funding Agencies</h1>
+  </div>
+</section>
+
+
+{# ==========================================================  FUNDING  === #}
+<section class="section fund-section">
+  <div class="shell">
+
+    {# The half inside <span> is the red half — page-head.css colours it. #}
+    <div class="page-head">
+      <h2 class="page-heading">List Of <span>Funding Agencies</span></h2>
+      <span class="page-rule"></span>
+    </div>
+
+    <ul class="fund-list">
+
+      {# ------------------------------------------- opens its list --- #}
+      <li class="fund-card">
+        <h3 class="fund-card__title">List of Project Funding Agencies for Research Proposals</h3>
+
+        <button class="fund-card__toggle" type="button" data-disclosure
+                aria-expanded="false" aria-controls="fund-projects">
+          {# Sized in the markup as well as the CSS: an <svg> with a viewBox #}
+          {# and no dimensions expands to fill its box, so a stylesheet that #}
+          {# has not loaded yet would put a full-width triangle on the page. #}
+          <svg class="fund-card__caret" width="10" height="10" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+          <span class="fund-card__more">Read More</span>
+          <span class="fund-card__less">Read Less</span>
+          <span class="sr-only"> — the full list of project funding agencies</span>
+        </button>
+
+        <ul class="fund-agencies" id="fund-projects" hidden>
+            {% include "includes/funding_row.html" with name="European Research Council" %}
+            {% include "includes/funding_row.html" with name="Advance Technology Research Laboratories, Japan(ATRL)" %}
+            {% include "includes/funding_row.html" with name="Aeronautical Development Agency Aeronautical Research &amp;Development Board" %}
+            {% include "includes/funding_row.html" with name="Alexander Humboldt Foundation" %}
+            {% include "includes/funding_row.html" with name="Atomic Energy Regulatory Board" %}
+            {% include "includes/funding_row.html" with name="Australia-India Strategic Research Fund" %}
+            {% include "includes/funding_row.html" with name="Board of Research in Nuclear Sciences(BRNS)" %}
+            {% include "includes/funding_row.html" with name="British Council Division, New Delhi" %}
+            {% include "includes/funding_row.html" with name="BTF Medical Research Grant" %}
+            {% include "includes/funding_row.html" with name="CEFIPRA &ndash; Indo-French Center for the Promotion of Advanced Research" %}
+            {% include "includes/funding_row.html" with name="Commonwealth Academic Staff Fellowship (UK)" %}
+            {% include "includes/funding_row.html" with name="Conservation Leadership Programme (CLP)- Conservation Follow-up Awards" %}
+            {% include "includes/funding_row.html" with name="Council of Scientific and Industrial Research (CSIR)" %}
+            {% include "includes/funding_row.html" with name="Defense Research&amp; Development Organization (DRDO)" %}
+            {% include "includes/funding_row.html" with name="Department of Atomic Energy" %}
+            {% include "includes/funding_row.html" with name="Department of Biotechnology" %}
+            {% include "includes/funding_row.html" with name="Department of Environment &amp; Forests, GOI (DEF)" %}
+            {% include "includes/funding_row.html" with name="International Fellowships for Beginning Investigators (ACSBI, USA)" %}
+            {% include "includes/funding_row.html" with name="International Centre for Genetic Engineering and Biotechnology" %}
+            {% include "includes/funding_row.html" with name="Department of Science &amp; Technology" %}
+            {% include "includes/funding_row.html" with name="Department of Scientific and Industrial Research (DSIR)" %}
+            {% include "includes/funding_row.html" with name="Department of Space, Ahemedabad&amp; Bangalore(DOS)" %}
+            {% include "includes/funding_row.html" with name="The Defence Research &amp; Development Establishment, Gwalior.(DRDE)" %}
+            {% include "includes/funding_row.html" with name="Euroindia &ndash; ICT Cooperation Initiative" %}
+            {% include "includes/funding_row.html" with name="European Research Council" %}
+            {% include "includes/funding_row.html" with name="Fulbright-Nehru Academic and Professional Excellence Fellowships" %}
+            {% include "includes/funding_row.html" with name="German Academic Exchange Service (DAAD)" %}
+            {% include "includes/funding_row.html" with name="Grand Challenges Explorations in global health" %}
+            {% include "includes/funding_row.html" with name="Hewlett-Packard Equipment Grants" %}
+            {% include "includes/funding_row.html" with name="IBM India Research Lab (IBM IRL)" %}
+            {% include "includes/funding_row.html" with name="The Aeronautical Development Establishment, Bangalore(ADE)" %}
+            {% include "includes/funding_row.html" with name="Indian Council for Historical Research" %}
+            {% include "includes/funding_row.html" with name="Indian Council for Social Science Research" %}
+            {% include "includes/funding_row.html" with name="Indian Council of Medical Research (ICMR)" %}
+            {% include "includes/funding_row.html" with name="Indian Space Research organization (ISRO)" %}
+            {% include "includes/funding_row.html" with name="Indira Gandhi Centre for Atomic Research (IGCAR)" %}
+            {% include "includes/funding_row.html" with name="Indo-French Centre for the Promotion of Advanced Research (IFCPAR) a.k.a CEFIPRA" %}
+            {% include "includes/funding_row.html" with name="Indo - South Asia Research Funding" %}
+            {% include "includes/funding_row.html" with name="Indo-US Research Fellowship for Indian Researchers" %}
+            {% include "includes/funding_row.html" with name="Intel Public Affairs International Contribution" %}
+            {% include "includes/funding_row.html" with name="The Defence Accounts Department, DRDL, Hyderabad" %}
+            {% include "includes/funding_row.html" with name="Lady Tata Memorial Trust" %}
+            {% include "includes/funding_row.html" with name="The Combat Vehicles Res. &amp; Dev. Estt. Avadi, Chennai(CVRDE)" %}
+            {% include "includes/funding_row.html" with name="M/S Chennai Petroleum Corporation Ltd.(CPCL)" %}
+            {% include "includes/funding_row.html" with name="M/s VATechWabag Ltd." %}
+            {% include "includes/funding_row.html" with name="Ministry of Coal &amp; Mines" %}
+            {% include "includes/funding_row.html" with name="Ministry of Earth Science, GOI, New Delhi(MOES)" %}
+            {% include "includes/funding_row.html" with name="Ministry of Environment &amp; Forests" %}
+            {% include "includes/funding_row.html" with name="Ministry of Food Processing Industries (MFPI)" %}
+            {% include "includes/funding_row.html" with name="Ministry of Human Resource Development" %}
+            {% include "includes/funding_row.html" with name="(MHRD) Ministry of New and Renewable Energy" %}
+            {% include "includes/funding_row.html" with name="Ministry of Power, Central Power Research Institute (CPRI)" %}
+            {% include "includes/funding_row.html" with name="Ministry of Social Justice&amp; Empowerment (MOSJE)" %}
+            {% include "includes/funding_row.html" with name="Ministry of Water Resources" %}
+            {% include "includes/funding_row.html" with name="National Board for Higher Mathematics (NBHM)" %}
+            {% include "includes/funding_row.html" with name="Naval Research Board" %}
+            {% include "includes/funding_row.html" with name="Oil Industry Development Board (OIDB)" %}
+            {% include "includes/funding_row.html" with name="Home ministryPetroleum Conservation Research Association (PCRA)" %}
+            {% include "includes/funding_row.html" with name="Royal Society of UK" %}
+            {% include "includes/funding_row.html" with name="Shastri Indo-Canadian Institute" %}
+            {% include "includes/funding_row.html" with name="Solutions for Environmental Contrasts in Coastal Areas (SECOA)" %}
+            {% include "includes/funding_row.html" with name="Tamilnadu State Council for Science &amp;Technology" %}
+            {% include "includes/funding_row.html" with name="Tata Institute of Fundamental Research" %}
+            {% include "includes/funding_row.html" with name="The Development of Rural Development and Panchayat Raj, Chennai (DRD&amp;PR)" %}
+            {% include "includes/funding_row.html" with name="The International Advanced Research Centre for Powder Metallurgy and New Materials, Hyderabad (ARCI)" %}
+            {% include "includes/funding_row.html" with name="The Department of Space, Bangalore (DOS)" %}
+            {% include "includes/funding_row.html" with name="The European Union Collaboration, Switzerland" %}
+            {% include "includes/funding_row.html" with name="The Indian National Centre for Ocean Information Services, Hyderabad (INCOIS)" %}
+            {% include "includes/funding_row.html" with name="The Institute of Hydraulics &amp; hydrology, Poondi.The Inter-University Accelerator, GOI, New Delhi (UAC)" %}
+            {% include "includes/funding_row.html" with name="The National Aerospace Laboratory, Bangalore.(NAL)" %}
+            {% include "includes/funding_row.html" with name="The National Initiative on Climate Resilient Agriculture, Hyderabad." %}
+            {% include "includes/funding_row.html" with name="The National Institute of Ocean Technology (NIOT)" %}
+            {% include "includes/funding_row.html" with name="The National Medicinal Plants Board" %}
+            {% include "includes/funding_row.html" with name="The Oil and Natural Gas Corporation Ltd. Chennai(ONGC)" %}
+            {% include "includes/funding_row.html" with name="The Tamil Virtual University, Chennai(TVU)" %}
+            {% include "includes/funding_row.html" with name="The Tamilnadu Forest Development, Chennai(TNFD)" %}
+            {% include "includes/funding_row.html" with name="The Tamilnadu Pollution Control Board, Govt. ofTamilnadu (TNPCB)" %}
+            {% include "includes/funding_row.html" with name="The Tata Steel Limited, Jamshedpur" %}
+            {% include "includes/funding_row.html" with name="University Grants Commission (UGC)" %}
+            {% include "includes/funding_row.html" with name="Wellcome Trust" %}
+            {% include "includes/funding_row.html" with name="World Cancer Research Fund International" %}
+            {% include "includes/funding_row.html" with name="Yamagiwa-Yoshida Memorial international study grants" %}
+            {% include "includes/funding_row.html" with name="Khorana- Nirenberg Scholar Program (India/NIH)" %}
+            {% include "includes/funding_row.html" with name="IBM - IUSSTF Visiting Fellowships in Nanotechnology (Thomas J. Watson Research Laboratory New York)" %}
+        </ul>
+      </li>
+
+      {# ------------------------------------ goes to a document --- #}
+      <li class="fund-card">
+        <h3 class="fund-card__title">Indian Funding Agencies for Research Proposals</h3>
+        {% with doc="documents/funding/indian-funding-agencies.pdf"|doc_url %}
+          {% if doc %}
+            <a class="fund-card__link" href="{{ doc }}" target="_blank" rel="noopener noreferrer">
+              Click To View
+              <svg width="10" height="10" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg>
+              <span class="sr-only">&mdash; Indian Funding Agencies for Research Proposals (opens in a new tab)</span>
+            </a>
+          {% else %}
+            <span class="fund-card__pending">Document to follow</span>
+          {% endif %}
+        {% endwith %}
+      </li>
+
+      <li class="fund-card">
+        <h3 class="fund-card__title">International Funding Agencies for Research Proposals</h3>
+        {% with doc="documents/funding/international-funding-agencies.pdf"|doc_url %}
+          {% if doc %}
+            <a class="fund-card__link" href="{{ doc }}" target="_blank" rel="noopener noreferrer">
+              Click To View
+              <svg width="10" height="10" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg>
+              <span class="sr-only">&mdash; International Funding Agencies for Research Proposals (opens in a new tab)</span>
+            </a>
+          {% else %}
+            <span class="fund-card__pending">Document to follow</span>
+          {% endif %}
+        {% endwith %}
+      </li>
+
+    </ul>
+
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,203 @@
+/* ==========================================================================
+   Research Funding  —  /page/research-funding/
+   Loaded ALONGSIDE page-head.css, which supplies the photo banner and the
+   heading with its rule. This file is the three cards and the list of
+   agencies the first one opens.
+
+   TWO KINDS OF CARD, WHICH ARE THE SAME CARD
+   One opens a list in place behind Read More; the other two are a title over
+   a Click To View link. Nothing switches between them — a card either holds a
+   .fund-card__toggle and a panel, or a .fund-card__link, and the spacing
+   sorts itself out either way.
+   ========================================================================== */
+
+.fund-section { background: var(--paper); }
+
+/* =========================================================== CARDS ======= */
+.fund-list {
+  display: grid;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fund-card {
+  padding: 20px 26px 18px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-xs);
+  transition: box-shadow var(--transition);
+}
+.fund-card:hover { box-shadow: var(--shadow-sm); }
+
+.fund-card__title {
+  margin: 0;
+  color: var(--ink);
+  font-size: 1.16rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+/* ---------------------------------------------- Click To View (leaf) ---- */
+/* On a card that goes straight to a document rather than opening a list. */
+.fund-card__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin: 12px 0 0 12px;
+  color: var(--red);
+  font-size: .82rem;
+  font-weight: 700;
+  line-height: 1.4;
+  transition: color var(--transition);
+}
+.fund-card__link:hover { color: #a80217; text-decoration: underline; }
+.fund-card__link:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
+.fund-card__link svg {
+  flex: none;
+  width: 10px; height: 10px;
+  fill: currentColor;
+  transition: transform var(--transition);
+}
+.fund-card__link:hover svg { transform: translateX(3px); }
+
+/* Shown in place of that link while the document is not uploaded. A line of
+   type rather than a dead link: something that looks clickable and is not is
+   worse than nothing in its place. */
+.fund-card__pending {
+  display: inline-block;
+  margin: 12px 0 0 12px;
+  color: var(--muted);
+  font-size: .8rem;
+  font-style: italic;
+}
+
+/* ------------------------------------------------- Read More (branch) --- */
+/* A <button>, so every one of the browser's defaults has to be undone: it
+   does not inherit the page font and arrives with a border, a grey face and
+   padding of its own. */
+.fund-card__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--red);
+  font-family: inherit;
+  font-size: .95rem;
+  font-weight: 400;
+  line-height: 1.4;
+  cursor: pointer;
+  transition: color var(--transition);
+}
+.fund-card__toggle:hover { color: #a80217; text-decoration: underline; }
+.fund-card__toggle:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
+
+/* The triangle turns to point down while the list is open — the one piece of
+   state that reads at a glance without anyone having to read the words. */
+.fund-card__caret {
+  flex: none;
+  width: 10px; height: 10px;
+  fill: currentColor;
+  transition: transform var(--transition);
+}
+.fund-card__toggle[aria-expanded="true"] .fund-card__caret { transform: rotate(90deg); }
+
+/* Two labels, one hidden. Swapping them off aria-expanded keeps the wording
+   in the markup where it can be edited rather than in a string in main.js. */
+.fund-card__less { display: none; }
+.fund-card__toggle[aria-expanded="true"] .fund-card__more { display: none; }
+.fund-card__toggle[aria-expanded="true"] .fund-card__less { display: inline; }
+
+/* ======================================================== AGENCIES ====== */
+/* hidden in the markup, so the list is shut before any script runs and stays
+   shut if the script never does. The explicit display:none is not redundant:
+   the hidden attribute is only a UA style rule, and ANY display declaration
+   that matches the element overrides it. */
+.fund-agencies {
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line);
+}
+.fund-agencies[hidden] { display: none; }
+
+/* One agency: its name, and the link that opens its page. The link follows
+   the name rather than being pushed to the right edge — with eighty rows of
+   wildly different name lengths, a ragged right column reads worse than a
+   link that simply trails each one. */
+.fund-agency {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 12px;
+  padding: 11px 6px;
+  border-bottom: 1px solid var(--line);
+}
+.fund-agency__name {
+  color: var(--ink-soft);
+  font-size: .9rem;
+  line-height: 1.6;
+}
+.fund-agency__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+  color: var(--red);
+  font-size: .76rem;
+  font-weight: 700;
+  line-height: 1.4;
+  white-space: nowrap;
+  transition: color var(--transition);
+}
+.fund-agency__link:hover { color: #a80217; text-decoration: underline; }
+.fund-agency__link:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
+.fund-agency__link svg { flex: none; width: 9px; height: 9px; fill: currentColor; }
+
+.fund-agency__pending {
+  flex: none;
+  color: var(--muted);
+  font-size: .75rem;
+  font-style: italic;
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   Responsive
+   One column at every width — this is a list read top to bottom, so only the
+   padding and the type come down.
+   ========================================================================== */
+@media (max-width: 767.98px) {
+  .fund-card { padding: 17px 18px 15px; }
+  .fund-card__title { font-size: 1.05rem; }
+}
+
+@media (max-width: 575.98px) {
+  .fund-list { gap: 12px; }
+  .fund-card { padding: 15px 15px 13px; }
+  .fund-card__title { font-size: .97rem; }
+  .fund-card__link,
+  .fund-card__pending { margin-left: 0; }
+  .fund-card__toggle { font-size: .89rem; }
+  .fund-agency { padding: 10px 2px; }
+  .fund-agency__name { font-size: .86rem; }
+  /* The nowrap comes off here: on the narrowest phone the link sharing a line
+     with the tail of a long agency name is worth more than keeping it whole. */
+  .fund-agency__link,
+  .fund-agency__pending { white-space: normal; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fund-card,
+  .fund-card__toggle,
+  .fund-card__caret,
+  .fund-card__link,
+  .fund-card__link svg,
+  .fund-agency__link { transition: none; }
+  .fund-card__link:hover svg { transform: none; }
+}

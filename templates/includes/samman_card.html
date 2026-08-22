@@ -1,0 +1,89 @@
+{% comment %}
+One honouree on the Vivek Jyoti Samman page. Sits inside a
+<ul class="samman-grid">.
+
+Expects:
+  name   the person, worded exactly as it should read, with the titles they
+         use — "Prof. (Dr.) G. D. Sharma", "Mr. Sushil Mohta".
+
+         WRITE AN AMPERSAND AS &amp; — a quoted string in a template tag is
+         marked safe by Django, so whatever is typed between the quotes lands
+         in the page verbatim. A bare & is not valid HTML and misparses next
+         to a word.
+
+  role   what they do, in a line or two. Always shown.
+
+  photo  optional path under static/, e.g. "img/samman/alok-rajoria.jpg".
+         Put the file in static/img/samman/ and write its name here; that is
+         the whole edit. Without one the card shows a hatched placeholder of
+         the same shape, so the copy around it does not move when the real
+         portrait lands.
+
+  watch  THE YOUTUBE LINK the Watch Now button opens, written in full:
+             watch="https://www.youtube.com/watch?v=XXXXXXXXXXX"
+         A youtu.be short link works just as well. Without one the card reads
+         "Film to follow" instead of showing a button that goes nowhere.
+
+  more   optional. A longer note that opens behind Read More. Only the few
+         cards whose role runs long need it.
+  id     REQUIRED WHENEVER more IS USED, and unique on the page — it wires the
+         Read More button to the note it opens. Anything will do as long as no
+         two cards share it; the lines below use the person's surname.
+
+WHY photo GOES THROUGH doc_url AND watch DOES NOT
+photo is resolved against static/, and under the manifest storage a bare
+{% static %} tag raises for a file that was never collected — one mistyped
+filename among thirty-odd cards would take the whole page down. doc_url
+returns an empty string instead and the card falls back to its placeholder.
+After adding portraits run:
+
+    python manage.py collectstatic --noinput
+
+watch is an address on somebody else's server, so there is nothing to resolve:
+it is used as written.
+
+rel="noopener" is not optional alongside target="_blank": without it the
+opened tab can reach back through window.opener and navigate this one.
+{% endcomment %}
+
+<li class="samman-card">
+  <figure class="samman-card__media">
+    {% with src=photo|doc_url %}
+      {% if src %}
+        <img src="{{ src }}" alt="{{ name }}" loading="lazy">
+      {% else %}
+        <span class="samman-card__missing" aria-hidden="true">
+          {# Sized in the markup as well as the CSS: an <svg> with a viewBox #}
+          {# and no dimensions expands to fill its box, so a stylesheet that #}
+          {# has not loaded yet would put a full-width icon on every card.   #}
+          <svg width="26" height="26" focusable="false"><use href="#i-users"></use></svg>
+        </span>
+      {% endif %}
+    {% endwith %}
+  </figure>
+
+  <div class="samman-card__body">
+    <h3 class="samman-card__name">{{ name }}</h3>
+    <p class="samman-card__role">{{ role }}</p>
+
+    {% if more %}
+      <button class="samman-card__toggle" type="button" data-disclosure
+              aria-expanded="false" aria-controls="samman-{{ id }}">
+        <svg class="samman-card__caret" width="8" height="8" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+        <span class="samman-card__more-label">Read More</span>
+        <span class="samman-card__less">Read Less</span>
+        <span class="sr-only"> about {{ name }}</span>
+      </button>
+      <p class="samman-card__more" id="samman-{{ id }}" hidden>{{ more }}</p>
+    {% endif %}
+
+    {% if watch %}
+      <a class="samman-card__watch" href="{{ watch }}" target="_blank" rel="noopener noreferrer">
+        <svg width="11" height="11" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+        Watch Now<span class="sr-only"> &mdash; the film on {{ name }} (opens YouTube in a new tab)</span>
+      </a>
+    {% else %}
+      <span class="samman-card__pending">Film to follow</span>
+    {% endif %}
+  </div>
+</li>

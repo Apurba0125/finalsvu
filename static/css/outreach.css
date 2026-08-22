@@ -1,0 +1,214 @@
+/* ==========================================================================
+   Social Outreach Activity  —  /page/social-outreach-activities/
+   Loaded ALONGSIDE page-head.css, which supplies the photo banner and the
+   heading with its rule. This file is the two tinted panels and the stack of
+   activity cards beneath them.
+
+   THE TWO PANELS ARE ONE COMPONENT
+   Mission and Vision are the same block in two colours — .sor-panel with a
+   modifier — so the icon, the heading, the bullets and every measurement are
+   set once. A third panel would need only a third modifier.
+
+   THE CARDS
+   Read More is a real <button> driving the site's shared accordion —
+   initAccordions in main.js, the same one behind the FAQ. Everything visible
+   about the open state is driven off aria-expanded, so there is no second
+   source of truth and no class for the script to keep in step.
+   ========================================================================== */
+
+.sor-section { background: var(--paper); }
+
+/* The paragraph that opens the page, above the panels. */
+.sor-intro {
+  margin: 0 0 26px;
+  color: var(--ink-soft);
+  font-size: .93rem;
+  line-height: 1.85;
+  /* Justified, the way the rest of the site sets body copy. Dropped on a
+     phone in the responsive block — it opens rivers in a narrow measure. */
+  text-align: justify;
+}
+
+/* =========================================== MISSION / VISION PANELS ===== */
+.sor-panel {
+  padding: 24px 28px 22px;
+  border-radius: var(--radius-sm);
+}
+.sor-panel + .sor-panel { margin-top: 22px; }
+
+/* The only difference between the two. */
+.sor-panel--mission { background: #f0f0f0; }
+.sor-panel--vision  { background: #dde7fa; }
+
+.sor-panel__head {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin: 0 0 16px;
+  color: var(--ink);
+  font-size: 1.08rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+.sor-panel__head svg {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  fill: var(--ink);
+}
+
+/* Square markers rather than discs, which is what the design uses and what
+   keeps a bulleted run of eight lead-ins from reading as a checklist. */
+.sor-panel__points {
+  margin: 0;
+  padding-left: 22px;
+  list-style: square;
+}
+.sor-panel__points li {
+  color: var(--ink-soft);
+  font-size: .92rem;
+  line-height: 1.75;
+}
+.sor-panel__points li + li { margin-top: 12px; }
+.sor-panel__points li::marker { color: var(--ink); }
+.sor-panel__points strong { color: var(--ink); font-weight: 700; }
+
+/* =========================================================== CARDS ======= */
+.sor-list {
+  display: grid;
+  gap: 12px;
+  margin: 32px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sor-card {
+  padding: 18px 22px 15px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-xs);
+  transition: box-shadow var(--transition);
+}
+.sor-card:hover { box-shadow: var(--shadow-sm); }
+
+.sor-card__text {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: .92rem;
+  line-height: 1.8;
+  text-align: justify;
+}
+.sor-card__text strong { color: var(--ink); font-weight: 700; }
+
+/* --------------------------------------------------- the Read More ------ */
+/* A <button>, so every one of the browser's defaults has to be undone: it
+   does not inherit the page font and arrives with a border, a grey face and
+   padding of its own. */
+.sor-card__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin: 8px 0 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--red);
+  font-family: inherit;
+  font-size: .86rem;
+  font-weight: 500;
+  line-height: 1.4;
+  cursor: pointer;
+  transition: color var(--transition);
+}
+.sor-card__toggle:hover { color: #a80217; text-decoration: underline; }
+.sor-card__toggle:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
+
+/* The triangle turns to point down while the panel is open — the one piece of
+   state that reads at a glance without anyone having to read the words. */
+.sor-card__caret {
+  flex: none;
+  width: 9px;
+  height: 9px;
+  fill: currentColor;
+  transition: transform var(--transition);
+}
+.sor-card__toggle[aria-expanded="true"] .sor-card__caret { transform: rotate(90deg); }
+
+/* Two labels, one hidden. Swapping them off aria-expanded keeps the wording
+   in the markup where it can be edited rather than in a string in main.js. */
+.sor-card__less { display: none; }
+.sor-card__toggle[aria-expanded="true"] .sor-card__more { display: none; }
+.sor-card__toggle[aria-expanded="true"] .sor-card__less { display: inline; }
+
+/* ------------------------------------------------------- the report ----- */
+/* hidden in the markup, so it is shut before any script runs and stays shut
+   if the script never does. The explicit display:none is not redundant: the
+   hidden attribute is only a UA style rule, and ANY display declaration that
+   matches the element overrides it. */
+.sor-card__body {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+  color: var(--ink-soft);
+  font-size: .89rem;
+  line-height: 1.8;
+}
+.sor-card__body[hidden] { display: none; }
+
+/* Reset and re-space at the SAME specificity, so source order decides. A
+   ".sor-card__body p { margin: 0 }" here would be one type selector heavier
+   and would silently kill the gap under every paragraph in a report. */
+.sor-card__body > *     { margin: 0; }
+.sor-card__body > * + * { margin-top: 13px; }
+.sor-card__body strong { color: var(--ink); font-weight: 700; }
+.sor-card__body p { text-align: justify; }
+
+/* A bold line introducing the block under it — Introduction, Objectives,
+   Methodology, Outcomes, Conclusion and the rest. */
+.sor-label {
+  color: var(--ink);
+  font-size: .92rem;
+  font-weight: 700;
+  line-height: 1.5;
+}
+.sor-label + * { margin-top: 5px; }
+* + .sor-label { margin-top: 18px; }
+
+.sor-points {
+  padding-left: 22px;
+  list-style: disc;
+}
+.sor-points li + li { margin-top: 5px; }
+.sor-points li::marker { color: var(--ink); }
+
+/* ==========================================================================
+   Responsive
+   One column at every width — this is a long read rather than a set of cards
+   to scan, so only the padding and the type come down.
+   ========================================================================== */
+@media (max-width: 767.98px) {
+  /* Justified type opens rivers in a narrow measure. */
+  .sor-intro,
+  .sor-card__text,
+  .sor-card__body p { text-align: left; }
+}
+
+@media (max-width: 575.98px) {
+  .sor-intro { font-size: .88rem; }
+  .sor-panel { padding: 18px 16px 16px; }
+  .sor-panel__head { font-size: .97rem; gap: 10px; }
+  .sor-panel__head svg { width: 22px; height: 22px; }
+  .sor-panel__points { padding-left: 19px; }
+  .sor-panel__points li { font-size: .87rem; }
+  .sor-card { padding: 15px 15px 13px; }
+  .sor-card__text { font-size: .88rem; }
+  .sor-card__body { font-size: .85rem; }
+  .sor-points { padding-left: 19px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sor-card,
+  .sor-card__toggle,
+  .sor-card__caret { transition: none; }
+}

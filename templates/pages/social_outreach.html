@@ -1,0 +1,320 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% comment %}
+===========================================================================
+SOCIAL OUTREACH ACTIVITY  —  served at /page/social-outreach-activities/
+                             by website.views.social_outreach
+---------------------------------------------------------------------------
+Header, navigation and footer come from base.html. Do not add them here.
+
+Styling: page-head.css gives the photo banner and the heading with its rule;
+outreach.css is the two tinted panels and the activity cards.
+
+EVERYTHING IS IN THIS ONE FILE
+  The intro, both panels and every activity are below. No data.py, no include.
+
+THE TWO PANELS ARE ONE COMPONENT IN TWO COLOURS
+  Mission is grey, Vision is blue, and the only difference in the markup is
+  the modifier class and the icon:
+
+    <section class="sor-panel sor-panel--mission">   grey
+    <section class="sor-panel sor-panel--vision">    blue
+
+  To add a bullet, copy a line. The lead-in goes in <strong> and comes out
+  dark against the grey of the copy:
+
+    <li><strong>Raise Awareness:</strong> Increase awareness about…</li>
+
+  The icon is any symbol in includes/icons.html — change the href in the
+  <use> tag.
+
+ONE BLOCK IS ONE ACTIVITY
+  Copy a whole <li class="sor-card"> and change three things:
+
+    1. the summary paragraph — what the programme was, with the place name in
+       <strong> the way the others do it
+    2. the id pair — aria-controls="sor-9" on the button and id="sor-9" on the
+       report. THEY MUST MATCH EACH OTHER AND BE UNIQUE ON THE PAGE. That pair
+       is the whole wiring; nothing counts the cards, so one can be dropped
+       into the middle without touching any other.
+    3. the report inside
+
+  Order on the page is the order of the blocks; nothing is sorted.
+
+WHAT CAN GO IN A REPORT
+  The first card carries one of each — copy the pieces out of it:
+
+    <p class="sor-label">Introduction:</p>   a bold line introducing what follows
+    <p>…</p>                                  a paragraph, justified
+    <ul class="sor-points"><li>…              bullets
+    <strong>Lead-in:</strong> …               dark run-in at the head of a paragraph
+
+  Spacing between blocks is set in outreach.css, so there is no need for <br>
+  or empty paragraphs anywhere.
+
+  THE OTHER SEVEN REPORTS HOLD A SINGLE LINE for now. Replace that <p> with
+  the real write-up; nothing else in a card needs touching.
+
+HOW READ MORE WORKS
+  It is a real <button> driving the site's shared accordion — initAccordions
+  in main.js, the same one behind the FAQ and Centre For Excellence — so this
+  page ships no script of its own. The contract is the two attributes on the
+  button: aria-expanded holds the state, aria-controls names the report. The
+  report carries hidden, so it is shut in the markup and stays shut if the
+  script never runs. The caret turning, and "Read More" becoming "Read Less",
+  are both CSS keyed off aria-expanded.
+
+WRITE AN AMPERSAND AS &amp; — a bare & is not valid HTML and misparses next to
+a word, e.g. "&copy" would be read as the © symbol. An apostrophe is best
+written &rsquo; so it curls.
+
+NOTE ON COMMENTS: the hash-style Django comment {# … #} covers a SINGLE line.
+For a multi-line note use a comment/endcomment pair like this one, or the text
+leaks onto the page and any tag inside it actually runs.
+===========================================================================
+{% endcomment %}
+
+{% block title %}Social Outreach Activity | {{ site.site_name }}{% endblock %}
+{% block meta_description %}Social outreach activities at Swami Vivekananda University — health camps, dietary awareness programmes and community initiatives run with local schools and organisations.{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/page-head.css' %}">
+  <link rel="stylesheet" href="{% static 'css/outreach.css' %}">
+{% endblock %}
+
+{% block content %}
+
+{# ===========================================================  BANNER  === #}
+{# THE BACKGROUND IMAGE IS SET HERE. Change the file name in the url() and  #}
+{# that is the whole edit — keep the dark gradient in front of it or the    #}
+{# white title stops being readable over a busy photograph.                 #}
+<section class="page-banner"
+         style="background-image: linear-gradient(0deg, rgba(10,10,10,.72), rgba(10,10,10,.55)), url('{% static 'img/about/campus.jpg' %}');">
+  <div class="shell">
+    <h1 class="page-banner__title">Social Outreach Activity</h1>
+  </div>
+</section>
+
+
+{# =========================================================  OUTREACH  === #}
+<section class="section sor-section">
+  <div class="shell">
+
+    {# The half inside <span> is the red half — page-head.css colours it. #}
+    <div class="page-head">
+      <h2 class="page-heading">Social Outreach <span>Activity</span></h2>
+      <span class="page-rule"></span>
+    </div>
+
+    <p class="sor-intro">Social outreach activities at <strong>Swami Vivekananda
+      University</strong> are dedicated to empowering communities and addressing
+      social issues through impactful initiatives. We strive to enhance
+      educational access, promote social equity, and foster inclusive development
+      by collaborating with local organizations and nonprofit concerns. Our
+      programs aim to raise awareness on critical issues, inspire volunteerism,
+      and support economic growth through job creation and entrepreneurship. By
+      providing valuable resources and fostering a culture of giving, we
+      contribute to sustainable community development and ensure that all
+      individuals have the opportunity to thrive. Through continuous evaluation
+      and innovation, we remain committed to making a meaningful difference.</p>
+
+      <section class="sor-panel sor-panel--mission">
+        <h3 class="sor-panel__head">
+          <svg width="26" height="26" aria-hidden="true" focusable="false"><use href="#i-excellence"></use></svg>
+          <span>Mission of Social Outreach Activities:</span>
+        </h3>
+        <ul class="sor-panel__points">
+          <li><strong>Promote Community Engagement:</strong> Foster active involvement in community initiatives and local events to strengthen societal ties and support communal development.</li>
+          <li><strong>Address Social Issues:</strong> Identify and tackle pressing social issues through targeted programs and partnerships that aim to make a meaningful impact.</li>
+          <li><strong>Support Educational Opportunities:</strong> Provide resources and opportunities for education and skill development to underserved populations to empower and uplift them.</li>
+          <li><strong>Encourage Volunteering:</strong> Inspire and facilitate volunteerism among students and staff to contribute positively to society and enhance collective well-being.</li>
+          <li><strong>Collaborate with Nonprofits:</strong> Partner with nonprofit organizations and social enterprises to leverage expertise and resources for greater social impact.</li>
+          <li><strong>Raise Awareness:</strong> Increase awareness about critical social and environmental issues through campaigns, workshops, and public events.</li>
+          <li><strong>Promote Inclusivity:</strong> Advocate for diversity and inclusivity by supporting initiatives that celebrate different cultures and perspectives.</li>
+          <li><strong>Measure Impact:</strong> Continuously assess and evaluate the effectiveness of outreach activities to ensure they are achieving their intended goals and making a tangible difference.</li>
+        </ul>
+      </section>
+
+      <section class="sor-panel sor-panel--vision">
+        <h3 class="sor-panel__head">
+          <svg width="26" height="26" aria-hidden="true" focusable="false"><use href="#i-innovation"></use></svg>
+          <span>Vision of Social Outreach Activities:</span>
+        </h3>
+        <ul class="sor-panel__points">
+          <li><strong>Empower Communities:</strong> Envision a future where every community has the resources and support needed to thrive and overcome challenges.</li>
+          <li><strong>Promote Social Equity:</strong> Strive for a society where all individuals have equal access to opportunities and are supported in addressing social and economic disparities.</li>
+          <li><strong>Enhance Educational Access:</strong> Aim to provide quality educational resources and learning opportunities to underserved populations, fostering personal and professional growth.</li>
+          <li><strong>Foster Inclusive Development:</strong> Create inclusive programs that celebrate diversity and ensure that all voices are heard and valued in community initiatives.</li>
+          <li><strong>Drive Sustainable Change:</strong> Focus on initiatives that not only address immediate needs but also contribute to long-term, sustainable improvements in society.</li>
+          <li><strong>Build Strong Partnerships:</strong> Develop robust collaborations with organizations, nonprofits, and community leaders to maximize impact and resources.</li>
+          <li><strong>Inspire Volunteerism:</strong> Encourage widespread community involvement and volunteerism, nurturing a culture of giving and shared responsibility.</li>
+          <li><strong>Increase Awareness:</strong> Raise awareness about critical social and environmental issues to drive collective action and foster a more informed and engaged public.</li>
+          <li><strong>Support Economic Growth:</strong> Contribute to economic development by creating job opportunities, supporting entrepreneurship, and enhancing local economies.</li>
+          <li><strong>Evaluate and Innovate:</strong> Continuously assess the effectiveness of outreach activities and innovate approaches to address emerging challenges and opportunities.</li>
+        </ul>
+      </section>
+
+    <ul class="sor-list">
+
+      <li class="sor-card">
+        {# THIS CARD IS THE WORKED EXAMPLE — its report carries one of  #}
+        {# every block a report can use. Copy the pieces out of it.      #}
+        <p class="sor-card__text">An outreach program for spreading awareness on the importance of proper dietary practices among the school-going female students was conducted at <strong>Baranagar Mayapith Nari Siksha Ashrom, Baranagar (School)</strong> on 16.09.2022.</p>
+
+        <button class="sor-card__toggle" type="button" data-disclosure
+                aria-expanded="false" aria-controls="sor-1">
+          {# Sized in the markup as well as the CSS: an <svg> with a     #}
+          {# viewBox and no dimensions expands to fill its box, so a     #}
+          {# stylesheet that has not loaded yet would put a full-width   #}
+          {# triangle on every card.                                     #}
+          <svg class="sor-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+          <span class="sor-card__more">Read More</span>
+          <span class="sor-card__less">Read Less</span>
+          <span class="sr-only"> about this outreach programme</span>
+        </button>
+
+        <div class="sor-card__body" id="sor-1" hidden>
+          {# THE REPORT BLOCKS. Copy these into any other card and change   #}
+          {# the words. Spacing between them is set in outreach.css, so no  #}
+          {# <br> or empty paragraphs are needed anywhere.                  #}
+          <p class="sor-label">Introduction:</p>
+          <p>Write the opening paragraph of the report here &mdash; what the
+            programme was, where it was held and who it reached.</p>
+
+          <p class="sor-label">Objectives:</p>
+          <ul class="sor-points">
+            <li>One objective per bullet.</li>
+            <li>Add or remove bullets freely; nothing counts them.</li>
+          </ul>
+
+          <p class="sor-label">Methodology:</p>
+          <p>How the camp or programme was run.</p>
+
+          <p class="sor-label">Outcomes:</p>
+          <p><strong>A lead-in in bold:</strong> put &lt;strong&gt; around the
+            opening words of a paragraph and they come out dark against the grey
+            of the copy, the way the summary lines above do.</p>
+
+          <p class="sor-label">Conclusion:</p>
+          <p>What the programme achieved.</p>
+        </div>
+      </li>
+
+      <li class="sor-card">
+        <p class="sor-card__text">An initiative was taken to provide individualized diet plan to infants and toddlers after taking proper anthropometric assessment at <strong>Eurokids, Khardah</strong>, on 16.12.2022.</p>
+
+        <button class="sor-card__toggle" type="button" data-disclosure
+                aria-expanded="false" aria-controls="sor-2">
+          <svg class="sor-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+          <span class="sor-card__more">Read More</span>
+          <span class="sor-card__less">Read Less</span>
+          <span class="sr-only"> about this outreach programme</span>
+        </button>
+
+        <div class="sor-card__body" id="sor-2" hidden>
+          <p>The full report of this programme will be published shortly.</p>
+        </div>
+      </li>
+
+      <li class="sor-card">
+        <p class="sor-card__text">An outreach program was conducted on 10.12.2022 at <strong>Aditya Academy Junior School, Sodepur</strong> for counselling the parents of school-going toddlers regarding their dietary practices with providing them with individualized diet plans.</p>
+
+        <button class="sor-card__toggle" type="button" data-disclosure
+                aria-expanded="false" aria-controls="sor-3">
+          <svg class="sor-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+          <span class="sor-card__more">Read More</span>
+          <span class="sor-card__less">Read Less</span>
+          <span class="sr-only"> about this outreach programme</span>
+        </button>
+
+        <div class="sor-card__body" id="sor-3" hidden>
+          <p>The full report of this programme will be published shortly.</p>
+        </div>
+      </li>
+
+      <li class="sor-card">
+        <p class="sor-card__text">A health awareness camp was organized by <strong>Evergreen Sporting Club, Barrackpore</strong>, on 22.01.2023; to make the local population aware of the importance of proper dietary practices after taking anthropometric assessments and providing diet plans to each of them.</p>
+
+        <button class="sor-card__toggle" type="button" data-disclosure
+                aria-expanded="false" aria-controls="sor-4">
+          <svg class="sor-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+          <span class="sor-card__more">Read More</span>
+          <span class="sor-card__less">Read Less</span>
+          <span class="sr-only"> about this outreach programme</span>
+        </button>
+
+        <div class="sor-card__body" id="sor-4" hidden>
+          <p>The full report of this programme will be published shortly.</p>
+        </div>
+      </li>
+
+      <li class="sor-card">
+        <p class="sor-card__text">A health camp was organized by our university at <strong>Summit School, Barrackpore</strong>, on 11.02.2023 for the purpose of providing individualized diet plan to infants and toddlers after taking proper anthropometric assessment and explanation of their suitable diet had been explained to their parents.</p>
+
+        <button class="sor-card__toggle" type="button" data-disclosure
+                aria-expanded="false" aria-controls="sor-5">
+          <svg class="sor-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+          <span class="sor-card__more">Read More</span>
+          <span class="sor-card__less">Read Less</span>
+          <span class="sr-only"> about this outreach programme</span>
+        </button>
+
+        <div class="sor-card__body" id="sor-5" hidden>
+          <p>The full report of this programme will be published shortly.</p>
+        </div>
+      </li>
+
+      <li class="sor-card">
+        <p class="sor-card__text">At <strong>Blooming Buds Day School, Anandapuri Barrackpur</strong>, an awareness camp on a good lifestyle and avoiding improper processed foods was performed by us.</p>
+
+        <button class="sor-card__toggle" type="button" data-disclosure
+                aria-expanded="false" aria-controls="sor-6">
+          <svg class="sor-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+          <span class="sor-card__more">Read More</span>
+          <span class="sor-card__less">Read Less</span>
+          <span class="sr-only"> about this outreach programme</span>
+        </button>
+
+        <div class="sor-card__body" id="sor-6" hidden>
+          <p>The full report of this programme will be published shortly.</p>
+        </div>
+      </li>
+
+      <li class="sor-card">
+        <p class="sor-card__text">A health awareness camp was organized on suitable diet among adolescents at <strong>Baranagar Rajkumari Memorial Girls&rsquo; High School</strong> on 19.01.2024.</p>
+
+        <button class="sor-card__toggle" type="button" data-disclosure
+                aria-expanded="false" aria-controls="sor-7">
+          <svg class="sor-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+          <span class="sor-card__more">Read More</span>
+          <span class="sor-card__less">Read Less</span>
+          <span class="sr-only"> about this outreach programme</span>
+        </button>
+
+        <div class="sor-card__body" id="sor-7" hidden>
+          <p>The full report of this programme will be published shortly.</p>
+        </div>
+      </li>
+
+      <li class="sor-card">
+        <p class="sor-card__text">Department of Food &amp; Nutrition, along with other departments of Allied Health Sciences, headed a health camp for school students (nursery to IX) for their assessment and proper health on 08.02.2023, at <strong>Summit School, Barrackpore</strong></p>
+
+        <button class="sor-card__toggle" type="button" data-disclosure
+                aria-expanded="false" aria-controls="sor-8">
+          <svg class="sor-card__caret" width="9" height="9" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+          <span class="sor-card__more">Read More</span>
+          <span class="sor-card__less">Read Less</span>
+          <span class="sr-only"> about this outreach programme</span>
+        </button>
+
+        <div class="sor-card__body" id="sor-8" hidden>
+          <p>The full report of this programme will be published shortly.</p>
+        </div>
+      </li>
+
+    </ul>
+
+  </div>
+</section>
+{% endblock %}

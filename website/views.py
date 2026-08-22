@@ -951,6 +951,95 @@ NEWSLETTER_MONTHS = [
 ]
 
 
+def public_self_disclosure(request):
+    """Mandatory Disclosure — ten sections of rows, all in the template.
+
+    Takes no context on purpose. Each row is one ``{% include %}`` line in
+    ``templates/pages/public_self_disclosure.html`` carrying its label and
+    whatever the link should open — a page on this site, a PDF or an outside
+    address, all in the same slot.
+
+    Its own template means its route has to sit above the generic
+    ``page/<slug>/`` line in urls.py; below it, page_detail claims the URL
+    first and renders an empty editorial placeholder.
+    """
+    return render(request, "pages/public_self_disclosure.html")
+
+
+def vivek_jyoti_samman(request):
+    """Vivek Jyoti Samman — the honourees, each with their film.
+
+    Takes no context on purpose. Each person is one ``{% include %}`` line in
+    ``templates/pages/vivek_jyoti_samman.html``, carrying their name, what
+    they do, their portrait and the YouTube address Watch Now opens.
+
+    Its own template means its route has to sit above the generic
+    ``page/<slug>/`` line in urls.py; below it, page_detail claims the URL
+    first and renders an empty editorial placeholder.
+    """
+    return render(request, "pages/vivek_jyoti_samman.html")
+
+
+def university_press(request):
+    """University Press — five panels, all in the template.
+
+    Takes no context on purpose. Mission, Vision and Objectives are a numbered
+    chip over its paragraph; Committee is a grid of name cards; Published
+    Bookes is one ``{% include %}`` line per title. All of it is markup in
+    ``templates/pages/university_press.html``.
+
+    Its own template means its route has to sit above the generic
+    ``page/<slug>/`` line in urls.py; below it, page_detail claims the URL
+    first and renders an empty editorial placeholder.
+    """
+    return render(request, "pages/university_press.html")
+
+
+def research_publication_cell(request):
+    """Research And Publication Cell — four panels, all in the template.
+
+    Takes no context on purpose. Mission, Vision and Objectives are a numbered
+    chip over its paragraph, repeated; Activity is a department, its categories
+    of output and their citations. All of it is markup in
+    ``templates/pages/research_publication_cell.html``.
+
+    Its own template means its route has to sit above the generic
+    ``page/<slug>/`` line in urls.py; below it, page_detail claims the URL
+    first and renders an empty editorial placeholder.
+    """
+    return render(request, "pages/research_publication_cell.html")
+
+
+def research_funding(request):
+    """Research Funding — the agencies open to research proposals.
+
+    Takes no context on purpose. The three cards are markup in
+    ``templates/pages/research_funding.html`` and every agency inside the
+    first is one ``{% include %}`` line, so adding one is a line in that file
+    and nothing else.
+
+    Its own template means its route has to sit above the generic
+    ``page/<slug>/`` line in urls.py; below it, page_detail claims the URL
+    first and renders an empty editorial placeholder.
+    """
+    return render(request, "pages/research_funding.html")
+
+
+def social_outreach(request):
+    """Social Outreach Activity — the intro, the two panels and the camps.
+
+    Takes no context on purpose. Every word is markup in
+    ``templates/pages/social_outreach.html``: Mission and Vision are the same
+    panel in two colours, and each activity is a block carrying its own report
+    behind Read More.
+
+    Its own template means its route has to sit above the generic
+    ``page/<slug>/`` line in urls.py; below it, page_detail claims the URL
+    first and renders an empty editorial placeholder.
+    """
+    return render(request, "pages/social_outreach.html")
+
+
 def regulations(request):
     """Regulations — one row per regulation, each opening its document.
 

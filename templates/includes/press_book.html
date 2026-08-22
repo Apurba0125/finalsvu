@@ -1,0 +1,49 @@
+{% comment %}
+One published book on the University Press page. Sits inside a
+<ul class="press-books">.
+
+Expects:
+  title  the book, worded exactly as it should read.
+
+         WRITE AN AMPERSAND AS &amp; — a quoted string in a template tag is
+         marked safe by Django, so whatever is typed between the quotes lands
+         in the page verbatim. A bare & displays the same in every browser but
+         is not valid HTML and misparses next to a word.
+
+  doc    what Click to View opens. EITHER the book as a PDF under static/ —
+         put the file in static/documents/press/ and write
+         "documents/press/biotech-miracles.pdf" — OR a full address if it is
+         hosted elsewhere.
+
+         Both go in the same slot. doc_url hands a full URL or a rooted path
+         straight back untouched and only resolves the bare paths, so nothing
+         has to say which kind it is.
+
+  Leave doc off and the row still names the book, reading "To follow" where
+  the link would be, so the catalogue is complete from the day it goes up.
+
+WHY doc GOES THROUGH doc_url
+Under the manifest storage a bare {% static %} tag raises for a file that was
+never collected, and one mistyped filename among thirty-odd rows would take
+the whole page down. doc_url returns an empty string instead and the row
+quietly falls back. It also means a filename can be written HERE BEFORE THE
+FILE EXISTS — the link appears by itself once it is uploaded and collectstatic
+has run:
+
+    python manage.py collectstatic --noinput
+
+rel="noopener" is not optional alongside target="_blank": without it the
+opened tab can reach back through window.opener and navigate this one.
+{% endcomment %}
+
+<li class="press-book">
+  <span class="press-book__title">{{ title }}</span>
+
+  {% with href=doc|doc_url %}
+    {% if href %}
+      <a class="press-book__link" href="{{ href }}" target="_blank" rel="noopener noreferrer">Click to View<span class="sr-only"> &mdash; {{ title }} (opens in a new tab)</span></a>
+    {% else %}
+      <span class="press-book__pending">To follow</span>
+    {% endif %}
+  {% endwith %}
+</li>
