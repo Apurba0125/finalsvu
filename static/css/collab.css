@@ -22,42 +22,57 @@
 }
 
 /* ============================================================ GRID ======= */
-/* Drawn as a ruled table rather than separated cards: these are partner marks
-   in no particular order, and a continuous rule reads as one set where gaps
-   would read as many.
-
-   The rules are made from ONE border per edge, not two. The container carries
-   the top and left, each cell carries its right and bottom, so neighbouring
-   cells never double up into a 2px line — which is what happens if every cell
-   is given a full border. gap MUST stay 0 for that to hold. */
+/* No rules and no boxes — the marks sit on the page with space around them,
+   and the even spacing is what holds the rows together instead of a border.
+   The grid was ruled once; if it ever goes back, the rules have to be ONE per
+   edge (container top+left, cell right+bottom) with gap:0, or neighbouring
+   cells double up into a 2px line. */
 .collab-grid {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 0;
+  gap: 30px 24px;
   margin: 0;
   padding: 0;
   list-style: none;
-  border-top: 1px solid var(--line);
-  border-left: 1px solid var(--line);
 }
 
+/* A FIXED HEIGHT, not an aspect-ratio. aspect-ratio only sets a PREFERRED
+   size: a grid item's automatic minimum still lets its content push past it,
+   so a tall logo made its own cell taller and the ruling came out ragged —
+   twenty different row heights across seventy-odd cells. A fixed height
+   cannot be pushed, so every cell is identical and the rules stay straight.
+
+   Change the number here and every cell on the page follows. The height is
+   what decides how big a square emblem renders: it is capped by the shorter
+   of the two, and these cells are wider than they are tall. */
 .collab-cell {
   display: grid;
   place-items: center;
-  /* A fixed shape, so a wide wordmark and a square emblem occupy the same
-     box and the rules stay straight across every row. */
-  aspect-ratio: 4 / 3;
-  padding: 16px;
-  border-right: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
+  height: 150px;
   text-align: center;
+  /* The cell can no longer grow, so anything that would not fit is clipped
+     rather than spilling into the row below. */
+  overflow: hidden;
 }
 
 /* contain, not cover: a logo must never be cropped, and these arrive in every
-   proportion from a square emblem to a long wordmark. */
+   proportion from a square emblem to a long wordmark. Every one is scaled to
+   fit the same box, so they all read at the same size.
+
+   min-width/min-height:0 is what makes max-*:100% bite. Without them the
+   image keeps a grid item's automatic minimum — its own intrinsic size — and
+   ignores the cap entirely, which is what was happening here. */
 .collab-cell img {
-  max-width: 100%;
-  max-height: 100%;
+  min-width: 0;
+  min-height: 0;
+  /* Capped INSIDE the cell rather than filling it. At 100% a square seal grew
+     to the full cell height while a wordmark stayed a couple of centimetres
+     tall, so the rows read as wildly different sizes even though every box
+     was identical. Holding both dimensions back to a common band closes most
+     of that gap, and the leftover margin doubles as the breathing room the
+     boxes used to give. */
+  max-width: 84%;
+  max-height: 74%;
   width: auto;
   height: auto;
   object-fit: contain;
@@ -98,8 +113,8 @@
 }
 
 @media (max-width: 991.98px) {
-  .collab-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  .collab-cell { padding: 13px; }
+  .collab-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 26px 20px; }
+  .collab-cell { height: 135px; }
 }
 
 @media (max-width: 767.98px) {
@@ -109,7 +124,7 @@
 @media (max-width: 479.98px) {
   /* Two across is the floor. At one across a cell would be the full width of
      the phone for a mark a couple of centimetres wide. */
-  .collab-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .collab-cell { padding: 11px; }
-  .collab-cell__name { font-size: .72rem; }
+  .collab-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 16px; }
+  .collab-cell { height: 112px; }
+  .collab-cell__name { font-size: .72rem; line-height: 1.3; }
 }
