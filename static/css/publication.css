@@ -1,0 +1,163 @@
+/* ==========================================================================
+   Publication  —  /page/publication/
+   Loaded ALONGSIDE page-head.css, which supplies the photo banner and the
+   heading with its rule. This file is the collapse beneath it: a department
+   bar that opens its faculty, and one row per member.
+
+   The bar is a near-twin of .nl-bar on the Newsletter page and deliberately
+   its own class. This site keeps a stylesheet per page, so a page can be
+   restyled without a second one moving with it; the two are alike today
+   because the same design was asked for twice, not because they are one
+   component.
+   ========================================================================== */
+
+.pub-section { background: var(--paper); }
+
+/* Departments, two to a row on a desktop, reading ACROSS then down.
+   align-items:start is what stops an opened department stretching the shut one
+   beside it to the same height — without it the whole row grows together, and
+   a department with eleven faculty would leave a tall empty box next to it. */
+.pub-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 26px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  align-items: start;
+}
+
+/* ============================================================= BAR ======= */
+.pub-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  width: 100%;
+  padding: 15px 20px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--blue-dark);
+  color: #fff;
+  font-family: inherit;
+  font-size: .93rem;
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+.pub-bar:hover { background: #1d477a; }
+.pub-bar:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+
+/* The chevron points down when shut and up when open — the one piece of state
+   that reads at a glance without anyone having to read the words. */
+.pub-bar svg {
+  flex: none;
+  width: 14px; height: 9px;
+  fill: currentColor;
+  transition: transform var(--transition);
+}
+.pub-bar[aria-expanded="true"] svg { transform: rotate(180deg); }
+
+/* ----------------------------------------------------------- panel ------ */
+/* hidden in the markup, so every panel is shut before any script runs and
+   stays shut if the script never does. The explicit display:none is not
+   redundant: the hidden attribute is only a UA style rule, and ANY display
+   declaration that matches the element overrides it. */
+.pub-panel {
+  padding: 20px 22px 18px;
+  border: 1px solid var(--line);
+  border-top: 0;
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+}
+.pub-panel[hidden] { display: none; }
+
+.pub-panel__title {
+  margin: 0 0 12px;
+  color: var(--red);
+  font-size: 1.08rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+/* ---------------------------------------------------------- faculty ----- */
+/* An <ol>, so the numbers are generated: adding a member in the middle
+   renumbers everyone after them by itself and nothing has to be retyped. */
+.pub-faculty {
+  margin: 0;
+  padding-left: 22px;
+  list-style: decimal;
+}
+.pub-faculty > li { margin-top: 14px; }
+.pub-faculty > li:first-child { margin-top: 0; }
+.pub-faculty > li::marker { color: var(--ink); font-size: .95rem; }
+
+/* The name and the link on one row, the link pushed to the right edge. It
+   wraps to its own line rather than squeezing a long name — flex-wrap plus
+   the row gap below is what allows that. */
+.pub-person {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 18px;
+}
+.pub-person__name {
+  color: var(--ink);
+  font-size: .95rem;
+  line-height: 1.5;
+}
+.pub-person__link {
+  flex: none;
+  color: var(--red);
+  font-size: .95rem;
+  font-weight: 500;
+  transition: color var(--transition);
+}
+.pub-person__link:hover { color: #a80217; text-decoration: underline; }
+.pub-person__link:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
+
+/* Shown in place of View More while that member's publications are not
+   linked yet. Quiet, and not a link: something that looks clickable and is
+   not is worse than nothing in its place. */
+.pub-person__pending {
+  flex: none;
+  color: var(--muted);
+  font-size: .85rem;
+  font-style: italic;
+}
+
+/* A department with no faculty listed yet. */
+.pub-empty {
+  margin: 0;
+  color: var(--muted);
+  font-size: .89rem;
+  font-style: italic;
+  line-height: 1.7;
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+@media (max-width: 767.98px) {
+  /* One department to a row. Two columns of bars leaves each too narrow for a
+     name like "Department of Language, Literature and Cultural Studies"
+     without wrapping it to three lines. */
+  .pub-grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 575.98px) {
+  .pub-bar { padding: 13px 15px; font-size: .87rem; }
+  .pub-panel { padding: 16px 14px 14px; }
+  .pub-panel__title { font-size: 1rem; }
+  .pub-faculty { padding-left: 20px; }
+  .pub-person__name,
+  .pub-person__link { font-size: .88rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pub-bar,
+  .pub-bar svg,
+  .pub-person__link { transition: none; }
+}

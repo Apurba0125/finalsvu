@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% comment %}
+===========================================================================
+REGULATIONS  —  served at /page/regulations/ by website.views.regulations
+---------------------------------------------------------------------------
+Header, navigation and footer come from base.html. Do not add them here.
+
+Styling: page-head.css gives the photo banner and the section heading;
+regulations.css is only the rows.
+
+ONE LINE IS ONE REGULATION
+  Every regulation is below, one {% include %} line each, in the order it
+  should appear. No data.py and nothing else to keep in step.
+
+    {% include "includes/regulation_row.html" with title="M.Sc. Regulations" doc="documents/regulations/msc.pdf" %}
+
+  title  the regulation, worded exactly as it should read
+  doc    what Click To View opens — see below. Leave it off and the row still
+         names the regulation, reading "Document to follow" where the link
+         goes.
+
+  To add a regulation, copy a line. To remove one, delete it. Order on the
+  page is the order of the lines; nothing is sorted.
+
+WHAT Click To View OPENS
+  The same doc= slot takes either kind of destination, and nothing has to say
+  which it is:
+
+    a PDF        doc="documents/regulations/btech-cbcs.pdf"
+                 Put the file in static/documents/regulations/ and run
+                     python manage.py collectstatic --noinput
+
+    elsewhere    doc="https://example.org/regulation.pdf"
+                 A full address is handed straight through untouched.
+
+  A filename can be written BEFORE the PDF exists — the link appears by itself
+  once the file is uploaded. A mistyped one leaves that row reading "Document
+  to follow" rather than taking the whole page down, which is what a bare
+  {% static %} tag would do under the manifest storage.
+
+  NONE OF THE LINES BELOW CARRY A doc= YET, so all twelve rows read that way
+  so far. Add doc= to a line as each regulation is uploaded.
+
+WRITE AN AMPERSAND AS &amp; — a quoted string in a template tag is marked safe
+by Django, so what is typed between the quotes lands in the page verbatim. A
+bare & is not valid HTML and misparses next to a word.
+
+NOTE ON COMMENTS: the hash-style Django comment {# … #} covers a SINGLE line.
+For a multi-line note use a comment/endcomment pair like this one, or the text
+leaks onto the page and any tag inside it actually runs.
+===========================================================================
+{% endcomment %}
+
+{% block title %}Regulations | {{ site.site_name }}{% endblock %}
+{% block meta_description %}Academic regulations of Swami Vivekananda University — undergraduate, postgraduate, diploma and doctoral programmes, research ethics and boards of studies.{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/page-head.css' %}">
+  <link rel="stylesheet" href="{% static 'css/regulations.css' %}">
+{% endblock %}
+
+{% block content %}
+
+{# ===========================================================  BANNER  === #}
+{# THE BACKGROUND IMAGE IS SET HERE. Change the file name in the url() and  #}
+{# that is the whole edit — keep the dark gradient in front of it or the    #}
+{# white title stops being readable over a busy photograph.                 #}
+<section class="page-banner"
+         style="background-image: linear-gradient(0deg, rgba(10,10,10,.72), rgba(10,10,10,.55)), url('{% static 'img/about/campus.jpg' %}');">
+  <div class="shell">
+    <h1 class="page-banner__title">Regulations</h1>
+  </div>
+</section>
+
+
+{# ======================================================  REGULATIONS  === #}
+<section class="section reg-section">
+  <div class="shell">
+
+    {# The whole heading is red on this page, so all of it goes inside the #}
+    {# <span> that page-head.css colours — no rule under it here.          #}
+    <div class="page-head">
+      <h2 class="page-heading"><span>Regulations</span></h2>
+    </div>
+
+    <ul class="reg-list">
+      {% include "includes/regulation_row.html" with title="B. Tech Regulation under CBCS pattern" %}
+      {% include "includes/regulation_row.html" with title="Diploma in Engineering" %}
+      {% include "includes/regulation_row.html" with title="Internal Complaints Committee" %}
+      {% include "includes/regulation_row.html" with title="M.A. Regulations" %}
+      {% include "includes/regulation_row.html" with title="M.Sc. Regulations" %}
+      {% include "includes/regulation_row.html" with title="UG- Regulations under pattern NEP-2020" %}
+      {% include "includes/regulation_row.html" with title="UG-Regulations under CBCS Pattern" %}
+      {% include "includes/regulation_row.html" with title="Research Ethics" %}
+      {% include "includes/regulation_row.html" with title="Regulations for the Degrees of Doctor of Literature ( D. Litt) and Doctor of Science (D. Sc.)" %}
+      {% include "includes/regulation_row.html" with title="Ph.d Regulation 21-22" %}
+      {% include "includes/regulation_row.html" with title="Ph.d Regulation 2022-24" %}
+      {% include "includes/regulation_row.html" with title="PG- Board of Studies" %}
+    </ul>
+
+  </div>
+</section>
+{% endblock %}

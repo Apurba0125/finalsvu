@@ -1,0 +1,115 @@
+/* ==========================================================================
+   Regulations  —  /page/regulations/
+   Loaded ALONGSIDE page-head.css, which supplies the photo banner and the
+   section heading. This file is only the rows beneath it.
+
+   The row is a near-twin of .proj-card on the Project page — the same white
+   card with the link set beside the title — and deliberately its own class.
+   This site keeps a stylesheet per page, so a page can be restyled without a
+   second one moving with it. If the two ever need to change together, that is
+   the moment to lift them into a shared file, not before.
+
+   The one real difference is the chevron after the link, which Project does
+   not carry.
+
+   The whole heading is red on this page, as on Project and Consultancy, so
+   the markup puts all of it inside the <span> that page-head.css colours. No
+   rule under it: the page opens on a card and the card edge does that job.
+   ========================================================================== */
+
+.reg-section { background: var(--paper); }
+
+/* ============================================================ ROWS ======= */
+.reg-list {
+  display: grid;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.reg-card {
+  /* The link sits BESIDE the title rather than under it, on a shared
+     baseline. flex-wrap lets it drop to its own line only when the title has
+     genuinely run out of room, which on a phone it always has. */
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 14px;
+  padding: 22px 26px;
+  background: var(--paper);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition);
+}
+.reg-card:hover { box-shadow: var(--shadow); }
+
+.reg-card__title {
+  color: var(--ink);
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+/* Smaller than the title and set on its baseline, so it reads as an aside to
+   the name rather than a second heading beside it. */
+.reg-card__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--red);
+  font-size: .82rem;
+  font-weight: 700;
+  line-height: 1.4;
+  white-space: nowrap;
+  transition: color var(--transition);
+}
+.reg-card__link:hover { color: #a80217; text-decoration: underline; }
+.reg-card__link:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
+
+.reg-card__link svg {
+  flex: none;
+  width: 10px;
+  height: 10px;
+  fill: currentColor;
+  transition: transform var(--transition);
+}
+.reg-card__link:hover svg { transform: translateX(3px); }
+
+/* Shown in place of the link while the document is not uploaded. A line of
+   type rather than a dead link: something that looks clickable and is not is
+   worse than nothing in its place. */
+.reg-card__pending {
+  color: var(--muted);
+  font-size: .8rem;
+  font-style: italic;
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   Responsive
+   The cards are full width at every size, so there is nothing to reflow —
+   only the padding and the type come down, and the link drops to its own line
+   once the title fills the row.
+   ========================================================================== */
+@media (max-width: 767.98px) {
+  .reg-card { padding: 18px 20px; }
+  .reg-card__title { font-size: .98rem; }
+}
+
+@media (max-width: 575.98px) {
+  .reg-list { gap: 11px; }
+  .reg-card { padding: 15px 16px; gap: 4px 12px; }
+  .reg-card__title { font-size: .93rem; line-height: 1.5; }
+  /* The nowrap comes off here: on the narrowest phone "Click To View" sharing
+     a line with the tail of a long title is worth more than keeping it whole. */
+  .reg-card__link,
+  .reg-card__pending { white-space: normal; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reg-card,
+  .reg-card__link,
+  .reg-card__link svg { transition: none; }
+  .reg-card__link:hover svg { transform: none; }
+}

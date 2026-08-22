@@ -1,0 +1,50 @@
+{% comment %}
+One project on the Project page. Sits inside a <ul class="proj-list">.
+
+Expects:
+  title  the funding body or scheme, worded exactly as it should read.
+
+         WRITE AN AMPERSAND AS &amp; — a quoted string in a template tag is
+         marked safe by Django, so whatever is typed between the quotes lands
+         in the page verbatim. A bare & displays the same in every browser but
+         is not valid HTML and misparses next to a word. That is why the SERB
+         line on this page is written "SCIENCE &amp; ENGINEERING".
+
+  doc    what Click to View opens. EITHER a PDF under static/ — put the file
+         in static/documents/project/ and write
+         "documents/project/icssr.pdf" — OR a full address to the scheme's own
+         page:
+             doc="https://icssr.org/"
+
+         Both go in the same slot. doc_url hands a full URL or a rooted path
+         straight back untouched and only resolves the bare paths, so nothing
+         has to say which kind it is.
+
+  Leave doc off and the row still names the project, reading "Document to
+  follow" where the link would be, so the list stays complete while the papers
+  are being collected.
+
+WHY doc GOES THROUGH doc_url
+Under the manifest storage a bare {% static %} tag raises for a file that was
+never collected, and one mistyped filename would take the whole page down.
+doc_url returns an empty string instead and the row quietly falls back. It
+also means a filename can be written HERE BEFORE THE PDF EXISTS — the link
+appears by itself once the file is uploaded and collectstatic has run:
+
+    python manage.py collectstatic --noinput
+
+rel="noopener" is not optional alongside target="_blank": without it the
+opened tab can reach back through window.opener and navigate this one.
+{% endcomment %}
+
+<li class="proj-card">
+  <span class="proj-card__title">{{ title }}</span>
+
+  {% with href=doc|doc_url %}
+    {% if href %}
+      <a class="proj-card__link" href="{{ href }}" target="_blank" rel="noopener noreferrer">Click to View<span class="sr-only"> &mdash; {{ title }} (opens in a new tab)</span></a>
+    {% else %}
+      <span class="proj-card__pending">Document to follow</span>
+    {% endif %}
+  {% endwith %}
+</li>

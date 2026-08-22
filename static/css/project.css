@@ -1,0 +1,92 @@
+/* ==========================================================================
+   Project  —  /page/project/
+   Loaded ALONGSIDE page-head.css, which supplies the photo banner and the
+   section heading. This file is only the rows beneath it.
+
+   The whole heading is red on this page, as on Consultancy, so the markup
+   puts all of it inside the <span> that page-head.css colours. No rule under
+   it: the page opens on a card and the card edge already does that job.
+   ========================================================================== */
+
+.proj-section { background: var(--paper); }
+
+/* ============================================================ ROWS ======= */
+.proj-list {
+  display: grid;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.proj-card {
+  /* The link sits BESIDE the title rather than under it, on a shared
+     baseline. flex-wrap lets it drop to its own line only when the title has
+     genuinely run out of room, which on a phone it always has. */
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 16px;
+  padding: 22px 26px;
+  background: var(--paper);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition);
+}
+.proj-card:hover { box-shadow: var(--shadow); }
+
+.proj-card__title {
+  color: var(--ink);
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+/* Smaller than the title and set on its baseline, so it reads as an aside to
+   the name rather than a second heading beside it. */
+.proj-card__link {
+  color: var(--red);
+  font-size: .82rem;
+  font-weight: 700;
+  line-height: 1.4;
+  white-space: nowrap;
+  transition: color var(--transition);
+}
+.proj-card__link:hover { color: #a80217; text-decoration: underline; }
+.proj-card__link:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
+
+/* Shown in place of the link while the document is not uploaded. A line of
+   type rather than a dead link: something that looks clickable and is not is
+   worse than nothing in its place. */
+.proj-card__pending {
+  color: var(--muted);
+  font-size: .8rem;
+  font-style: italic;
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   Responsive
+   The cards are full width at every size, so there is nothing to reflow —
+   only the padding and the type come down, and the link drops to its own line
+   once the title fills the row.
+   ========================================================================== */
+@media (max-width: 767.98px) {
+  .proj-card { padding: 18px 20px; }
+  .proj-card__title { font-size: .98rem; }
+}
+
+@media (max-width: 575.98px) {
+  .proj-list { gap: 11px; }
+  .proj-card { padding: 15px 16px; gap: 4px 12px; }
+  .proj-card__title { font-size: .93rem; line-height: 1.5; }
+  /* The nowrap comes off here: on the narrowest phone "Click to View" sharing
+     a line with the tail of a long title is worth more than keeping it whole. */
+  .proj-card__link,
+  .proj-card__pending { white-space: normal; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .proj-card,
+  .proj-card__link { transition: none; }
+}

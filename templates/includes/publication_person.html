@@ -1,0 +1,52 @@
+{% comment %}
+One faculty member on the Publication page. Sits inside a
+<ol class="pub-faculty"> within a department's panel.
+
+Expects:
+  name  the member, worded exactly as it should read, with the title they use
+        — "Dr. Tanmoy Sarkar", "Mrs. Sayani Bhowmick", "Mr. Rakesh Das".
+
+        The NUMBER IS NOT TYPED. The list is an <ol>, so 1, 2, 3 are generated:
+        adding a member in the middle renumbers everyone after them by itself.
+
+  url   what View More opens. EITHER that member's publication list as a PDF
+        under static/ — put the file in static/documents/publication/ and write
+        "documents/publication/tanmoy-sarkar.pdf" — OR a full address to their
+        profile elsewhere:
+            url="https://scholar.google.com/citations?user=…"
+
+        Both go in the same slot. doc_url hands a full URL or a rooted path
+        straight back untouched and only resolves the bare paths, so nothing
+        has to say which kind it is.
+
+  Leave url off and the row still names the member, reading "To follow" where
+  View More would be, so a department list is complete from the day it goes up.
+
+WHY url GOES THROUGH doc_url EVEN FOR A WEB ADDRESS
+It costs nothing — a full URL is handed straight back — and it means the same
+slot takes a PDF without a second code path. For the PDF case it also matters:
+under the manifest storage a bare {% static %} tag raises for a file that was
+never collected, so one mistyped filename would take the whole page down
+instead of leaving one row unlinked. After adding a PDF run:
+
+    python manage.py collectstatic --noinput
+
+and that row becomes a link by itself — no edit here.
+
+rel="noopener" is not optional alongside target="_blank": without it the
+opened tab can reach back through window.opener and navigate this one.
+{% endcomment %}
+
+<li>
+  <div class="pub-person">
+    <span class="pub-person__name">{{ name }}</span>
+
+    {% with href=url|doc_url %}
+      {% if href %}
+        <a class="pub-person__link" href="{{ href }}" target="_blank" rel="noopener noreferrer">View More<span class="sr-only"> &mdash; publications by {{ name }} (opens in a new tab)</span></a>
+      {% else %}
+        <span class="pub-person__pending">To follow</span>
+      {% endif %}
+    {% endwith %}
+  </div>
+</li>

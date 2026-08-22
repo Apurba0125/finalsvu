@@ -951,6 +951,49 @@ NEWSLETTER_MONTHS = [
 ]
 
 
+def regulations(request):
+    """Regulations — one row per regulation, each opening its document.
+
+    Takes no context on purpose. Each regulation is one ``{% include %}`` line
+    in ``templates/pages/regulations.html``, carrying its title and whatever
+    Click To View should open.
+
+    Its own template means its route has to sit above the generic
+    ``page/<slug>/`` line in urls.py; below it, page_detail claims the URL
+    first and renders an empty editorial placeholder.
+    """
+    return render(request, "pages/regulations.html")
+
+
+def project(request):
+    """Project — the funded schemes, each row opening its document.
+
+    Takes no context on purpose. Each project is one ``{% include %}`` line in
+    ``templates/pages/project.html``, carrying its title and whatever Click to
+    View should open.
+
+    Its own template means its route has to sit above the generic
+    ``page/<slug>/`` line in urls.py; below it, page_detail claims the URL
+    first and renders an empty editorial placeholder.
+    """
+    return render(request, "pages/project.html")
+
+
+def publication(request):
+    """Publication — a department bar that opens its faculty.
+
+    Takes no context on purpose. Every department is a block of markup in
+    ``templates/pages/publication.html`` and every faculty member is one
+    ``{% include %}`` line inside it, so adding a name is a line in that file
+    and nothing else.
+
+    Its own template means its route has to sit above the generic
+    ``page/<slug>/`` line in urls.py; below it, page_detail claims the URL
+    first and renders an empty editorial placeholder.
+    """
+    return render(request, "pages/publication.html")
+
+
 def newsletter(request):
     """Newsletter — a department opens its years, a year opens its months.
 

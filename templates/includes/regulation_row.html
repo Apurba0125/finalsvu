@@ -1,0 +1,55 @@
+{% comment %}
+One regulation on the Regulations page. Sits inside a <ul class="reg-list">.
+
+Expects:
+  title  the regulation, worded exactly as it should read.
+
+         WRITE AN AMPERSAND AS &amp; — a quoted string in a template tag is
+         marked safe by Django, so whatever is typed between the quotes lands
+         in the page verbatim. A bare & displays the same in every browser but
+         is not valid HTML and misparses next to a word.
+
+  doc    what Click To View opens. EITHER the regulation as a PDF under
+         static/ — put the file in static/documents/regulations/ and write
+         "documents/regulations/btech-cbcs.pdf" — OR a full address if it is
+         hosted elsewhere.
+
+         Both go in the same slot. doc_url hands a full URL or a rooted path
+         straight back untouched and only resolves the bare paths, so nothing
+         has to say which kind it is.
+
+  Leave doc off and the row still names the regulation, reading "Document to
+  follow" where the link would be, so the list stays complete while the papers
+  are being collected.
+
+WHY doc GOES THROUGH doc_url
+Under the manifest storage a bare {% static %} tag raises for a file that was
+never collected, and one mistyped filename would take the whole page down.
+doc_url returns an empty string instead and the row quietly falls back. It
+also means a filename can be written HERE BEFORE THE PDF EXISTS — the link
+appears by itself once the file is uploaded and collectstatic has run:
+
+    python manage.py collectstatic --noinput
+
+rel="noopener" is not optional alongside target="_blank": without it the
+opened tab can reach back through window.opener and navigate this one.
+{% endcomment %}
+
+<li class="reg-card">
+  <span class="reg-card__title">{{ title }}</span>
+
+  {% with href=doc|doc_url %}
+    {% if href %}
+      <a class="reg-card__link" href="{{ href }}" target="_blank" rel="noopener noreferrer">
+        Click To View
+        {# Sized in the markup as well as the CSS: an <svg> with a viewBox and #}
+        {# no dimensions expands to fill its box, so a stylesheet that has not #}
+        {# loaded yet would put a full-width chevron on every row.             #}
+        <svg width="10" height="10" aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg>
+        <span class="sr-only">&mdash; {{ title }} (opens in a new tab)</span>
+      </a>
+    {% else %}
+      <span class="reg-card__pending">Document to follow</span>
+    {% endif %}
+  {% endwith %}
+</li>

@@ -1,0 +1,456 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% comment %}
+===========================================================================
+PUBLICATION  —  served at /page/publication/ by website.views.publication
+---------------------------------------------------------------------------
+Header, navigation and footer come from base.html. Do not add them here.
+
+Styling: page-head.css gives the photo banner and the heading with its rule;
+publication.css is the bars, the panels and the faculty rows.
+
+EVERYTHING IS IN THIS ONE FILE
+  Every department and every name is below. No data.py to open.
+
+ONE BLOCK IS ONE DEPARTMENT
+  Copy a whole <li> and change three things:
+
+    1. the <span> on the bar — the department name
+    2. the id pair — aria-controls="pub-cse" on the button and id="pub-cse" on
+       the panel. THEY MUST MATCH EACH OTHER AND BE UNIQUE ON THE PAGE. That
+       pair is the whole wiring; nothing counts the departments, so one can be
+       dropped into the middle without touching any other.
+    3. the panel contents — the faculty
+
+  The grid reads ACROSS then down, two to a row on a desktop, so the order of
+  the blocks is the order on the page.
+
+ONE LINE IS ONE FACULTY MEMBER
+
+    {% include "includes/publication_person.html" with name="Dr. Tanmoy Sarkar" url="documents/publication/tanmoy-sarkar.pdf" %}
+
+  name  the member, with the title they use
+  url   what View More opens: a PDF under static/ (put it in
+        static/documents/publication/) or a full address to a profile
+        elsewhere. The same slot takes either.
+
+  THE NUMBER IS NOT TYPED. The list is an <ol>, so 1, 2, 3 are generated and
+  adding someone in the middle renumbers the rest by itself.
+
+  Leave url off and the row still names the member, reading "To follow" where
+  View More would be. NONE OF THE LINES BELOW CARRY A url= YET, so every row
+  reads that way so far. Add url= as each publication list is settled and that
+  row becomes a link on its own — no other edit, and after adding a PDF run
+
+      python manage.py collectstatic --noinput
+
+HOW THE COLLAPSE WORKS
+  The bars run on the site's shared accordion — initAccordions in main.js, the
+  same one behind the FAQ — so this page ships no script of its own. Per bar
+  it is aria-expanded for the state and aria-controls naming the panel, and
+  the panel carries hidden so it is shut before any script runs. Every panel
+  is shut on load, and opening one leaves the others alone.
+
+WRITE AN AMPERSAND AS &amp; — a quoted string in a template tag is marked safe
+by Django, so what is typed between the quotes lands in the page verbatim. A
+bare & is not valid HTML and misparses next to a word.
+
+NOTE ON COMMENTS: the hash-style Django comment {# … #} covers a SINGLE line.
+For a multi-line note use a comment/endcomment pair like this one, or the text
+leaks onto the page and any tag inside it actually runs.
+===========================================================================
+{% endcomment %}
+
+{% block title %}Publication | {{ site.site_name }}{% endblock %}
+{% block meta_description %}Research publications by the faculty of Swami Vivekananda University, listed by department.{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/page-head.css' %}">
+  <link rel="stylesheet" href="{% static 'css/publication.css' %}">
+{% endblock %}
+
+{% block content %}
+
+{# ===========================================================  BANNER  === #}
+{# THE BACKGROUND IMAGE IS SET HERE. Change the file name in the url() and  #}
+{# that is the whole edit — keep the dark gradient in front of it or the    #}
+{# white title stops being readable over a busy photograph.                 #}
+<section class="page-banner"
+         style="background-image: linear-gradient(0deg, rgba(10,10,10,.72), rgba(10,10,10,.55)), url('{% static 'img/about/campus.jpg' %}');">
+  <div class="shell">
+    <h1 class="page-banner__title">Publication</h1>
+  </div>
+</section>
+
+
+{# ======================================================  PUBLICATIONS  == #}
+<section class="section pub-section">
+  <div class="shell">
+
+    <div class="page-head">
+      <h2 class="page-heading">Publication</h2>
+      <span class="page-rule"></span>
+    </div>
+
+    <ul class="pub-grid">
+
+      <li>
+        {# THIS DEPARTMENT IS THE WORKED EXAMPLE — copy its panel when   #}
+        {# filling in any of the others below.                           #}
+        <button class="pub-bar" type="button" data-disclosure
+                aria-expanded="false" aria-controls="pub-agriculture">
+          <span>Department of Agriculture</span>
+          {# Sized in the markup as well as the CSS: an <svg> with no    #}
+          {# intrinsic size falls back to 300x150, so a stylesheet that  #}
+          {# has not loaded yet would put a full-width chevron on every  #}
+          {# bar.                                                        #}
+          <svg width="14" height="9" aria-hidden="true" focusable="false"><use href="#i-caret"></use></svg>
+        </button>
+
+        <div class="pub-panel" id="pub-agriculture" hidden>
+          <h3 class="pub-panel__title">Faculty</h3>
+          <ol class="pub-faculty">
+            {% include "includes/publication_person.html" with name="Dr. Tanmoy Sarkar" %}
+            {% include "includes/publication_person.html" with name="Dr. Animesh Ghosh Bag" %}
+            {% include "includes/publication_person.html" with name="Dr. Anirneeta De" %}
+            {% include "includes/publication_person.html" with name="Dr. Mahafuzar Rahaman" %}
+            {% include "includes/publication_person.html" with name="Dr. Parijat Bhattacharya" %}
+            {% include "includes/publication_person.html" with name="Dr. Sudip Sengupta" %}
+            {% include "includes/publication_person.html" with name="Dr. Suprabuddha Kundu" %}
+            {% include "includes/publication_person.html" with name="Dr. Ria Mukhopadhyay" %}
+            {% include "includes/publication_person.html" with name="Mrs. Sayani Bhowmick" %}
+            {% include "includes/publication_person.html" with name="Mr. Rakesh Das" %}
+            {% include "includes/publication_person.html" with name="Mr. Tanmoy Majhi" %}
+          </ol>
+        </div>
+      </li>
+
+      <li>
+        <button class="pub-bar" type="button" data-disclosure
+                aria-expanded="false" aria-controls="pub-basic-sciences">
+          <span>Department of Basic Sciences</span>
+          <svg width="14" height="9" aria-hidden="true" focusable="false"><use href="#i-caret"></use></svg>
+        </button>
+
+        <div class="pub-panel" id="pub-basic-sciences" hidden>
+          <h3 class="pub-panel__title">Faculty</h3>
+              {% comment %}
+              No faculty listed for this department yet. Replace the paragraph
+              below with an <ol class="pub-faculty"> of include lines, the way
+              Department of Agriculture above does it.
+              {% endcomment %}
+              <p class="pub-empty">The faculty list for this department will be
+                published shortly.</p>
+        </div>
+      </li>
+
+      <li>
+        <button class="pub-bar" type="button" data-disclosure
+                aria-expanded="false" aria-controls="pub-cse">
+          <span>Department of CSE</span>
+          <svg width="14" height="9" aria-hidden="true" focusable="false"><use href="#i-caret"></use></svg>
+        </button>
+
+        <div class="pub-panel" id="pub-cse" hidden>
+          <h3 class="pub-panel__title">Faculty</h3>
+              {% comment %}
+              No faculty listed for this department yet. Replace the paragraph
+              below with an <ol class="pub-faculty"> of include lines, the way
+              Department of Agriculture above does it.
+              {% endcomment %}
+              <p class="pub-empty">The faculty list for this department will be
+                published shortly.</p>
+        </div>
+      </li>
+
+      <li>
+        <button class="pub-bar" type="button" data-disclosure
+                aria-expanded="false" aria-controls="pub-ece">
+          <span>Department of ECE</span>
+          <svg width="14" height="9" aria-hidden="true" focusable="false"><use href="#i-caret"></use></svg>
+        </button>
+
+        <div class="pub-panel" id="pub-ece" hidden>
+          <h3 class="pub-panel__title">Faculty</h3>
+              {% comment %}
+              No faculty listed for this department yet. Replace the paragraph
+              below with an <ol class="pub-faculty"> of include lines, the way
+              Department of Agriculture above does it.
+              {% endcomment %}
+              <p class="pub-empty">The faculty list for this department will be
+                published shortly.</p>
+        </div>
+      </li>
+
+      <li>
+        <button class="pub-bar" type="button" data-disclosure
+                aria-expanded="false" aria-controls="pub-education">
+          <span>Department of Education</span>
+          <svg width="14" height="9" aria-hidden="true" focusable="false"><use href="#i-caret"></use></svg>
+        </button>
+
+        <div class="pub-panel" id="pub-education" hidden>
+          <h3 class="pub-panel__title">Faculty</h3>
+              {% comment %}
+              No faculty listed for this department yet. Replace the paragraph
+              below with an <ol class="pub-faculty"> of include lines, the way
+              Department of Agriculture above does it.
+              {% endcomment %}
+              <p class="pub-empty">The faculty list for this department will be
+                published shortly.</p>
+        </div>
+      </li>
+
+      <li>
+        <button class="pub-bar" type="button" data-disclosure
+                aria-expanded="false" aria-controls="pub-electrical-engineering">
+          <span>Department Of Electrical Engineering</span>
+          <svg width="14" height="9" aria-hidden="true" focusable="false"><use href="#i-caret"></use></svg>
+        </button>
+
+        <div class="pub-panel" id="pub-electrical-engineering" hidden>
+          <h3 class="pub-panel__title">Faculty</h3>
+              {% comment %}
+              No faculty listed for this department yet. Replace the paragraph
+              below with an <ol class="pub-faculty"> of include lines, the way
+              Department of Agriculture above does it.
+              {% endcomment %}
+              <p class="pub-empty">The faculty list for this department will be
+                published shortly.</p>
+        </div>
+      </li>
+
+      <li>
+        <button class="pub-bar" type="button" data-disclosure
+                aria-expanded="false" aria-controls="pub-language-literature-cultural-studies">
+          <span>Department of Language, Literature and Cultural Studies</span>
+          <svg width="14" height="9" aria-hidden="true" focusable="false"><use href="#i-caret"></use></svg>
+        </button>
+
+        <div class="pub-panel" id="pub-language-literature-cultural-studies" hidden>
+          <h3 class="pub-panel__title">Faculty</h3>
+              {% comment %}
+              No faculty listed for this department yet. Replace the paragraph
+              below with an <ol class="pub-faculty"> of include lines, the way
+              Department of Agriculture above does it.
+              {% endcomment %}
+              <p class="pub-empty">The faculty list for this department will be
+                published shortly.</p>
+        </div>
+      </li>
+
+      <li>
+        <button class="pub-bar" type="button" data-disclosure
+                aria-expanded="false" aria-controls="pub-journalism-mass-communication">
+          <span>Department of Journalism &amp; Mass Commmunication</span>
+          <svg width="14" height="9" aria-hidden="true" focusable="false"><use href="#i-caret"></use></svg>
+        </button>
+
+        <div class="pub-panel" id="pub-journalism-mass-communication" hidden>
+          <h3 class="pub-panel__title">Faculty</h3>
+              {% comment %}
+              No faculty listed for this department yet. Replace the paragraph
+              below with an <ol class="pub-faculty"> of include lines, the way
+              Department of Agriculture above does it.
+              {% endcomment %}
+              <p class="pub-empty">The faculty list for this department will be
+                published shortly.</p>
+        </div>
+      </li>
+
+      <li>
+        <button class="pub-bar" type="button" data-disclosure
+                aria-expanded="false" aria-controls="pub-management">
+          <span>Department of Management</span>
+          <svg width="14" height="9" aria-hidden="true" focusable="false"><use href="#i-caret"></use></svg>
+        </button>
+
+        <div class="pub-panel" id="pub-management" hidden>
+          <h3 class="pub-panel__title">Faculty</h3>
+              {% comment %}
+              No faculty listed for this department yet. Replace the paragraph
+              below with an <ol class="pub-faculty"> of include lines, the way
+              Department of Agriculture above does it.
+              {% endcomment %}
+              <p class="pub-empty">The faculty list for this department will be
+                published shortly.</p>
+        </div>
+      </li>
+
+      <li>
+        <button class="pub-bar" type="button" data-disclosure
+                aria-expanded="false" aria-controls="pub-medical-laboratory-technology">
+          <span>Department of Medical Laboratory Technology</span>
+          <svg width="14" height="9" aria-hidden="true" focusable="false"><use href="#i-caret"></use></svg>
+        </button>
+
+        <div class="pub-panel" id="pub-medical-laboratory-technology" hidden>
+          <h3 class="pub-panel__title">Faculty</h3>
+              {% comment %}
+              No faculty listed for this department yet. Replace the paragraph
+              below with an <ol class="pub-faculty"> of include lines, the way
+              Department of Agriculture above does it.
+              {% endcomment %}
+              <p class="pub-empty">The faculty list for this department will be
+                published shortly.</p>
+        </div>
+      </li>
+
+      <li>
+        <button class="pub-bar" type="button" data-disclosure
+                aria-expanded="false" aria-controls="pub-food-and-nutrition">
+          <span>Department of Food and Nutrition</span>
+          <svg width="14" height="9" aria-hidden="true" focusable="false"><use href="#i-caret"></use></svg>
+        </button>
+
+        <div class="pub-panel" id="pub-food-and-nutrition" hidden>
+          <h3 class="pub-panel__title">Faculty</h3>
+              {% comment %}
+              No faculty listed for this department yet. Replace the paragraph
+              below with an <ol class="pub-faculty"> of include lines, the way
+              Department of Agriculture above does it.
+              {% endcomment %}
+              <p class="pub-empty">The faculty list for this department will be
+                published shortly.</p>
+        </div>
+      </li>
+
+      <li>
+        <button class="pub-bar" type="button" data-disclosure
+                aria-expanded="false" aria-controls="pub-biotechnology-microbiology">
+          <span>Department of Biotechnology &amp; Microbiology</span>
+          <svg width="14" height="9" aria-hidden="true" focusable="false"><use href="#i-caret"></use></svg>
+        </button>
+
+        <div class="pub-panel" id="pub-biotechnology-microbiology" hidden>
+          <h3 class="pub-panel__title">Faculty</h3>
+              {% comment %}
+              No faculty listed for this department yet. Replace the paragraph
+              below with an <ol class="pub-faculty"> of include lines, the way
+              Department of Agriculture above does it.
+              {% endcomment %}
+              <p class="pub-empty">The faculty list for this department will be
+                published shortly.</p>
+        </div>
+      </li>
+
+      <li>
+        <button class="pub-bar" type="button" data-disclosure
+                aria-expanded="false" aria-controls="pub-civil-engineering">
+          <span>Department of Civil Engineering</span>
+          <svg width="14" height="9" aria-hidden="true" focusable="false"><use href="#i-caret"></use></svg>
+        </button>
+
+        <div class="pub-panel" id="pub-civil-engineering" hidden>
+          <h3 class="pub-panel__title">Faculty</h3>
+              {% comment %}
+              No faculty listed for this department yet. Replace the paragraph
+              below with an <ol class="pub-faculty"> of include lines, the way
+              Department of Agriculture above does it.
+              {% endcomment %}
+              <p class="pub-empty">The faculty list for this department will be
+                published shortly.</p>
+        </div>
+      </li>
+
+      <li>
+        <button class="pub-bar" type="button" data-disclosure
+                aria-expanded="false" aria-controls="pub-mechanical-engineering">
+          <span>Department of Mechanical Engineering</span>
+          <svg width="14" height="9" aria-hidden="true" focusable="false"><use href="#i-caret"></use></svg>
+        </button>
+
+        <div class="pub-panel" id="pub-mechanical-engineering" hidden>
+          <h3 class="pub-panel__title">Faculty</h3>
+              {% comment %}
+              No faculty listed for this department yet. Replace the paragraph
+              below with an <ol class="pub-faculty"> of include lines, the way
+              Department of Agriculture above does it.
+              {% endcomment %}
+              <p class="pub-empty">The faculty list for this department will be
+                published shortly.</p>
+        </div>
+      </li>
+
+      <li>
+        <button class="pub-bar" type="button" data-disclosure
+                aria-expanded="false" aria-controls="pub-physiotherapy">
+          <span>Department of Physiotherapy</span>
+          <svg width="14" height="9" aria-hidden="true" focusable="false"><use href="#i-caret"></use></svg>
+        </button>
+
+        <div class="pub-panel" id="pub-physiotherapy" hidden>
+          <h3 class="pub-panel__title">Faculty</h3>
+              {% comment %}
+              No faculty listed for this department yet. Replace the paragraph
+              below with an <ol class="pub-faculty"> of include lines, the way
+              Department of Agriculture above does it.
+              {% endcomment %}
+              <p class="pub-empty">The faculty list for this department will be
+                published shortly.</p>
+        </div>
+      </li>
+
+      <li>
+        <button class="pub-bar" type="button" data-disclosure
+                aria-expanded="false" aria-controls="pub-psychology">
+          <span>Department of Psychology</span>
+          <svg width="14" height="9" aria-hidden="true" focusable="false"><use href="#i-caret"></use></svg>
+        </button>
+
+        <div class="pub-panel" id="pub-psychology" hidden>
+          <h3 class="pub-panel__title">Faculty</h3>
+              {% comment %}
+              No faculty listed for this department yet. Replace the paragraph
+              below with an <ol class="pub-faculty"> of include lines, the way
+              Department of Agriculture above does it.
+              {% endcomment %}
+              <p class="pub-empty">The faculty list for this department will be
+                published shortly.</p>
+        </div>
+      </li>
+
+      <li>
+        <button class="pub-bar" type="button" data-disclosure
+                aria-expanded="false" aria-controls="pub-optometry">
+          <span>Department of Optometry</span>
+          <svg width="14" height="9" aria-hidden="true" focusable="false"><use href="#i-caret"></use></svg>
+        </button>
+
+        <div class="pub-panel" id="pub-optometry" hidden>
+          <h3 class="pub-panel__title">Faculty</h3>
+              {% comment %}
+              No faculty listed for this department yet. Replace the paragraph
+              below with an <ol class="pub-faculty"> of include lines, the way
+              Department of Agriculture above does it.
+              {% endcomment %}
+              <p class="pub-empty">The faculty list for this department will be
+                published shortly.</p>
+        </div>
+      </li>
+
+      <li>
+        <button class="pub-bar" type="button" data-disclosure
+                aria-expanded="false" aria-controls="pub-multimedia-animation">
+          <span>Department of Multimedia and Animation</span>
+          <svg width="14" height="9" aria-hidden="true" focusable="false"><use href="#i-caret"></use></svg>
+        </button>
+
+        <div class="pub-panel" id="pub-multimedia-animation" hidden>
+          <h3 class="pub-panel__title">Faculty</h3>
+              {% comment %}
+              No faculty listed for this department yet. Replace the paragraph
+              below with an <ol class="pub-faculty"> of include lines, the way
+              Department of Agriculture above does it.
+              {% endcomment %}
+              <p class="pub-empty">The faculty list for this department will be
+                published shortly.</p>
+        </div>
+      </li>
+
+    </ul>
+
+  </div>
+</section>
+{% endblock %}
