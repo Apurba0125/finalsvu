@@ -47,9 +47,12 @@ has no Bootstrap, so there is no data-bs-toggle here.
   <div class="shell about-intro__grid">
 
     <div class="about-intro__media">
-      <img src="{% static 'img/about/campus.jpg' %}"
-           alt="The Swami Vivekananda University campus at Barrackpore, with the WE LOVE SVU installation on the lawn"
-           width="900" height="620" loading="lazy">
+      {# alt describes THIS picture. Swap the file and the alt has to change #}
+      {# with it, and so do width/height - they only reserve the right space  #}
+      {# before it loads if they match the file's real proportions.           #}
+      <img src="{% static 'img/about/abt-usimg.png' %}"
+           alt="Dignitaries lighting the ceremonial lamp at a Swami Vivekananda University event"
+           width="526" height="489" loading="lazy">
     </div>
 
     <div class="about-intro__body">
