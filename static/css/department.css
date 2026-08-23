@@ -343,13 +343,16 @@
 @media (max-width: 991.98px) {
   .dept-intro__row { grid-template-columns: 1fr; }
   .tab-pane__body--split { grid-template-columns: 1fr; }
-  /* Picture under the message on a narrow screen: the words are what the
-     visitor came for, and a portrait pushed above them buries the text.
+  /* Picture over the message on a narrow screen, the way it reads on a wide
+     one - the head of department comes first and the message follows.
+
+     No 'order' here: the figure is already ahead of the prose in the markup,
+     so the single column takes them in that order on its own.
 
      Centred, because the cap is narrower than the single column it now sits
      in - left where it was, it hugged the left edge with up to 440px of dead
      space beside it on a tablet. */
-  .tab-pane__media { order: 2; max-width: 340px; margin-inline: auto; }
+  .tab-pane__media { max-width: 340px; margin-inline: auto; }
 }
 
 @media (max-width: 575.98px) {
