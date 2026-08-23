@@ -179,7 +179,7 @@ MAIN_NAV = [{'title': 'About SVU',
                {'title': 'IIC', 'href': '/page/iic/', 'is_external': False},
                {'title': 'Journals', 'href': '/page/journals/', 'is_external': False},
                {'title': 'Incubation Centre', 'href': '/page/incubation-centre/', 'is_external': False},
-               {'title': 'List of Funding Agencies', 'href': '/page/funding-agencies/', 'is_external': False},
+            #    {'title': 'List of Funding Agencies', 'href': '/page/funding-agencies/', 'is_external': False},
                {'title': 'Newsletter', 'href': '/page/newsletter/', 'is_external': False},
 
                {'title': 'Publication', 'href': '/page/publication/', 'is_external': False},
