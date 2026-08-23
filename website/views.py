@@ -531,11 +531,19 @@ def _course_tabs(course):
                 for point in tab["points"] if point.get("text")
             ]
 
-        # No PDF, no button - rather than a button that leads to a 404.
+        # No syllabus, no button - rather than a button that leads to a 404.
         tab["download"] = ""
         if tab["slug"] == SYLLABUS_TAB_SLUG and course.get("syllabus_url"):
-            tab["download"] = {"url": course["syllabus_url"],
-                               "label": "Download Syllabus"}
+            url = course["syllabus_url"]
+            tab["download"] = {
+                "url": url,
+                "label": "Download Syllabus",
+                # A syllabus hosted somewhere else opens in a new tab. The
+                # download attribute is ignored across origins anyway, so
+                # asking for it there would promise a save and navigate the
+                # visitor off the course page instead.
+                "is_external": url.startswith(("http://", "https://", "//")),
+            }
 
         panels.append(tab)
     return panels

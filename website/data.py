@@ -1324,6 +1324,7 @@ COURSES = [
     'name': 'Diploma in Civil Engineering',
     'badge': 'Diploma',
     'card_image': '',
+    'syllabus': '',
     'careers': [
         'Software Engineer',
         'Hardware Engineer',
@@ -1351,6 +1352,7 @@ COURSES = [
     'name': 'B.Tech in Civil Engineering',
     'badge': 'B.Tech',
     'card_image': '',
+    'syllabus': '',
     'careers': [
         'Software Engineer',
         'Systems Analyst',
@@ -1375,6 +1377,7 @@ COURSES = [
     'name': 'M.Tech in Civil Engineering',
     'badge': 'M.Tech',
     'card_image': '',
+    'syllabus': '',
     'careers': [
         'Senior Software Engineer',
         'Machine Learning Engineer',
@@ -1397,6 +1400,7 @@ COURSES = [
     'name': 'Ph.D. in Civil Engineering',
     'badge': 'Ph.D.',
     'card_image': '',
+    'syllabus': '',
     'careers': [
         'Research Scientist',
         'Assistant Professor',
@@ -1421,6 +1425,7 @@ COURSES = [
     'name': 'Diploma in Computer Science & Technology',
     'badge': 'Diploma',
     'card_image': 'img/departments/computer-app.jpg',
+    'syllabus': 'documents/syllabus/diploma-in-computer-science-technology.pdf',
     'careers': [
         'Software Engineer',
         'Hardware Engineer',
@@ -1447,7 +1452,8 @@ COURSES = [
     'slug': 'b-tech-in-computer-science-engineering',
     'name': 'B.Tech in Computer Science & Engineering',
     'badge': 'B.Tech',
-    'card_image': '',
+    'card_image': 'img/departments/master-computer.jpg',
+    'syllabus': '',
     'careers': [
         'Software Engineer',
         'Systems Analyst',
@@ -1463,7 +1469,7 @@ COURSES = [
     'total_seats': 120,
     'is_featured': True,
     'eligibility': 'Passed 10+2 with Physics, Chemistry and Mathematics as main subjects and a minimum of 50% aggregate from a recognised board.',
-    'description': 'The programme blends classroom instruction, laboratory or field practice and continuous internal assessment. Students are mentored throughout the course and prepared for placement through the training and placement cell.'
+    'description': 'At Swami Vivekananda University, one of the best colleges for btech in computer science and engineering, the B Tech course Computer Science and Engineering has been meticulously designed to equip students with the knowledge and skills required to excel in the ever-evolving field of technology. The B tech computer science duration is of four years. This program aims to foster critical thinking, problem-solving abilities, and innovative approaches necessary for success in the digital era. Swami Vivekananda University has been regarded as one of the top colleges for b tech in computer science and engineering, and its B.Tech Computer Science and Engineering program offers a comprehensive curriculum that covers a wide range of subjects, including programming languages, algorithms, data structures, artificial intelligence, databases, and computer networks. You can find more about the b tech computer science and engineering course details below.'
 },
 
 
@@ -1471,7 +1477,8 @@ COURSES = [
     'slug': 'm-tech-in-computer-science-engineering',
     'name': 'M.Tech in Computer Science & Engineering',
     'badge': 'M.Tech',
-    'card_image': '',
+    'card_image': 'img/departments/mcompute.png',
+    'syllabus': '',
     'careers': [
         'Senior Software Engineer',
         'Machine Learning Engineer',
@@ -1486,7 +1493,7 @@ COURSES = [
     'total_seats': 60,
     'is_featured': True,
     'eligibility': 'Passed B.Tech or B.E. in Computer Science & Engineering, Information Technology, or a related engineering discipline from a recognised university with a minimum of 50% aggregate marks.',
-    'description': 'The programme provides advanced knowledge in computer science and engineering through specialised coursework, practical laboratory training, research-oriented learning and project work. Students are mentored throughout the course and prepared for advanced technical careers, research and higher studies.'
+    'description': 'The MTech in Computer Science and Engineering course at Swami Vivekananda University is a two-year postgraduate programme designed to equip students with advanced knowledge and skills in the field of computer science. This Mtech computer science and engineering course is aimed at candidates who wish to enhance their expertise in areas such as data structures, algorithms, computer networks, artificial intelligence, machine learning, software engineering, and more. The curriculum of the Mtech in computer engineering course is carefully crafted to strike a balance between theoretical concepts and practical application, ensuring students develop a strong foundation for professional growth and research. You can find more M tech computer science course details below.'
 },
 
 {
@@ -1494,6 +1501,7 @@ COURSES = [
     'name': 'Ph.D. in Computer Science & Engineering',
     'badge': 'Ph.D.',
     'card_image': '',
+    'syllabus': '',
     'careers': [
         'Research Scientist',
         'Assistant Professor',
@@ -1518,6 +1526,7 @@ COURSES = [
     'name': 'Diploma in Electrical Engineering',
     'badge': 'Diploma',
     'card_image': '',
+    'syllabus': '',
     'careers': [
         'Software Engineer',
         'Hardware Engineer',
@@ -1545,6 +1554,7 @@ COURSES = [
     'name': 'B.Tech in Electrical Engineering',
     'badge': 'B.Tech',
     'card_image': '',
+    'syllabus': '',
     'careers': [
         'Software Engineer',
         'Systems Analyst',
@@ -1569,6 +1579,7 @@ COURSES = [
     'name': 'M.Tech in Electrical Engineering',
     'badge': 'M.Tech',
     'card_image': '',
+    'syllabus': '',
     'careers': [
         'Senior Software Engineer',
         'Machine Learning Engineer',
@@ -1594,6 +1605,7 @@ COURSES = [
   'name': 'B.Tech in Electronics & Communication Engineering',
   'badge': 'B.Tech',
   'card_image': '',
+  'syllabus': '',
   'careers': [
       'Research Scientist',
       'Assistant Professor',
@@ -1617,6 +1629,7 @@ COURSES = [
   'name': 'M.Tech in Electronics & Communication Engineering',
   'badge': 'M.Tech',
   'card_image': '',
+  'syllabus': '',
   'careers': [
       'Research Scientist',
       'Assistant Professor',
@@ -1640,6 +1653,7 @@ COURSES = [
   'name': 'Diploma in Mechanical Engineering',
   'badge': 'Diploma',
   'card_image': '',
+  'syllabus': '',
   'careers': [
       'Research Scientist',
       'Assistant Professor',
@@ -1664,6 +1678,7 @@ COURSES = [
   'name': 'B.Tech in Mechanical Engineering',
   'badge': 'B.Tech',
   'card_image': '',
+  'syllabus': '',
   'careers': [
       'Research Scientist',
       'Assistant Professor',
@@ -1686,6 +1701,7 @@ COURSES = [
   'name': 'M.Tech in Mechanical Engineering',
   'badge': 'M.Tech',
   'card_image': '',
+  'syllabus': '',
   'careers': [
       'Research Scientist',
       'Assistant Professor',
@@ -1708,6 +1724,7 @@ COURSES = [
   'name': 'PhD in Mechanical Engineering',
   'badge': 'PhD',
   'card_image': '',
+  'syllabus': '',
   'careers': [
       'Research Scientist',
       'Assistant Professor',
@@ -1735,6 +1752,7 @@ COURSES = [
   'name': 'Bachelor of Business Administration (BBA)',
   'badge': 'BBA',
   'card_image': '',
+  'syllabus': '',
   'careers': [
       'Research Scientist',
       'Assistant Professor',
@@ -1758,6 +1776,7 @@ COURSES = [
   'name': 'Bachelor of Business Administration (Digital Marketing)',
   'badge': 'BBA',
   'card_image': '',
+  'syllabus': '',
   'careers': [
       'Research Scientist',
       'Assistant Professor',
@@ -1781,6 +1800,7 @@ COURSES = [
   'name': 'Bachelor of Business Administration (Hodpital Management)',
   'badge': 'MBA',
   'card_image': '',
+  'syllabus': '',
   'careers': [
       'Research Scientist',
       'Assistant Professor',
@@ -1805,6 +1825,7 @@ COURSES = [
   'name': 'Bachelor of Business Administration (Hotel Hodpital Management)',
   'badge': 'MBA',
   'card_image': '',
+  'syllabus': '',
   'careers': [
       'Research Scientist',
       'Assistant Professor',
@@ -1827,6 +1848,7 @@ COURSES = [
   'name': 'Master of Business Administration',
   'badge': 'MBA',
   'card_image': '',
+  'syllabus': '',
   'careers': [
       'Research Scientist',
       'Assistant Professor',
@@ -1854,6 +1876,7 @@ COURSES = [
   'name': 'Bachelor of Science (Hons.) in Biotechnology',
   'badge': 'B.Sc',
   'card_image': '',
+  'syllabus': '',
   'careers': [
       'Research Scientist',
       'Assistant Professor',
@@ -1877,6 +1900,7 @@ COURSES = [
   'name': 'Master of Science in Biotechnology',
   'badge': 'M.Sc',
   'card_image': '',
+  'syllabus': '',
   'careers': [
       'Research Scientist',
       'Assistant Professor',
@@ -1902,6 +1926,7 @@ COURSES = [
   'name': 'Bachelor of Science (Hons.) in Microbiology',
   'badge': 'B.Sc',
   'card_image': '',
+  'syllabus': '',
   'careers': [
       'Research Scientist',
       'Assistant Professor',
@@ -1925,6 +1950,7 @@ COURSES = [
   'name': 'Master of Science in Microbiology',
   'badge': 'M.Sc',
   'card_image': '',
+  'syllabus': '',
   'careers': [
       'Research Scientist',
       'Assistant Professor',
@@ -1952,6 +1978,7 @@ COURSES = [
   'name': 'Bachelor of Physiotherapy',
   'badge': 'BPT',
   'card_image': '',
+  'syllabus': '',
   'careers': [
       'Research Scientist',
       'Assistant Professor',
@@ -1974,6 +2001,7 @@ COURSES = [
   'name': 'Master of Physiotherapy',
   'badge': 'MPT',
   'card_image': '',
+  'syllabus': '',
   'careers': [
       'Research Scientist',
       'Assistant Professor',
@@ -2000,6 +2028,7 @@ COURSES = [
   'name': 'BA (Honours) in Journalism & Mass Communication',
   'badge': 'BA',
   'card_image': '',
+  'syllabus': '',
   'careers': [
       'Research Scientist',
       'Assistant Professor',
@@ -2022,6 +2051,7 @@ COURSES = [
   'name': 'M.A in Journalism & Mass Communication',
   'badge': 'MA',
   'card_image': '',
+  'syllabus': '',
   'careers': [
       'Research Scientist',
       'Assistant Professor',
@@ -2049,6 +2079,7 @@ COURSES = [
   'name': 'M.Sc. / M.A in Applied Psychology (Specialization in Clinical Psychology)',
   'badge': 'MA/MSc',
   'card_image': '',
+  'syllabus': '',
   'careers': [
       'Research Scientist',
       'Assistant Professor',
@@ -2079,6 +2110,7 @@ COURSES = [
   'name': 'Bachelor of Computer Applications',
   'badge': 'BCA',
   'card_image': '',
+  'syllabus': '',
   'careers': [
       'Research Scientist',
       'Assistant Professor',
@@ -2103,6 +2135,7 @@ COURSES = [
   'name': 'Master of Computer Applications',
   'badge': 'MCA',
   'card_image': '',
+  'syllabus': '',
   'careers': [
       'Research Scientist',
       'Assistant Professor',
@@ -2126,6 +2159,7 @@ COURSES = [
   'name': 'B.Tech in Data Science',
   'badge': 'Data Science',
   'card_image': '',
+  'syllabus': '',
   'careers': [
       'Research Scientist',
       'Assistant Professor',
@@ -2149,6 +2183,7 @@ COURSES = [
   'name': 'Master of Science in Data Science',
   'badge': 'Data Science',
   'card_image': '',
+  'syllabus': '',
   'careers': [
       'Research Scientist',
       'Assistant Professor',
@@ -2171,6 +2206,7 @@ COURSES = [
   'name': 'B.SC(H) In Advanced Networking And Cyber Security',
   'badge': 'ancs',
   'card_image': '',
+  'syllabus': '',
   'careers': [
       'Research Scientist',
       'Assistant Professor',
@@ -2192,6 +2228,7 @@ COURSES = [
   'name': 'M.SC(H) In Advanced Networking And Cyber Security',
   'badge': 'ancs',
   'card_image': '',
+  'syllabus': '',
   'careers': [
       'Research Scientist',
       'Assistant Professor',
@@ -2215,6 +2252,7 @@ COURSES = [
   'name': 'Bachelor of Science (Hons.) in Multimedia & Animation',
   'badge': 'animation',
   'card_image': '',
+  'syllabus': '',
   'careers': [
       'Research Scientist',
       'Assistant Professor',
@@ -2238,6 +2276,7 @@ COURSES = [
   'name': 'MSc in Multimedia and Animation',
   'badge': 'animation',
   'card_image': '',
+  'syllabus': '',
   'careers': [
       'Research Scientist',
       'Assistant Professor',
@@ -2264,6 +2303,7 @@ COURSES = [
   'name': 'Master of Science in Mathematics',
   'badge': 'M.Sc',
   'card_image': '',
+  'syllabus': '',
   'careers': [
       'Research Scientist',
       'Assistant Professor',
@@ -2292,6 +2332,7 @@ COURSES = [
   'name': 'Master of Science in Chemestry',
   'badge': 'M.Sc',
   'card_image': '',
+  'syllabus': '',
   'careers': [
       'Research Scientist',
       'Assistant Professor',
@@ -2316,6 +2357,7 @@ COURSES = [
   'name': 'Master of Science in physics',
   'badge': 'M.Sc',
   'card_image': '',
+  'syllabus': '',
   'careers': [
       'Research Scientist',
       'Assistant Professor',
@@ -2342,6 +2384,7 @@ COURSES = [
   'name': 'B.A. LL.B. (Hons.)',
   'badge': 'BA LL.B',
   'card_image': '',
+  'syllabus': '',
   'careers': [
       'Research Scientist',
       'Assistant Professor',
@@ -2364,6 +2407,7 @@ COURSES = [
   'name': 'BBA LL.B. (Hons.)',
   'badge': 'BBA LL.B',
   'card_image': '',
+  'syllabus': '',
   'careers': [
       'Research Scientist',
       'Assistant Professor',
@@ -2385,6 +2429,7 @@ COURSES = [
   'name': 'LL.B.(Hons.)',
   'badge': 'LL.B',
   'card_image': '',
+  'syllabus': '',
   'careers': [
       'Research Scientist',
       'Assistant Professor',
@@ -2410,6 +2455,7 @@ COURSES = [
   'name': 'Bachelor of Optometry',
   'badge': 'BA',
   'card_image': '',
+  'syllabus': '',
   'careers': [
       'Research Scientist',
       'Assistant Professor',
@@ -2438,6 +2484,7 @@ COURSES = [
   'name': 'B.Sc (H) in Clinical Nutrition & Dietetics',
   'badge': 'BSc',
   'card_image': '',
+  'syllabus': '',
   'careers': [
       'Research Scientist',
       'Assistant Professor',
@@ -2460,6 +2507,7 @@ COURSES = [
   'name': 'M.Sc in Food & Nutrition',
   'badge': 'MSc',
   'card_image': '',
+  'syllabus': '',
   'careers': [
       'Research Scientist',
       'Assistant Professor',
@@ -2492,6 +2540,7 @@ COURSES = [
   'name': 'Bachelor of Science (Hons.) in Medical Laboratory Technology',
   'badge': 'BA',
   'card_image': '',
+  'syllabus': '',
   'careers': [
       'Research Scientist',
       'Assistant Professor',
@@ -2520,6 +2569,7 @@ COURSES = [
   'name': 'B.Sc. in Medical Radiology & Imaging Technology',
   'badge': 'BSc',
   'card_image': '',
+  'syllabus': '',
   'careers': [
       'Research Scientist',
       'Assistant Professor',
@@ -2547,6 +2597,7 @@ COURSES = [
   'name': 'Bachelor of Arts (B.A.) in English',
   'badge': 'BA',
   'card_image': '',
+  'syllabus': '',
   'careers': [
       'Research Scientist',
       'Assistant Professor',
@@ -2570,6 +2621,7 @@ COURSES = [
   'name': 'Master of Arts (M.A.) in English',
   'badge': 'MA',
   'card_image': '',
+  'syllabus': '',
   'careers': [
       'Research Scientist',
       'Assistant Professor',
@@ -2592,6 +2644,7 @@ COURSES = [
   'name': 'Doctor of Philosophy (Ph.D.) in English',
   'badge': 'phd',
   'card_image': '',
+  'syllabus': '',
   'careers': [
       'Research Scientist',
       'Assistant Professor',
@@ -2618,6 +2671,7 @@ COURSES = [
   'name': 'B.A (Hons.) in Education',
   'badge': 'BA',
   'card_image': '',
+  'syllabus': '',
   'careers': [
       'Research Scientist',
       'Assistant Professor',
@@ -2641,6 +2695,7 @@ COURSES = [
   'name': 'M.A in Education',
   'badge': 'MA',
   'card_image': '',
+  'syllabus': '',
   'careers': [
       'Research Scientist',
       'Assistant Professor',
@@ -2666,6 +2721,7 @@ COURSES = [
   'name': ' B.Sc. (H) Agriculture',
   'badge': 'BA',
   'card_image': '',
+  'syllabus': '',
   'careers': [
       'Research Scientist',
       'Assistant Professor',
@@ -2688,6 +2744,7 @@ COURSES = [
   'name': ' M.Sc. (H) Agronomy',
   'badge': 'M.Sc.',
   'card_image': '',
+  'syllabus': '',
   'careers': [
       'Research Scientist',
       'Assistant Professor',
@@ -2711,6 +2768,7 @@ COURSES = [
   'name': ' M.Sc. (H) Soil Science',
   'badge': 'M.Sc.',
   'card_image': '',
+  'syllabus': '',
   'careers': [
       'Research Scientist',
       'Assistant Professor',
@@ -2732,6 +2790,7 @@ COURSES = [
   'name': ' M.Sc. (H) Genetics & Plant Breedinge',
   'badge': 'M.Sc.',
   'card_image': '',
+  'syllabus': '',
   'careers': [
       'Research Scientist',
       'Assistant Professor',
@@ -2753,6 +2812,7 @@ COURSES = [
   'name': ' M.Sc. (H) Horticulture',
   'badge': 'M.Sc.',
   'card_image': '',
+  'syllabus': '',
   'careers': [
       'Research Scientist',
       'Assistant Professor',

@@ -208,11 +208,17 @@ text leaks onto the page.
                 {% if tab.download %}
                   <p class="tab-pane__action">
                     <a class="btn btn--gold" href="{{ tab.download.url }}"
-                       download type="application/pdf">
+                       {% if tab.download.is_external %}
+                         target="_blank" rel="noopener noreferrer"
+                       {% else %}
+                         download type="application/pdf"
+                       {% endif %}>
                       <svg width="15" height="15" aria-hidden="true"
                            focusable="false"><use href="#i-download"></use></svg>
                       {{ tab.download.label }}
-                      <span class="sr-only">(PDF download)</span>
+                      <span class="sr-only">
+                        {% if tab.download.is_external %}(opens in a new tab){% else %}(PDF download){% endif %}
+                      </span>
                     </a>
                   </p>
                 {% endif %}
