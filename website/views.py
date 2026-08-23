@@ -127,6 +127,21 @@ def _courses():
                               or _asset(department_images.get(row["department"], ""))
                               or _asset(school_images.get(row["school"], ""))
                               or _asset("img/school-placeholder.svg"))
+        # The banner behind the course title. A ladder of its own, NOT
+        # card_image's, because the two want different pictures:
+        #
+        #   this one   the course's own banner, then its school's, then the
+        #              campus shot everything else falls back to
+        #
+        # Deliberately NOT the school card_image the intro band uses. Those
+        # carry the school name and crest painted into the picture, and a
+        # banner is so much wider than it is tall that cropping to it cuts
+        # the wording in half behind the title — a Computer Science course
+        # came out reading "School of Engineering" across its middle. A
+        # banner wants a picture with nothing important in the centre.
+        item["hero_image"] = (_asset(row.get("hero_image"))
+                              or _asset(data.COURSE_BANNERS.get(row["school"], ""))
+                              or _asset("img/about/team.png"))
         item["department_name"] = department_names.get(row["department"], "")
         item["program_name"] = program_names.get(row["program"], "")
         item["school_url"] = (
@@ -643,6 +658,7 @@ def course_detail(request, slug):
         "recruiters": _recruiters(),
         "hero_title": course["name"],
         "hero_subtitle": "%s  |  %s" % (course["program_name"], course["duration"]),
+        "hero_image": course["hero_image"],
         "crumbs": [
             {"label": "Academics"},
             {"label": "Schools & Courses", "url": reverse("website:course_list")},

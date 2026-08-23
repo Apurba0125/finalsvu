@@ -1474,7 +1474,7 @@ table { border-collapse: collapse; width: 100%; }
 
 .affil-strip {
   display: flex;
-  gap: 24px;
+  gap: 16px;
   overflow-x: auto;
   text-align: center;
   scrollbar-width: none;
@@ -1484,7 +1484,30 @@ table { border-collapse: collapse; width: 100%; }
   scroll-behavior: auto;
 }
 .affil-strip::-webkit-scrollbar { display: none; }
-.affil-strip .affil-card { flex: 0 0 calc(100% - 12px); }
+
+/* ---- HOW MANY DISCS SIT ACROSS ------------------------------------------
+   The space between two marks is mostly NOT the `gap` above. A card is much
+   wider than the 150px disc inside it, and that leftover is what reads as
+   space: at four across on a wide screen each card was 280px holding a 150px
+   disc, which left 154px between neighbouring marks and only 24px of it was
+   the gap. So the way to close it is to fit MORE cards across, not to shrink
+   the gap further.
+
+   Raising a count narrows the cards, so CHECK THE CARD NEVER GETS NARROWER
+   THAN THE DISC or the two collide. At each step the tightest case is the
+   first pixel of its range:
+
+     step    card at its narrowest    disc    left between marks
+     2 up    136px  (at 320px wide)   112px    40px
+     3 up    139px  (at 480px wide)   132px    23px
+     4 up    170px  (at 768px wide)   150px    36px
+     5 up    176px  (at 992px wide)   150px    42px
+     6 up    179px  (at 1200px wide)  150px    45px                        */
+.affil-strip .affil-card   { flex: 0 0 calc((100% - 16px) / 2); }
+@media (min-width:  480px) { .affil-strip .affil-card { flex: 0 0 calc((100% - 32px) / 3); } }
+@media (min-width:  768px) { .affil-strip .affil-card { flex: 0 0 calc((100% - 48px) / 4); } }
+@media (min-width:  992px) { .affil-strip .affil-card { flex: 0 0 calc((100% - 64px) / 5); } }
+@media (min-width: 1200px) { .affil-strip .affil-card { flex: 0 0 calc((100% - 80px) / 6); } }
 
 .affil-card__link { display: block; color: inherit; }
 
@@ -1521,6 +1544,15 @@ table { border-collapse: collapse; width: 100%; }
   height: auto;
   object-fit: contain;
 }
+/* Two across on a phone leaves a card narrower than a full-size disc, so the
+   disc steps down with it rather than forcing the card wider than its share.
+
+   THESE MUST STAY BELOW the width/height above, not above them: same
+   specificity, so whichever comes last in the file wins. Placed before it,
+   they were silently overridden and the disc stayed 150px on a phone. */
+@media (max-width: 575.98px) { .affil-card__disc { width: 132px; height: 132px; } }
+@media (max-width: 379.98px) { .affil-card__disc { width: 112px; height: 112px; } }
+
 /* Shown inside the disc until a mark is uploaded — see the note in data.py. */
 .affil-card__fallback {
   color: var(--ink);
@@ -1531,12 +1563,15 @@ table { border-collapse: collapse; width: 100%; }
 }
 
 .affil-card__title {
-  margin: 16px auto 0;
+  margin: 14px auto 0;
   max-width: 22ch;
   color: var(--ink);
   font-size: .93rem;
   font-weight: 500;
   line-height: 1.55;
+  /* A card is 136px at its narrowest; a long name has to break inside the
+     word rather than set a floor the phone cannot meet. */
+  overflow-wrap: anywhere;
 }
 .affil-card__link:hover .affil-card__title { text-decoration: underline; }
 .affil-card__link:focus-visible { outline: 3px solid var(--red); outline-offset: 4px; }
@@ -3087,7 +3122,6 @@ table { border-collapse: collapse; width: 100%; }
   .quicklinks { grid-template-columns: 1fr 1fr; }
   .enlist-grid { grid-template-columns: repeat(2, 1fr); }
   .enlist-strip .enlist-card { flex: 0 0 calc((100% - 24px) / 2); }
-  .affil-strip .affil-card { flex: 0 0 calc((100% - 24px) / 2); }
   .offerings__panel { grid-template-columns: 1fr 1fr; padding: 32px 28px; }
   .video-grid { grid-template-columns: 1fr 1fr; }
   .carousel__item { flex-basis: calc((100% - 18px) / 2); }
@@ -3104,9 +3138,6 @@ table { border-collapse: collapse; width: 100%; }
   .section { padding: 52px 0; }
   .enlist-grid { grid-template-columns: repeat(3, 1fr); }
   .enlist-strip .enlist-card { flex: 0 0 calc((100% - 48px) / 3); }
-  /* Four across from here: these discs are smaller than the enlist panels, so
-     three would leave the band looking half empty on a wide screen. */
-  .affil-strip .affil-card { flex: 0 0 calc((100% - 72px) / 4); }
   /* Three across, matching the grid this replaced. */
   /* Three link columns beside each other; brand still spans the full row. */
   .footer__grid { grid-template-columns: repeat(3, 1fr); }

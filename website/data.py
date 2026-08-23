@@ -738,6 +738,7 @@ DEPARTMENTS = [
                  'one of the top-ranked universities in India, drives on the purpose of providing '
                  'quality education and improving competence among students, thereby living up to '
                  "its motto, 'Progress Through Knowledge'.",},
+                 
  {'slug': 'department-of-civil-engineering',
   'name': 'Department Of Civil Engineering',
   'school': 'school-of-engineering',
@@ -1307,6 +1308,48 @@ DEFAULT_DEPARTMENT_TABS = [
 ]
 
 # --------------------------------------------------------------------------
+# Banner behind the course title, one per SCHOOL — every course in that school
+# picks it up. Empty, so all of them currently show the campus banner.
+#
+# Fill a line in to give a whole school its own, e.g.
+#     'school-of-engineering': 'img/banners/engineering.jpg',
+# and drop the file in static/img/banners/. The key is the school slug, the
+# same one the course rows use.
+#
+# WHAT MAKES A GOOD ONE: wide and short — around 1440x300 — with nothing
+# important across the middle, because that is where the title sits. It is
+# laid at about a third opacity over the dark ground, so a busy photograph is
+# fine, but a picture with WORDING PAINTED INTO IT is not: cropped to this
+# shape the words get cut in half and read as a mistake behind the title.
+# That is why the school pictures used elsewhere on the site are not used
+# here — they have the school name across them.
+#
+# A single course can override its school with 'hero_image' on its own row.
+COURSE_BANNERS = {}
+
+# --------------------------------------------------------------------------
+# Courses  —  /academics/courses/[slug]/
+#
+# THE TWO PICTURES ON A COURSE PAGE, and they are not the same one:
+#
+#   hero_image   the wide banner BEHIND the course title at the top. Optional,
+#                and only needed to override the school-wide one: left blank,
+#                the course takes its school's entry in COURSE_BANNERS above,
+#                and failing that the campus banner. So every course has one
+#                without a word being typed here.
+#
+#                See COURSE_BANNERS for what makes a good picture — the short
+#                version is wide, short, and nothing important in the middle.
+#
+#   card_image   the picture in the intro band lower down, and on the course
+#                card in listings. Its own ladder, finest first: the course's
+#                own picture, then its department's, then its school's.
+#
+# Both take a path under static/, e.g. 'img/courses/civil-banner.jpg'. Drop
+# the file in, name it here, run
+#     python manage.py collectstatic --noinput
+# and it appears. A name that does not match a file costs that one picture
+# rather than the page — the banner just goes back to its plain dark ground.
 COURSES = [
 
 #civil start
