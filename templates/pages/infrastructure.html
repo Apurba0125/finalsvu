@@ -17,7 +17,7 @@ HOW TO EDIT
                        card. Anything already in static/img/ works; put a new
                        photograph there and run
                            python manage.py collectstatic --noinput
-  Add a block          Copy a whole <article class="infra-item"> … </article>
+  Add a block          Copy a whole <article class="infra-item" data-reveal> … </article>
                        and edit it. They alternate sides automatically — the
                        even-numbered one puts its picture on the right — so
                        do not add classes to control that.
@@ -43,6 +43,7 @@ leaks onto the page and any tag inside it actually runs.
 {% block meta_description %}The campus of Swami Vivekananda University — smart classrooms, laboratories, the digital library, sports facilities, cafeteria and the green campus at Barrackpore.{% endblock %}
 
 {% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/gallery.css' %}">
   <link rel="stylesheet" href="{% static 'css/placements.css' %}">
 {% endblock %}
 
@@ -72,16 +73,24 @@ leaks onto the page and any tag inside it actually runs.
 
 
 {# ========================================================  THE BLOCKS  === #}
-{# Copy one <article class="infra-item"> to add a block. Sides alternate on #}
+{# Copy one <article class="infra-item" data-reveal> to add a block. Sides alternate on #}
 {# their own; do not add a class to flip one.                               #}
 <section class="section section--alt">
-  <div class="shell infra-list">
+  {# data-viewer marks these six photographs as ONE gallery, so the arrows   #}
+  {# in the viewer step between them and it counts "3 / 6" on its own. That   #}
+  {# attribute is half the contract with initPhotoViewer in main.js; the      #}
+  {# other half is the button around each picture below. WITHOUT the          #}
+  {# attribute HERE those buttons are focusable controls that do nothing.     #}
+  <div class="shell infra-list" data-viewer>
 
-    <article class="infra-item">
+    <article class="infra-item" data-reveal>
       <figure class="infra-item__media">
-        <img src="{% static 'img/facilities/classroom.jpg' %}"
+          <button class="infra-item__zoom" type="button" data-viewer-item
+                  aria-label="Enlarge this photograph">
+            <img src="{% static 'img/facilities/classroom.jpg' %}"
              alt="A smart classroom in use" loading="lazy"
              width="720" height="480">
+        </button>
       </figure>
       <div class="infra-item__body">
         <h3 class="infra-item__title">Smart Classrooms</h3>
@@ -93,11 +102,14 @@ leaks onto the page and any tag inside it actually runs.
       </div>
     </article>
 
-    <article class="infra-item">
+    <article class="infra-item" data-reveal>
       <figure class="infra-item__media">
-        <img src="{% static 'img/facilities/lab.png' %}"
+          <button class="infra-item__zoom" type="button" data-viewer-item
+                  aria-label="Enlarge this photograph">
+            <img src="{% static 'img/facilities/lab.png' %}"
              alt="Students working in a university laboratory" loading="lazy"
              width="720" height="480">
+        </button>
       </figure>
       <div class="infra-item__body">
         <h3 class="infra-item__title">Laboratories</h3>
@@ -109,11 +121,14 @@ leaks onto the page and any tag inside it actually runs.
       </div>
     </article>
 
-    <article class="infra-item">
+    <article class="infra-item" data-reveal>
       <figure class="infra-item__media">
-        <img src="{% static 'img/facilities/12.jpg' %}"
+          <button class="infra-item__zoom" type="button" data-viewer-item
+                  aria-label="Enlarge this photograph">
+            <img src="{% static 'img/facilities/12.jpg' %}"
              alt="The university library" loading="lazy"
              width="720" height="480">
+        </button>
       </figure>
       <div class="infra-item__body">
         <h3 class="infra-item__title">Library &amp; Digital Resources</h3>
@@ -132,11 +147,14 @@ leaks onto the page and any tag inside it actually runs.
       </div>
     </article>
 
-    <article class="infra-item">
+    <article class="infra-item" data-reveal>
       <figure class="infra-item__media">
-        <img src="{% static 'img/facilities/groupstudy.jpg' %}"
+          <button class="infra-item__zoom" type="button" data-viewer-item
+                  aria-label="Enlarge this photograph">
+            <img src="{% static 'img/facilities/groupstudy.jpg' %}"
              alt="Students working together in a study area" loading="lazy"
              width="720" height="480">
+        </button>
       </figure>
       <div class="infra-item__body">
         <h3 class="infra-item__title">Study &amp; Project Spaces</h3>
@@ -148,11 +166,14 @@ leaks onto the page and any tag inside it actually runs.
       </div>
     </article>
 
-    <article class="infra-item">
+    <article class="infra-item" data-reveal>
       <figure class="infra-item__media">
-        <img src="{% static 'img/facilities/sports.jpg' %}"
+          <button class="infra-item__zoom" type="button" data-viewer-item
+                  aria-label="Enlarge this photograph">
+            <img src="{% static 'img/facilities/sports.jpg' %}"
              alt="The campus sports ground" loading="lazy"
              width="720" height="480">
+        </button>
       </figure>
       <div class="infra-item__body">
         <h3 class="infra-item__title">Sports &amp; Gymnasium</h3>
@@ -164,11 +185,14 @@ leaks onto the page and any tag inside it actually runs.
       </div>
     </article>
 
-    <article class="infra-item">
+    <article class="infra-item" data-reveal>
       <figure class="infra-item__media">
-        <img src="{% static 'img/facilities/garden.jpg' %}"
+          <button class="infra-item__zoom" type="button" data-viewer-item
+                  aria-label="Enlarge this photograph">
+            <img src="{% static 'img/facilities/garden.jpg' %}"
              alt="Green space on the university campus" loading="lazy"
              width="720" height="480">
+        </button>
       </figure>
       <div class="infra-item__body">
         <h3 class="infra-item__title">A Green Campus</h3>
@@ -193,7 +217,7 @@ leaks onto the page and any tag inside it actually runs.
       <span class="page-rule"></span>
     </div>
 
-    <ul class="infra-chips">
+    <ul class="infra-chips" data-reveal>
       <li class="infra-chip">
         <svg width="22" height="22" aria-hidden="true" focusable="false"><use href="#i-globe"></use></svg>
         <span>Campus-wide Wi-Fi</span>
