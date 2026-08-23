@@ -1273,14 +1273,49 @@ COURSE_BANNERS = {}
 #                version is wide, short, and nothing important in the middle.
 #
 #   card_image   the picture in the intro band lower down, and on the course
-#                card in listings. Its own ladder, finest first: the course's
-#                own picture, then its department's, then its school's.
+#                card in EVERY listing - the course list, the department page,
+#                the school page, the home page. One value behind all of them,
+#                so a course cannot show one picture in one place and a
+#                different one somewhere else.
+#
+#                MOST COURSES SHOULD LEAVE THIS EMPTY. Name the file after the
+#                course instead and it is picked up on its own:
+#
+#                    static/img/courses/b-tech-in-civil-engineering.jpg
+#
+#                - the course's own slug, the last part of its web address,
+#                with .jpg, .jpeg, .png or .webp. See the README in that
+#                folder. Fill this line in only when the picture cannot be
+#                named that way, e.g. one picture shared by several courses;
+#                what is written here beats a file found by name.
+#
+#                The ladder in full, finest first: this line, then a file
+#                named after the course, then the department's picture, then
+#                the school's, then a plain placeholder. So a course is never
+#                a hole on the page while its photograph is being taken.
 #
 # Both take a path under static/, e.g. 'img/courses/civil-banner.jpg'. Drop
 # the file in, name it here, run
 #     python manage.py collectstatic --noinput
 # and it appears. A name that does not match a file costs that one picture
 # rather than the page — the banner just goes back to its plain dark ground.
+#
+# THE SYLLABUS, and the Download Syllabus button under Course Eligibility:
+#
+#   syllabus     a PDF, and the button only appears when there is one - no
+#                file, no button, rather than a button that leads to a 404.
+#
+#                LIKE THE PICTURE, MOST COURSES SHOULD LEAVE THIS OUT. Name
+#                the PDF after the course instead and it is picked up on its
+#                own:
+#
+#                    static/documents/syllabus/b-tech-in-civil-engineering.pdf
+#
+#                See the README in that folder. Write this line only when the
+#                PDF cannot be named that way - one syllabus shared by several
+#                courses, or a filename carrying the regulation year - and it
+#                beats a file found by name. A full URL works too, for a
+#                syllabus hosted somewhere else.
 COURSES = [
 
 #civil start
@@ -1385,7 +1420,7 @@ COURSES = [
     'slug': 'diploma-in-computer-science-technology',
     'name': 'Diploma in Computer Science & Technology',
     'badge': 'Diploma',
-    'card_image': '',
+    'card_image': 'img/departments/computer-app.jpg',
     'careers': [
         'Software Engineer',
         'Hardware Engineer',
@@ -1400,12 +1435,12 @@ COURSES = [
     ],
     'school': 'school-of-engineering',
     'department': 'department-of-computer-science-engineering',
-    'program': 'under-graduate',
+    'program': 'diploma',
     'duration': '3 Years',
     'total_seats': 120,
     'is_featured': True,
     'eligibility': 'Passed 10th standard or equivalent examination from a recognised board with a minimum of 50% marks.',
-    'description': 'The programme blends classroom instruction, laboratory or field practice and continuous internal assessment. Students are mentored throughout the course and prepared for placement through the training and placement cell.'
+    'description': 'The Diploma in Computer Science and Technology program at Swami Vivekananda University aims to equip students with practical skills and theoretical knowledge necessary for a successful career in the field. Students can expect to gain a comprehensive understanding of programming languages, software development, algorithm design, data structures, and computer networking while doing the diploma in computer science course. The coursework of computer science diploma emphasizes practical application through hands-on projects, industry collaborations, and internships, allowing students to develop real-world problem-solving skills. The diploma in computer technology program also focuses on enhancing analytical and critical thinking abilities, enabling students to adapt to rapidly evolving technologies in the digital era.'
 },
 
 {
@@ -2803,6 +2838,8 @@ COURSE_TABS = {
     {'text': 'A minimum of 35% marks in aggregate at that examination.'},
     {'text': 'English, Physical Science / Science and Mathematics must have been subjects '
              'at that examination.'},
+    
+
    ]},
 
   {'title': 'Career Opportunities',

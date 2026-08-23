@@ -33,6 +33,13 @@
 .course-facts .v a { color: var(--accent); }
 .course-facts .v a:hover { text-decoration: underline; }
 
+/* ----------------------------------------------- tab download button ---- */
+/* Download Syllabus, under the eligibility list. On a line of its own with
+   air above it rather than tucked against the last point: it is the one
+   thing on that tab a visitor is meant to click. */
+.tab-pane__action { margin: 24px 0 0; }
+.tab-pane__action .btn svg { fill: currentColor; flex: none; }
+
 /* --------------------------------------------- tab panel + enquiry ------ */
 /* This band stays white between the two tinted ones either side of it, so
    the tabs read as the middle of the page rather than another stripe. */

@@ -7,8 +7,10 @@ stay exactly as they are and only the lookups in this file change.
 """
 import datetime
 import logging
+import os
 import re
 
+from django.conf import settings
 from django.core.paginator import Paginator
 from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, render
@@ -110,6 +112,62 @@ def _departments(school=None):
     return items
 
 
+# --------------------------------------------------------------------------
+# Files named after the course they belong to, so that dropping one in is the
+# whole job and there is no line to edit in data.py:
+#
+#     static/img/courses/b-tech-in-civil-engineering.jpg        <- its picture
+#     static/documents/syllabus/b-tech-in-civil-engineering.pdf <- its syllabus
+#
+# The name is the course's SLUG - the last part of its URL. Each folder has a
+# README saying so, for whoever is adding the files.
+#
+# Neither is compulsory. A course with no picture falls back to its
+# department's and then its school's; a course with no syllabus simply shows
+# no Download Syllabus button, rather than one that leads to a 404. What is
+# written on the course row in data.py beats a file found by name.
+COURSE_IMAGE_DIR = "img/courses"
+COURSE_IMAGE_TYPES = (".jpg", ".jpeg", ".png", ".webp")
+
+COURSE_SYLLABUS_DIR = "documents/syllabus"
+COURSE_SYLLABUS_TYPES = (".pdf",)
+
+_slug_named_index = {}
+
+
+def _slug_named_files(folder, extensions):
+    """``{slug: '<folder>/<file>'}`` for what is sitting in a static folder.
+
+    Read once per process and kept, except under DEBUG where it is read again
+    every time: adding a picture or a PDF is not a code change, so the dev
+    server does not restart for it, and a cached listing would leave whoever
+    added the file staring at the old page wondering what went wrong.
+    """
+    if not settings.DEBUG and folder in _slug_named_index:
+        return _slug_named_index[folder]
+
+    index = {}
+    for root in settings.STATICFILES_DIRS:
+        path = os.path.join(str(root), *folder.split("/"))
+        try:
+            names = sorted(os.listdir(path))
+        except OSError:
+            # No such folder yet, which is the normal state until the first
+            # file is dropped in.
+            continue
+        for name in names:
+            stem, extension = os.path.splitext(name)
+            if extension.lower() in extensions:
+                # setdefault over a sorted listing, so with both a .jpg and a
+                # .png of the same course the answer is the same every time
+                # rather than following the order the filesystem hands them
+                # back.
+                index.setdefault(stem.lower(), "%s/%s" % (folder, name))
+
+    _slug_named_index[folder] = index
+    return index
+
+
 def _courses():
     school_names = {s["slug"]: s["name"] for s in data.SCHOOLS}
     school_images = {s["slug"]: s.get("card_image", "") for s in data.SCHOOLS}
@@ -121,9 +179,17 @@ def _courses():
         item = dict(row)
         item["url"] = reverse("website:course_detail", args=[row["slug"]])
         item["school_name"] = school_names.get(row["school"], "")
-        # Same fallback ladder as a department: the course's own picture, then
-        # its department's, then its school's, then the placeholder.
+        # Finest first: the picture named on the course row, then one named
+        # after the course in static/img/courses/ (_slug_named_files above),
+        # then its department's, then its school's, then the placeholder.
+        #
+        # Every listing on the site reads this one value - the course cards on
+        # a department page as much as the course page itself - so a course
+        # cannot show one picture in one place and another somewhere else.
         item["card_image"] = (_asset(row.get("card_image"))
+                              or _asset(_slug_named_files(
+                                  COURSE_IMAGE_DIR, COURSE_IMAGE_TYPES)
+                                  .get(row["slug"], ""))
                               or _asset(department_images.get(row["department"], ""))
                               or _asset(school_images.get(row["school"], ""))
                               or _asset("img/school-placeholder.svg"))
@@ -142,6 +208,14 @@ def _courses():
         item["hero_image"] = (_asset(row.get("hero_image"))
                               or _asset(data.COURSE_BANNERS.get(row["school"], ""))
                               or _asset("img/about/team.png"))
+        # The PDF behind the Download Syllabus button on the eligibility tab.
+        # 'syllabus' on the course row first - through doc_url, so a path
+        # typed before the file exists hides the button instead of taking the
+        # page down - then a PDF named after the course.
+        item["syllabus_url"] = (doc_url(row.get("syllabus", ""))
+                                or _asset(_slug_named_files(
+                                    COURSE_SYLLABUS_DIR, COURSE_SYLLABUS_TYPES)
+                                    .get(row["slug"], "")))
         item["department_name"] = department_names.get(row["department"], "")
         item["program_name"] = program_names.get(row["program"], "")
         item["school_url"] = (
@@ -395,6 +469,14 @@ def _department_tabs(department):
     return panels
 
 
+# The Download Syllabus button rides on this tab, because a candidate who has
+# just read what they need in order to apply is the one who wants to see what
+# they would actually study. Matched on the slug, which slugify() derives from
+# the tab title, so a course with its own COURSE_TABS entry gets the button
+# too as long as it calls the tab Course Eligibility.
+SYLLABUS_TAB_SLUG = "course-eligibility"
+
+
 def _course_tabs(course):
     """Tab panels for a course page.
 
@@ -448,6 +530,12 @@ def _course_tabs(course):
                  "image": _asset(data.CAREER_IMAGES.get(point["text"], ""))}
                 for point in tab["points"] if point.get("text")
             ]
+
+        # No PDF, no button - rather than a button that leads to a 404.
+        tab["download"] = ""
+        if tab["slug"] == SYLLABUS_TAB_SLUG and course.get("syllabus_url"):
+            tab["download"] = {"url": course["syllabus_url"],
+                               "label": "Download Syllabus"}
 
         panels.append(tab)
     return panels
