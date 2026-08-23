@@ -8,30 +8,38 @@ INFRASTRUCTURE  —  served at /page/infrastructure/
 ---------------------------------------------------------------------------
 Header, navigation and footer come from base.html. Do not add them here.
 
-THIS PAGE IS WRITTEN BY HAND. Every word and every picture on it is in this
-file — there is nothing to change in data.py to edit it.
+EVERYTHING ON THIS PAGE IS IN THIS ONE FILE. Six tabs of photographs, then
+the Conference band underneath. There is nothing to change in data.py.
 
 HOW TO EDIT
-  Change any wording   Edit the text directly. It is ordinary HTML.
-  Change a picture     Edit the file name inside {% templatetag openblock %} static '…' {% templatetag closeblock %} on that
-                       card. Anything already in static/img/ works; put a new
-                       photograph there and run
-                           python manage.py collectstatic --noinput
-  Add a block          Copy a whole <article class="infra-item" data-reveal> … </article>
-                       and edit it. They alternate sides automatically — the
-                       even-numbered one puts its picture on the right — so
-                       do not add classes to control that.
-  Add a small card     Copy an <li class="infra-chip"> in the last section.
-  Remove a block       Delete it. Nothing else refers to it.
 
-A NOTE ON THE PICTURES
-The photographs used here are the ones already in static/img/facilities/.
-Several blocks below reuse the same file because the university has not
-supplied a photograph for every space yet. Swap them as real ones arrive —
-each is named once, on its own card.
+  Any wording        Type over it. It is plain HTML.
 
-Styling is static/css/placements.css, shared with Training & Placements, plus
-main.css for the banner that includes/page_hero.html draws.
+  Add a photograph   Copy one {% include "includes/infra_shot.html" %} line
+                     and change the file it names. Put the file itself in
+                     static/img/infrastructure/<folder>/ and run
+                         python manage.py collectstatic --noinput
+                     The folder for each tab is named in the comment above
+                     its grid. Order on the page is the order of the lines.
+
+  Add a tab          Copy a <button class="tab-btn"> and a matching
+                     <div class="tab-pane">, and give the pair a new id. The
+                     button's data-tab-target is "#" plus the pane's id. The
+                     pills split the row evenly however many there are.
+
+CLICKING A PHOTOGRAPH OPENS IT FULL SIZE
+data-viewer on a grid marks its photographs as ONE gallery, and each cell
+carries data-viewer-item. That is the whole contract with initPhotoViewer in
+main.js: the arrows, the "3 / 12" count and the wrap are worked out from the
+markup, so a photograph can be dropped into the middle of a grid without
+renumbering anything. EACH TAB IS ITS OWN GALLERY, so the arrows stay inside
+the tab being looked at.
+
+WHY EVERY PICTURE GOES THROUGH doc_url
+Under the manifest storage a bare {% static %} tag RAISES for a file that was
+never collected. With sixty-odd filenames on this page, one typo would be a
+500 rather than one missing photograph. doc_url returns an empty string and
+the cell is dropped instead.
 
 NOTE ON COMMENTS: the hash-style Django comment {# … #} covers a SINGLE line.
 For a multi-line note use a comment/endcomment pair like this one, or the text
@@ -40,223 +48,311 @@ leaks onto the page and any tag inside it actually runs.
 {% endcomment %}
 
 {% block title %}Infrastructure | {{ site.site_name }}{% endblock %}
-{% block meta_description %}The campus of Swami Vivekananda University — smart classrooms, laboratories, the digital library, sports facilities, cafeteria and the green campus at Barrackpore.{% endblock %}
+{% block meta_description %}The campus of Swami Vivekananda University at Barrackpore — the grounds, classrooms, laboratories, library and hostel, and the international conferences held here.{% endblock %}
 
 {% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/page-head.css' %}">
+  <link rel="stylesheet" href="{% static 'css/tabs.css' %}">
   <link rel="stylesheet" href="{% static 'css/gallery.css' %}">
-  <link rel="stylesheet" href="{% static 'css/placements.css' %}">
+  <link rel="stylesheet" href="{% static 'css/infrastructure.css' %}">
 {% endblock %}
 
 {% block content %}
 {% include "includes/page_hero.html" %}
 
 
-{# ============================================================  INTRO  === #}
-<section class="section">
+{# ==============================================================  TABS  === #}
+<section class="section infra-section">
   <div class="shell">
+
     <div class="page-head">
       <h2 class="page-heading">The <span>Campus</span></h2>
       <span class="page-rule"></span>
     </div>
 
-    <div class="prose prose--full">
-      <p>
-        The university sits at Barrackpore, north of Kolkata, on a green
-        campus built around water bodies and open ground. What follows is what
-        a student actually finds on arrival — the rooms they are taught in,
-        the laboratories they work in, and the places they spend the hours
-        between.
-      </p>
+    <div class="tabset" data-tabs>
+
+      {# Under 768px six pills would wrap to more height than the panel they #}
+      {# navigate, so they collapse behind this control. The span below      #}
+      {# reads whichever pill is open, so there is no second copy of the     #}
+      {# labels to keep in step.                                             #}
+      <button class="tabset__toggle" type="button" data-tabs-toggle
+              aria-expanded="false" aria-controls="infraTabNav">
+        <span data-tabs-current>Campus</span>
+        {# Sized in the markup as well as the CSS: an <svg> with no          #}
+        {# intrinsic size falls back to 300x150, so a stylesheet that has    #}
+        {# not loaded yet would put a full-width chevron on the page.        #}
+        <svg width="12" height="8" aria-hidden="true" focusable="false"><use href="#i-caret"></use></svg>
+      </button>
+
+      <div class="tabset__nav" id="infraTabNav" data-tabs-nav role="tablist"
+           aria-label="Campus infrastructure">
+        <button class="tab-btn is-active" type="button" role="tab"
+                id="tab-campus" data-tab-target="#pane-campus"
+                aria-controls="pane-campus"
+                aria-selected="true" tabindex="0">Campus</button>
+
+        <button class="tab-btn" type="button" role="tab"
+                id="tab-classrooms" data-tab-target="#pane-classrooms"
+                aria-controls="pane-classrooms"
+                aria-selected="false" tabindex="-1">Classrooms</button>
+
+        <button class="tab-btn" type="button" role="tab"
+                id="tab-laboratories" data-tab-target="#pane-laboratories"
+                aria-controls="pane-laboratories"
+                aria-selected="false" tabindex="-1">Laboratories</button>
+
+        <button class="tab-btn" type="button" role="tab"
+                id="tab-library" data-tab-target="#pane-library"
+                aria-controls="pane-library"
+                aria-selected="false" tabindex="-1">Library</button>
+
+        <button class="tab-btn" type="button" role="tab"
+                id="tab-future" data-tab-target="#pane-future"
+                aria-controls="pane-future"
+                aria-selected="false" tabindex="-1">Future Aspects</button>
+
+        <button class="tab-btn" type="button" role="tab"
+                id="tab-hostel" data-tab-target="#pane-hostel"
+                aria-controls="pane-hostel"
+                aria-selected="false" tabindex="-1">Hostel</button>
+      </div>
+
+      {# ---------------------------------------------------- CAMPUS #}
+      <div class="tab-pane is-active" id="pane-campus" role="tabpanel"
+           aria-labelledby="tab-campus" tabindex="0">
+
+        <h3 class="infra-pane__title">Campus</h3>
+        <p class="infra-pane__text">
+          Our university campus is spacious and decorated with greenery. It
+          gives students and faculties enough space to conduct productive
+          experiments with plants and flowers. Students can read books anywhere
+          in the campus.
+        </p>
+
+        {# Photographs live in static/img/infrastructure/campus/ #}
+        {# data-viewer makes these 16 one gallery of their own, so the#}
+        {# arrows stay inside this tab rather than running into the   #}
+        {# next one. Without it the cells below do nothing on click.  #}
+        <ul class="infra-grid" data-viewer>
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/campus/1.avif" alt="The Swami Vivekananda University campus" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/campus/1.jpg" alt="The Swami Vivekananda University campus" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/campus/2.avif" alt="The Swami Vivekananda University campus" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/campus/2.jpg" alt="The Swami Vivekananda University campus" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/campus/3.avif" alt="The Swami Vivekananda University campus" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/campus/3.jpg" alt="The Swami Vivekananda University campus" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/campus/4.avif" alt="The Swami Vivekananda University campus" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/campus/4.jpg" alt="The Swami Vivekananda University campus" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/campus/5.avif" alt="The Swami Vivekananda University campus" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/campus/5.jpg" alt="The Swami Vivekananda University campus" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/campus/6.avif" alt="The Swami Vivekananda University campus" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/campus/6.jpg" alt="The Swami Vivekananda University campus" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/campus/7.avif" alt="The Swami Vivekananda University campus" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/campus/7.jpg" alt="The Swami Vivekananda University campus" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/campus/8.avif" alt="The Swami Vivekananda University campus" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/campus/8.jpg" alt="The Swami Vivekananda University campus" %}
+        </ul>
+      </div>
+
+      {# ------------------------------------------------ CLASSROOMS #}
+      <div class="tab-pane" id="pane-classrooms" role="tabpanel"
+           aria-labelledby="tab-classrooms" tabindex="0">
+
+        <h3 class="infra-pane__title">Classrooms</h3>
+        <p class="infra-pane__text">
+          Every classroom at our university is designed to provide a
+          comfortable studying environment. Our classrooms have smart learning
+          facilities, centralized AC, sufficient lighting, and fans for a
+          stress-free learning experience.
+        </p>
+
+        {# Photographs live in static/img/infrastructure/classrooms/ #}
+        {# data-viewer makes these 6 one gallery of their own, so the#}
+        {# arrows stay inside this tab rather than running into the   #}
+        {# next one. Without it the cells below do nothing on click.  #}
+        <ul class="infra-grid" data-viewer>
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/classrooms/1.avif" alt="A classroom at Swami Vivekananda University" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/classrooms/2.avif" alt="A classroom at Swami Vivekananda University" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/classrooms/3.avif" alt="A classroom at Swami Vivekananda University" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/classrooms/4.avif" alt="A classroom at Swami Vivekananda University" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/classrooms/5.avif" alt="A classroom at Swami Vivekananda University" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/classrooms/6.avif" alt="A classroom at Swami Vivekananda University" %}
+        </ul>
+      </div>
+
+      {# ---------------------------------------------- LABORATORIES #}
+      <div class="tab-pane" id="pane-laboratories" role="tabpanel"
+           aria-labelledby="tab-laboratories" tabindex="0">
+
+        <h3 class="infra-pane__title">Laboratories</h3>
+        <p class="infra-pane__text">
+          Our Laboratories are equipped with the latest machines and apparatus
+          for training our students for the best. Students conduct effective
+          practical sessions under experienced faculties and proper safety
+          instructions.
+        </p>
+
+        {# Photographs live in static/img/infrastructure/laboratories/ #}
+        {# data-viewer makes these 18 one gallery of their own, so the#}
+        {# arrows stay inside this tab rather than running into the   #}
+        {# next one. Without it the cells below do nothing on click.  #}
+        <ul class="infra-grid" data-viewer>
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/laboratories/1.avif" alt="A laboratory at Swami Vivekananda University" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/laboratories/2.avif" alt="A laboratory at Swami Vivekananda University" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/laboratories/3.avif" alt="A laboratory at Swami Vivekananda University" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/laboratories/4.avif" alt="A laboratory at Swami Vivekananda University" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/laboratories/5.avif" alt="A laboratory at Swami Vivekananda University" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/laboratories/6.avif" alt="A laboratory at Swami Vivekananda University" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/laboratories/7.avif" alt="A laboratory at Swami Vivekananda University" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/laboratories/8.avif" alt="A laboratory at Swami Vivekananda University" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/laboratories/9.avif" alt="A laboratory at Swami Vivekananda University" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/laboratories/10.avif" alt="A laboratory at Swami Vivekananda University" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/laboratories/11.avif" alt="A laboratory at Swami Vivekananda University" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/laboratories/12.avif" alt="A laboratory at Swami Vivekananda University" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/laboratories/13.avif" alt="A laboratory at Swami Vivekananda University" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/laboratories/14.avif" alt="A laboratory at Swami Vivekananda University" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/laboratories/15.avif" alt="A laboratory at Swami Vivekananda University" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/laboratories/16.avif" alt="A laboratory at Swami Vivekananda University" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/laboratories/17.avif" alt="A laboratory at Swami Vivekananda University" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/laboratories/18.avif" alt="A laboratory at Swami Vivekananda University" %}
+        </ul>
+      </div>
+
+      {# --------------------------------------------------- LIBRARY #}
+      <div class="tab-pane" id="pane-library" role="tabpanel"
+           aria-labelledby="tab-library" tabindex="0">
+
+        <h3 class="infra-pane__title">Library</h3>
+        <p class="infra-pane__text">
+          We have curated our library with thousands of study and literature
+          books. Every student has easy access to the library and can read
+          about interdisciplinary topics to broaden their knowledge boundaries.
+        </p>
+
+        {# Photographs live in static/img/infrastructure/library/ #}
+        {# data-viewer makes these 12 one gallery of their own, so the#}
+        {# arrows stay inside this tab rather than running into the   #}
+        {# next one. Without it the cells below do nothing on click.  #}
+        <ul class="infra-grid" data-viewer>
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/library/1.jpg" alt="The university library" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/library/2.jpg" alt="The university library" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/library/3.jpg" alt="The university library" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/library/4.jpg" alt="The university library" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/library/5.jpg" alt="The university library" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/library/6.jpg" alt="The university library" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/library/7.jpg" alt="The university library" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/library/8.jpg" alt="The university library" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/library/9.jpg" alt="The university library" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/library/11.jpg" alt="The university library" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/library/12.jpg" alt="The university library" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/library/13.jpg" alt="The university library" %}
+        </ul>
+      </div>
+
+      {# -------------------------------------------- FUTURE ASPECTS #}
+      <div class="tab-pane" id="pane-future" role="tabpanel"
+           aria-labelledby="tab-future" tabindex="0">
+
+        <h3 class="infra-pane__title">Future Aspects</h3>
+        <p class="infra-pane__text">
+          At Swami Vivekananda University, we constantly upgrade our existing
+          infrastructure to bring in newer developments and facilities. Future
+          students can expect the benefits of several amenities, including a
+          basketball court, an indoor swimming pool, smart conference halls,
+          among others. Join SVU for world-class facilities and more!
+        </p>
+
+        {# Photographs live in static/img/infrastructure/future/ #}
+        {# data-viewer makes these 6 one gallery of their own, so the#}
+        {# arrows stay inside this tab rather than running into the   #}
+        {# next one. Without it the cells below do nothing on click.  #}
+        <ul class="infra-grid" data-viewer>
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/future/1.avif" alt="Planned facilities on the university campus" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/future/2.avif" alt="Planned facilities on the university campus" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/future/3.avif" alt="Planned facilities on the university campus" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/future/4.avif" alt="Planned facilities on the university campus" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/future/5.avif" alt="Planned facilities on the university campus" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/future/6.avif" alt="Planned facilities on the university campus" %}
+        </ul>
+      </div>
+
+      {# ---------------------------------------------------- HOSTEL #}
+      <div class="tab-pane" id="pane-hostel" role="tabpanel"
+           aria-labelledby="tab-hostel" tabindex="0">
+
+        <h3 class="infra-pane__title">Hostel</h3>
+
+        {# Photographs live in static/img/infrastructure/hostel/ #}
+        {# data-viewer makes these 3 one gallery of their own, so the#}
+        {# arrows stay inside this tab rather than running into the   #}
+        {# next one. Without it the cells below do nothing on click.  #}
+        <ul class="infra-grid" data-viewer>
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/hostel/hostel_1.jpeg" alt="The university hostel" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/hostel/hostel_3.jpeg" alt="The university hostel" %}
+          {% include "includes/infra_shot.html" with photo="img/infrastructure/hostel/hostel_4.jpeg" alt="The university hostel" %}
+        </ul>
+      </div>
+
     </div>
   </div>
 </section>
 
 
-{# ========================================================  THE BLOCKS  === #}
-{# Copy one <article class="infra-item" data-reveal> to add a block. Sides alternate on #}
-{# their own; do not add a class to flip one.                               #}
-<section class="section section--alt">
-  {# data-viewer marks these six photographs as ONE gallery, so the arrows   #}
-  {# in the viewer step between them and it counts "3 / 6" on its own. That   #}
-  {# attribute is half the contract with initPhotoViewer in main.js; the      #}
-  {# other half is the button around each picture below. WITHOUT the          #}
-  {# attribute HERE those buttons are focusable controls that do nothing.     #}
-  <div class="shell infra-list" data-viewer>
-
-    <article class="infra-item" data-reveal>
-      <figure class="infra-item__media">
-          <button class="infra-item__zoom" type="button" data-viewer-item
-                  aria-label="Enlarge this photograph">
-            <img src="{% static 'img/facilities/classroom.jpg' %}"
-             alt="A smart classroom in use" loading="lazy"
-             width="720" height="480">
-        </button>
-      </figure>
-      <div class="infra-item__body">
-        <h3 class="infra-item__title">Smart Classrooms</h3>
-        <p>
-          Fully air-conditioned lecture rooms with digital boards and
-          projection, wired for the hybrid mode the university teaches in, so
-          a session can be followed in the room or from outside it.
-        </p>
-      </div>
-    </article>
-
-    <article class="infra-item" data-reveal>
-      <figure class="infra-item__media">
-          <button class="infra-item__zoom" type="button" data-viewer-item
-                  aria-label="Enlarge this photograph">
-            <img src="{% static 'img/facilities/lab.png' %}"
-             alt="Students working in a university laboratory" loading="lazy"
-             width="720" height="480">
-        </button>
-      </figure>
-      <div class="infra-item__body">
-        <h3 class="infra-item__title">Laboratories</h3>
-        <p>
-          Engineering, science and allied-health laboratories mapped to the
-          syllabus rather than to a minimum requirement, and kept open beyond
-          scheduled hours for students working on projects of their own.
-        </p>
-      </div>
-    </article>
-
-    <article class="infra-item" data-reveal>
-      <figure class="infra-item__media">
-          <button class="infra-item__zoom" type="button" data-viewer-item
-                  aria-label="Enlarge this photograph">
-            <img src="{% static 'img/facilities/12.jpg' %}"
-             alt="The university library" loading="lazy"
-             width="720" height="480">
-        </button>
-      </figure>
-      <div class="infra-item__body">
-        <h3 class="infra-item__title">Library &amp; Digital Resources</h3>
-        <p>
-          A reference and lending library alongside a digital collection of
-          journals, e-books and theses, reachable on campus and off it.
-        </p>
-        <p>
-          <a class="btn btn--outline-gold btn--sm"
-             href="https://svu.knimbus.com/portal/v2/default/home"
-             target="_blank" rel="noopener noreferrer">
-            Open the digital library
-            <span class="sr-only">(opens in a new tab)</span>
-          </a>
-        </p>
-      </div>
-    </article>
-
-    <article class="infra-item" data-reveal>
-      <figure class="infra-item__media">
-          <button class="infra-item__zoom" type="button" data-viewer-item
-                  aria-label="Enlarge this photograph">
-            <img src="{% static 'img/facilities/groupstudy.jpg' %}"
-             alt="Students working together in a study area" loading="lazy"
-             width="720" height="480">
-        </button>
-      </figure>
-      <div class="infra-item__body">
-        <h3 class="infra-item__title">Study &amp; Project Spaces</h3>
-        <p>
-          Rooms set aside for group work, seminar practice and project
-          building, because a good deal of what a degree teaches happens
-          between students rather than at the front of a room.
-        </p>
-      </div>
-    </article>
-
-    <article class="infra-item" data-reveal>
-      <figure class="infra-item__media">
-          <button class="infra-item__zoom" type="button" data-viewer-item
-                  aria-label="Enlarge this photograph">
-            <img src="{% static 'img/facilities/sports.jpg' %}"
-             alt="The campus sports ground" loading="lazy"
-             width="720" height="480">
-        </button>
-      </figure>
-      <div class="infra-item__body">
-        <h3 class="infra-item__title">Sports &amp; Gymnasium</h3>
-        <p>
-          Indoor and outdoor sport with a gymnasium on campus, and ground for
-          the inter-departmental and inter-university fixtures the university
-          takes part in.
-        </p>
-      </div>
-    </article>
-
-    <article class="infra-item" data-reveal>
-      <figure class="infra-item__media">
-          <button class="infra-item__zoom" type="button" data-viewer-item
-                  aria-label="Enlarge this photograph">
-            <img src="{% static 'img/facilities/garden.jpg' %}"
-             alt="Green space on the university campus" loading="lazy"
-             width="720" height="480">
-        </button>
-      </figure>
-      <div class="infra-item__body">
-        <h3 class="infra-item__title">A Green Campus</h3>
-        <p>
-          Planted grounds and water bodies, an open-air theatre and an
-          auditorium for the cultural calendar — the part of the campus that
-          does not appear on a syllabus and is remembered anyway.
-        </p>
-      </div>
-    </article>
-
-  </div>
-</section>
-
-
-{# ====================================================  ON CAMPUS TOO  === #}
-{# Small cards for everything that does not need a photograph of its own.  #}
-<section class="section">
+{# ========================================================  CONFERENCE  === #}
+<section class="section infra-conf" aria-labelledby="conference-heading">
   <div class="shell">
+
     <div class="page-head">
-      <h2 class="page-heading">Also On <span>Campus</span></h2>
+      <h2 class="page-heading" id="conference-heading">International <span>Conferences</span></h2>
       <span class="page-rule"></span>
     </div>
 
-    <ul class="infra-chips" data-reveal>
-      <li class="infra-chip">
-        <svg width="22" height="22" aria-hidden="true" focusable="false"><use href="#i-globe"></use></svg>
-        <span>Campus-wide Wi-Fi</span>
-      </li>
-      <li class="infra-chip">
-        <svg width="22" height="22" aria-hidden="true" focusable="false"><use href="#i-users"></use></svg>
-        <span>Cafeteria</span>
-      </li>
-      <li class="infra-chip">
-        <svg width="22" height="22" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
-        <span>Auditorium &amp; Open-Air Theatre</span>
-      </li>
-      <li class="infra-chip">
-        <svg width="22" height="22" aria-hidden="true" focusable="false"><use href="#i-innovation"></use></svg>
-        <span>Incubation Centre</span>
-      </li>
-      <li class="infra-chip">
-        <svg width="22" height="22" aria-hidden="true" focusable="false"><use href="#i-research"></use></svg>
-        <span>Central Instrumentation Facility</span>
-      </li>
-      <li class="infra-chip">
-        <svg width="22" height="22" aria-hidden="true" focusable="false"><use href="#i-women"></use></svg>
-        <span>Separate Common Rooms</span>
-      </li>
-      <li class="infra-chip">
-        <svg width="22" height="22" aria-hidden="true" focusable="false"><use href="#i-clock"></use></svg>
-        <span>Reading Room</span>
-      </li>
-      <li class="infra-chip">
-        <svg width="22" height="22" aria-hidden="true" focusable="false"><use href="#i-pin"></use></svg>
-        <span>Accessible Ground Floor Access</span>
-      </li>
-    </ul>
-
-    <p class="infra-note">
-      Planning a visit? The campus is open to prospective students and their
-      families — <a href="{% url 'website:contact' %}">write to the help desk</a>
-      to arrange one.
+    <p class="infra-conf__text">
+      International conferences serve as platforms for scholars,
+      professionals, and experts from various countries to come together and
+      exchange knowledge and ideas. These conferences facilitate
+      collaboration and networking among individuals working in diverse
+      fields, ranging from science and technology to humanities, social
+      sciences, life sciences and allied health sciences. Participants at
+      international conferences often present their research findings, share
+      best practices, and engage in discussions that contribute to the
+      advancement of knowledge in their respective fields. Keynote speakers,
+      who are often leading authorities in their domains, deliver lectures
+      that provide valuable insights and perspectives on current issues and
+      trends.
     </p>
+    <p class="infra-conf__text">
+      The diverse backgrounds of attendees contribute to a rich and
+      multicultural environment, fostering a global perspective on common
+      challenges and opportunities. This type of conferences play a crucial
+      role in disseminating the latest research and innovations, helping
+      participants stay abreast of developments in their fields. Workshops
+      and panel discussions at these conferences offer opportunities for
+      skill development, learning new methodologies, and addressing practical
+      challenges faced by professionals.
+    </p>
+    <p class="infra-conf__text">
+      Cultural exchange is an integral part of international conferences,
+      allowing participants to appreciate and understand different customs,
+      traditions, and approaches to problem-solving. The collaborative nature
+      of these gatherings often leads to the formation of international
+      partnerships, joint research initiatives, and the establishment of
+      networks that endure beyond the conference itself. Overall, this type
+      of International conferences contribute significantly to the global
+      academic and professional communities, fostering a spirit of
+      cooperation and mutual understanding that transcends geographical
+      boundaries.
+    </p>
+    <p class="infra-conf__text">
+      During the time of Covid period, Swami Vivekananda University has
+      proudly and successfully organized almost eight international
+      conferences to cater knowledge on various multidisciplinary approaches.
+      In fact, after the post COVID period, this prestigious university has
+      also organized ten more international conferences with the fullest
+      spirit and dedication to empower the various disciplines with
+      multitudinous aspects.
+    </p>
+
   </div>
 </section>
 {% endblock %}

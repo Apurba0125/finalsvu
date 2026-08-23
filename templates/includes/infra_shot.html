@@ -1,0 +1,29 @@
+{% comment %}
+One photograph in an Infrastructure grid. Sits inside a
+<ul class="infra-grid" data-viewer>.
+
+Expects:
+  photo  path under static/, e.g. "img/infrastructure/library/3.jpg"
+  alt    what is in the frame, for anyone who cannot see it. It does DOUBLE
+         DUTY: the viewer prints it as the caption under the enlarged
+         photograph, so it is worth writing well.
+
+CLICKING IT OPENS IT FULL SIZE. The cell is a real <button> carrying
+data-viewer-item, which is half the contract with initPhotoViewer in main.js;
+the other half is data-viewer on the <ul> around it, marking those cells as
+one gallery. THE GRID MUST CARRY IT - without data-viewer on the <ul> these
+buttons are focusable controls that do nothing when pressed.
+
+A button rather than a div because it is a control: it takes focus, answers
+Enter and Space, and is announced as a button. The viewer returns focus to it
+on close, which only works because it can hold focus in the first place.
+
+photo goes through doc_url because a bare {% static %} tag RAISES under the
+manifest storage for a file that was never collected, and with sixty-odd
+photographs on this page one typo would take the whole page down rather than
+cost a single picture. A cell whose photograph cannot be resolved is dropped
+altogether - unlike a card, an empty frame in a photograph grid carries
+nothing at all, and leaving it in would put a button in the gallery with no
+photograph behind it.
+{% endcomment %}
+{% with src=photo|doc_url %}{% if src %}<li><button class="infra-shot" type="button" data-viewer-item aria-label="Enlarge this photograph"><img src="{{ src }}" alt="{{ alt|default:'' }}" loading="lazy"></button></li>{% endif %}{% endwith %}

@@ -115,6 +115,10 @@ WHITENOISE_SKIP_COMPRESS_EXTENSIONS = [
     "3gp", "3gpp", "asf", "avi", "br", "bz2", "flv", "gif", "gz", "jpeg",
     "jpg", "m4v", "mov", "mp4", "mpeg", "mpg", "png", "swf", "tbz", "tgz",
     "webm", "webp", "wmv", "woff", "woff2", "xz", "zip",
+    # Added here: both are already-compressed formats that gain nothing from a
+    # second pass. avif arrived with the Infrastructure photographs, pdf with
+    # the placement brochure - which brotli spent a whole build on to save 9%.
+    "avif",
     "pdf",
 ]
 

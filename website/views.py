@@ -884,11 +884,14 @@ def training_placements(request):
 
 
 def infrastructure(request):
-    """The campus. Written by hand in the template; no data.py list behind it."""
+    """The campus: six tabs of photographs, then the conference band.
+
+    Written by hand in the template, photographs and all - there is no data.py
+    list behind it. No hero_subtitle: the design has the banner carrying the
+    title on its own.
+    """
     return render(request, "pages/infrastructure.html", {
         "hero_title": "Infrastructure",
-        "hero_subtitle": "The rooms, laboratories and grounds a student "
-                         "actually finds on arrival.",
         "hero_image": "img/facilities/garden.jpg",
         "crumbs": [{"label": "Infrastructure"}],
     })

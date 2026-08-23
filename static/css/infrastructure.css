@@ -1,0 +1,141 @@
+/* ==========================================================================
+   Infrastructure  —  /page/infrastructure/
+   Loaded alongside three shared files: page-head.css for the heading and its
+   rule, tabs.css for the pill row and the panel switching, and gallery.css
+   for the viewer overlay that opens when a photograph is clicked.
+
+   This file is the panels' own contents: the copy at the top of each one, and
+   the grid of photographs under it.
+   ========================================================================== */
+
+.infra-section { background: var(--paper); }
+
+/* ------------------------------------------------------------- panels --- */
+.infra-pane__title {
+  margin: 0 0 12px;
+  color: var(--ink);
+  font-size: clamp(1.15rem, 1rem + .7vw, 1.5rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .02em;
+}
+.infra-pane__text {
+  margin: 0 0 26px;
+  max-width: 92ch;
+  color: var(--muted);
+  font-size: .97rem;
+  line-height: 1.85;
+}
+
+/* ------------------------------------------------------------ the grid -- */
+/* Four across on a desktop, which is what the design has. A fixed count
+   rather than auto-fit: auto-fit with a minmax floor gives three columns on a
+   wide screen and overflows a 320px phone, both of which this page hit. */
+.infra-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 22px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Each photograph is a BUTTON that opens the viewer, so it starts by being
+   reset out of a button's default chrome. */
+.infra-shot {
+  display: block;
+  position: relative;
+  width: 100%;
+  /* A fixed shape keeps the rows level whatever proportion the photograph
+     arrives in - these run from 3:2 to 16:9 - and the picture is cropped to
+     it rather than the row going ragged. */
+  aspect-ratio: 4 / 3;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius);
+  background: var(--page);
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: var(--shadow-xs);
+  transition: box-shadow var(--transition), transform var(--transition);
+}
+.infra-shot img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .55s ease;
+}
+.infra-shot:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
+.infra-shot:hover img { transform: scale(1.07); }
+.infra-shot:focus-visible { outline: 3px solid var(--red); outline-offset: 3px; }
+
+/* A magnifier in the corner, and deliberately NOT hover-only: the pointer
+   cursor and the hover zoom are both invisible on a touch screen, so on a
+   phone this badge is the only thing saying the picture opens. Drawn from an
+   inline data URI because the CSP is locked to 'self' and the site carries no
+   icon font to borrow a glyph from. */
+.infra-shot::after {
+  content: "";
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, .55) center / 17px 17px no-repeat;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='M20 20l-4.5-4.5M11 8v6M8 11h6'/%3E%3C/svg%3E");
+  opacity: .8;
+  transition: opacity var(--transition), transform var(--transition);
+}
+.infra-shot:hover::after { opacity: 1; transform: scale(1.08); }
+
+/* A panel whose photographs are not uploaded yet. */
+.infra-empty {
+  margin: 0;
+  padding: 26px 22px;
+  background: var(--page-alt);
+  border-radius: var(--radius-sm);
+  color: var(--muted);
+  font-size: .9rem;
+  line-height: 1.7;
+}
+
+/* ==========================================================================
+   Conference  —  its own band under the tabs
+   ========================================================================== */
+.infra-conf { background: var(--page-alt); }
+.infra-conf__text {
+  margin: 0 0 16px;
+  color: var(--muted);
+  font-size: .97rem;
+  line-height: 1.9;
+  text-align: justify;
+  hyphens: auto;
+}
+.infra-conf__text:last-child { margin-bottom: 0; }
+
+/* ==========================================================================
+   Responsive
+   The column count steps down rather than the cells shrinking without limit -
+   below about 150px a photograph of a room stops being readable.
+   ========================================================================== */
+@media (max-width: 991.98px) {
+  .infra-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+}
+
+@media (max-width: 575.98px) {
+  /* Two across, not one. One across on a phone makes 18 laboratory
+     photographs into a very long scroll for no extra legibility. */
+  .infra-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .infra-shot::after { right: 7px; bottom: 7px; width: 28px; height: 28px; background-size: 14px 14px; }
+  .infra-conf__text { text-align: left; hyphens: manual; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .infra-shot,
+  .infra-shot img,
+  .infra-shot::after { transition: none; }
+  .infra-shot:hover { transform: none; }
+  .infra-shot:hover img { transform: none; }
+}
