@@ -378,6 +378,14 @@ def _department_tabs(department):
         # Message Desk sets 'image' in data.py and the panel lays the text out
         # beside it; a tab without one keeps the full width.
         tab["image"] = _asset(row.get("image", ""))
+        # A heading inside the prose, under the Name/Designation lines - the
+        # "Welcome to the Department of ..." line on a Message Desk tab.
+        tab["subheading"] = fill(row.get("subheading", ""))
+        # Whoever the message is from, printed as "Name:" / "Designation:"
+        # above it. Optional: without it the message simply starts.
+        person = row.get("person")
+        if person:
+            tab["person"] = {k: fill(v) for k, v in person.items()}
         # The signature carries {department} as well, so the shared default
         # block signs off as this department rather than as a placeholder.
         signature = row.get("signature")

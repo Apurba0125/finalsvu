@@ -130,6 +130,26 @@
 
 /* Prose tab (Message Desk) ------------------------------------------------ */
 .tab-pane__body p { color: var(--ink-soft); text-align: justify; }
+
+/* "Name: ..." over the message, one line each. Stacked rather than a table:
+   the two labels are different lengths and a narrow column would break the
+   longer one over two lines. */
+.tab-person { display: grid; gap: 2px; margin: 0 0 14px; }
+.tab-person__row { color: var(--ink); font-weight: 600; }
+.tab-person__row--sm { font-size: .92rem; }
+.tab-person__label { color: var(--red); font-weight: 800; }
+
+/* "Welcome to the Department of ..." between the name and the message. */
+.tab-pane__subtitle {
+  margin: 0 0 12px;
+  font-size: clamp(1.02rem, 1.5vw, 1.2rem);
+  font-weight: 800;
+  color: var(--ink);
+}
+
+/* A phrase the message lifts out of its sentence with <strong>. */
+.tab-pane__prose p strong { color: var(--blue); font-weight: 700; }
+
 .tab-sign {
   margin-top: 18px;
   padding-top: 14px;
@@ -310,12 +330,15 @@
   display: block;
   width: 100%;
   height: auto;
-  aspect-ratio: 5 / 4;
+  /* Upright rather than the landscape crop it used to have: the photograph
+     is a person, and the message beside it runs long enough that a short
+     frame left a gap under the picture. */
+  aspect-ratio: 4 / 5;
   object-fit: cover;
   border-radius: var(--radius);
   box-shadow: var(--shadow-sm);
 }
-.tab-pane__prose > p:first-child { margin-top: 0; }
+.tab-pane__prose > :first-child { margin-top: 0; }
 
 @media (max-width: 991.98px) {
   .dept-intro__row { grid-template-columns: 1fr; }
@@ -326,7 +349,7 @@
      Centred, because the cap is narrower than the single column it now sits
      in - left where it was, it hugged the left edge with up to 440px of dead
      space beside it on a tablet. */
-  .tab-pane__media { order: 2; max-width: 420px; margin-inline: auto; }
+  .tab-pane__media { order: 2; max-width: 340px; margin-inline: auto; }
 }
 
 @media (max-width: 575.98px) {

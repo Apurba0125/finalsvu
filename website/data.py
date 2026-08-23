@@ -729,292 +729,204 @@ DEPARTMENTS = [
   'image': 'img/departments/comp1.png',
   'short_description': 'Diploma, B.Tech, M.Tech and Ph.D programmes in computing, with laboratories '
                        'for AI, data science, networking and software engineering.',
-  'description': 'Computer Science serves as the foundation for various technological advancements '
-                 'that the world sees today. The field has grown by leaps and bounds and the future '
-                 'innovations it brings along never seem to slow down. Yet another beauty of '
-                 'computer science is that it finds a place in many interdisciplinary fields as '
-                 'well. With these, there also comes a necessity to keep up to the global demand of '
-                 'finding highly skilled engineers and scientists. Swami Vivekananda University, '
-                 'one of the top-ranked universities in India, drives on the purpose of providing '
-                 'quality education and improving competence among students, thereby living up to '
-                 "its motto, 'Progress Through Knowledge'.",},
+  'description': 'Computer Science serves as the foundation for various technological advancements that the world sees today. The field has grown by leaps and bounds. The future innovations that it brings along never seem to slow down. Yet another beauty of computer science is that it finds a place in many interdisciplinary fields as well. With these, there also comes a necessity to keep up to the global demand of finding highly skilled engineers and scientists. Swami Vivekananda University, one of the top-ranked t universities in India drives on the purpose of providing quality education and improving competence among students thereby living up to its motto, Progress Through Knowledge'},
                  
  {'slug': 'department-of-civil-engineering',
   'name': 'Department Of Civil Engineering',
   'school': 'school-of-engineering',
-  'image': '',
+  'image': 'img/departments/civil-engg.png',
   'short_description': 'Structural, geotechnical, transportation and environmental engineering with '
                        'a full survey and materials testing laboratory.',
-  'description': 'Civil engineering shapes the built environment - the buildings people live and '
-                 'work in, the roads and bridges they travel over, and the water and waste systems '
-                 'that let a settlement function. The department teaches structural, geotechnical, '
-                 'transportation and environmental engineering alongside a full survey and '
-                 'materials testing laboratory, so design work is checked against measurement from '
-                 'the first year rather than the last.',},
+  'description': 'The Civil Engineering Department at Swami Vivekananda University is a hub of academic excellence, offering a comprehensive range of programs including Diploma, B. Tech, M. Tech, and Ph.D. The department is committed to providing a holistic education, blending theoretical knowledge with practical skills. With state-of-the-art laboratories, students have access to cutting edge equipment and technology, ensuring hands-on learning experiences. Our distinguished faculty, hailing from prestigious institutions such as IITs and NITs, brings a wealth of expertise to the department. Their commitment to quality education and research enhances the overall academic environment. Additionally, the department fosters a culture of continuous learning and professional development, providing ample opportunities for students to engage in internships, industry collaborations, and skill building activities. Recognizing the importance of a smooth transition from academia to industry, the department places a strong emphasis on training and placement. Through strategic partnerships with leading companies, students benefit from exposure to real world challenges, preparing them for successful careers in civil engineering. At Swami Vivekanand Universitys Civil Engineering Department, we take pride in shaping the future leaders of the field.'},
  {'slug': 'department-of-electrical-engineering',
   'name': 'Department Of Electrical Engineering',
   'school': 'school-of-engineering',
-  'image': '',
+  'image': 'img/departments/elecrtriacl1.jpg',
   'short_description': 'Circuits, electrical machines, power systems, control and instrumentation, '
                        'with laboratory work at every stage of the programme.',
-  'description': 'Electrical engineering covers the generation, transmission and control of '
-                 'electrical power and the machines that run on it. The department teaches '
-                 'circuits, machines, power systems, control and instrumentation, and pairs each '
-                 'subject with laboratory work so that theory is tested on equipment rather than '
-                 'only on paper.',},
+  'description': 'The Electrical Engineering course at SWAMI VIVEKANANDA UNIVERSITY is designed with an endeavor to create globally competitive and employable engineers. SWAMI VIVEKANANDA UNIVERSITY offers the students a conducive and rewarding environment by contributing to seminars, live projects, and case studies to pursue ideas, cultivate the spirit of curiosity and sustain a passion for excellence. The perfect blend of Industry-Academia environment develops students with practical hands-on sessions offering a dynamic teaching program for creating a vibrant and successful community of professionals who can develop both concepts and skills essential for the design, analysis, manufacturing, and maintenance of various kinds of Electrical systems and machinery.'},
  {'slug': 'department-of-electronics-communication',
   'name': 'Department Of Electronics & Communication',
   'school': 'school-of-engineering',
-  'image': '',
+  'image': 'img/departments/electronic-eng.png',
   'short_description': 'Analog and digital electronics, embedded systems, VLSI and communication '
                        'engineering.',
-  'description': 'Electronics and communication engineering sits behind almost everything that '
-                 'computes or connects - the devices themselves, the circuits inside them and the '
-                 'networks between them. The department teaches analog and digital electronics, '
-                 'embedded systems, VLSI design and communication engineering, with laboratories '
-                 'where students build and measure the circuits they have designed.',},
+  'description': 'ECE focuses on understanding the behavior, design, and applications of electronic components and circuits. This includes semiconductor devices like diodes and transistors, integrated circuits, amplifiers, oscillators, and digital logic circuits. The field of ECE covers the study of various communication systems, both analog and digital and the design topology of antenna including free-space wave propagation. Various communication systems and networking protocols are incorporated here. ECE involves the analysis and manipulation of signals to extract information or enhance their quality. Signal processing techniques are used in various applications, including image processing, audio processing, speech recognition, and data compression. ECE deals with the design and fabrication of microelectronic devices and integrated circuits. It involves working with very small-scale components, often at the nanometer level, to create powerful and efficient electronic systems including designing complex integrated circuits with millions or billions of transistors on a single chip.'},
  {'slug': 'department-of-mechanical-engineering',
   'name': 'Department Of Mechanical Engineering',
   'school': 'school-of-engineering',
-  'image': '',
+  'image': 'img/departments/mechanical1.jpg',
   'short_description': 'Advanced mechanical engineering education covering design, thermal, '
                        'manufacturing and industrial systems with hands-on CAD/CAM, workshop and '
                        'fluid mechanics laboratory training.',
-  'description': 'Mechanical engineering is the broadest of the engineering disciplines, running '
-                 'from the design of a single component to the operation of a whole plant. The '
-                 'department covers design, thermal and fluid sciences, manufacturing and '
-                 'industrial systems, supported by CAD/CAM, workshop and fluid mechanics '
-                 'laboratories where students make and test what they have drawn.',},
+  'description': 'The department of Mechanical Engineering, Swami Vivekananda University offers state of the art education, well equipped classroom, high end laboratories and cutting-edge research facilities for the students to create, enable, apply and spread knowledge in the advanced field of Mechanical Engineering. In addition to curriculum courses, the department contributes to value added courses, guest lecture by industry experts, industrial visits and various add on activities for the students to make them future ready technocrats of academia & industry. We are committed to work in emerging areas and developing sustainable technologies & innovations to shape the future of Mechanical Engineering and allied sectors.'},
 
  # --- School of Management ---
  {'slug': 'department-of-management-studies',
   'name': 'Department Of Management Studies',
   'school': 'school-of-management',
-  'image': '',
+  'image': 'img/departments/bba.jpg',
   'short_description': 'BBA and MBA programmes covering marketing, finance, human resources and '
                        'operations, taught through cases and live projects.',
-  'description': 'Management is learned by deciding, not only by reading about decisions. The '
-                 'department teaches marketing, finance, human resources and operations through '
-                 'case discussion, live projects and summer internships with partner organisations, '
-                 'so students practise judgement on real situations before they are responsible for '
-                 'the consequences.',},
+  'description': 'Department of Management Studies of Swami Vivekananda University (SVU) offers skill-based and industry oriented Under Graduate (UG) programmes such as Bachelor of Business Administration (BBA), Bachelor of Business Administration in Agri-business Management (BBA-ABM), Bachelor of Hospital Management (BHM) and Post Graduate (PG) programmes such as Master of Business Administration (MBA), Master of Business Administration in Agri-business Management (MBA -ABM), Executive Master of Business Administration (EMBA) and Master of Hospital Administration (MHA) which have been crafted with utmost care in collaboration with academicians and professionals. Besides that, our department also offers Doctorate of Philosophy (Ph.D.) programs for researchers in the field of Management. The entire curriculum of the department of management facilitates the development of skills, abilities, and knowledge that enable students to handle their respective positions with lots of responsibilities in the corporate world and academia. In these years, the Department of Management has emerged as a professional Department with a focus on business management, hospital management and administration, agri-business, industry-academia interface, and sectoral business strategies. The focus is reflected in several major areas under this school like Innovation, Research, Expertise, and Entrepreneurship which leads to creating a knowledge hub of ultimate business excellence. The competency-directed curriculum puts together the latest carefully aligned inputs sourced from the best of leading B-Schools. Department of Management has emerged to establish itself as one of the best Management Department through its unique style of teaching & experiential learning.'},
 
  # --- School of Computer Science ---
  {'slug': 'department-of-computer-application',
   'name': 'Department Of Computer Application',
   'school': 'school-of-computer-science',
-  'image': '',
+  'image': 'img/departments/cp.jpg',
   'short_description': 'BCA and MCA programmes covering programming, databases, web technology and '
                        'application development.',
-  'description': 'Computer applications is the applied side of computing - building the software '
-                 'that people actually use. The department teaches programming, databases, web '
-                 'technology and application development at both bachelor and master level, with '
-                 'laboratory time and project work running alongside every theory paper.',},
+  'description': 'The Department of Computer Application at Swami Vivekananda University, Barrackpore, is a center of quality education and advanced practical sessions. Since its foundation, the department has been nurturing the hidden skills of aspiring Computer Application experts. The faculty members of this department are highly qualified and hold years of experience in this line. With their dedication and art-of-state infrastructure, the Computer Application Department has been supporting its students with an inclusive and positive study environment. Students are encouraged to participate in multiple seminars and conferences to cultivate their skills. The department also organizes regular practical sessions to give hands-on experience and workshops and special lectures to expand the knowledge barriers of students. In short, the Department of Computer Application at Swami Vivekananda University, Barrackpore, offers an all-rounded opportunity for budding professionals of the future.'},
  {'slug': 'department-of-data-science',
   'name': 'Department Of Data Science',
   'school': 'school-of-computer-science',
-  'image': '',
+  'image': 'img/departments/ba-data.jpg',
   'short_description': 'Statistics, machine learning and data engineering, taught with the '
                        'programming and visualisation skills that make an analysis usable.',
-  'description': 'Data science turns recorded data into decisions, and it needs statistics, '
-                 'programming and domain judgement in equal measure. The department teaches '
-                 'statistical foundations, machine learning and data engineering together with the '
-                 'visualisation and communication skills that decide whether an analysis is ever '
-                 'acted on.',},
+  'description': 'The Department of Data Science at Swami Vivekananda University, Barrackpore, is the hub for nurturing the skills of future Data Scientists. From the very beginning, the department has been training aspirants to master the in-demand skills of the Data Science industry. The teaching professors associated with the department are highly educated and hold years of experience in this profession. With their dedication and commitment to preparing suitable graduates for the industry, they have been working tirelessly for a brighter future for students. Thanks to the art-of-state infrastructure, the Data Science Department conducts regular workshops, seminars, special lectures, and innovative project presentation sessions to bring out the best in students. Students are also encouraged to work on real-life projects and internships in leading companies to gain hands-on experience. The Department of Data Science at Swami Vivekananda University, Barrackpore, is the stepping stone for success for aspiring Data Scientists.'},
  {'slug': 'department-of-advanced-networking-cyber-security',
   'name': 'Department Of Advanced Networking & Cyber Security',
   'school': 'school-of-computer-science',
-  'image': '',
+  'image': 'img/departments/cyber-sec.jpg',
   'short_description': 'Network architecture, security operations and digital forensics, taught on '
                        'equipment students configure themselves.',
-  'description': 'Networks are the infrastructure everything else depends on, and securing them is '
-                 'now a discipline of its own. The department teaches network architecture and '
-                 'protocols alongside cryptography, security operations and digital forensics, on '
-                 'laboratory equipment students configure, attack and defend themselves.',},
+  'description': 'Department of Cyber Security & Advanced Networking is designed to address the industry’s increasing demand for skilled security professionals in the public and private sector, both in the Data Security and in the Network/Cloud Security domains. The programme offered by the department covers core computer science subjects as well as Cyber Security specific courses. The emphasis of the program is to nurture students with the knowledge and skills required to secure computers, detect and analyze attacks and threats, respond to attacks, develop security policies, procedures, and standards.'},
  {'slug': 'department-of-multimedia-animation',
   'name': 'Department Of Multimedia & Animation',
   'school': 'school-of-computer-science',
-  'image': '',
+  'image': 'img/departments/ani1.png',
   'short_description': 'Design, 2D and 3D animation, visual effects and post-production, taught as '
                        'studio practice.',
-  'description': 'Animation and multimedia are craft disciplines: they are learned by making work '
-                 'and having it critiqued. The department teaches design fundamentals, 2D and 3D '
-                 'animation, visual effects and post-production as studio practice, so a graduate '
-                 'leaves with a portfolio rather than only a transcript.',},
+  'description': 'The Department of Animation at Swami Vivekananda University, Barrackpore, is the hot spot for learning basics to advanced Animation skills for a brighter future. Since the beginning, the department has been providing world-class learning experiences to every student. From 2D and 3D animations to VFX, the Animation Department of Swami Vivekananda University covers them all. The department is enriched with highly qualified faculty members who not only have deeper knowledge in this field but also are well-connected to the industry. The department frequently organizes special screenings, lectures, workshops, and fieldwork for aspiring professionals. Students are encouraged to join real-life projects along with professional experts to learn constructive skills. The Department of Animation at Swami Vivekananda University, Barrackpore, also provides chances to apply for internships at multiple companies to give students real-life experience. In short, the Animation Department of Swami Vivekananda University is one of the best places that offers a holistic approach to Animation, Visual Effects, and Graphic Design.'},
 
  # --- School of Humanities & Social Sciences ---
  {'slug': 'department-of-language-literature-cultural-studies',
   'name': 'Department Of Language, Literature And Cultural Studies',
   'school': 'school-of-humanities-social-science',
-  'image': '',
+  'image': 'img/departments/Department of Language, Literature and Cultural Studies.jpg',
   'short_description': 'Language, literature and cultural studies, with translation and critical '
                        'writing running through the programme.',
-  'description': 'Literature is one of the longest records of how people have understood their own '
-                 'societies, and reading it closely is a transferable skill. The department teaches '
-                 'language, literature and cultural studies together, with translation work and '
-                 'critical writing running through the programme rather than confined to one paper.',},
+  'description': 'The Department of Language, Literature, and Cultural Studies at Swami Vivekananda University, Barrackpore, is a hub for critical thinking, literary analysis, and interdisciplinary research. Since its inception, the department has been dedicated to fostering intellectual curiosity, encouraging students to engage with literature, culture, and critical theories from diverse perspectives. '
+                 'Backed by a team of highly qualified and experienced faculty members, the department seamlessly integrates academic excellence with industry-oriented skill development. The faculty not only introduces students to the works of renowned literary figures but also conducts specialized training sessions designed to enhance career-oriented competencies in research, writing, and cultural studies.'
+                 'Emphasizing interdisciplinary learning, the department actively engages students in seminars, literary workshops, and expert lectures, creating a dynamic environment for scholarly discourse. Students are encouraged to cultivate analytical, creative, and critical thinking skills, empowering them to contribute meaningfully to the fields of literature, linguistics, and cultural studies. '
+                 'Following the UGC-recommended curriculum, the department ensures a comprehensive and contemporary learning experience, preparing students for both academic and professional success. The Department of Language, Literature, and Cultural Studies at Swami Vivekananda University stands as a center of advanced learning, promoting a holistic approach to literature, culture, and communication in today’s evolving academic landscape.'},
  {'slug': 'department-of-journalism-mass-communication',
   'name': 'Department Of Journalism & Mass Communication',
   'school': 'school-of-humanities-social-science',
-  'image': '',
+  'image': 'img/departments/mass.jpg',
   'short_description': 'Print, broadcast and digital media practice, with an in-house studio and '
                        'editing suite.',
-  'description': 'Journalism is a practical trade with an ethical spine, and both halves have to be '
-                 'taught. The department covers print, broadcast and digital media practice in an '
-                 'in-house studio and editing suite, alongside media law and ethics, so students '
-                 'learn how to gather and verify a story as well as how to produce it.',},
+  'description': 'The Department of Mass Communication at Swami Vivekananda University, Barrackpore, is the one-stop learning center for Mass communication courses. From the very beginning, the Department of Mass Communication has committed to preparing students with advanced skills preferred in the field of journalism and Mass Communication. The teachers in this department have years of experience in this line and hold deeper knowledge about the nook and corner of Mass communication. They aim to prepare students to excel in multiple media departments like television, journalism, and film industry. The department often organizes interactive lectures, seminars, and workshops to bring out the best in their students. Students are encouraged to participate in multiple programs that will develop professionalism and problem-solving skills in the process. The Department of Mass Communication has tied up with eminent platforms that offer valuable internship programs to the students of Mass communication. The Mass Communication Department at Swami Vivekananda University, Barrackpore, is synonymous with quality learning and effective industry-based skill development, bringing out the best in aspiring students.'},
  {'slug': 'department-of-education',
   'name': 'Department Of Education',
   'school': 'school-of-humanities-social-science',
-  'image': '',
+  'image': 'img/departments/edu1.png',
   'short_description': 'Teacher education covering pedagogy, curriculum design, educational '
                        'psychology and supervised classroom practice.',
-  'description': 'Teaching is a profession that has to be practised under supervision before it is '
-                 'practised alone. The department covers pedagogy, curriculum design, educational '
-                 'psychology and assessment, and places every student in supervised classroom '
-                 'practice so that method is tested against real pupils.',},
+  'description': 'The Department of Education, Swami Vivekananda University is a centre of excellence where all faculty members are Doctorate. Our vision is to be a beacon of knowledge and transformation in the realm of education. We aspire to foster a society where education is not merely a pursuit but a lifelong journey of enlightenment, fostering the development of compassionate, creative, and critical thinkers. Our mission is to provide a nurturing academic environment where pedagogical innovation and research excellence converge. We are dedicated to producing educational leaders who empower future generations with wisdom, empathy, and a global perspective. Our department facilitates individuals to interact effectively with people having different social, cultural, economic, inclusive and various educational backgrounds, thereby fostering international understanding and collaboration, which further helps them in every aspect of their lives.'},
 
  # --- School of Allied Health Services ---
  {'slug': 'department-of-physiotherapy',
   'name': 'Department Of Physiotherapy',
   'school': 'school-of-allied-health-services',
-  'image': '',
+  'image': 'img/departments/Department_of_Physiotherapy.jpg',
   'short_description': 'Musculoskeletal, neurological and sports physiotherapy, including a '
                        'compulsory rotating internship.',
-  'description': 'Physiotherapy restores movement after injury, surgery or illness, and it is '
-                 'learned hands-on. The department teaches musculoskeletal, neurological and sports '
-                 'physiotherapy with electrotherapy and exercise laboratories, and every student '
-                 'completes a compulsory rotating clinical internship before qualifying.',},
+  'description': 'Physiotherapy, as a branch of rehabilitative medicine, focuses on helping patients maintain, recover, or enhance their physical abilities. Physiotherapists remediate impairments and disabilities while promoting mobility and movement potential through provisional diagnosis and physical interventions. High quality physiotherapy education is essential for this post - modern era. People require rehabilitation in different aspects of life. A specialized physiotherapist is well equipped to cater to such needs. The Department of Physiotherapy was established in the year 2020 to provide quality education interlaced with hands-on experience to undergraduate Bachelor of Physiotherapy students and Master of Physiotherapy Programme commenced in the year of 2024 to impart internationally accepted education and training in Physiotherapy program. The department has a fully equipped Electrotherapy and Exercise Therapy laboratory, complete with cutting-edge physiotherapy equipment and tools'},
  {'slug': 'department-of-optometry',
   'name': 'Department Of Optometry',
   'school': 'school-of-allied-health-services',
-  'image': '',
+  'image': 'img/departments/opto1.png',
   'short_description': 'Clinical optometry, optics and vision science, with dispensing and contact '
                        'lens practice in a working clinic.',
-  'description': 'Optometry is primary eye care: examining vision, detecting disease and correcting '
-                 'what can be corrected. The department teaches optics and vision science alongside '
-                 'clinical refraction, dispensing and contact lens practice, with clinic hours '
-                 'built into the programme rather than added at the end.',},
+  'description': 'The department of Optometry was established in the year 2021. We offer full time Bachelor of Optometry (B.Optom)that follows semester based and credit-based evaluation system. Department of Optometry focused in educating the next generation Optometrists and vision science researchers. We provide well equipped practical rooms, hands on experience, clinical demonstration, adequate library, journal club presentation, clinical case discussion and exposure to community eye camp. Our graduates aim to facilitate the detection, diagnosis and treatment of vision disorders.'},
  {'slug': 'department-of-food-nutrition',
   'name': 'Department Of Food & Nutrition',
   'school': 'school-of-allied-health-services',
-  'image': '',
+  'image': 'img/departments/nutri.jpg',
   'short_description': 'Human nutrition, dietetics and food science, with food analysis and diet '
                        'counselling practice.',
-  'description': 'Nutrition connects laboratory science to daily life more directly than most '
-                 'disciplines. The department teaches human nutrition, dietetics and food science '
-                 'together with food analysis and quality control, and students practise diet '
-                 'planning and counselling on real cases before they graduate.',},
+  'description': 'The Department of Food and Nutrition at Swami Vivekananda University, under the guidance of our respected Advisory Board Members, is striving each day to narrow down the gap between scientific findings and practical day-to-day life. We are trying to understand the several dynamics of food―the chemical constituents, their biochemical aspects, as well as their interaction with the host and environment, across myriad geographical and demographic boundaries.'},
  {'slug': 'department-of-psychology',
   'name': 'Department Of Psychology',
   'school': 'school-of-allied-health-services',
-  'image': '',
+  'image': 'img/departments/psco.png',
   'short_description': 'Cognitive, clinical and counselling psychology supported by a psychological '
                        'testing laboratory.',
-  'description': 'Psychology is the systematic study of behaviour and mental process, and its '
-                 'methods matter as much as its findings. The department teaches cognitive, '
-                 'clinical and counselling psychology supported by a psychological testing '
-                 'laboratory, with research method and statistics taught as a working skill rather '
-                 'than a hurdle.',},
+  'description': 'Psychology Department currently poses four faculty members, who ensures the excellence of teaching learning method for students. Apart from study we are preparing students for internship and placement program, conduct a psychological counseling cell for career counseling and psychotherapy. We also arrange workshops, seminars and conferences regarding various psychological topics. We also engage students in multidisciplinary events, like performing arts, art therapy, play therapy.'},
  {'slug': 'department-of-medical-laboratory-technology',
   'name': 'Department Of Medical Laboratory Technology',
   'school': 'school-of-allied-health-services',
-  'image': '',
+  'image': 'img/departments/biotechnology.png',
   'short_description': 'Clinical biochemistry, pathology, haematology and microbiology, taught in '
                        'working diagnostic laboratories.',
-  'description': 'Most clinical decisions rest on a laboratory result, which makes the accuracy of '
-                 'that result a patient-safety question. The department teaches clinical '
-                 'biochemistry, pathology, haematology and microbiology in working diagnostic '
-                 'laboratories, with quality control and sample handling treated as core subjects.',},
+  'description': 'The department of Medical Laboratory Technology has started on the year of 2021 under the School of Allied Health Sciences, Swami Vivekananda University. It is considered to be one of the most demanding programs now these days. With the modernization of the healthcare industries requirement of the healthcare professionals are also growing. The program B.Sc in medical laboratory technology offers three years graduate program with 6 semesters and one compulsory internship at private & government laboratories as well as blood banks. This program not only develops job opportunities but also inspire candidates to become a competent entrepreneur. The department contain well-structured hematological unit along with hybrid lab which offers the facilities of performing experiments like microbiological tests, bio chemical assessments, pathophysiological experimentation and biotechnological assessments.'},
  {'slug': 'department-of-medical-radiology-imaging-technology',
   'name': 'Department Of Medical Radiology & Imaging Technology',
   'school': 'school-of-allied-health-services',
-  'image': '',
+  'image': 'img/departments/radiology1.png',
   'short_description': 'Radiography, imaging physics and radiation safety, with supervised practice '
                        'on diagnostic equipment.',
-  'description': 'Medical imaging is how much of modern diagnosis is done, and operating it well is '
-                 'a technical and a safety discipline at once. The department teaches radiographic '
-                 'technique, imaging physics and radiation protection, with supervised practice on '
-                 'diagnostic equipment throughout the programme.',},
+  'description': 'Medical Radiology & Imaging Technology (MRIT) is the degree course dedicated to utilization of modern techniques such as CT scan, MRI, X-ray, etc. for diagnosing diseases. Radiographic machinery takes internal images of the human body to enable diagnosis. The undergraduate degree programme in MRIT is the B. Sc. in Medical Radiology & Imaging Technology or BMRIT, the duration for which is 3.5 years and it is spread over 7 semesters.The medical sector advances with leaps and bounds with physicians needing skilled radiologists for proper diagnosis and efficient treatment of a disease.Department of MRIT in Swami Vivekananda University is equipped with cutting edge instruments, biological models and professionals that enable students to understand the detailed internal image of the human body. This makesapplying the knowledge in real world easy, accurate, efficient, and thus facilitates achievement of career goals. The faculties of the University are at the forefront of research in their field and their expertise benefits students greatly.'},
 
  # --- School of Legal Studies ---
  {'slug': 'department-of-legal-studies',
   'name': 'Department Of Legal Studies',
   'school': 'school-of-Legal-Studies',
-  'image': '',
+  'image': 'img/departments/LLBCourse.jpg',
   'short_description': 'Integrated and postgraduate law programmes with moot court training, a '
                        'legal aid clinic and court internships.',
-  'description': 'Law is argued, not recited, so advocacy is taught from the beginning. The '
-                 'department runs integrated and postgraduate law programmes with moot court '
-                 'training, a legal aid clinic and court internships, so students appear, draft and '
-                 'advise under supervision long before they are admitted to practice.',},
+  'description': 'Legal Studies serves as the cornerstone for maintaining justice, upholding rights, and shaping the frameworks that govern societies. The field continues to evolve with the changing dynamics of the world, adapting to new challenges in global governance, human rights, and technology. One of the remarkable aspects of legal studies is its relevance across various interdisciplinary areas, including politics, economics, and international relations. This growing significance underscores the global demand for well-informed, skilled legal professionals. Swami Vivekananda University, one of the top-ranked universities in India, is committed to delivering quality legal education and fostering analytical thinking, integrity, and ethical practice among students, in alignment with its motto, Progress Through Knowledge'},
 
  # --- School of Life Sciences ---
  {'slug': 'department-of-biotechnology',
   'name': 'Department Of Biotechnology',
   'school': 'school-of-life-sciences',
-  'image': '',
+  'image': 'img/departments/biotechnology.png',
   'short_description': 'Molecular biology, genetic engineering and bioprocess technology at '
                        'undergraduate and postgraduate level.',
-  'description': 'Biotechnology puts living systems to work, and it is a laboratory subject before '
-                 'it is anything else. The department teaches molecular biology, genetic '
-                 'engineering and bioprocess technology at undergraduate and postgraduate level, '
-                 'with bench work and project research running through both.',},
+  'description': 'Since the establishment in 2019,the Department of Biotechnology of Swami Vivekananda University has been maintaining academic andscholastic ambience to providequality education to the studentswhile fostering the idea of youngminds and motivate them to thinkout of the box.A group of eleven dedicated and highlyqualified faculty members engagethemselves to deliver quality educationwhile pursuing experimentalresearches in their respective fields.Choice Based Credit System (CBCS)curriculum and National Education Policy has been introduced toemphasize new-age discourses likeproblem-solving skills, critical thinking,internship program etc. while theacademic curricula are regularlyupdated through systematic revision.'},
  {'slug': 'department-of-microbiology',
   'name': 'Department Of Microbiology',
   'school': 'school-of-life-sciences',
-  'image': '',
+  'image': 'img/departments/mcrobiologys.jpg',
   'short_description': 'Medical, industrial and food microbiology with a dedicated culture and '
                        'fermentation laboratory.',
-  'description': 'Microbiology underpins medicine, food safety and much of industry, and all three '
-                 'are taught here. The department covers medical, industrial and food microbiology '
-                 'with a dedicated culture and fermentation laboratory, where students handle, '
-                 'identify and cultivate organisms themselves.',},
+  'description': 'Since its establishment in 2020, the Department of Microbiology at Swami Vivekananda University has been committed to fostering a vibrant academic environment, providing students with a superior education that encourages creative thinking and pushes the boundaries of knowledge. Our esteemed faculty, comprising eleven dedicated and highly qualified members, is actively engaged in delivering quality education and conducting pioneering research in various microbiological disciplines. The curriculum follows the innovative Choice Based Credit System (CBCS) and aligns with the National Education Policy, emphasizing critical skills like problem-solving, analytical thinking, and offering internship programs, ensuring students are well-prepared for real-world challenges. We continually update our academic programs through rigorous reviews to stay at the forefront of the field.'},
 
  # --- School of Basic Sciences ---
  {'slug': 'department-of-mathematics',
   'name': 'Department Of Mathematics',
   'school': 'school-of-basic-sciences',
-  'image': '',
+  'image': 'img/departments/mathematics-png.jpg',
   'short_description': 'Pure and applied mathematics, numerical methods and the foundation courses '
                        'that run across every engineering programme.',
-  'description': 'Mathematics is both a subject in its own right and the language the other '
-                 'sciences are written in. The department teaches pure and applied mathematics, '
-                 'numerical methods and statistics, and also runs the foundation courses that sit '
-                 'under every engineering and science programme in the university.',},
+  'description': 'The Department of Mathematics at Swami Vivekananda University (SVU) is dedicated to advancing mathematical knowledge through comprehensive education and innovative research. Our department offers a robust curriculum designed to equip students with both theoretical understanding and practical problem-solving skills, preparing them for diverse careers in academia, industry, and research. We provide a range of programs tailored to meet the needs of our students. Master of Science (M.Sc.) in Mathematics delves deeper into advanced mathematical theories and applications, encouraging students to engage in research and specialized study. For those aspiring to contribute original research to the field, our Doctor of Philosophy (Ph.D.) in Mathematics offers opportunities to explore various areas of mathematics under the guidance of experienced faculty. The Department of Mathematics actively engages in research initiatives and encourages interdisciplinary collaboration. We host seminars, workshops, and conferences to foster a vibrant academic environment. Notably, SVU organized the International Conference on Innovations in Science and Engineering (ICISE), which featured sessions on mathematical and numerical modeling, highlighting our dedication to integrating mathematics with other scientific disciplines. Our department is equipped with state-of-the-art facilities to support both learning and research activities. Students have access to modern classrooms, computer labs with specialized software, and a comprehensive library housing an extensive collection of mathematical texts and journals. At the Department of Mathematics, Swami Vivekananda University, we are committed to nurturing a passion for mathematics and empowering our students to make significant contributions to the global mathematical community.'},
  {'slug': 'department-of-chemistry',
   'name': 'Department Of Chemistry',
   'school': 'school-of-basic-sciences',
-  'image': '',
+  'image': 'img/departments/chemistry.jpg',
   'short_description': 'Organic, inorganic, physical and analytical chemistry, with instrumentation '
                        'and synthesis laboratories.',
-  'description': 'Chemistry explains what materials are made of and how they can be changed, which '
-                 'puts it under medicine, materials and energy alike. The department teaches '
-                 'organic, inorganic, physical and analytical chemistry, with synthesis and '
-                 'instrumentation laboratories where students run and interpret their own analyses.',},
+  'description': 'The Department of Chemistry at Swami Vivekananda University (SVU) is dedicated to providing students with a comprehensive understanding of the fundamental principles of chemistry, while fostering practical skills and an appreciation for the applications of chemical knowledge in various fields. Our faculty members are committed to excellence in teaching, research, and service to the community. The Department of Chemistry serves as a vital service unit within the university, offering a broad range of foundational courses and laboratory experiences to support the academic goals of students from various disciplines. The Faculties of Chemistry department are dedicated to provide high-quality instruction in chemistry and its applications, ensuring that students across different fields gain the essential scientific knowledge and skills necessary for their academic and professional success.'},
  {'slug': 'department-of-physics',
   'name': 'Department Of Physics',
   'school': 'school-of-basic-sciences',
-  'image': '',
+  'image': 'img/departments/physics_image.webp',
   'short_description': 'Classical and modern physics, electronics and computational methods, with '
                        'optics and condensed matter laboratories.',
-  'description': 'Physics is the foundation the engineering disciplines are built on, and it is '
-                 'taught here as an experimental subject. The department covers classical and '
-                 'modern physics, electronics and computational methods, with optics, electronics '
-                 'and condensed matter laboratories where students measure the effects they have '
-                 'just derived.',},
+  'description': 'The Department of Physics at Swami Vivekananda University (SVU) is committed to advancing the frontiers of physics through rigorous education and cutting-edmge research. Our department offers a well-structured curriculum designed to provide students with a strong foundation in theoretical concepts and practical problem-solving skills, preparing them for careers in academia, industry, and research. We offer diverse academic programs to cater to the aspirations of our students. The Master of Science (M.Sc.) in Physics delves into advanced topics in physics, encouraging students to explore specialized areas and engage in research. For those seeking to contribute original research to the field, our Doctor of Philosophy (Ph.D.) in Physics provides opportunities to investigate various branches of physics under the mentorship of experienced faculty. The Department of Physics is actively involved in research initiatives and promotes interdisciplinary collaborations. We regularly organize seminars, workshops, and conferences to cultivate a dynamic academic environment. Notably, SVU hosted the International Conference on Innovations in Science and Engineering (ICISE), which included sessions on modern physics and computational modeling, underscoring our commitment to integrating physics with other scientific disciplines. Our department is equipped with state-of-the-art laboratories and facilities to support both education and research. Students have access to well-equipped experimental physics labs, computational facilities with specialized software, and an extensive library housing a vast collection of physics-related books and journals. At the Department of Physics, Swami Vivekananda University, we strive to foster a deep passion for physics and empower our students to make meaningful contributions to the global scientific community.'},
 
  # --- School of Agriculture ---
  {'slug': 'department-of-agriculture',
   'name': 'Department Of Agriculture',
   'school': 'school-of-agriculture',
-  'image': '',
+  'image': 'img/departments/agri-course.jpg',
   'short_description': 'Agronomy, soil science, horticulture and agricultural extension, taught on '
                        "the university's own plots.",
-  'description': 'Agriculture is a field science, and it cannot be learned entirely indoors. The '
-                 'department teaches agronomy, soil science, horticulture, plant protection and '
-                 "agricultural extension, with practical work on the university's own plots and "
-                 'attachments with farms and extension agencies in the surrounding districts.',}]
+  'description': 'The School of Agriculture, established in 2020, aims at achieving excellence in academics and research. Bachelor’s degree courses in Agriculture, Agricultural engineering and Master’s degree courses in Agribusiness management are offered by the School. The school has designed dynamic and focused curricula as per the guidelines of Indian Council of Agricultural Research (ICAR) to develop well-trained manpower for academics, agro-based industry and extension oriented applications. The Department of Agriculture at Swami Vivekananda University plays a critical role in advancing agricultural education, research, and outreach. Its primary objective is to equip students with knowledge and skills related to agriculture and contribute to the advancement of the agricultural sector through research and community engagement. In general, studying agriculture is vital for ensuring food security, supporting economic growth, safeguarding the environment, and addressing pressing global challenges such as climate change and malnutrition. By investing in agricultural education and research, we can build a more sustainable and resilient future for our planet.'}
+  ]
 
 
 
@@ -1074,6 +986,10 @@ DEPARTMENT_FACULTY = {
    'research_area': 'Machine Learning, Automation',
    'profile_url': 'img/faculty/Apurba sarkar.pdf'},
  ],
+
+
+
+
 }
 
 # --------------------------------------------------------------------------
@@ -1191,19 +1107,34 @@ DEPARTMENT_TABS = {
    'icon': 'users',
    # Sits to the left of the message. Swap in the head of department's
    # photograph; drop the key and the text simply runs full width.
-   'image': 'img/about/campus.jpg',
+   'image': 'img/hods/ranjankumarmondal.jpg',
+   # Printed as "Name:" and "Designation:" over the message. Drop the key and
+   # the message starts straight away.
+   'person': {'name': 'Dr. Ranjan Kumar Mondal'},
+   # The line above the message itself, under the two lines above.
+   'subheading': 'Welcome to the Department of Computer Science & Engineering',
+   # A paragraph may carry <strong> to lift a phrase out of the sentence - it
+   # comes out in the department blue. These strings reach the page as markup,
+   # so write a literal ampersand in one of them as &amp;.
    'body': [
-    'Welcome to the Department of Computer Science and Engineering. Computing changes faster '
-    'than any syllabus can be revised, so our work here is less about teaching you a fixed '
-    'set of tools and more about building the foundation that lets you pick up the next one '
-    'on your own.',
-    'Our faculty combine teaching with active research, and our laboratories stay open for '
-    'students who want to build something beyond the prescribed practicals. If you are '
-    'considering this department, come and see the campus — talk to the students, not just '
-    'the prospectus.',
+    'It is my pleasure to invite you to explore our vibrant academic community. Our '
+    'department is committed to <strong>excellence in teaching, research, and '
+    'innovation</strong>, striving to empower students with both strong theoretical '
+    'foundations and practical skills that meet global industry standards.',
+    'We offer a <strong>dynamic curriculum</strong> enriched with emerging technologies, '
+    'hands-on projects, and interdisciplinary learning opportunities. Our dedicated '
+    'faculty, state-of-the-art laboratories, and strong industry partnerships ensure that '
+    'our students are well-prepared to tackle real-world challenges and contribute '
+    'meaningfully to the ever-evolving field of computing.',
+    'Beyond academics, we encourage our students to engage in <strong>technical clubs, '
+    'hackathons, workshops, and community outreach programs</strong> that help them grow '
+    'personally and professionally.',
+    'I warmly welcome prospective students, researchers, alumni and industry collaborators '
+    'to connect with us and be part of our journey towards shaping the future of technology. '
+    'Together, let us foster a culture of curiosity, creativity and continuous learning.',
    ],
    'signature': {'name': 'Head of the Department',
-                 'role': 'Department of Computer Science & Engineering'}},
+                   'role': 'Department of {department}'}}
  ],
 }
 
@@ -1291,7 +1222,7 @@ DEFAULT_DEPARTMENT_TABS = [
   'icon': 'users',
   'image': 'img/about/campus.jpg',
   'body': [
-   'Welcome to the Department of {department}. Our work here is less about '
+   'Welcome to the Department of <b> {department}</b>. Our work here is less about '
    'teaching a fixed set of tools than about building the foundation that lets '
    'a graduate pick up the next one on their own, because every discipline '
    'changes faster than a syllabus can be revised.',

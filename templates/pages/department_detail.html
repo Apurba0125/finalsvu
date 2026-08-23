@@ -298,11 +298,24 @@ visitor drags, and stays still for prefers-reduced-motion.
                 {% if tab.image %}
                   <figure class="tab-pane__media">
                     <img src="{{ tab.image }}" alt="" loading="lazy"
-                         width="520" height="420">
+                         width="520" height="650">
                   </figure>
                 {% endif %}
                 <div class="tab-pane__prose">
-                  {% for paragraph in tab.body %}<p>{{ paragraph }}</p>{% endfor %}
+                  {# Who the message is from, when the tab names them. #}
+                  {% if tab.person %}
+                    <p class="tab-person">
+                      {% if tab.person.name %}<span class="tab-person__row"><span class="tab-person__label">Name:</span> {{ tab.person.name }}</span>{% endif %}
+                      {% if tab.person.designation %}<span class="tab-person__row tab-person__row--sm"><span class="tab-person__label">Designation:</span> {{ tab.person.designation }}</span>{% endif %}
+                    </p>
+                  {% endif %}
+
+                  {% if tab.subheading %}<h4 class="tab-pane__subtitle">{{ tab.subheading }}</h4>{% endif %}
+
+                  {# |safe so a message can emphasise a phrase with <strong>. #}
+                  {# The text is written in data.py, never submitted by a      #}
+                  {# visitor, so there is nothing here to escape.              #}
+                  {% for paragraph in tab.body %}<p>{{ paragraph|safe }}</p>{% endfor %}
 
                   {% if tab.signature %}
                     <div class="tab-sign">
