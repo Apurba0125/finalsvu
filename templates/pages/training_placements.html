@@ -3,35 +3,67 @@
 
 {% comment %}
 ===========================================================================
-TRAINING & PLACEMENTS  —  served at /page/training-placements/
-                          by website.views.training_placements
+OUR PLACEMENTS  —  served at /page/training-placements/
+                   by website.views.training_placements
 ---------------------------------------------------------------------------
 Header, navigation and footer come from base.html. Do not add them here.
 
-THIS PAGE IS WRITTEN BY HAND. Everything you read on it is in this file —
-there is nothing to change in data.py to edit the wording. The one exception
-is the recruiter logos at the bottom, which come from PARTNERS in data.py so
-that the same list is not maintained in two places.
+EVERYTHING ON THIS PAGE IS IN THIS ONE FILE. There is nothing to change in
+data.py to edit it — the wording, the figures, the six placed students and
+the partner list are all below, as ordinary HTML.
+
+THE PAGE IS TWO PARTS
+  1. Four tab panels: Mission & Vision, Objectives, Message from TPO,
+     Collaborations.
+  2. A "Top Placement" band UNDER them, which stays on show whichever panel
+     is open — the figures, the six students, and the View More button.
 
 HOW TO EDIT
-  Change any wording   Edit the text directly. It is ordinary HTML.
-  Add a service card   Copy a whole <li class="tp-card"> … </li> block and
-                       change its icon, title and text. The grid works out its
-                       own column count, so an odd number never leaves a gap.
-  Change an icon       Swap the name after "#i-" for any symbol in
-                       templates/includes/icons.html — book, lab, experts,
-                       industry, handshake, graduation, users, research …
-  Add a step           Copy an <li> inside .tp-steps. They number themselves,
-                       so inserting one in the middle renumbers the rest.
-  Add the numbers      There is a commented-out .tp-stats block below. Fill in
-                       real figures and uncomment it. It is left commented on
-                       purpose: placement percentages and salary figures are
-                       claims a university has to be able to stand behind, and
-                       inventing them here would be worse than leaving the
-                       block out.
 
-Styling is static/css/placements.css (this page and Infrastructure) plus
-main.css for the banner that includes/page_hero.html draws.
+  Any wording          Type over it. It is plain HTML.
+
+  A figure             The three bars are <li class="tp-figure ...">. Change
+                       the text; the colour comes from the second class
+                       (--high, --avg, --low) and is set in placements.css.
+
+  Add a student        Copy a whole <li class="tp-person"> block and change
+                       the picture and the four lines. The grid works out its
+                       own rows, so any number is fine — but they read three
+                       to a row, so multiples of three sit tidiest.
+
+  A student's picture  Put the file in static/img/placements/ and name it on
+                       that student's line. Square works best: the circle
+                       crops to the middle of whatever it is given. The ones
+                       here are 118px square, which is exactly the size the
+                       circle is drawn at — a bigger file is fine, a smaller
+                       one will be upscaled and go soft.
+
+  Add a partner        Copy one <li> in the Collaborations panel. NAME IT
+                       EVEN IF THE LOGO IS NOT UPLOADED YET — a cell with no
+                       file shows the name instead of sitting empty, so the
+                       panel is a complete and readable list from day one and
+                       turns into a logo by itself once the file arrives.
+
+  Add a tab            Copy a <button class="tab-btn"> and a matching
+                       <div class="tab-pane">, and give the pair a new id.
+                       The button's data-tab-target must be "#" plus the
+                       pane's id. Nothing else needs changing: the pills
+                       split the row evenly however many there are.
+
+WHY EVERY PICTURE GOES THROUGH doc_url
+Under the manifest storage a bare {% static %} tag RAISES for a file that was
+never collected — one mistyped filename among thirty-odd here and the whole
+page is a 500. doc_url returns an empty string instead, so a bad name costs
+that one picture and the page stands. It also means a filename can be typed
+in BEFORE the file exists: drop the file in later, run
+
+    python manage.py collectstatic --noinput
+
+and it appears on its own with nothing to edit here.
+
+WRITE AN AMPERSAND AS &amp; — a quoted string inside a template tag is marked
+safe by Django, so whatever is typed between the quotes lands in the page
+verbatim. A bare & is not valid HTML and misparses next to a word.
 
 NOTE ON COMMENTS: the hash-style Django comment {# … #} covers a SINGLE line.
 For a multi-line note use a comment/endcomment pair like this one, or the text
@@ -39,10 +71,12 @@ leaks onto the page and any tag inside it actually runs.
 ===========================================================================
 {% endcomment %}
 
-{% block title %}Training &amp; Placements | {{ site.site_name }}{% endblock %}
-{% block meta_description %}The Training &amp; Placement Cell at Swami Vivekananda University — aptitude and soft-skills training, mock interviews, internships, industry interface and the campus recruitment process.{% endblock %}
+{% block title %}Our Placements | {{ site.site_name }}{% endblock %}
+{% block meta_description %}The Training &amp; Placement Cell at Swami Vivekananda University — its vision and objectives, a message from the placement co-ordinator, our recruiting partners and the students placed with them.{% endblock %}
 
 {% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/page-head.css' %}">
+  <link rel="stylesheet" href="{% static 'css/tabs.css' %}">
   <link rel="stylesheet" href="{% static 'css/placements.css' %}">
 {% endblock %}
 
@@ -50,222 +84,258 @@ leaks onto the page and any tag inside it actually runs.
 {% include "includes/page_hero.html" %}
 
 
-{# ============================================================  INTRO  === #}
-<section class="section">
+{# ==============================================================  TABS  === #}
+<section class="section section--white">
   <div class="shell">
-    <div class="page-head">
-      <h2 class="page-heading">The Training &amp; <span>Placement Cell</span></h2>
-      <span class="page-rule"></span>
-    </div>
 
-    <div class="prose prose--full">
-      <p>
-        A degree earns an interview; it does not by itself win the job. The
-        Training &amp; Placement Cell exists to close that gap. It works with
-        students from the pre-final year onward — on aptitude, on
-        communication, on how an interview is actually conducted — and with
-        employers, so that the companies arriving on campus are ones our
-        graduates are prepared for.
-      </p>
-      <p>
-        The Cell is open to every student of the university, across all
-        schools and programmes, and its training runs alongside the timetable
-        rather than after it.
-      </p>
-    </div>
-  </div>
-</section>
+    <div class="tabset tp-tabset" data-tabs>
 
+      {# Under 768px the four pills would wrap to more height than the panel #}
+      {# they navigate, so they collapse behind this control. It is a real   #}
+      {# button rather than a <select> so the pills keep their shape above   #}
+      {# the breakpoint, and there is no second copy of the labels to keep   #}
+      {# in step — the span below reads whichever pill is open.              #}
+      <button class="tabset__toggle" type="button" data-tabs-toggle
+              aria-expanded="false" aria-controls="tpTabNav">
+        <span data-tabs-current>Mission &amp; Vision</span>
+        {# Sized in the markup as well as the CSS: an <svg> with no         #}
+        {# intrinsic size falls back to 300x150, so a stylesheet that has   #}
+        {# not loaded yet would put a full-width chevron on the page.       #}
+        <svg width="12" height="8" aria-hidden="true" focusable="false"><use href="#i-caret"></use></svg>
+      </button>
 
-{# =========================================================  SERVICES  === #}
-{# Copy one <li class="tp-card"> block to add a service. #}
-<section class="section section--alt">
-  <div class="shell">
-    <div class="page-head">
-      <h2 class="page-heading">What the <span>Cell Does</span></h2>
-      <span class="page-rule"></span>
-    </div>
+      <div class="tabset__nav" id="tpTabNav" data-tabs-nav role="tablist"
+           aria-label="Placement cell">
+        <button class="tab-btn is-active" type="button" role="tab"
+                id="tab-vision" data-tab-target="#pane-vision"
+                aria-controls="pane-vision"
+                aria-selected="true" tabindex="0">Mission &amp; Vision</button>
 
-    <ul class="tp-grid">
+        <button class="tab-btn" type="button" role="tab"
+                id="tab-objectives" data-tab-target="#pane-objectives"
+                aria-controls="pane-objectives"
+                aria-selected="false" tabindex="-1">Objectives</button>
 
-      <li class="tp-card">
-        <span class="tp-card__icon" aria-hidden="true">
-          {# Sized in the markup as well as the CSS: an <svg> with a viewBox #}
-          {# and no dimensions expands to fill its box, so a stylesheet that #}
-          {# has not loaded yet would put a full-width icon on every card.   #}
-          <svg width="26" height="26" focusable="false"><use href="#i-book"></use></svg>
-        </span>
-        <h3 class="tp-card__title">Aptitude &amp; Reasoning</h3>
-        <p class="tp-card__text">
-          Regular classes in quantitative aptitude, logical reasoning and
-          verbal ability — the three papers almost every campus test opens
-          with — from the pre-final year onward.
-        </p>
-      </li>
+        <button class="tab-btn" type="button" role="tab"
+                id="tab-tpo" data-tab-target="#pane-tpo"
+                aria-controls="pane-tpo"
+                aria-selected="false" tabindex="-1">Message from TPO</button>
 
-      <li class="tp-card">
-        <span class="tp-card__icon" aria-hidden="true">
-          <svg width="26" height="26" focusable="false"><use href="#i-users"></use></svg>
-        </span>
-        <h3 class="tp-card__title">Communication &amp; Soft Skills</h3>
-        <p class="tp-card__text">
-          Group discussion, presentation and business communication practice,
-          run in small groups so every student speaks rather than watches.
-        </p>
-      </li>
-
-      <li class="tp-card">
-        <span class="tp-card__icon" aria-hidden="true">
-          <svg width="26" height="26" focusable="false"><use href="#i-experts"></use></svg>
-        </span>
-        <h3 class="tp-card__title">Mock Interviews</h3>
-        <p class="tp-card__text">
-          Technical and HR interviews conducted by faculty and by visiting
-          professionals, with feedback given individually afterwards.
-        </p>
-      </li>
-
-      <li class="tp-card">
-        <span class="tp-card__icon" aria-hidden="true">
-          <svg width="26" height="26" focusable="false"><use href="#i-file"></use></svg>
-        </span>
-        <h3 class="tp-card__title">Résumé &amp; Profile</h3>
-        <p class="tp-card__text">
-          Workshops on writing a résumé that survives a screening filter, and
-          on keeping a professional profile that a recruiter can find.
-        </p>
-      </li>
-
-      <li class="tp-card">
-        <span class="tp-card__icon" aria-hidden="true">
-          <svg width="26" height="26" focusable="false"><use href="#i-industry"></use></svg>
-        </span>
-        <h3 class="tp-card__title">Internships</h3>
-        <p class="tp-card__text">
-          Summer and semester internships arranged with partner organisations,
-          so a student has real work on the record before final placement.
-        </p>
-      </li>
-
-      <li class="tp-card">
-        <span class="tp-card__icon" aria-hidden="true">
-          <svg width="26" height="26" focusable="false"><use href="#i-handshake"></use></svg>
-        </span>
-        <h3 class="tp-card__title">Industry Interface</h3>
-        <p class="tp-card__text">
-          Guest sessions, industry-led certification courses and Board of
-          Studies input, which is how the syllabus stays answerable to what
-          employers actually ask for.
-        </p>
-      </li>
-
-    </ul>
-  </div>
-</section>
-
-
-{# ============================================================  STEPS  === #}
-<section class="section">
-  <div class="shell">
-    <div class="page-head">
-      <h2 class="page-heading">How Campus <span>Recruitment Runs</span></h2>
-      <span class="page-rule"></span>
-    </div>
-
-    {# The steps number themselves — insert an <li> anywhere and the rest #}
-    {# renumber. Do not type the numbers into the text.                   #}
-    <ol class="tp-steps">
-      <li>
-        <h3>Registration</h3>
-        <p>Eligible students register with the Cell at the start of the
-        placement season and share an up-to-date résumé.</p>
-      </li>
-      <li>
-        <h3>Pre-placement talk</h3>
-        <p>The visiting company presents its role, its selection process and
-        its terms, and takes questions from students.</p>
-      </li>
-      <li>
-        <h3>Written test</h3>
-        <p>An aptitude or technical test, usually online, sat on campus under
-        the company's own supervision.</p>
-      </li>
-      <li>
-        <h3>Group discussion</h3>
-        <p>Held where the recruiter includes one, and used to shortlist for
-        the interviews that follow.</p>
-      </li>
-      <li>
-        <h3>Technical &amp; HR interviews</h3>
-        <p>One or more rounds, conducted by the company on campus or online,
-        co-ordinated by the Cell.</p>
-      </li>
-      <li>
-        <h3>Offer</h3>
-        <p>Selected students receive their offer through the Cell, which keeps
-        the record and follows up on joining.</p>
-      </li>
-    </ol>
-  </div>
-</section>
-
-
-{% comment %}
-THE NUMBERS. Fill in real figures and delete the comment tags around the block
-below to publish it. Left out on purpose rather than filled with plausible
-placeholders — a placement percentage is a claim, and a wrong one on a
-university website is worse than none.
-
-<section class="section section--alt">
-  <div class="shell">
-    <ul class="tp-stats">
-      <li><strong>000</strong><span>Students placed</span></li>
-      <li><strong>00</strong><span>Recruiters on campus</span></li>
-      <li><strong>0.0 LPA</strong><span>Highest package</span></li>
-      <li><strong>0.0 LPA</strong><span>Average package</span></li>
-    </ul>
-  </div>
-</section>
-{% endcomment %}
-
-
-{# ========================================================  RECRUITERS  === #}
-{% if recruiters %}
-  <section class="section section--alt">
-    <div class="shell">
-      <div class="page-head">
-        <h2 class="page-heading">Our <span>Recruiters</span></h2>
-        <span class="page-rule"></span>
+        <button class="tab-btn" type="button" role="tab"
+                id="tab-collab" data-tab-target="#pane-collab"
+                aria-controls="pane-collab"
+                aria-selected="false" tabindex="-1">Collaborations</button>
       </div>
 
-      {# These come from PARTNERS in website/data.py, shared with the course #}
-      {# pages, so the list is maintained in one place. Add a company there. #}
-      <ul class="recruiter-grid">
-        {% for item in recruiters %}
-          <li class="recruiter-grid__item">
-            <img src="{{ item.logo }}" alt="{{ item.name }}"
-                 loading="lazy" width="180" height="90">
+
+      {# ------------------------------------------- MISSION & VISION --- #}
+      <div class="tab-pane is-active tp-prose" id="pane-vision" role="tabpanel"
+           aria-labelledby="tab-vision" tabindex="0">
+
+        <h3>Vision</h3>
+        <p>
+          The vision of placement cell is to increase the employability skills
+          of our students at institutional and industrial level; to furnish our
+          students with relevant and conceptualized professional skills and
+          guiding them towards the bright future and career all around the
+          globe with values of genuineness, hard work and justice.
+        </p>
+
+        <h3>Mission</h3>
+        <p>
+          To achieve 100% placement for students through dedication, attitude
+          and complete involvement is our mission. Training and Placement Cell
+          arranges and coordinates various programmes that aim at moulding the
+          students so as to meet the industry expectations in career building
+          and in turn bring laurels to the parent institution. The Training and
+          Placement Cell, guided by a set of rules and principles, strives to
+          maintain good relationship with industries. Preparing the recruitment
+          schedule for the year, inviting corporations for pre-placement talks
+          on the campus followed by final placements, and overseeing the
+          process to its end, is the responsibility of the Training and
+          Placement Cell. The Cell endeavors to carry out successfully all the
+          processes methodically throughout the year.
+        </p>
+      </div>
+
+
+      {# ------------------------------------------------ OBJECTIVES --- #}
+      <div class="tab-pane" id="pane-objectives" role="tabpanel"
+           aria-labelledby="tab-objectives" tabindex="0">
+
+        <h2 class="tp-pane__title">Objectives</h2>
+
+        {# Copy one <li> to add an objective. The icon is the same on every  #}
+        {# line; swap "#i-graduation" for any symbol in includes/icons.html. #}
+        <ul class="tp-objectives">
+          <li>
+            <svg aria-hidden="true" focusable="false"><use href="#i-graduation"></use></svg>
+            <span>To provide company specific training in technical and aptitude skills.</span>
           </li>
-        {% endfor %}
-      </ul>
-    </div>
-  </section>
-{% endif %}
-
-
-{# ==========================================================  CONTACT  === #}
-<section class="section">
-  <div class="shell">
-    <div class="tp-contact">
-      <div>
-        <h2 class="tp-contact__title">Recruiting from {{ site.short_name }}?</h2>
-        <p class="tp-contact__text">
-          Employers are welcome to write to the Training &amp; Placement Cell
-          to arrange a campus drive, an internship intake or a guest session.
-        </p>
+          <li>
+            <svg aria-hidden="true" focusable="false"><use href="#i-graduation"></use></svg>
+            <span>To prepare students for campus recruitment by arranging training in
+              Aptitude tests, Group discussions, preparing for Technical and HR
+              interviews through professional trainers.</span>
+          </li>
+          <li>
+            <svg aria-hidden="true" focusable="false"><use href="#i-graduation"></use></svg>
+            <span>To provide ample opportunities for placement of students to achieve
+              maximum placements.</span>
+          </li>
+          <li>
+            <svg aria-hidden="true" focusable="false"><use href="#i-graduation"></use></svg>
+            <span>To support our students for attending pool campus / off campus drives
+              and also to keep updating with other job opportunities.</span>
+          </li>
+          <li>
+            <svg aria-hidden="true" focusable="false"><use href="#i-graduation"></use></svg>
+            <span>To extend deserving candidates to have the opportunity to start their
+              career with their preferred company.</span>
+          </li>
+          <li>
+            <svg aria-hidden="true" focusable="false"><use href="#i-graduation"></use></svg>
+            <span>To enter into tie-up arrangements with Industries &amp; Corporates for
+              Campus recruitments.</span>
+          </li>
+        </ul>
       </div>
-      <a class="btn btn--gold" href="{% url 'website:contact' %}">Contact the Cell</a>
+
+
+      {# ----------------------------------------- MESSAGE FROM TPO ---- #}
+      <div class="tab-pane" id="pane-tpo" role="tabpanel"
+           aria-labelledby="tab-tpo" tabindex="0">
+
+        <h2 class="tp-pane__title">Message from TPO</h2>
+
+        <div class="tp-tpo">
+          {% with photo="img/placements/sourav-trainer.jpg"|doc_url %}
+            {% if photo %}
+              <figure class="tp-tpo__photo">
+                <img src="{{ photo }}" alt="Sourav Saha, Central Training &amp; Placement Co-ordinator"
+                     width="269" height="280" loading="lazy">
+              </figure>
+            {% endif %}
+          {% endwith %}
+
+          <div class="tp-tpo__body">
+            <p class="tp-tpo__line"><span class="tp-tpo__k">Name:</span> Sourav Saha</p>
+            <p class="tp-tpo__line"><span class="tp-tpo__k">Designation:</span>
+              Central Training &amp; Placement Co-ordinator</p>
+
+            <p class="tp-tpo__text">
+              Our goal is to position as many students as possible through
+              company-conducted on-campus and off-campus interviews through
+              training programs like aptitude testing, group talks, mock
+              interviews, etc., we support students with career planning and
+              employment strategies and prepare them for competitive
+              examinations and interviews. We encourage students to pursue
+              higher education in order to sit for competitive examinations
+              like the CAT, GATE, IES, GRE, UPSC, and others. We also encourage
+              them to build soft skills and technical expertise in goal-setting.
+              We bring reputable organizations to the college to organize a
+              campus placement session and prepare the students for the industry
+              recruitment process.
+            </p>
+          </div>
+        </div>
+      </div>
+
+
+      {# --------------------------------------------- COLLABORATIONS -- #}
+      <div class="tab-pane" id="pane-collab" role="tabpanel"
+           aria-labelledby="tab-collab" tabindex="0">
+
+        <h2 class="tp-pane__title">Collaborations</h2>
+
+        {# ONE LINE IS ONE PARTNER. The name is written twice on purpose:    #}
+        {# once as the picture's alt text, once as the fallback shown while  #}
+        {# the file is missing. Most of these logos are NOT UPLOADED YET, so #}
+        {# those cells currently read as names. Put a file in                #}
+        {# static/img/placements/collab/ under the name on its line, run     #}
+        {# collectstatic, and that cell becomes a logo with no edit here.    #}
+        <ul class="tp-collab">
+          {% include "includes/collab_logo.html" with name="Cognizant" file="img/partners/partner-3.png" %}
+          {% include "includes/collab_logo.html" with name="KPMG" file="img/placements/collab/kpmg.png" %}
+          {% include "includes/collab_logo.html" with name="Microsoft" file="img/placements/collab/microsoft.png" %}
+          {% include "includes/collab_logo.html" with name="Punj Lloyd" file="img/placements/collab/punj-lloyd.png" %}
+          {% include "includes/collab_logo.html" with name="Larsen &amp; Toubro" file="img/industry/lt.png" %}
+          {% include "includes/collab_logo.html" with name="NTPC" file="img/placements/collab/ntpc.png" %}
+
+          {% include "includes/collab_logo.html" with name="Capgemini" file="img/partners/partner-4.png" %}
+          {% include "includes/collab_logo.html" with name="Deloitte" file="img/placements/collab/deloitte.png" %}
+          {% include "includes/collab_logo.html" with name="Voltas" file="img/placements/collab/voltas.png" %}
+          {% include "includes/collab_logo.html" with name="Indeed SEO" file="img/placements/collab/indeed-seo.png" %}
+          {% include "includes/collab_logo.html" with name="SAGE" file="img/placements/collab/sage.png" %}
+          {% include "includes/collab_logo.html" with name="ABP" file="img/placements/collab/abp.png" %}
+
+          {% include "includes/collab_logo.html" with name="Zee Media" file="img/placements/collab/zee-media.png" %}
+          {% include "includes/collab_logo.html" with name="Aaj Tak" file="img/placements/collab/aaj-tak.png" %}
+          {% include "includes/collab_logo.html" with name="BYJU'S" file="img/partners/partner-7.png" %}
+          {% include "includes/collab_logo.html" with name="IGT Solutions" file="img/placements/collab/igt-solutions.png" %}
+          {% include "includes/collab_logo.html" with name="HyVeg" file="img/placements/collab/hyveg.png" %}
+          {% include "includes/collab_logo.html" with name="Adani" file="img/placements/collab/adani.png" %}
+
+          {% include "includes/collab_logo.html" with name="IBM" file="img/industry/ibm.png" %}
+          {% include "includes/collab_logo.html" with name="Bajaj" file="img/placements/collab/bajaj.png" %}
+          {% include "includes/collab_logo.html" with name="AirAsia" file="img/placements/collab/airasia.png" %}
+          {% include "includes/collab_logo.html" with name="Wipro" file="img/partners/partner-2.png" %}
+          {% include "includes/collab_logo.html" with name="Axis Bank" file="img/placements/collab/axis-bank.png" %}
+          {% include "includes/collab_logo.html" with name="Ecovative" file="img/placements/collab/ecovative.png" %}
+        </ul>
+      </div>
+
     </div>
+  </div>
+</section>
+
+
+{# =====================================================  TOP PLACEMENT === #}
+{# Outside the tabset on purpose: it stays on show whichever panel is open. #}
+<section class="section section--white tp-top" aria-labelledby="top-placement-heading">
+  <div class="shell">
+
+    {# The half inside <span> is the red half — page-head.css colours it. #}
+    <div class="page-head">
+      <h2 class="page-heading" id="top-placement-heading">Top <span>Placement</span></h2>
+      <span class="page-rule"></span>
+    </div>
+
+    {# THESE ARE CLAIMS THE UNIVERSITY HAS TO STAND BEHIND. Keep them in    #}
+    {# step with what the placement cell actually reports each year.        #}
+    <ul class="tp-figures">
+      <li class="tp-figure tp-figure--high">Highest Package - 25 Lakhs</li>
+      <li class="tp-figure tp-figure--avg">Average Package - 5 Lakhs</li>
+      <li class="tp-figure tp-figure--low">Lowest Package - 1.8 Lakhs</li>
+    </ul>
+
+    {# Copy a whole <li> to add a student. They read three to a row. #}
+    <ul class="tp-people">
+      {% include "includes/placed_student.html" with name="Abhisek Gupta" course="MBA" ctc="25 Lakhs Per Annum" company="Wipro" photo="img/placements/Abhisek-gupta.png" %}
+      {% include "includes/placed_student.html" with name="Sayed Nazish" course="MBA" ctc="25 Lakhs Per Annum" company="Saudi Aramco" photo="img/placements/Suman.png" %}
+      {% include "includes/placed_student.html" with name="Vishal Verma" course="Management" ctc="22 Lakhs Per Annum" company="Alumnus" photo="img/placements/Vishal-verma.png" %}
+      {% include "includes/placed_student.html" with name="Sayanta Banerjee" course="MBA" ctc="20 Lakhs Per Annum" company="Byjus" photo="img/placements/sayanta-banerjee.png" %}
+      {% include "includes/placed_student.html" with name="Saikat Jana" course="M.Tech ECE" ctc="16 Lakhs Per Annum" company="PWC" photo="img/placements/saikat-jana.png" %}
+      {% include "includes/placed_student.html" with name="Payal Saha" course="MBA" ctc="9 Lakhs Per Annum" company="Unacademy" photo="img/placements/payal-saha.png" %}
+    </ul>
+
+    <div class="tp-more">
+      <h3 class="tp-more__title">Some Of <span>Our Placed Candidates</span></h3>
+
+      {# View More points at the first of these that exists, so it is never   #}
+      {# a dead button: a PDF of the full placement list if one is uploaded,  #}
+      {# otherwise the photo gallery. To send it somewhere else, replace the  #}
+      {# whole {% with %} with a plain <a class="btn btn--blue" href="…">.    #}
+      {% with pdf="documents/placements/placed-candidates.pdf"|doc_url %}
+        <a class="btn btn--blue" href="{% if pdf %}{{ pdf }}{% else %}{% url 'website:gallery' %}{% endif %}"
+           {% if pdf %}target="_blank" rel="noopener noreferrer"{% endif %}>
+          View More
+          <svg aria-hidden="true" focusable="false"><use href="#i-search"></use></svg>
+          {% if pdf %}<span class="sr-only"> (opens the placement list in a new tab)</span>{% endif %}
+        </a>
+      {% endwith %}
+    </div>
+
   </div>
 </section>
 {% endblock %}

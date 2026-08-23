@@ -867,15 +867,17 @@ def chancellors_message(request):
 def training_placements(request):
     """The Training & Placement Cell.
 
-    The page itself is written by hand in the template; only the recruiter
-    logos come from data.py, through the same helper the course pages use, so
-    that list is kept in one place.
+    Written entirely by hand in the template - the wording, the figures, the
+    placed students and the partner list are all there, so nothing about this
+    page is edited here. The partner logos used to come from PARTNERS; they
+    are named in the template now because the panel lists two dozen companies
+    and only a handful have a logo file, and a row that names its partner is
+    more use than one that hides it.
+
+    No hero_subtitle: the design has the banner carrying the title alone.
     """
     return render(request, "pages/training_placements.html", {
-        "recruiters": _recruiters(),
-        "hero_title": "Training & Placements",
-        "hero_subtitle": "Preparing students for the interview, and employers "
-                         "for our graduates.",
+        "hero_title": "Our Placements",
         "hero_image": "img/about/campus.jpg",
         "crumbs": [{"label": "Training & Placements"}],
     })

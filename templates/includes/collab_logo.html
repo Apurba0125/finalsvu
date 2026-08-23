@@ -1,0 +1,24 @@
+{% comment %}
+One partner in the Collaborations panel of /page/training-placements/.
+Sits inside a <ul class="tp-collab">.
+
+Expects:
+  name  the company, e.g. "Punj Lloyd". WRITE AN AMPERSAND AS &amp; — a quoted
+        string in a template tag is marked safe by Django, so what is typed
+        between the quotes lands in the page verbatim, and a bare & is not
+        valid HTML next to a word.
+  file  its mark, under static/. e.g. "img/placements/collab/kpmg.png"
+
+THE NAME IS SHOWN WHEN THE FILE IS NOT THERE, rather than the cell sitting
+empty. So a partner can be listed BEFORE anyone has the logo: the panel reads
+as a complete list from the day it goes up, and the cell turns into a mark by
+itself once the file is dropped in and collectstatic has run:
+
+    python manage.py collectstatic --noinput
+
+That is also why the file goes through doc_url rather than {% static %}: under
+the manifest storage a bare static tag RAISES for a file that was never
+collected, so one mistyped name among two dozen would take the whole page down
+instead of costing a single logo.
+{% endcomment %}
+<li>{% with src=file|doc_url %}{% if src %}<img src="{{ src }}" alt="{{ name }}" loading="lazy">{% else %}<span class="tp-collab__name">{{ name }}</span>{% endif %}{% endwith %}</li>

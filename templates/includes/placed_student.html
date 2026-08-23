@@ -1,0 +1,41 @@
+{% comment %}
+One placed student on /page/training-placements/. Sits inside a
+<ul class="tp-people">.
+
+Expects:
+  name     the student
+  course   the programme they read, e.g. "M.Tech ECE"
+  ctc      the package, written out — "16 Lakhs Per Annum"
+  company  who placed them
+  photo    their portrait, under static/img/placements/. Optional.
+
+THE PORTRAIT IS A CIRCLE HANGING OVER THE TOP EDGE OF THE CARD, drawn at
+118px — the size the supplied photographs are. A square picture works best,
+because the circle crops to the middle of whatever it is given; a larger
+square is fine, a smaller one gets upscaled and goes soft.
+
+No photo, or a filename matching no file, and the card simply has no portrait
+— the card keeps its shape and the rest of its lines. It does not break the
+page, which a bare {% static %} tag would under the manifest storage.
+
+THESE ARE REAL, NAMED PEOPLE and the salary beside each name is a claim about
+them. Only put a student here with their agreement.
+{% endcomment %}
+<li class="tp-person">
+  {% with src=photo|doc_url %}
+    {% if src %}
+      <span class="tp-person__photo">
+        <img src="{{ src }}" alt="{{ name }}" width="118" height="118" loading="lazy">
+      </span>
+    {% endif %}
+  {% endwith %}
+
+  {# Decorative: the quote mark is a flourish from the design, not something #}
+  {# anyone needs read out, and there is no quotation on the card.           #}
+  <span class="tp-person__quote" aria-hidden="true">&ldquo;</span>
+
+  <p class="tp-person__line"><span class="tp-person__k">Name:</span> {{ name }}</p>
+  <p class="tp-person__line"><span class="tp-person__k">Course:</span> {{ course }}</p>
+  <p class="tp-person__line"><span class="tp-person__k">CTC:</span> {{ ctc }}</p>
+  <p class="tp-person__line"><span class="tp-person__k">Company:</span> {{ company }}</p>
+</li>

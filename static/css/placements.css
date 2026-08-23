@@ -6,140 +6,299 @@
    and reused here, so it is not repeated below.
    ========================================================================== */
 
-/* ================================================ Training & Placements == */
-
 /* auto-fit, not auto-fill: with an odd number of cards the last row stretches
    to fill instead of leaving an empty track beside it. */
-.tp-grid {
-  list-style: none;
-  margin: 26px 0 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: clamp(16px, 2vw, 24px);
-}
+/* ================================================ Training & Placements ==
+   The page is four tab panels, then a "Top Placement" band that stays put
+   below them whichever panel is open. The pills and the switching come from
+   the shared tabs.css; everything the panels CONTAIN, and the whole band
+   under them, is below.
+   ========================================================================== */
 
-.tp-card {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  padding: 24px 22px;
-  background: var(--paper);
-  border-bottom: 3px solid var(--gold);
-  border-radius: var(--radius-sm);
-  box-shadow: var(--shadow-xs);
-  transition: box-shadow var(--transition), transform var(--transition);
-}
-.tp-card:hover { box-shadow: var(--shadow); transform: translateY(-3px); }
+/* ------------------------------------------------------------- panels --- */
+.tp-tabset { margin-top: 4px; }
 
-.tp-card__icon {
-  flex: none;
-  width: 50px;
-  height: 50px;
-  margin-bottom: 16px;
-  display: grid;
-  place-items: center;
-  border-radius: var(--radius-sm);
-  background: var(--blue);
-}
-.tp-card__icon svg { width: 26px; height: 26px; fill: #fff; }
-
-.tp-card__title {
-  margin: 0 0 8px;
-  font-size: 1rem;
-  font-weight: 800;
-  line-height: 1.35;
+.tp-pane__title {
+  margin: 0 0 16px;
   color: var(--ink);
+  font-size: clamp(1.15rem, 1rem + .7vw, 1.5rem);
+  font-weight: 700;
 }
-.tp-card__text { margin: 0; color: var(--ink-soft); font-size: .88rem; line-height: 1.75; }
 
-/* ------------------------------------------------------------- steps ---- */
-/* Numbered by a counter rather than by list-item markers, so the number can
-   be styled as a disc without a second element in the markup — and inserting
-   a step in the middle renumbers the rest for free. */
-.tp-steps {
-  counter-reset: tp-step;
-  list-style: none;
-  margin: 26px 0 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: clamp(18px, 2vw, 28px);
-}
-.tp-steps li {
-  counter-increment: tp-step;
-  position: relative;
-  padding: 4px 0 0 60px;
-}
-.tp-steps li::before {
-  content: counter(tp-step, decimal-leading-zero);
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 44px;
-  height: 44px;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  background: var(--gold);
+/* Justified, as the reference has it. Justifying needs hyphens to stop the
+   word spacing tearing open, and even then it only works with enough words
+   per line - see the phone rule at the foot of the file, which drops the
+   whole page back to ragged-right. */
+.tp-prose h3 {
+  margin: 26px 0 10px;
   color: var(--ink);
-  font-weight: 800;
-  font-size: .9rem;
+  font-size: 1.28rem;
+  font-weight: 600;
 }
-.tp-steps h3 { margin: 0 0 4px; font-size: .98rem; font-weight: 800; color: var(--ink); }
-.tp-steps p  { margin: 0; color: var(--ink-soft); font-size: .87rem; line-height: 1.7; }
+.tp-prose h3:first-child { margin-top: 0; }
+.tp-prose p {
+  margin: 0;
+  color: var(--muted);
+  font-size: .97rem;
+  line-height: 1.85;
+  text-align: justify;
+  hyphens: auto;
+}
 
-/* ------------------------------------------------------------- stats ---- */
-/* Only paints if the commented-out block in the template is uncommented. */
-.tp-stats {
-  list-style: none;
+/* ---------------------------------------------------------- objectives --- */
+.tp-objectives { margin: 0; padding: 0; list-style: none; }
+/* A fixed first track rather than a flex gap, so every line of text starts on
+   the same left edge however many lines an item wraps to. */
+.tp-objectives li {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  align-items: start;
+  padding: 11px 0;
+  color: var(--muted);
+  font-size: .97rem;
+  line-height: 1.8;
+  text-align: justify;
+  hyphens: auto;
+}
+.tp-objectives svg {
+  width: 20px;
+  height: 20px;
+  margin-top: 6px;
+  fill: var(--red);
+}
+
+/* ----------------------------------------------------- message from TPO -- */
+.tp-tpo {
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr);
+  gap: 34px;
+  align-items: start;
+}
+.tp-tpo__photo {
+  margin: 0;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+.tp-tpo__photo img { display: block; width: 100%; height: auto; }
+
+.tp-tpo__line { margin: 0 0 8px; color: var(--ink); font-size: 1.02rem; }
+/* The label half of "Name: Sourav Saha" - red against a dark value. */
+.tp-tpo__k { color: var(--red); font-weight: 700; }
+.tp-tpo__text {
+  margin: 14px 0 0;
+  color: var(--muted);
+  font-size: .97rem;
+  line-height: 1.85;
+  text-align: justify;
+  hyphens: auto;
+}
+
+/* -------------------------------------------------------- collaborations - */
+/* Same shape as the grid on /page/collaboration/, and for the same reasons:
+   no rules and no boxes, a FIXED cell height so one tall logo cannot make its
+   own row taller than the rest, and the image capped INSIDE that box rather
+   than filling it.
+
+   min-width/min-height:0 is what makes the max-* caps bite. Without them the
+   image keeps a grid item's automatic minimum - its own intrinsic size - and
+   ignores the caps completely, which is exactly how the Collaboration grid
+   came out ragged before it was fixed. */
+.tp-collab {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 28px 22px;
   margin: 0;
   padding: 0;
+  list-style: none;
+}
+.tp-collab li {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 18px;
+  place-items: center;
+  height: 110px;
+  text-align: center;
+  overflow: hidden;
+}
+.tp-collab img {
+  min-width: 0;
+  min-height: 0;
+  max-width: 86%;
+  max-height: 74%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+/* Stands in for a mark that is not uploaded yet, so the panel reads as a
+   complete list of partners from the day it goes up rather than a field of
+   empty cells. */
+.tp-collab__name {
+  color: var(--ink-soft);
+  font-size: .78rem;
+  font-weight: 600;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+/* ==========================================================================
+   Top Placement  -  below the tabs, on show whichever panel is open
+   ========================================================================== */
+
+/* ---------------------------------------------------------- the figures -- */
+.tp-figures {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 26px;
+  margin: 22px 0 0;
+  padding: 0;
+  list-style: none;
+}
+/* Two tones with a HARD STOP rather than a fade: the reference has a distinct
+   band down the left of each bar, not a gradient. Recolour one bar by editing
+   its --tone-a/--tone-b below; move the join on all three by editing the 40%. */
+.tp-figure {
+  display: grid;
+  place-items: center;
+  min-height: 58px;
+  padding: 14px 18px;
+  background: linear-gradient(90deg,
+              var(--tone-a) 0 40%, var(--tone-b) 40% 100%);
+  color: #fff;
+  font-size: .97rem;
+  font-weight: 500;
   text-align: center;
 }
-.tp-stats li {
-  padding: 24px 16px;
-  background: var(--paper);
-  border-radius: var(--radius-sm);
-  box-shadow: var(--shadow-xs);
+.tp-figure--high { --tone-a: #3a3a3a; --tone-b: #000000; }
+.tp-figure--avg  { --tone-a: #4a7ab8; --tone-b: #2d5f9e; }
+.tp-figure--low  { --tone-a: #c9584f; --tone-b: #b93f34; }
+
+/* ------------------------------------------------------- placed people --- */
+/* The row-gap is large because the portrait hangs ABOVE its card: without it
+   the picture would overlap the row of cards above. Change the portrait size
+   and this has to be checked with it. */
+.tp-people {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 96px 30px;
+  margin: 82px 0 0;
+  padding: 0;
+  list-style: none;
 }
-.tp-stats strong {
+
+.tp-person {
+  position: relative;
+  /* Room for the half of the portrait that overhangs the card. */
+  padding: 74px 20px 26px;
+  background: #f3e3f9;
+  border-radius: var(--radius-lg);
+  text-align: center;
+}
+/* Centred on the card's top edge, half in and half out. The offset is half
+   the height, so resizing the circle means changing both numbers together -
+   and checking .tp-people's row-gap above, since the picture reaches up into
+   the space that gap provides. */
+.tp-person__photo {
+  position: absolute;
+  top: -59px;
+  left: 50%;
+  transform: translateX(-50%);
+  box-sizing: border-box;
+  width: 118px;
+  height: 118px;
+  padding: 3px;
+  background: #fff;
+  border: 3px solid var(--red);
+  border-radius: 50%;
+  overflow: hidden;
+}
+/* Drawn at exactly the size the portraits are supplied at (118px square).
+   Asked to fill a larger circle they would be upscaled and go soft. */
+.tp-person__photo img {
   display: block;
-  font-size: clamp(1.6rem, 1.2rem + 1.4vw, 2.3rem);
-  font-weight: 800;
-  color: var(--accent);
-  line-height: 1.1;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
 }
-.tp-stats span {
+
+/* SERIF on purpose. The page's sans face draws a quote mark as two thin
+   strokes; the design wants the heavy filled pair a serif gives, and Georgia
+   is already loaded as --font-serif. */
+.tp-person__quote {
   display: block;
-  margin-top: 6px;
-  font-size: .8rem;
-  letter-spacing: .04em;
-  text-transform: uppercase;
-  color: var(--muted);
+  margin: -4px 0 12px;
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: 3.1rem;
+  font-weight: 700;
+  /* A quote mark sits on the cap line with a lot of empty space beneath it, so the
+     line box is collapsed to stop it opening a gap above the name. */
+  line-height: .5;
+}
+.tp-person__line {
+  margin: 0 0 7px;
+  color: var(--ink);
+  font-size: .95rem;
+  line-height: 1.5;
+  /* A long company or course name has to break rather than push the card
+     wider than the track it sits in. */
+  overflow-wrap: anywhere;
+}
+.tp-person__line:last-child { margin-bottom: 0; }
+.tp-person__k { font-weight: 700; }
+
+/* --------------------------------------------------------- the closer ---- */
+.tp-more { margin-top: 54px; text-align: center; }
+.tp-more__title {
+  margin: 0 0 18px;
+  color: var(--ink);
+  font-size: clamp(1.2rem, 1rem + .9vw, 1.65rem);
+  font-weight: 700;
+}
+.tp-more__title span { color: var(--red); }
+.tp-more .btn svg {
+  width: 16px;
+  height: 16px;
+  margin-left: 8px;
+  fill: currentColor;
+  vertical-align: -2px;
 }
 
-/* ----------------------------------------------------------- contact ---- */
-.tp-contact {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 18px 26px;
-  padding: clamp(22px, 3vw, 34px);
-  background: var(--paper);
-  border-left: 4px solid var(--gold);
-  border-radius: var(--radius-sm);
-  box-shadow: var(--shadow-xs);
+/* ==========================================================================
+   Responsive
+   The logo grid steps down the way the Collaboration one does - a mark has a
+   size below which it stops being recognisable, so the COLUMN COUNT drops
+   rather than the cells shrinking indefinitely.
+   ========================================================================== */
+@media (max-width: 1100px) {
+  .tp-collab { grid-template-columns: repeat(5, minmax(0, 1fr)); }
 }
-.tp-contact__title { margin: 0 0 6px; font-size: 1.1rem; font-weight: 800; color: var(--ink); }
-.tp-contact__text  { margin: 0; color: var(--ink-soft); font-size: .9rem; line-height: 1.7; max-width: 62ch; }
 
+@media (max-width: 991.98px) {
+  .tp-collab { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px 18px; }
+  .tp-tpo { grid-template-columns: 240px minmax(0, 1fr); gap: 26px; }
+  .tp-people { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
 
-/* ========================================================= Infrastructure = */
+@media (max-width: 767.98px) {
+  .tp-collab { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  /* The portrait goes above the text instead of beside it. */
+  .tp-tpo { grid-template-columns: minmax(0, 1fr); }
+  .tp-tpo__photo { max-width: 300px; }
+  .tp-figures { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+  .tp-people { grid-template-columns: minmax(0, 1fr); gap: 84px 0; margin-top: 74px; }
+}
+
+@media (max-width: 575.98px) {
+  /* Ragged-right from here down. Justified text needs enough words on a line
+     to absorb the slack; in a phone column it tears white rivers down the
+     middle of the paragraph instead. */
+  .tp-prose p,
+  .tp-tpo__text,
+  .tp-objectives li { text-align: left; hyphens: manual; }
+  .tp-objectives li { grid-template-columns: 28px minmax(0, 1fr); font-size: .93rem; }
+  .tp-collab { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tp-collab li { height: 92px; }
+}
 
 .infra-list { display: grid; gap: clamp(28px, 4vw, 52px); }
 
