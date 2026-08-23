@@ -104,6 +104,20 @@ if not DEBUG:
         },
     }
 
+# WhiteNoise writes a .gz and a .br beside every file it thinks will benefit,
+# and it does not think a PDF will not.  A PDF is already deflate-compressed
+# inside, so the second pass buys almost nothing: brotli spent the whole build
+# on a 167 MB brochure to save 9%, and left 1.2 GB in staticfiles/ for that one
+# document.  On a free Render instance that is the build's time and memory gone
+# for no gain, so PDFs are added to the list WhiteNoise already skips for JPEG,
+# PNG, ZIP and the video formats - all compressed formats, same reasoning.
+WHITENOISE_SKIP_COMPRESS_EXTENSIONS = [
+    "3gp", "3gpp", "asf", "avi", "br", "bz2", "flv", "gif", "gz", "jpeg",
+    "jpg", "m4v", "mov", "mp4", "mpeg", "mpg", "png", "swf", "tbz", "tgz",
+    "webm", "webp", "wmv", "woff", "woff2", "xz", "zip",
+    "pdf",
+]
+
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # --- Security ---------------------------------------------------------------

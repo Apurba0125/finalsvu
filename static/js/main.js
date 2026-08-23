@@ -1330,6 +1330,71 @@
   }
 
   /* ----------------------------------------------------------------------
+     Scroll reveal
+     Fades a block up as it comes into view. Marked in the markup with
+     data-reveal; give it data-reveal-delay="120" (milliseconds) to stagger a
+     row of cards.
+
+     FAILS SAFE. The CSS only hides a [data-reveal] block while <html> carries
+     .js-reveal, and that class is added HERE — so if this script never runs,
+     or throws before this point, every block is simply visible. Hiding first
+     and revealing with JS would mean a broken script empties the page.
+
+     Reduced motion, or a browser with no IntersectionObserver, gets the same
+     deal: everything shown at once, no animation.
+     ---------------------------------------------------------------------- */
+  function initReveal() {
+    var items = $$("[data-reveal]");
+    if (!items.length) { return; }
+
+    function showAll() {
+      items.forEach(function (el) { el.classList.add("is-revealed"); });
+    }
+
+    if (prefersReducedMotion || !("IntersectionObserver" in window)) {
+      document.documentElement.classList.add("js-reveal");
+      showAll();
+      return;
+    }
+
+    document.documentElement.classList.add("js-reveal");
+
+    var observer = new IntersectionObserver(function (entries, obs) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) { return; }
+        obs.unobserve(entry.target);
+        var delay = parseInt(entry.target.getAttribute("data-reveal-delay"), 10) || 0;
+        if (delay > 0) {
+          window.setTimeout(function () {
+            entry.target.classList.add("is-revealed");
+          }, delay);
+        } else {
+          entry.target.classList.add("is-revealed");
+        }
+      });
+    }, {
+      /* A little way up from the bottom edge, so a block has finished its
+         fade by the time the reader's eye reaches it rather than starting
+         as it appears. */
+      rootMargin: "0px 0px -12% 0px",
+      threshold: 0.08
+    });
+
+    items.forEach(function (el) { observer.observe(el); });
+
+    /* Anything already on screen at load - the top of the page - should not
+       wait for a scroll that may never come. */
+    window.setTimeout(function () {
+      items.forEach(function (el) {
+        var r = el.getBoundingClientRect();
+        if (r.top < window.innerHeight && r.bottom > 0) {
+          el.classList.add("is-revealed");
+        }
+      });
+    }, 60);
+  }
+
+  /* ----------------------------------------------------------------------
      Bootstrap
      ---------------------------------------------------------------------- */
   function init() {
@@ -1346,6 +1411,7 @@
     initLazyImages();
     initPhotoViewer();
     initCounters();
+    initReveal();
   }
 
   if (document.readyState === "loading") {

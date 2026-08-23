@@ -163,7 +163,7 @@ leaks onto the page and any tag inside it actually runs.
       <div class="tab-pane" id="pane-objectives" role="tabpanel"
            aria-labelledby="tab-objectives" tabindex="0">
 
-        <h2 class="tp-pane__title">Objectives</h2>
+        <h2 class="tp-pane__title" data-reveal>Objectives</h2>
 
         {# Copy one <li> to add an objective. The icon is the same on every  #}
         {# line; swap "#i-graduation" for any symbol in includes/icons.html. #}
@@ -208,7 +208,7 @@ leaks onto the page and any tag inside it actually runs.
 
         <h2 class="tp-pane__title">Message from TPO</h2>
 
-        <div class="tp-tpo">
+        <div class="tp-tpo" data-reveal>
           {% with photo="img/placements/sourav-trainer.jpg"|doc_url %}
             {% if photo %}
               <figure class="tp-tpo__photo">
@@ -254,7 +254,7 @@ leaks onto the page and any tag inside it actually runs.
         {# those cells currently read as names. Put a file in                #}
         {# static/img/placements/collab/ under the name on its line, run     #}
         {# collectstatic, and that cell becomes a logo with no edit here.    #}
-        <ul class="tp-collab">
+        <ul class="tp-collab" data-reveal>
           {% include "includes/collab_logo.html" with name="Cognizant" file="img/partners/partner-3.png" %}
           {% include "includes/collab_logo.html" with name="KPMG" file="img/placements/collab/kpmg.png" %}
           {% include "includes/collab_logo.html" with name="Microsoft" file="img/placements/collab/microsoft.png" %}
@@ -304,35 +304,48 @@ leaks onto the page and any tag inside it actually runs.
     {# THESE ARE CLAIMS THE UNIVERSITY HAS TO STAND BEHIND. Keep them in    #}
     {# step with what the placement cell actually reports each year.        #}
     <ul class="tp-figures">
-      <li class="tp-figure tp-figure--high">Highest Package - 25 Lakhs</li>
-      <li class="tp-figure tp-figure--avg">Average Package - 5 Lakhs</li>
-      <li class="tp-figure tp-figure--low">Lowest Package - 1.8 Lakhs</li>
+      {# The figure counts up as the bar scrolls into view. initCounters in    #}
+      {# main.js drives it: data-count-to is the number to land on, and       #}
+      {# data-count-decimals says how many places to keep — without it 1.8    #}
+      {# would count up to a flat 2. The 0 between the tags is what shows if  #}
+      {# the script never runs, so write the real figure there too.           #}
+      <li class="tp-figure tp-figure--high" data-reveal data-reveal-delay="0"><span class="tp-figure__text">Highest Package - <span data-count-to="25">25</span> Lakhs</span></li>
+      <li class="tp-figure tp-figure--avg" data-reveal data-reveal-delay="110"><span class="tp-figure__text">Average Package - <span data-count-to="5">5</span> Lakhs</span></li>
+      <li class="tp-figure tp-figure--low" data-reveal data-reveal-delay="220"><span class="tp-figure__text">Lowest Package - <span data-count-to="1.8" data-count-decimals="1">1.8</span> Lakhs</span></li>
     </ul>
 
     {# Copy a whole <li> to add a student. They read three to a row. #}
     <ul class="tp-people">
-      {% include "includes/placed_student.html" with name="Abhisek Gupta" course="MBA" ctc="25 Lakhs Per Annum" company="Wipro" photo="img/placements/Abhisek-gupta.png" %}
-      {% include "includes/placed_student.html" with name="Sayed Nazish" course="MBA" ctc="25 Lakhs Per Annum" company="Saudi Aramco" photo="img/placements/Suman.png" %}
-      {% include "includes/placed_student.html" with name="Vishal Verma" course="Management" ctc="22 Lakhs Per Annum" company="Alumnus" photo="img/placements/Vishal-verma.png" %}
-      {% include "includes/placed_student.html" with name="Sayanta Banerjee" course="MBA" ctc="20 Lakhs Per Annum" company="Byjus" photo="img/placements/sayanta-banerjee.png" %}
-      {% include "includes/placed_student.html" with name="Saikat Jana" course="M.Tech ECE" ctc="16 Lakhs Per Annum" company="PWC" photo="img/placements/saikat-jana.png" %}
-      {% include "includes/placed_student.html" with name="Payal Saha" course="MBA" ctc="9 Lakhs Per Annum" company="Unacademy" photo="img/placements/payal-saha.png" %}
+      {% include "includes/placed_student.html" with reveal_delay="0" name="Abhisek Gupta" course="MBA" ctc="25 Lakhs Per Annum" company="Wipro" photo="img/placements/Abhisek-gupta.png" %}
+      {% include "includes/placed_student.html" with reveal_delay="120" name="Sayed Nazish" course="MBA" ctc="25 Lakhs Per Annum" company="Saudi Aramco" photo="img/placements/Suman.png" %}
+      {% include "includes/placed_student.html" with reveal_delay="240" name="Vishal Verma" course="Management" ctc="22 Lakhs Per Annum" company="Alumnus" photo="img/placements/Vishal-verma.png" %}
+      {% include "includes/placed_student.html" with reveal_delay="0" name="Sayanta Banerjee" course="MBA" ctc="20 Lakhs Per Annum" company="Byjus" photo="img/placements/sayanta-banerjee.png" %}
+      {% include "includes/placed_student.html" with reveal_delay="120" name="Saikat Jana" course="M.Tech ECE" ctc="16 Lakhs Per Annum" company="PWC" photo="img/placements/saikat-jana.png" %}
+      {% include "includes/placed_student.html" with reveal_delay="240" name="Payal Saha" course="MBA" ctc="9 Lakhs Per Annum" company="Unacademy" photo="img/placements/payal-saha.png" %}
     </ul>
 
-    <div class="tp-more">
+    <div class="tp-more" data-reveal>
       <h3 class="tp-more__title">Some Of <span>Our Placed Candidates</span></h3>
 
-      {# View More points at the first of these that exists, so it is never   #}
-      {# a dead button: a PDF of the full placement list if one is uploaded,  #}
-      {# otherwise the photo gallery. To send it somewhere else, replace the  #}
-      {# whole {% with %} with a plain <a class="btn btn--blue" href="…">.    #}
-      {% with pdf="documents/placements/placed-candidates.pdf"|doc_url %}
-        <a class="btn btn--blue" href="{% if pdf %}{{ pdf }}{% else %}{% url 'website:gallery' %}{% endif %}"
-           {% if pdf %}target="_blank" rel="noopener noreferrer"{% endif %}>
-          View More
-          <svg aria-hidden="true" focusable="false"><use href="#i-search"></use></svg>
-          {% if pdf %}<span class="sr-only"> (opens the placement list in a new tab)</span>{% endif %}
-        </a>
+      {# THE PATH HERE DOES NOT START WITH "static/". doc_url resolves it     #}
+      {# against the static folder itself, so a leading "static/" resolves to #}
+      {# /static/static/… , finds nothing, and hands back an empty string —   #}
+      {# which is a button that reloads this page instead of opening the PDF. #}
+      {#                                                                      #}
+      {# View More opens the placement brochure and nothing else. If that PDF #}
+      {# is not in place the button does not render at all — better than one  #}
+      {# that looks live and reloads the page when pressed. So if the button  #}
+      {# has gone missing, the file is the thing to check:                    #}
+      {#     static/img/placements/placement-brochure.pdf                     #}
+      {# then run: python manage.py collectstatic --noinput                   #}
+      {% with pdf="img/placements/placement-brochure.pdf"|doc_url %}
+        {% if pdf %}
+          <a class="btn btn--blue" href="{{ pdf }}" target="_blank" rel="noopener noreferrer">
+            View More
+            <svg aria-hidden="true" focusable="false"><use href="#i-search"></use></svg>
+            <span class="sr-only"> (opens the placement brochure in a new tab)</span>
+          </a>
+        {% endif %}
       {% endwith %}
     </div>
 

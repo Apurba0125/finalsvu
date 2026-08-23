@@ -9,6 +9,10 @@ Expects:
   company  who placed them
   photo    their portrait, under static/img/placements/. Optional.
 
+  reveal_delay  optional milliseconds to hold this card back as it scrolls
+                into view, so a row of three arrives one after another rather
+                than all at once. Left out, the card fades in immediately.
+
 THE PORTRAIT IS A CIRCLE HANGING OVER THE TOP EDGE OF THE CARD, drawn at
 118px — the size the supplied photographs are. A square picture works best,
 because the circle crops to the middle of whatever it is given; a larger
@@ -21,7 +25,7 @@ page, which a bare {% static %} tag would under the manifest storage.
 THESE ARE REAL, NAMED PEOPLE and the salary beside each name is a claim about
 them. Only put a student here with their agreement.
 {% endcomment %}
-<li class="tp-person">
+<li class="tp-person" data-reveal{% if reveal_delay %} data-reveal-delay="{{ reveal_delay }}"{% endif %}>
   {% with src=photo|doc_url %}
     {% if src %}
       <span class="tp-person__photo">

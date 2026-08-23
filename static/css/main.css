@@ -1577,6 +1577,44 @@ table { border-collapse: collapse; width: 100%; }
 .affil-card__link:focus-visible { outline: 3px solid var(--red); outline-offset: 4px; }
 
 /* --------------------------------------------------------------------------
+   Scroll reveal
+   A block marked data-reveal fades up as it scrolls into view. initReveal in
+   main.js adds .is-revealed to it, and data-reveal-delay="120" staggers a row.
+
+   NOTE THE .js-reveal GUARD ON <html>. Nothing is hidden until the script has
+   run far enough to add that class, so a browser with JS off - or a script
+   that throws before it gets there - shows every block normally instead of a
+   page of invisible content. That is the whole reason the guard exists;
+   hiding these in plain CSS would be one broken script away from an empty
+   page.
+   -------------------------------------------------------------------------- */
+.js-reveal [data-reveal] {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity .55s ease-out, transform .55s ease-out;
+  /* Tells the browser what is about to change so it can promote the layer
+     once, instead of repainting the block on every frame of the fade. */
+  will-change: opacity, transform;
+}
+.js-reveal [data-reveal].is-revealed {
+  opacity: 1;
+  transform: none;
+  will-change: auto;
+}
+
+/* Motion is the thing being asked about here, so the whole effect goes - the
+   blocks are simply present. initReveal makes the same check and stops
+   observing, so this is belt and braces rather than the only guard. */
+@media (prefers-reduced-motion: reduce) {
+  .js-reveal [data-reveal],
+  .js-reveal [data-reveal].is-revealed {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
    13. Life at SVU
    -------------------------------------------------------------------------- */
 /* Red rather than the site's gold accent, matching the heading in the design

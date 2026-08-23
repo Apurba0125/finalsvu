@@ -152,24 +152,28 @@
   padding: 0;
   list-style: none;
 }
-/* Two tones with a HARD STOP rather than a fade: the reference has a distinct
-   band down the left of each bar, not a gradient. Recolour one bar by editing
-   its --tone-a/--tone-b below; move the join on all three by editing the 40%. */
+/* ONE FLAT COLOUR per bar. Recolour a bar by editing its --tone below. */
 .tp-figure {
   display: grid;
   place-items: center;
   min-height: 58px;
   padding: 14px 18px;
-  background: linear-gradient(90deg,
-              var(--tone-a) 0 40%, var(--tone-b) 40% 100%);
+  background: var(--tone);
   color: #fff;
   font-size: .97rem;
   font-weight: 500;
   text-align: center;
 }
-.tp-figure--high { --tone-a: #3a3a3a; --tone-b: #000000; }
-.tp-figure--avg  { --tone-a: #4a7ab8; --tone-b: #2d5f9e; }
-.tp-figure--low  { --tone-a: #c9584f; --tone-b: #b93f34; }
+.tp-figure--high { --tone: #1f1f1f; }
+.tp-figure--avg  { --tone: #2d6cb5; }
+.tp-figure--low  { --tone: #c0453a; }
+
+/* THE WHOLE LABEL IS ONE ELEMENT, and it has to stay that way. The bar is a
+   grid, so every child is a grid item: with the counting number as a bare
+   <span> beside loose text, "Highest Package -", "25" and "Lakhs" became
+   three separate items and stacked into three lines. Wrapped up here they are
+   a single item that simply wraps as ordinary text. */
+.tp-figure__text { display: block; }
 
 /* ------------------------------------------------------- placed people --- */
 /* The row-gap is large because the portrait hangs ABOVE its card: without it
