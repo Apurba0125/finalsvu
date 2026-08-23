@@ -8,8 +8,8 @@ INFRASTRUCTURE  —  served at /page/infrastructure/
 ---------------------------------------------------------------------------
 Header, navigation and footer come from base.html. Do not add them here.
 
-EVERYTHING ON THIS PAGE IS IN THIS ONE FILE. Six tabs of photographs, then
-the Conference band underneath. There is nothing to change in data.py.
+EVERYTHING ON THIS PAGE IS IN THIS ONE FILE. Six tabs of photographs, and
+nothing else. There is nothing to change in data.py.
 
 HOW TO EDIT
 
@@ -48,7 +48,7 @@ leaks onto the page and any tag inside it actually runs.
 {% endcomment %}
 
 {% block title %}Infrastructure | {{ site.site_name }}{% endblock %}
-{% block meta_description %}The campus of Swami Vivekananda University at Barrackpore — the grounds, classrooms, laboratories, library and hostel, and the international conferences held here.{% endblock %}
+{% block meta_description %}The campus of Swami Vivekananda University at Barrackpore — the grounds, classrooms, laboratories, library and hostel.{% endblock %}
 
 {% block extra_head %}
   <link rel="stylesheet" href="{% static 'css/page-head.css' %}">
@@ -294,65 +294,6 @@ leaks onto the page and any tag inside it actually runs.
       </div>
 
     </div>
-  </div>
-</section>
-
-
-{# ========================================================  CONFERENCE  === #}
-<section class="section infra-conf" aria-labelledby="conference-heading">
-  <div class="shell">
-
-    <div class="page-head">
-      <h2 class="page-heading" id="conference-heading">International <span>Conferences</span></h2>
-      <span class="page-rule"></span>
-    </div>
-
-    <p class="infra-conf__text">
-      International conferences serve as platforms for scholars,
-      professionals, and experts from various countries to come together and
-      exchange knowledge and ideas. These conferences facilitate
-      collaboration and networking among individuals working in diverse
-      fields, ranging from science and technology to humanities, social
-      sciences, life sciences and allied health sciences. Participants at
-      international conferences often present their research findings, share
-      best practices, and engage in discussions that contribute to the
-      advancement of knowledge in their respective fields. Keynote speakers,
-      who are often leading authorities in their domains, deliver lectures
-      that provide valuable insights and perspectives on current issues and
-      trends.
-    </p>
-    <p class="infra-conf__text">
-      The diverse backgrounds of attendees contribute to a rich and
-      multicultural environment, fostering a global perspective on common
-      challenges and opportunities. This type of conferences play a crucial
-      role in disseminating the latest research and innovations, helping
-      participants stay abreast of developments in their fields. Workshops
-      and panel discussions at these conferences offer opportunities for
-      skill development, learning new methodologies, and addressing practical
-      challenges faced by professionals.
-    </p>
-    <p class="infra-conf__text">
-      Cultural exchange is an integral part of international conferences,
-      allowing participants to appreciate and understand different customs,
-      traditions, and approaches to problem-solving. The collaborative nature
-      of these gatherings often leads to the formation of international
-      partnerships, joint research initiatives, and the establishment of
-      networks that endure beyond the conference itself. Overall, this type
-      of International conferences contribute significantly to the global
-      academic and professional communities, fostering a spirit of
-      cooperation and mutual understanding that transcends geographical
-      boundaries.
-    </p>
-    <p class="infra-conf__text">
-      During the time of Covid period, Swami Vivekananda University has
-      proudly and successfully organized almost eight international
-      conferences to cater knowledge on various multidisciplinary approaches.
-      In fact, after the post COVID period, this prestigious university has
-      also organized ten more international conferences with the fullest
-      spirit and dedication to empower the various disciplines with
-      multitudinous aspects.
-    </p>
-
   </div>
 </section>
 {% endblock %}
